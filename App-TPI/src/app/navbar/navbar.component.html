@@ -1,0 +1,93 @@
+<div class="mb-5">
+    <!-- Background opacity  -->
+    <div class="overlay-off" [class]="!expand ? 'overlay-off' : 'overlay-on'"></div>
+    <!-- NavBar -->
+    <nav class="navbar mynav d-flex justify-content-between shadow z-3 fixed-top text-light">
+        <button class="btn text-light fs-4" (click)="changeState()">
+            <i [class]="expand ? 'bi bi-x-lg' : 'bi bi-list'"></i>
+        </button>
+        <h3>Página principal</h3>
+        <img src="https://i.pinimg.com/736x/f6/57/00/f657005622da78726534f8c723ed399a.jpg" alt="" style="width: 40px; height: 40px; padding-right: 16px;">
+    </nav>
+    <!-- SideBar -->
+        <aside class="myside z-2 h-100 pt-5 fixed-top animation"
+            [class]="expand ? 'side-expand' : 'side-compressed'">
+            <div class="pt-3 fs-5 d-flex flex-column h-100">
+                <ul class="nav flex-column">
+
+                    <li class="nav-item mb-2">
+                        <button class="nav-link d-flex text-light w-100">
+                            <i class="bi-person"></i>
+                            @if (expand) {<span class="ms-2">Perfil</span>}
+                        </button>
+                    </li>
+
+                    <li class="nav-item mb-2">
+                        <button class="nav-link d-flex text-light w-100">
+                            <i class="bi-people"></i>
+                            @if (expand) {<span class="ms-2">Familia</span>}
+                        </button>
+                    </li>
+
+                    <li class="nav-item mb-2">
+                        <button class="nav-link d-flex text-light w-100">
+                            <i class="bi-file-text"></i>
+                            @if (expand) {<span class="ms-2">Facturas</span>}
+                        </button>
+                    </li>
+
+                    <li class="nav-item mb-2">
+                        <button class="nav-link d-flex text-light w-100" data-bs-toggle="collapse"
+                            data-bs-target="#dropmenu">
+                            <i class="bi-exclamation-triangle"></i>
+                            @if (expand) {<span class="ms-2">Infracciones</span>}
+                        </button>
+
+                        <!-- Dropdown items -->
+                        <div class="sub-menu collapse fs-6 animacion" [class]="expand ? 'side-expandido' : 'side-comprimido'" id="dropmenu">
+                            <button class="nav-link d-flex text-light w-100">
+                                <i class="bi-list-task"></i>
+                                @if (expand) {<span class="ms-2">Listado</span>}
+                            </button>
+
+                            <button class="nav-link d-flex text-light w-100">
+                                <i class="bi-file-earmark-plus"></i>
+                                @if (expand) {<span class="ms-2">Nueva</span>}
+                            </button>
+
+                            <button class="nav-link d-flex text-light w-100">
+                                <i class="bi-graph-up"></i>
+                                @if (expand) {<span class="ms-2">Estadisticas</span>}
+                            </button>
+                        </div>
+                    </li>
+
+                    <li class="nav-item mb-2">
+                        <button class="nav-link d-flex text-light w-100">
+                            <i class="bi-gear"></i>
+                            @if (expand) {<span class="ms-2">Configuración</span>}
+                        </button>
+                    </li>
+
+                    <!-- <li class="nav-item mb-2">
+                        <button class="nav-link d-flex text-light w-100">
+                            <i class="bi-info-circle"></i>
+                            @if (expandir) {<span class="ms-2">Ayuda</span>}
+                        </button>
+                    </li> -->
+                </ul>
+
+                
+                <div class="nav-item mt-auto">
+                    <button class="nav-link d-flex text-light w-100 px-3 py-2">
+                        <i class="bi-info-circle"></i>
+                        @if (expand) {<span class="ms-2">Ayuda</span>}
+                    </button>
+                    <button class="nav-link d-flex text-light w-100 px-3 py-2" (click)="exit()">
+                        <i class="bi-box-arrow-left"></i>
+                        @if (expand) {<span class="ms-2">Salir</span>}
+                    </button>
+                </div>
+            </div>
+        </aside>
+</div>

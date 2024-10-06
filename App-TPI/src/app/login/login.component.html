@@ -1,0 +1,49 @@
+<section class="fondo min-vh-100 d-flex align-items-center justify-content-center">
+    <div class="container">
+        <form #login="ngForm" action="" (ngSubmit)="ingresar(login)" novalidate>
+            <div class="row mb-3">
+                <div class="col mb-3">
+                    <img src="https://www.cabaniasaldeaentresierras.com.ar/frontend/cabanas/images/logo-color.png" style="height: 150px; width: 200px;" alt="">
+                </div>
+            </div>
+    
+            <div class="row mb-3">
+                <div class="col">
+                        <input type="text" class="form-control custom-input" [ngClass]="{'is-invalid': correo.invalid  && (correo.dirty || correo.touched),'is-valid': correo.valid }" 
+                        id="inputCorreo" #correo="ngModel" name="correo" [(ngModel)]="correoInput" required placeholder="Correo electrónico o dni">
+                        @if(correo.invalid  && (correo.dirty || correo.touched)){
+                            <div class="text-danger alinear-texto">Ingrese su correo</div>  
+                        }
+                        
+                </div>
+            </div>
+    
+            <div class="row mb-3">
+                <div class="col">
+                    <input type="password" class="form-control custom-input" [ngClass]="{'is-invalid': clave.invalid  && (clave.dirty || clave.touched),'is-valid': clave.valid }"
+                    id="inputClave" #clave="ngModel" name="clave" [(ngModel)]="claveInput" required minlength="8" placeholder="Contraseña">
+                    @if(clave.errors && clave.errors['required'] && (clave.dirty || clave.touched)){
+                        <div class="text-danger alinear-texto">Ingrese su contraseña</div>
+                        
+                    }
+                    @if(clave.dirty && clave.getError('minlength')) {
+                        <div class="text-danger alinear-texto">Mínimo 8 caracteres</div>
+                    }
+                </div>
+            </div>
+    
+            <div class="row mb-3">
+                <div class="col">
+                    <button type="submit" class="btn btn-secondary rounded-pill w-100" [disabled]="login.invalid">Ingresar</button>
+                </div>
+            </div>
+    
+            <div class="row">
+                <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="#">
+                    ¿Olvidaste tu contraseña?
+                  </a>
+            </div>
+        </form>
+        
+    </div>    
+</section>

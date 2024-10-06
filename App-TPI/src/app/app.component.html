@@ -1,0 +1,9 @@
+<section>
+  <app-login (validacion)="redirigir()" [hidden]="showLandingPage"></app-login>
+  @if (showLandingPage) {
+    <app-navbar (logOut)="redirigir()" ></app-navbar>
+    <app-landing-page></app-landing-page>
+  }
+  
+  <!-- <app-login></app-login> -->
+</section>
