@@ -1,9 +1,19 @@
+
 <section>
-  <app-login (validacion)="redirigir()" [hidden]="showLandingPage"></app-login>
-  @if (showLandingPage) {
-    <app-navbar (logOut)="redirigir()" ></app-navbar>
-    <app-landing-page></app-landing-page>
+  <!--
+  @if(showLoginPage){
+    <app-login (validacion)="redirect('Landing')" [hidden]="showLandingPage"></app-login>
   }
-  
-  <!-- <app-login></app-login> -->
+  @else {-->
+    <app-navbar (navigation)="redirect($event)" ></app-navbar>
+    @if (showLandingPage) {
+      <app-landing-page></app-landing-page>
+    }
+    @if(showListUsersPage){
+      <app-list-users></app-list-users>
+    } 
+    @if(showAddUserPage){
+      <app-new-user></app-new-user>   
+    }
+  <!--}-->
 </section>

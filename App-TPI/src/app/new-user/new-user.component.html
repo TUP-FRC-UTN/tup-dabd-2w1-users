@@ -1,17 +1,96 @@
 <section class="container pt-5">
     <h3>Añadir Usuario</h3>
 
-    <form #newUser action="">
+    <form #newUser="ngForm" action="" (ngSubmit)="createUser(newUser)" novalidate>
 
-        <div class="row">
+        <!--
+        <div>
+            <img src="https://e7.pngegg.com/pngimages/858/581/png-clipart-profile-icon-user-computer-icons-system-chinese-wind-title-column-miscellaneous-service.png" class="rounded float-end" alt="Foto" style="width: 150px; height: auto;">
+        </div>
+        -->
+        <div class="row mb-3">
             <div class="col">
-
+                <label for="inputName" class="form-label">Nombre</label>
+                <input type="text" class="form-control custom-input" [ngClass]="{'is-invalid': nameInp.invalid  && (nameInp.dirty || nameInp.touched),'is-valid': nameInp.valid }" 
+                        id="inputName" #nameInp="ngModel" name="nameInp" [(ngModel)]="nameInput" required placeholder="Nombre">
+                        @if(nameInp.invalid  && (nameInp.dirty || nameInp.touched)){
+                            <div class="text-danger alinear-texto">Ingrese su nombre</div>
+                        }
             </div>
             <div class="col">
-
+                <label for="inputLastName" class="form-label">Apellido</label>
+                <input type="text" class="form-control custom-input" [ngClass]="{'is-invalid': lastnameInp.invalid  && (lastnameInp.dirty || lastnameInp.touched),'is-valid': lastnameInp.valid }" 
+                        id="inputLastName" #lastnameInp="ngModel" name="lastNameImp" [(ngModel)]="lastNameInput" required placeholder="Apellido">
+                        @if(lastnameInp.invalid  && (lastnameInp.dirty || lastnameInp.touched)){
+                            <div class="text-danger alinear-texto">Ingrese su apellido</div>  
+                        }
             </div>
         </div>
 
+        <div class="row mb-3">
+            <div class="col">
+                <label for="inputEmail" class="form-label">Email</label>
+                <input type="text" class="form-control custom-input" [ngClass]="{'is-invalid': emailInp.invalid  && (emailInp.dirty || emailInp.touched),'is-valid': emailInp.valid }" 
+                        id="inputEmail" #emailInp="ngModel" name="emailInp" [(ngModel)]="emailInput" required placeholder="Correo electrónico">
+                        @if(emailInp.invalid  && (emailInp.dirty || emailInp.touched)){
+                            <div class="text-danger alinear-texto">Ingrese su correo electrónico</div>  
+                        }
+            </div>
+            <div class="col">
+                <label for="inputDni" class="form-label">Dni</label>
+                <input type="text" class="form-control custom-input" [ngClass]="{'is-invalid': dniInp.invalid  && (dniInp.dirty || dniInp.touched),'is-valid': dniInp.valid }" 
+                        id="inputDni" #dniInp="ngModel" name="dniInp" [(ngModel)]="dniInput" required placeholder="Dni">
+                        @if(dniInp.invalid  && (dniInp.dirty || dniInp.touched)){
+                            <div class="text-danger alinear-texto">Ingrese su dni</div>  
+                        }
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col">
+                <label for="inputTelefono" class="form-label">Teléfono</label>
+                <input type="text" class="form-control custom-input" [ngClass]="{'is-invalid': telefonoInp.invalid  && (telefonoInp.dirty || telefonoInp.touched),'is-valid': telefonoInp.valid }" 
+                        id="inputTelefono" #telefonoInp="ngModel" name="telefonoInp" [(ngModel)]="telefonoInput" required placeholder="Teléfono">
+                        @if(telefonoInp.invalid  && (telefonoInp.dirty || telefonoInp.touched)){
+                            <div class="text-danger alinear-texto">Ingrese su teléfono</div>  
+                        }
+            </div>
+            <div class="col">
+                <label for="inputBirthdate" class="form-label">Fecha de nacimiento</label>
+                <input type="date" class="form-control custom-input"
+                        id="inputBirthdate" #birthdateInp="ngModel" name="birthdateInp" [(ngModel)]="birthdateInput" required placeholder="Dni">
+            </div>
+        </div>
+
+        
+
+        <div>
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="exampleInputEmail1" class="form-label">Rol</label>
+                    <select class="form-select" aria-label="Default select example"
+                    id="selectType" required name="selectRol" [(ngModel)]="select" #rol="ngModel">
+                        <option selected>Seleccione un rol</option>
+                        @for(rol of roles; track $index){
+                            <option value="{{rol.description}}">{{rol.description}}</option>
+                        }   
+                      </select>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <button type="submit"  class="btn rounded-pill w-100  btn-hoover">Crear</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <button type="button" class="btn rounded-pill w-100  btn-hoover">Cancelar</button>
+                    
+                </div>
+            </div>
+        </div>
+
+        
     </form>
 
 </section>

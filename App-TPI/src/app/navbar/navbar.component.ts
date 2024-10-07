@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
-  @Output() logOut = new EventEmitter<void>();
+  @Output() navigation = new EventEmitter<String>();
 
   expand : boolean = false;
 
@@ -18,7 +18,7 @@ export class NavbarComponent {
     this.expand = !this.expand;
   }
 
-  exit(){
-    this.logOut.emit();
+  redirect(page : string){
+    this.navigation.emit(page);
   }
 }

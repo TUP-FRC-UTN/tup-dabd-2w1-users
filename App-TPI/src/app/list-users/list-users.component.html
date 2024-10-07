@@ -1,0 +1,49 @@
+<section class="container pt-5">
+    <h3>Listado de Usuarios</h3>
+    <p>Filtrar por:</p>
+
+    <div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="options" id="inlineCheckbox1" value="option1">
+            <label class="form-check-label" for="inlineCheckbox1">Rol</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="options" id="inlineCheckbox2" value="option2">
+            <label class="form-check-label" for="inlineCheckbox2">Fecha de creación</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="options" id="inlineCheckbox3" value="option3">
+            <label class="form-check-label" for="inlineCheckbox3">Lote</label>
+        </div>
+    </div>
+    <div style="background-color: #362e2e">
+        <table class="table" style="background-color: #6c757d"> <!-- color personalizado -->
+            <thead>
+                <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Rol</th>
+                    <th scope="col">Fecha de creación</th>
+                    <th scope="col">Nro. de Lote</th>
+                    <th scope="col">Acciones</th> <!-- Cerramos correctamente el th -->
+                </tr>
+            </thead>
+            <tbody>
+                @for (user of users; track $index) {
+                    <tr>
+                        <td>{{user.name + ", " + user.lastname}}</td>
+                        <td>{{user.roles}}</td>
+                        <td>{{user.datebirth}}</td>
+                        <td>{{ getRandomLote($index) }}</td> 
+                        <td>
+                            <button class="btn btn-success">Ver más</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    
+    
+    
+
+</section>

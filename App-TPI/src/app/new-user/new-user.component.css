@@ -1,0 +1,26 @@
+input{
+    background: #E8E8E8;
+    height: 50px;
+    border-radius: 0%;
+}
+
+input.custom-input:focus {
+    background-color: #E8E8E8;
+}
+
+select{
+    background: #E8E8E8;
+    height: 50px;
+    border-radius: 0%;
+}
+
+button{
+    background-color: var(--color-nav);
+    height: 50px;
+    color: #E8E8E8;
+}
+
+.btn-hoover:hover{
+    background-color: var(--color-side)!important;
+    color: #E8E8E8;
+}
