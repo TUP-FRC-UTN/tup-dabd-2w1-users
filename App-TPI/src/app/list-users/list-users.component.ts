@@ -19,6 +19,12 @@ import { FormsModule } from '@angular/forms';
   startDate: string = ''; // Almacena el valor del filtro de fecha de inicio
   endDate: string = ''; // Almacena el valor del filtro de fecha de fin
 
+  showFilterName : boolean = false;
+
+  changeFilterName(){
+    this.showFilterName = !this.showFilterName;
+  }
+
   constructor(private http: HttpClient) {
     this.http.get<UserModel[]>("http://localhost:8080/users").subscribe((data: any) => {
       this.users = data.map((user: any) => {

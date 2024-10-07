@@ -1,24 +1,37 @@
 <section class="container pt-5">
-    <h3>Listado de Usuarios</h3>
-    <p>Filtrar por:</p>
+  <h3>Listado de Usuarios</h3>
+  <p>Filtrar por:</p>
 
-    <!-- Filtros de selección -->
+  <!-- Filtros de selección -->
   <div>
     <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="filterOption" id="filterRole" value="role" (change)="onFilterChange('role')">
+      <input class="form-check-input" type="radio" name="filterOption" id="filterRole" value="role"
+        (change)="onFilterChange('role')">
       <label class="form-check-label" for="filterRole">Rol</label>
     </div>
     <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="filterOption" id="filterDate" value="date" (change)="onFilterChange('date')">
+      <input class="form-check-input" type="radio" name="filterOption" id="filterDate" value="date"
+        (change)="onFilterChange('date')">
       <label class="form-check-label" for="filterDate">Fecha de creación</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name="filterOption" id="filterDate" value="date" 
+      (change)="onFilterChange('name')">
+      <label class="form-check-label" for="filterDate">Nombre</label>
     </div>
   </div>
 
-  <!-- Campo de búsqueda por nombre -->
-  <div class="mt-3">
-    <label for="filterName">Buscar por nombre:</label>
-    <input id="filterName" type="text" class="form-control" (input)="filterByName($event)">
+  <div *ngIf="selectedFilter === 'name'">
+    <div class="mt-3">
+      <label for="filterName">Buscar por nombre:</label>
+      <input id="filterName" type="text" class="form-control" (input)="filterByName($event)">
+    </div>
+    <!-- Botón Filtrar -->
+    <div class="mt-3">
+      <button class="btn btn-primary" (click)="applyFilter()">Filtrar</button>
+    </div>
   </div>
+  
 
   <!-- Opciones de filtro dinámicas -->
   <div class="mt-3">
@@ -34,44 +47,37 @@
     <div *ngIf="selectedFilter === 'date'">
       <label for="startDate">Fecha de inicio:</label>
       <input id="startDate" type="date" class="form-control mb-2" [(ngModel)]="startDate">
-      
+
       <label for="endDate">Fecha de fin:</label>
       <input id="endDate" type="date" class="form-control" [(ngModel)]="endDate">
     </div>
   </div>
 
-  <!-- Botón Filtrar -->
-   @if(){
-    <div class="mt-3">
-        <button class="btn btn-primary" (click)="applyFilter()">Filtrar</button>
-      </div>
-   }
 
-
-    <div style="background-color: #362e2e">
-        <table class="table" style="background-color: #6c757d"> <!-- color personalizado -->
-            <thead>
-                <tr>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Rol</th>
-                    <th scope="col">Fecha de creación</th>
-                    <th scope="col">Nro. de Lote</th>
-                    <th scope="col">Acciones</th> <!-- Cerramos correctamente el th -->
-                </tr>
-            </thead>
-            <tbody>
-                @for (user of filteredUsers ; track $index) {
-                    <tr>
-                        <td>{{user.name + ", " + user.lastname}}</td>
-                        <td>{{user.roles}}</td>
-                        <td>{{user.datebirth}}</td>
-                        <td>{{ getRandomLote($index) }}</td> 
-                        <td>
-                            <button class="btn btn-success">Ver más</button>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+  <div style="background-color: #362e2e">
+    <table class="table" style="background-color: #6c757d"> <!-- color personalizado -->
+      <thead>
+        <tr>
+          <th scope="col">Nombre</th>
+          <th scope="col">Rol</th>
+          <th scope="col">Fecha de creación</th>
+          <th scope="col">Nro. de Lote</th>
+          <th scope="col">Acciones</th> <!-- Cerramos correctamente el th -->
+        </tr>
+      </thead>
+      <tbody>
+        @for (user of filteredUsers ; track $index) {
+        <tr>
+          <td>{{user.name + ", " + user.lastname}}</td>
+          <td>{{user.roles}}</td>
+          <td>{{user.datebirth}}</td>
+          <td>{{ getRandomLote($index) }}</td>
+          <td>
+            <button class="btn btn-success">Ver más</button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
 </section>
