@@ -76,7 +76,8 @@
             <td>{{user.datebirth}}</td>
             <td>{{ getRandomLote($index) }}</td>
             <td>
-              <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#infoUser">
+              <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#infoUser"
+              (click)="selectUser(user.id)">
                 Ver más
               </button>
             </td>
@@ -87,4 +88,4 @@
   </div>
 </section>
 
-<app-modal-info-user/>
+<app-modal-info-user [user]="user"/>

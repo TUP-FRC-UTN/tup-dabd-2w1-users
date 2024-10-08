@@ -1,9 +1,10 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, inject, OnInit, Query } from '@angular/core';
 import { UserModel } from '../models/User';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ModalInfoUserComponent } from '../modal-info-user/modal-info-user.component';
+import { ApiServiceService } from '../servicies/api-service.service';
 
 @Component({
   selector: 'app-list-users',
@@ -11,8 +12,10 @@ import { ModalInfoUserComponent } from '../modal-info-user/modal-info-user.compo
   imports: [HttpClientModule, CommonModule, FormsModule, ModalInfoUserComponent], // Importa aquí el HttpClientModule
   templateUrl: './list-users.component.html',
   styleUrls: ['./list-users.component.css']
-})export class ListUsersComponent {
+})export class ListUsersComponent implements OnInit { 
+  user: number = 0; 
   users: UserModel[] = [];
+  private readonly apiService = inject(ApiServiceService);
   filteredUsers: UserModel[] = [];
   availableRoles: string[] = ['Admin', 'User', 'Owner', 'Security']; // Ajusta según tus roles disponibles
   selectedFilter: string = ''; // Almacena el filtro seleccionado (role, date)
@@ -20,26 +23,19 @@ import { ModalInfoUserComponent } from '../modal-info-user/modal-info-user.compo
   startDate: string = ''; // Almacena el valor del filtro de fecha de inicio
   endDate: string = ''; // Almacena el valor del filtro de fecha de fin
 
-
-  constructor(private http: HttpClient) {
-    this.http.get<UserModel[]>("http://localhost:8080/users").subscribe((data: any) => {
-      this.users = data.map((user: any) => {
-        const userModel = new UserModel();
-        userModel.id = user.id;
-        userModel.name = user.name;
-        userModel.lastname = user.lastname;
-        userModel.username = user.username;
-        userModel.email = user.email;
-        userModel.dni = user.dni;
-        userModel.contact_id = user.contact_id;
-        userModel.active = user.active;
-        userModel.avatar_url = user.avatar_url;
-        userModel.datebirth = user.datebirth;
-        userModel.roles = user.roles;
-        return userModel;
-      });
-      this.filteredUsers = [...this.users]; // Inicialmente, no hay filtro
+  ngOnInit() {
+    this.apiService.getAllUsers().subscribe({
+      next: (data: UserModel[]) => {
+        this.filteredUsers = data;
+      },
+      error: (error) => {
+        console.error('Error al cargar los roles:', error);
+      }
     });
+    }
+
+  selectUser(id: number) {
+    this.user = id;
   }
 
   onFilterChange(filter: string) {

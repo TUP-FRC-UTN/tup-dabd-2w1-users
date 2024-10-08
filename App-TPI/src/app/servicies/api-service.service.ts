@@ -22,6 +22,10 @@ export class ApiServiceService {
     return this.http.get<RolModel[]>(this.url + "roles");
   }
 
+  getUserById(id: number): Observable<UserModel> {
+    return this.http.get<UserModel>(this.url + "users/" + id);
+  }
+
   postUser(user: UserPost): Observable<UserModel> {    
     return this.http.post<UserModel>(this.url + "users", user);
   } 
