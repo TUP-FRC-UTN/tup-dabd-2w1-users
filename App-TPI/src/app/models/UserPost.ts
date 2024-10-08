@@ -1,5 +1,4 @@
-export class UserModel {
-    id: number;
+export class UserPost {
     name: string;
     lastname: string;   
     username: string;     
@@ -13,7 +12,6 @@ export class UserModel {
     password: string;
 
     constructor() {
-        this.id = 0;
         this.name = '';
         this.lastname = '';
         this.username = '';

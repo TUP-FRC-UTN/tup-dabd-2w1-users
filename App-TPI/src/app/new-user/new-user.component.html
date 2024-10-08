@@ -8,6 +8,24 @@
             <img src="https://e7.pngegg.com/pngimages/858/581/png-clipart-profile-icon-user-computer-icons-system-chinese-wind-title-column-miscellaneous-service.png" class="rounded float-end" alt="Foto" style="width: 150px; height: auto;">
         </div>
         -->
+           <!-- 
+        {
+        --"name": "string",
+        --"lastname": "string",
+        --"username": "string",
+        "password": "string",
+        --"email": "string",
+        --"dni": "string",
+        "contact_id": 0,
+        "active": true,
+        "avatar_url": "string",
+        --"datebirth": "2024-10-07",
+        --"roles": [
+            "string"
+        ]
+        }
+        -->
+
         <div class="row mb-3">
             <div class="col">
                 <label for="inputName" class="form-label">Nombre</label>
@@ -24,6 +42,23 @@
                         @if(lastnameInp.invalid  && (lastnameInp.dirty || lastnameInp.touched)){
                             <div class="text-danger alinear-texto">Ingrese su apellido</div>  
                         }
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col">
+                <label for="usernameInput" class="form-label">Nombre del usuario</label>
+                <input type="text" class="form-control custom-input" 
+                       [ngClass]="{'is-invalid': usernameField.invalid && (usernameField.dirty || usernameField.touched),
+                                   'is-valid': usernameField.valid }" 
+                       id="usernameInput" 
+                       #usernameField="ngModel" 
+                       name="usernameInput" 
+                       [(ngModel)]="usernameInput" 
+                       required 
+                       placeholder="Nombre de Usuario">
+                @if(usernameField.invalid && (usernameField.dirty || usernameField.touched)){
+                    <div class="text-danger alinear-texto">Ingrese su nombre de usuario</div>
+                }
             </div>
         </div>
 
@@ -58,22 +93,37 @@
             <div class="col">
                 <label for="inputBirthdate" class="form-label">Fecha de nacimiento</label>
                 <input type="date" class="form-control custom-input"
-                        id="inputBirthdate" #birthdateInp="ngModel" name="birthdateInp" [(ngModel)]="birthdateInput" required placeholder="Dni">
-            </div>
+                       id="inputBirthdate" name="birthdateInp" required>
+              </div>
+              
+              
         </div>
 
         <div>
             <div class="row mb-3">
                 <div class="col">
                     <label for="exampleInputEmail1" class="form-label">Rol</label>
-                    <select class="form-select" aria-label="Default select example"
-                    id="selectType" required name="selectRol" [(ngModel)]="select" #rol="ngModel">
-                        <option selected>Seleccione un rol</option>
-                        @for(rol of roles; track $index){
-                            <option value="{{rol.description}}">{{rol.description}}</option>
-                        }   
-                      </select>
+                    <div class="d-flex">
+                        <select class="form-select" aria-label="Default select example"
+                        id="selectType" required name="selectRol" [(ngModel)]="select" #rol="ngModel">
+                            <option selected>Seleccione un rol</option>
+                            @for(rol of roles; track $index){
+                                <option value="{{rol.description}}">{{rol.description}}</option>
+                            }   
+                        </select>
+                        <button type="button" (click)="aniadirRol()" > Añadir</button>
+                    </div>
                 </div>
+            </div>
+            <div class="row mb-3">
+                <ul>
+                    @if(rolesInput.length > 0){
+                        <p>Roles añadidos: </p>
+                    }
+                    @for(rol of rolesInput; track $index){
+                        <li class="">{{rol}} <button (click)="quitarRol(rol)">Quitar</button></li>
+                    }
+                  </ul>
             </div>
             <div class="row mb-3">
                 <div class="col">

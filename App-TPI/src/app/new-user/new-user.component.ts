@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RolModel } from '../models/Rol';
+import { ApiServiceService } from '../servicies/api-service.service';
+import { UserModel } from '../models/User';
+import { UserPost } from '../models/UserPost';
 
 @Component({
   selector: 'app-new-user',
@@ -11,78 +13,89 @@ import { RolModel } from '../models/Rol';
   templateUrl: './new-user.component.html',
   styleUrl: './new-user.component.css'
 })
-export class NewUserComponent  implements OnInit{
+export class NewUserComponent implements OnInit {
+  private readonly apiService = inject(ApiServiceService);
 
-  roles : RolModel[] = [];
+  
+  roles: RolModel[] = [];
 
-  constructor(private http: HttpClient) {
-    this.http.get<RolModel[]>("http://localhost:8080/roles").subscribe((data: any) => {
-      this.roles = data.map((user: any) => {
-        const rolModel = new RolModel();
-        rolModel.id = user.id;
-        rolModel.description = user.description;
-        console.log(rolModel);
-        
-        return rolModel;
-      });
+  rolesHtmlString: string = '';  //
+  rolesString: string = "Roles añadidos:";
+  rolesInput: string[] = [];
+  select: string = "";
+
+
+  nameInput: string = "";
+  lastNameInput: string = "";
+  usernameInput: string = "";
+  emailInput: string = "";
+  dniInput: string = "";
+  telefonoInput: string = "";
+  birthdateInput: Date = new Date();
+
+  ngOnInit() {
+    this.loadRoles();
+  }
+
+  loadRoles() {
+    this.apiService.getAllRoles().subscribe({
+      next: (data: RolModel[]) => {
+        this.roles = data;
+      },
+      error: (error) => {
+        console.error('Error al cargar los roles:', error);
+      }
     });
   }
 
-  nameInput : string = "";
-  lastNameInput : string = "";
-  emailInput : string = "";
-  dniInput : string = "";
-  telefonoInput : string = "";
-  birthdateInput : Date = new Date();
-  select : string = "";
-
-  ngOnInit(): void {
-    
+   aniadirRol() {
+    if (this.select && !this.rolesInput.includes(this.select)) {  // Evita duplicados
+      this.rolesInput.push(this.select);  
+    }
   }
 
-  fillSelect(){}
+  quitarRol(rol: string) {
+    const index = this.rolesInput.indexOf(rol);
+    if (index > -1) {
+      this.rolesInput.splice(index, 1);
+    }
+  }
 
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // getMonth() es 0-indexed
+    const day = String(date.getDate()).padStart(2, '0');
+    
+    return `${year}-${month}-${day}`;
+  }
   
 
-  createUser(form : any) {
-  console.log(form.value);
-    var username : string = this.nameInput + this.lastNameInput;
-    var password : string = this.dniInput;
-    var contact_id : number = 2;
-    var active : boolean = true;
-    var name : string = form.value.nameInp;
-    var lastname : string = form.value.lastNameImp;
-    var email : string = form.value.emailInp;
-    var dni : string = form.value.dniInp;
-    var datebirth : Date = form.value.birthdateInp;
-    var roles : string[] = [form.value.selectRol];
-
-    const userData = {
-      username: username,
-      password: password,
-      contact_id: contact_id,
-      active: active,
-      name: name,
-      lastname: lastname,
-      email: email,
-      dni: dni,
-      datebirth: datebirth,
-      roles: roles
+  createUser(form: any) {
+    const userData : UserPost = {
+      name: form.value.nameInp,
+      lastname: form.value.lastNameImp,
+      username: this.usernameInput,
+      password: this.dniInput,
+      email: form.value.emailInp,
+      dni: form.value.dniInp,
+      contact_id: 1,
+      active: true,
+      avatar_url: '',
+      datebirth: this.formatDate(this.birthdateInput),
+      roles: this.rolesInput  
     };
 
     console.log(userData);
-    
 
-    this.http.post("http://localhost:8080/users", userData).subscribe({
+    this.apiService.postUser(userData).subscribe({
       next: (response) => {
         console.log('Usuario creado exitosamente:', response);
-        // Aquí puedes manejar el éxito (mostrar notificación, limpiar el formulario, etc.)
+        // Aquí podrías redirigir o actualizar la UI
       },
       error: (error) => {
         console.error('Error al crear el usuario:', error);
-        // Manejo del error
-      }
+        // Manejo de errores, podrías mostrar un mensaje al usuario
+      },
     });
-    
   }
 }
