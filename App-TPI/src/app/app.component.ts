@@ -5,18 +5,19 @@ import { NavbarComponent } from "./navbar/navbar.component";
 import { LandingPageComponent } from "./landing-page/landing-page.component";
 import { NewUserComponent } from './new-user/new-user.component';
 import { ListUsersComponent } from './list-users/list-users.component';
+import { ModalInfoUserComponent } from './modal-info-user/modal-info-user.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, LoginComponent, NavbarComponent, LandingPageComponent, NewUserComponent, ListUsersComponent],
+  imports: [RouterOutlet, LoginComponent, NavbarComponent, LandingPageComponent, NewUserComponent, ListUsersComponent, ModalInfoUserComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
   title = 'LoginTpi';
   showLoginPage : boolean = false;
-  showLandingPage : boolean = false;
+  showLandingPage : boolean = true;
   showAddUserPage : boolean = false;
   showListUsersPage : boolean = false;
 

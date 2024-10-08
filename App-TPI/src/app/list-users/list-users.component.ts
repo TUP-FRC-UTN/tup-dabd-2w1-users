@@ -3,11 +3,12 @@ import { Component } from '@angular/core';
 import { UserModel } from '../models/User';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ModalInfoUserComponent } from '../modal-info-user/modal-info-user.component';
 
 @Component({
   selector: 'app-list-users',
   standalone: true,
-  imports: [HttpClientModule, CommonModule, FormsModule ], // Importa aquí el HttpClientModule
+  imports: [HttpClientModule, CommonModule, FormsModule, ModalInfoUserComponent], // Importa aquí el HttpClientModule
   templateUrl: './list-users.component.html',
   styleUrls: ['./list-users.component.css']
 })export class ListUsersComponent {
@@ -19,11 +20,6 @@ import { FormsModule } from '@angular/forms';
   startDate: string = ''; // Almacena el valor del filtro de fecha de inicio
   endDate: string = ''; // Almacena el valor del filtro de fecha de fin
 
-  showFilterName : boolean = false;
-
-  changeFilterName(){
-    this.showFilterName = !this.showFilterName;
-  }
 
   constructor(private http: HttpClient) {
     this.http.get<UserModel[]>("http://localhost:8080/users").subscribe((data: any) => {
