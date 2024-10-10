@@ -4,6 +4,7 @@ export class UserModel {
     lastname: string;   
     username: string;     
     email: string;        
+    phone_number: number;
     dni: number;        
     contact_id: number;   
     active: boolean;      
@@ -25,5 +26,6 @@ export class UserModel {
         this.datebirth = '';
         this.roles = [];
         this.password = ''; 
+        this.phone_number = 0;
     }
 }
