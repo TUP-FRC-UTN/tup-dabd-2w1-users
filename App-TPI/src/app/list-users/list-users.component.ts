@@ -34,8 +34,21 @@ import { ApiServiceService } from '../servicies/api-service.service';
     });
     }
 
+  // Busca el user y se lo pasa al modal
+  userModal : UserModel = new UserModel();
   selectUser(id: number) {
     this.user = id;
+    this.apiService.getUserById(id)
+      .subscribe({
+        next: (data: UserModel) => {
+          this.userModal = data;
+          console.log(this.userModal);
+          
+        },
+        error: (error) => {
+          console.error('Error al cargar el usuario:', error);
+        }
+      });
   }
 
   onFilterChange(filter: string) {

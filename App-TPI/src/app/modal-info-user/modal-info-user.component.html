@@ -13,12 +13,12 @@
                         <div class="col">
                             <label for="inputName" class="form-label">Nombre</label>
                             <input type="text" class="form-control custom-input" id=" inputName" #name="ngModel"
-                                name="name" [(ngModel)]="nameInput">
+                                name="name" [(ngModel)]="userModal.name">
                         </div>
                         <div class="col">
                             <label for="inputLastName" class="form-label">Apellido</label>
                             <input type="text" class="form-control custom-input" id="inputLastName" #lastname="ngModel"
-                                name="lastName" [(ngModel)]="lastNameInput">
+                                name="lastName" [(ngModel)]="userModal.lastname">
                         </div>
                     </div>
 
@@ -26,12 +26,12 @@
                         <div class="col">
                             <label for="inputEmail" class="form-label">Email</label>
                             <input type="text" class="form-control custom-input" id="inputEmail" #email="ngModel"
-                                name="email" [(ngModel)]="emailInput">
+                                name="email" [(ngModel)]="userModal.email">
                         </div>
                         <div class="col">
                             <label for="inputDni" class="form-label">Dni</label>
                             <input type="text" class="form-control custom-input" id="inputDni" #dni="ngModel" name="dni"
-                                [(ngModel)]="dniInput">
+                                [(ngModel)]="userModal.dni">
                         </div>
                     </div>
 
@@ -44,7 +44,7 @@
                         <div class="col">
                             <label for="inputBirthdate" class="form-label">Fecha de nacimiento</label>
                             <input type="date" class="form-control custom-input" id="inputBirthdate"
-                                #birthdate="ngModel" name="birthdate" [(ngModel)]="birthdateInput">
+                                #birthdate="ngModel" name="birthdate" [(ngModel)]="userModal.datebirth">
                         </div>
                     </div>
 
@@ -52,9 +52,12 @@
                         <div class="row mb-3">
                             <div class="col">
                                 <label for="exampleInputEmail1" class="form-label">Rol</label>
-
+                                
                                 <div class="container">
                                     <!-- lista de roles -->
+                                     @for (rol of userModal.roles; track $index) {
+                                        <p>{{rol}}</p>
+                                     }
                                 </div>
 
                             </div>

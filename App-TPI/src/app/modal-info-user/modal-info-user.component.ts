@@ -3,6 +3,7 @@ import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, 
 import { FormsModule } from '@angular/forms';
 import { UserModel } from '../models/User';
 import { ApiServiceService } from '../servicies/api-service.service';
+import { RolModel } from '../models/Rol';
 
 @Component({
   selector: 'app-modal-info-user',
@@ -11,21 +12,19 @@ import { ApiServiceService } from '../servicies/api-service.service';
   templateUrl: './modal-info-user.component.html',
   styleUrl: './modal-info-user.component.css'
 })
-export class ModalInfoUserComponent implements OnInit{
+export class ModalInfoUserComponent {
   nameInput : string = "";
   lastNameInput : string = "";
   emailInput : string = "";
   dniInput : string = "";
   telefonoInput : string = "";
   birthdateInput : Date = new Date();
+  roles : RolModel[] = [];
 
   private readonly apiService = inject(ApiServiceService);
 
-  @Input() user: number = 0;
+  @Input() userModal: UserModel = new UserModel();
 
-  ngOnInit(): void {
-    var user: UserModel = this.apiService.getUser(this.user);
-  }
 
 
 }

@@ -23,7 +23,7 @@ export class ApiServiceService {
   }
 
   getUserById(id: number): Observable<UserModel> {
-    return this.http.get<UserModel>(this.url + "users/" + id);
+    return this.http.get<UserModel>(this.url + "users/get/" + id);
   }
 
   postUser(user: UserPost): Observable<UserModel> {    
