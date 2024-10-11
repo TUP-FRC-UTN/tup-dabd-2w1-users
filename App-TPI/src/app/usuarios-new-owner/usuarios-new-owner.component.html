@@ -1,0 +1,111 @@
+<section class="container pt-5">
+    <h3>Añadir Propietario</h3>
+    <form [formGroup]="newOwner" (ngSubmit)="createOwner()">
+        <div class="row mb-3 mt-5">
+            <div class="col d-flex flex-column">
+                <div class="d-flex align-items-center justify-content-end">
+                    <label class="form-label mb-0 me-3 text-end">Nombre</label>
+                    <input type="text" class="form-control custom-input" formControlName="name">
+                </div>   
+                @if(newOwner.controls['name'].invalid && (newOwner.controls['name'].dirty || newOwner.controls['name'].touched)){
+                    <div class="text-danger align-self-end" style="width: 500px;">
+                        Ingrese su nombre
+                    </div>
+                }
+            </div>
+            <div class="col d-flex flex-column">
+                <div class="d-flex align-items-center justify-content-end">
+                    <label class="form-label mb-0 me-3 text-end">Apellido</label>
+                    <input type="text" class="form-control custom-input" formControlName="lastname">
+                </div>   
+                @if(newOwner.controls['lastname'].invalid && (newOwner.controls['lastname'].dirty || newOwner.controls['lastname'].touched)){
+                    <div class="text-danger align-self-end" style="width: 500px;">
+                        Ingrese su apellido
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col d-flex flex-column">
+                <div class="d-flex align-items-center justify-content-end">
+                    <label class="form-label mb-0 me-3 text-end">DNI</label>
+                    <input type="text" class="form-control custom-input" formControlName="dni">
+                </div>   
+                @if(newOwner.controls['dni'].invalid && (newOwner.controls['dni'].dirty || newOwner.controls['dni'].touched)){
+                    <div class="text-danger align-self-end" style="width: 500px;">
+                        Ingrese su DNI
+                    </div>
+                }
+            </div>
+            <div class="col d-flex flex-column">
+                <div class="d-flex align-items-center justify-content-end">
+                    <label class="form-label mb-0 me-3 text-end">CUIT - CUIL</label>
+                    <input type="text" class="form-control custom-input" formControlName="cuit_cuil">
+                </div>   
+                @if(newOwner.controls['cuit_cuil'].invalid && (newOwner.controls['cuit_cuil'].dirty || newOwner.controls['cuit_cuil'].touched)){
+                    <div class="text-danger align-self-end" style="width: 500px;">
+                        Ingrese su CUIT - CUIL
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col d-flex flex-column">
+                <div class="d-flex align-items-center justify-content-end">
+                    <label class="form-label mb-0 me-3 text-end">Fecha de nacimiento</label>
+                    <input type="text" class="form-control custom-input" formControlName="birthdate">
+                </div>   
+                @if(newOwner.controls['birthdate'].invalid && (newOwner.controls['birthdate'].dirty || newOwner.controls['birthdate'].touched)){
+                    <div class="text-danger align-self-end" style="width: 500px;">
+                        Ingrese su Fecha de nacimiento
+                    </div>
+                }
+            </div>
+            <div class="col d-flex flex-column ">
+                <div class="d-flex align-items-center justify-content-end">
+                    <label class="form-label mb-0 me-3 text-end">Email</label>
+                    <input type="text" class="form-control custom-input" formControlName="email">
+                </div>   
+                @if(newOwner.controls['email'].invalid && (newOwner.controls['email'].dirty || newOwner.controls['email'].touched)){
+                    <div class="text-danger align-self-end" style="width: 500px;">
+                        Ingrese su Email
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col d-flex flex-column ">
+                <div class="d-flex align-items-center justify-content-end">
+                    <label class="form-label mb-0 me-3 text-end">Teléfono</label>
+                    <input type="text" class="form-control custom-input" formControlName="phone_number">
+                </div>   
+                @if(newOwner.controls['phone_number'].invalid && (newOwner.controls['phone_number'].dirty || newOwner.controls['phone_number'].touched)){
+                    <div class="text-danger align-self-end" style="width: 500px;">
+                        Ingrese su Teléfono
+                    </div>
+                }
+            </div>
+            <div class="col">
+                <div class="d-flex align-items-center justify-content-end">
+                    <label class="form-label mb-0 me-3 text-end">Empresa</label>
+                    <input type="text" class="form-control custom-input" formControlName="bussines_name">
+                </div>                              
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col">
+                <div class="d-flex justify-content-end">
+                    <button type="button" class="btn btn-danger me-3">Cancelar</button>
+                    @if(newOwner.valid){
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    }@else{
+                        <button type="submit" class="btn btn-primary" disabled>Guardar</button>
+                    }
+                </div>                              
+            </div>
+        </div>
+    </form>
+</section>
