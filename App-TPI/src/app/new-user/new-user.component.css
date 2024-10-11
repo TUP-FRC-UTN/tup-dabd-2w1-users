@@ -1,15 +1,4 @@
-input{
-    background: #E8E8E8;
-    height: 50px;
-    border-radius: 0%;
-}
-
-input.custom-input:focus {
-    background-color: #E8E8E8;
-}
-
-select{
-    background: #E8E8E8;
-    height: 50px;
-    border-radius: 0%;
+.form-control{
+    min-width: 500px;
+    max-width: 500px;   
 }
