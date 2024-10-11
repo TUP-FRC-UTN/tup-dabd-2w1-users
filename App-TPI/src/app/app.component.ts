@@ -6,11 +6,12 @@ import { LandingPageComponent } from "./landing-page/landing-page.component";
 import { NewUserComponent } from './new-user/new-user.component';
 import { ListUsersComponent } from './list-users/list-users.component';
 import { ModalInfoUserComponent } from './modal-info-user/modal-info-user.component';
+import { UsersModalInfoOwnerComponent } from "./users-modal-info-owner/users-modal-info-owner.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, LoginComponent, NavbarComponent, LandingPageComponent, NewUserComponent, ListUsersComponent, ModalInfoUserComponent],
+  imports: [RouterOutlet, LoginComponent, NavbarComponent, LandingPageComponent, NewUserComponent, ListUsersComponent, ModalInfoUserComponent, UsersModalInfoOwnerComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
