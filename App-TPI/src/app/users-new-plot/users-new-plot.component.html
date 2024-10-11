@@ -1,0 +1,79 @@
+<section class="container pt-5">
+    <div class="mb-3">
+        <h3>Añadir Lote</h3>
+    </div>
+    <form [formGroup]="newPlot" (ngSubmit)="createPlot(newPlot)">
+        <div class="row mb-3">
+            <div class="col">
+                <div class="d-flex justify-content-end">
+                    <label for="inputName" class="form-label mb-0 me-3">Número</label>
+                    <input type="text" class="form-control custom-input" formControlName="number">
+                </div>    
+            </div>
+            <div class="col">
+                <div class="d-flex justify-content-end">
+                    <label for="inputName" class="form-label mb-0 me-3">Manzana</label>
+                    <input type="text" class="form-control custom-input" formControlName="blockNumber">
+                </div>  
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col">
+                <div class="d-flex justify-content-end">
+                    <label for="inputName" class="form-label mb-0 me-3">Metros cuadrados(m²)</label>
+                    <input type="text" class="form-control custom-input" formControlName="totalArea">
+                </div>    
+            </div>
+            <div class="col">
+                <div class="d-flex justify-content-end">
+                    <label for="inputName" class="form-label mb-0 me-3">Metros cuadrados construidos(m²)</label>
+                    <input type="text" class="form-control custom-input" formControlName="totalAreaBuild">
+                </div>  
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col">
+                <div class="d-flex justify-content-end">
+                    <label for="chxOwner" class="form-label mb-0 me-3">¿Tiene un propietario?</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="chxOwner" (change)="toggleShowOwners($event)">
+                        <label class="form-check-label" for="flexCheckDefault">
+                        </label>
+                      </div>
+                      <select class="form-select" aria-label="Default select example" [disabled]="!showOwners">
+                        <option selected>Seleccione un propietario</option>
+                        <!-- @if(){
+                            <option value="1">One</option>
+                        } -->
+                      </select>
+                </div>    
+            </div>
+            <div class="col">
+                <div class="d-flex justify-content-end">
+                    <label for="inputName" class="form-label mb-0 me-3">Tipo de lote</label>
+                    <select class="form-select" aria-label="Default select example">
+                        <option selected>Seleccione un tipo</option>
+                        <!-- @if(){
+                            <option value="1">One</option>
+                        } -->
+                      </select>
+                </div>  
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col">
+                <!-- aca va el botón de archivos -->
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col d-flex justify-content-end">
+                <button type="button" class="btn btn-danger me-3">Cancelar</button>
+                <button type="submit" class="btn btn-primary" [disabled]="!newPlot.valid">Crear</button>
+            </div>
+        </div>
+    </form>
+</section>
