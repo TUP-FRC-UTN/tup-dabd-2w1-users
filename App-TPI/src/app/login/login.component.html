@@ -1,6 +1,6 @@
 <section class="fondo min-vh-100 d-flex align-items-center justify-content-center">
     <div class="container">
-        <form #login="ngForm" action="" (ngSubmit)="ingresar(login)" novalidate>
+        <form [formGroup]="loginForm" (ngSubmit)="ingresar(loginForm)">
             <div class="row mb-3">
                 <div class="col mb-3">
                     <img src="assets/images/icono_image.png" style="height: 150px; width: 200px;" alt="">
@@ -9,24 +9,24 @@
     
             <div class="row mb-3">
                 <div class="col">
-                        <input type="text" class="form-control custom-input" [ngClass]="{'is-invalid': correo.invalid  && (correo.dirty || correo.touched),'is-valid': correo.valid }" 
-                        id="inputCorreo" #correo="ngModel" name="correo" [(ngModel)]="correoInput" required placeholder="Correo electrónico o dni">
-                        @if(correo.invalid  && (correo.dirty || correo.touched)){
+                        <input type="text" class="form-control custom-input" [ngClass]="{'is-invalid': loginForm.controls['name'].invalid  && (loginForm.get('name')?.dirty|| loginForm.get('name')?.touched),'is-valid': loginForm.controls['name'].valid }" 
+                         placeholder="Correo electrónico o dni" formControlName="name">
+                         @if(loginForm.controls['name'].invalid && (loginForm.controls['name'].dirty || loginForm.controls['name'].touched)){
+                    
                             <div class="text-danger alinear-texto">Ingrese su correo</div>  
-                        }
-                        
+                        }             
                 </div>
             </div>
     
             <div class="row mb-3">
                 <div class="col">
-                    <input type="password" class="form-control custom-input" [ngClass]="{'is-invalid': clave.invalid  && (clave.dirty || clave.touched),'is-valid': clave.valid }"
-                    id="inputClave" #clave="ngModel" name="clave" [(ngModel)]="claveInput" required minlength="8" placeholder="Contraseña">
-                    @if(clave.errors && clave.errors['required'] && (clave.dirty || clave.touched)){
-                        <div class="text-danger alinear-texto">Ingrese su contraseña</div>
-                        
-                    }
-                    @if(clave.dirty && clave.getError('minlength')) {
+                    <input type="password" class="form-control custom-input" [ngClass]="{'is-invalid': loginForm.controls['password'].invalid  && (loginForm.get('password')?.dirty|| loginForm.get('password')?.touched),'is-valid': loginForm.controls['password'].valid }"
+                     placeholder="Contraseña" formControlName="password" >
+                     @if(loginForm.controls['password'].errors?.["required"] && (loginForm.controls['password'].dirty || loginForm.controls['password'].touched)){
+                    
+                        <div class="text-danger alinear-texto">Ingrese su contraseña</div>  
+                    }   
+                    @if(loginForm.controls["password"].errors?.["minlength"] && (loginForm.controls["password"].dirty || loginForm.controls["password"].touched)){ 
                         <div class="text-danger alinear-texto">Mínimo 8 caracteres</div>
                     }
                 </div>
@@ -34,7 +34,8 @@
     
             <div class="row mb-3">
                 <div class="col">
-                    <button type="submit" class="btn btn-secondary rounded-pill w-100" [disabled]="login.invalid">Ingresar</button>
+                    <!-- Documetación pide negro el boton de iniciar sesión -->
+                    <button type="submit" class="btn btn-dark rounded-pill w-100" [disabled]="loginForm.invalid">Ingresar</button>
                 </div>
             </div>
     

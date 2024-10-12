@@ -9,6 +9,10 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 
+import $ from 'jquery';
+import 'datatables.net'
+import 'datatables.net-bs5';
+
 @Component({
   selector: 'app-list-users',
   standalone: true,
@@ -16,30 +20,101 @@ import * as XLSX from 'xlsx';
   templateUrl: './list-users.component.html',
   styleUrls: ['./list-users.component.css']
 })export class ListUsersComponent implements OnInit { 
+
   user: number = 0; 
   users: UserModel[] = [];
   private readonly apiService = inject(ApiServiceService);
-  filteredUsers: UserModel[] = [];
-  availableRoles: string[] = ['Admin', 'User', 'Owner', 'Security']; // Ajusta según tus roles disponibles
-  selectedFilter: string = ''; // Almacena el filtro seleccionado (role, date)
-  filterValue: string = ''; // Almacena el valor del filtro por rol o nombre
-  startDate: string = ''; // Almacena el valor del filtro de fecha de inicio
-  endDate: string = ''; // Almacena el valor del filtro de fecha de fin
 
   ngOnInit() {
     this.apiService.getAllUsers().subscribe({
       next: (data: UserModel[]) => {
-        this.filteredUsers = data;
+        this.users = data;
+        
+  
+        // Inicializar DataTables después de cargar los datos
+        setTimeout(() => {
+          $('#myTable').DataTable({
+            paging: true,
+            searching: true,
+            ordering: false,
+            lengthChange: false,
+            pageLength: 10,
+            columns: [
+              { title: 'Nombre' },
+              { title: 'Rol' },
+              { title: 'Nro. de lote', className: 'text-start' },
+              { title: 'Fecha de creación' },
+              { 
+                title: 'Acciones', 
+                render: (data, type, row, meta) => {
+                  return `
+                    <div class="dropdown-center d-flex align-items-center">
+                      <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-three-dots-vertical"></i>
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item view-user" data-id="${meta.row}"
+                         data-bs-toggle="modal" data-bs-target="#infoUser">Ver más</a></li>
+                        <li><a class="dropdown-item">Editar</a></li>
+                      </ul>
+                    </div>
+                  `;
+                }
+                
+              }
+            ],
+            data: this.users.map(user => [
+              `${user.lastname}, ${user.name}`,  // Nombre completo
+              user.roles.join(', '),            // Roles
+              1234,                             // Nro. de lote (puedes ajustar esto)
+              user.datebirth,                   // Fecha de nacimiento
+              '<button class="btn btn-info">Ver más</button>'  // Ejemplo de acción
+            ]),
+            language: {
+              lengthMenu: "Mostrar _MENU_ registros por página",
+              zeroRecords: "No se encontraron resultados",
+              info: "Mostrando página _PAGE_ de _PAGES_",
+              infoEmpty: "No hay registros disponibles",
+              infoFiltered: "(filtrado de _MAX_ registros totales)",
+              search: "Buscar:",
+              paginate: {
+                first: "Primera",
+                last: "Última",
+                next: "Siguiente",
+                previous: "Anterior"
+              },
+              loadingRecords: "Cargando...",
+              processing: "Procesando...",
+              emptyTable: "No hay datos disponibles en la tabla"
+            }
+          });
+  
+          // Alinear la caja de búsqueda a la derecha
+          const searchInputWrapper = $('#myTable_filter');
+          searchInputWrapper.addClass('d-flex justify-content-start');
+
+                  // Asignar el evento click a los botones "Ver más"
+        $('#myTable').on('click', '.view-user', (event) => {
+          console.log('AAAAAAAAAA');
+          const id = $(event.currentTarget).data('id');
+          const userId = this.users[id].id; // Obtén el ID real del usuario
+          this.selectUser(userId); // Llama al método selectUser con el ID correcto
+        });
+        }, 0);  // Asegurar que la tabla se inicializa en el próximo ciclo del evento
       },
       error: (error) => {
-        console.error('Error al cargar los roles:', error);
+        console.error('Error al cargar los usuarios:', error);
       }
     });
-    }
+  }
+  
+  
 
   // Busca el user y se lo pasa al modal
   userModal : UserModel = new UserModel();
   selectUser(id: number) {
+    console.log(id);
+    
     this.user = id;
     this.apiService.getUserById(id)
       .subscribe({
@@ -52,46 +127,6 @@ import * as XLSX from 'xlsx';
           console.error('Error al cargar el usuario:', error);
         }
       });
-  }
-
-  onFilterChange(filter: string) {
-    this.selectedFilter = filter;
-    this.filterValue = '';
-    this.startDate = '';
-    this.endDate = '';
-  }
-
-  applyFilter() {
-    this.filteredUsers = this.users.filter(user => {
-      let matches = true;
-
-      // Filtrar por Rol
-      if (this.selectedFilter === 'role' && this.filterValue) {
-        matches = matches && user.roles.includes(this.filterValue);
-      }
-
-      // Filtrar por Fecha de Creación
-      if (this.selectedFilter === 'date' && this.startDate && this.endDate) {
-        const userDate = new Date(user.datebirth);
-        const start = new Date(this.startDate);
-        const end = new Date(this.endDate);
-        matches = matches && userDate >= start && userDate <= end;
-      }
-
-      return matches;
-    });
-  }
-
-  filterByName(event: any) {
-    const searchTerm = event.target.value.toLowerCase();
-    this.filteredUsers = this.users.filter(user =>
-      user.name.toLowerCase().includes(searchTerm) ||
-      user.lastname.toLowerCase().includes(searchTerm)
-    );
-  }
-
-  getRandomLote(index: number): number {
-    return Math.floor(Math.random() * 21) + 1;
   }
 
   //SE PUEDEN MODIFICAR LOS VALORES A MOSTRAR EN EL PDF
@@ -109,12 +144,12 @@ import * as XLSX from 'xlsx';
     const columns = ['Nombre', 'Email', 'Rol', 'Fecha de creación', 'Nro. de lote'];
   
     // Mapear los datos filtrados a un formato adecuado para jsPDF
-    const rows = this.filteredUsers.map(user => [
+    const rows = this.users.map(user => [
       `${user.name}, ${user.lastname}`,
       user.email, // Agregado el email
       user.roles.join(', '), // Unir roles en un solo string
       user.datebirth,
-      this.getRandomLote(this.filteredUsers.indexOf(user)) // Obtener el lote con el índice correspondiente
+      0 // Obtener el lote con el índice correspondiente
     ]);
   
     // Generar la tabla en el PDF usando autoTable
@@ -137,12 +172,12 @@ import * as XLSX from 'xlsx';
   //SE PUEDEN MODIFICAR LOS VALORES A MOSTRAR EN EL EXCEL
   exportexcel() {
     // Crear los datos personalizados para la exportación
-    const rows = this.filteredUsers.map(user => [
+    const rows = this.users.map(user => [
       `${user.name} ${user.lastname}`,  // Nombre completo
       user.email,                       // Email
       user.roles.join(', '),            // Roles
       user.datebirth,                   // Fecha de nacimiento
-      this.getRandomLote(this.filteredUsers.indexOf(user)) // Nro. de lote
+      0 // Nro. de lote
     ]);
   
     // Definir las cabeceras de las columnas

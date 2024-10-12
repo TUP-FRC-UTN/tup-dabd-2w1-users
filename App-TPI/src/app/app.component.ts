@@ -17,8 +17,8 @@ import { UsuariosNewOwnerComponent } from "./usuarios-new-owner/usuarios-new-own
 })
 export class AppComponent {
   title = 'LoginTpi';
-  showLoginPage : boolean = false;
-  showLandingPage : boolean = true;
+  showLoginPage : boolean = true;
+  showLandingPage : boolean = false;
   showAddUserPage : boolean = false;
   showListUsersPage : boolean = false;
 

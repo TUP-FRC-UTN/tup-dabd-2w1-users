@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { UserModel } from '../models/User';
 import { RolModel } from '../models/Rol';
 import { UserPost } from '../models/UserPost';
+import { LoginUser } from '../models/Login';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,10 @@ export class ApiServiceService {
   getAllUsers(): Observable<UserModel[]> {
     return this.http.get<UserModel[]>(this.url + "users");
   }
+
+  verifyLogin(user: LoginUser): Observable<LoginUser> {
+    return this.http.post<LoginUser>(this.url + "users/login", user);
+  }   
 
   getAllRoles(): Observable<RolModel[]> {
     return this.http.get<RolModel[]>(this.url + "roles");
