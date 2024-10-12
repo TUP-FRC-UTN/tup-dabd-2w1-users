@@ -3,21 +3,27 @@
   <p>Filtrar por:</p>
 
   <!-- Filtros de selección -->
-  <div>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="filterOption" id="filterRole" value="role"
-        (change)="onFilterChange('role')">
-      <label class="form-check-label" for="filterRole">Rol</label>
+  <div class="d-flex justify-content-between align-items-center">
+    <div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="filterOption" id="filterRole" value="role"
+          (change)="onFilterChange('role')">
+        <label class="form-check-label" for="filterRole">Rol</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="filterOption" id="filterDate" value="date"
+          (change)="onFilterChange('date')">
+        <label class="form-check-label" for="filterDate">Fecha de creación</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="filterOption" id="filterName" value="name"
+          (change)="onFilterChange('name')">
+        <label class="form-check-label" for="filterName">Nombre</label>
+      </div>
     </div>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="filterOption" id="filterDate" value="date"
-        (change)="onFilterChange('date')">
-      <label class="form-check-label" for="filterDate">Fecha de creación</label>
-    </div>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="filterOption" id="filterName" value="name" 
-      (change)="onFilterChange('name')">
-      <label class="form-check-label" for="filterName">Nombre</label>
+    <div class="ml-auto">
+      <button (click)="exportexcel()" class="btn btn-secondary" style="margin-right: 8px;">EXCEL</button>
+      <button (click)="exportPdf()" class="btn btn-secondary">PDF</button>
     </div>
   </div>
 
