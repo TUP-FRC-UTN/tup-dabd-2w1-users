@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RolModel } from '../models/Rol';
 import { ApiServiceService } from '../servicies/api-service.service';
 import { UserModel } from '../models/User';
@@ -9,11 +9,23 @@ import { UserPost } from '../models/UserPost';
 @Component({
   selector: 'app-new-user',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule],
   templateUrl: './new-user.component.html',
   styleUrl: './new-user.component.css'
 })
 export class NewUserComponent implements OnInit {
+
+  formReactivo = new FormGroup({
+    nombre: new FormControl('', [Validators.required]),
+    apellido: new FormControl('', [Validators.required]),
+    username: new FormControl('', [Validators.required]),
+    email: new FormControl('', [Validators.email, Validators.required]),
+    dni: new FormControl('', [Validators.required]),
+    telefono: new FormControl('', [Validators.required]),
+    fecha: new FormControl(null, [Validators.required]),
+    rol: new FormControl('') 
+  });
+
   private readonly apiService = inject(ApiServiceService);
 
   
@@ -23,15 +35,6 @@ export class NewUserComponent implements OnInit {
   rolesString: string = "Roles añadidos:";
   rolesInput: string[] = [];
   select: string = "";
-
-
-  nameInput: string = "";
-  lastNameInput: string = "";
-  usernameInput: string = "";
-  emailInput: string = "";
-  dniInput: string = "";
-  telefonoInput: string = "";
-  birthdateInput: Date = new Date();
 
   ngOnInit() {
     this.loadRoles();
@@ -48,10 +51,12 @@ export class NewUserComponent implements OnInit {
     });
   }
 
-   aniadirRol() {
-    if (this.select && !this.rolesInput.includes(this.select)) {  // Evita duplicados
-      this.rolesInput.push(this.select);  
+  aniadirRol() {
+    const rolSeleccionado = this.formReactivo.get('rol')?.value;
+    if (rolSeleccionado && !this.rolesInput.includes(rolSeleccionado)) {  
+      this.rolesInput.push(rolSeleccionado);  
     }
+    this.formReactivo.get('rol')?.setValue('');
   }
 
   quitarRol(rol: string) {
@@ -61,28 +66,28 @@ export class NewUserComponent implements OnInit {
     }
   }
 
-  formatDate(date: Date): string {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // getMonth() es 0-indexed
-    const day = String(date.getDate()).padStart(2, '0');
-    
-    return `${year}-${month}-${day}`;
+  resetForm() {
+    this.formReactivo.reset();
+    this.rolesInput = [];
   }
-  
 
-  createUser(form: any) {
+  createUser() {
+    
+    const fechaValue = this.formReactivo.get('fecha')?.value;
+    
     const userData : UserPost = {
-      name: form.value.nameInp,
-      lastname: form.value.lastNameImp,
-      username: this.usernameInput,
-      password: this.dniInput,
-      email: form.value.emailInp,
-      dni: form.value.dniInp,
-      contact_id: 1,
-      active: true,
-      avatar_url: '',
-      datebirth: this.formatDate(this.birthdateInput),
-      roles: this.rolesInput  
+      name: this.formReactivo.get('nombre')?.value || '',
+    lastname: this.formReactivo.get('apellido')?.value || '',
+    username: this.formReactivo.get('username')?.value || '',
+    password: this.formReactivo.get('dni')?.value || '',
+    email: this.formReactivo.get('email')?.value || '',
+    dni: Number(this.formReactivo.get('dni')?.value) || 0,
+    active: true,
+    avatar_url: '',
+    datebirth: fechaValue ? 
+                   new Date(fechaValue).toISOString().split('T')[0] : '',
+    roles: this.rolesInput,
+    phone_number: this.formReactivo.get('telefono')?.value || ''
     };
 
     console.log(userData);
@@ -90,7 +95,9 @@ export class NewUserComponent implements OnInit {
     this.apiService.postUser(userData).subscribe({
       next: (response) => {
         console.log('Usuario creado exitosamente:', response);
+        alert('Usuario creado exitosamente');
         // Aquí podrías redirigir o actualizar la UI
+        this.resetForm();
       },
       error: (error) => {
         console.error('Error al crear el usuario:', error);

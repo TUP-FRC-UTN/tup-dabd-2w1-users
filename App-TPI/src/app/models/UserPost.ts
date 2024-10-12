@@ -3,13 +3,13 @@ export class UserPost {
     lastname: string;   
     username: string;     
     email: string;        
-    dni: number;        
-    contact_id: number;   
+    dni: number;         
     active: boolean;      
     avatar_url: string;   
     datebirth: string;    
     roles: string[];      
     password: string;
+    phone_number: string;
 
     constructor() {
         this.name = '';
@@ -17,11 +17,11 @@ export class UserPost {
         this.username = '';
         this.email = '';
         this.dni = 0;
-        this.contact_id = 0;
         this.active = true;
         this.avatar_url = '';
         this.datebirth = '';
         this.roles = [];
-        this.password = ''; 
+        this.password = '';
+        this.phone_number = ''
     }
 }

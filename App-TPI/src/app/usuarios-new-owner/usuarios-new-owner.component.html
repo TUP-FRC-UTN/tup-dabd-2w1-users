@@ -5,9 +5,11 @@
             <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center justify-content-end">
                     <label class="form-label mb-0 me-3 text-end">Nombre</label>
-                    <input type="text" class="form-control custom-input" formControlName="name">
+                    <input type="text" class="form-control custom-input" formControlName="name" 
+                    [ngClass]="{'is-invalid': newOwner.controls['name'].invalid  && (newOwner.get('name')?.dirty|| newOwner.get('name')?.touched),'is-valid': newOwner.controls['name'].valid }" >
                 </div>   
                 @if(newOwner.controls['name'].invalid && (newOwner.controls['name'].dirty || newOwner.controls['name'].touched)){
+                    
                     <div class="text-danger align-self-end" style="width: 500px;">
                         Ingrese su nombre
                     </div>
@@ -16,7 +18,8 @@
             <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center justify-content-end">
                     <label class="form-label mb-0 me-3 text-end">Apellido</label>
-                    <input type="text" class="form-control custom-input" formControlName="lastname">
+                    <input type="text" class="form-control custom-input" formControlName="lastname"
+                    [ngClass]="{'is-invalid': newOwner.controls['lastname'].invalid  && (newOwner.get('lastname')?.dirty|| newOwner.get('lastname')?.touched),'is-valid': newOwner.controls['lastname'].valid }">
                 </div>   
                 @if(newOwner.controls['lastname'].invalid && (newOwner.controls['lastname'].dirty || newOwner.controls['lastname'].touched)){
                     <div class="text-danger align-self-end" style="width: 500px;">
@@ -30,7 +33,8 @@
             <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center justify-content-end">
                     <label class="form-label mb-0 me-3 text-end">DNI</label>
-                    <input type="text" class="form-control custom-input" formControlName="dni">
+                    <input type="text" class="form-control custom-input" formControlName="dni"
+                    [ngClass]="{'is-invalid': newOwner.controls['dni'].invalid  && (newOwner.get('dni')?.dirty|| newOwner.get('dni')?.touched),'is-valid': newOwner.controls['dni'].valid }">
                 </div>   
                 @if(newOwner.controls['dni'].invalid && (newOwner.controls['dni'].dirty || newOwner.controls['dni'].touched)){
                     <div class="text-danger align-self-end" style="width: 500px;">
@@ -41,7 +45,8 @@
             <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center justify-content-end">
                     <label class="form-label mb-0 me-3 text-end">CUIT - CUIL</label>
-                    <input type="text" class="form-control custom-input" formControlName="cuit_cuil">
+                    <input type="text" class="form-control custom-input" formControlName="cuit_cuil"
+                    [ngClass]="{'is-invalid': newOwner.controls['cuit_cuil'].invalid  && (newOwner.get('cuit_cuil')?.dirty|| newOwner.get('cuit_cuil')?.touched),'is-valid': newOwner.controls['cuit_cuil'].valid }">
                 </div>   
                 @if(newOwner.controls['cuit_cuil'].invalid && (newOwner.controls['cuit_cuil'].dirty || newOwner.controls['cuit_cuil'].touched)){
                     <div class="text-danger align-self-end" style="width: 500px;">
@@ -55,7 +60,8 @@
             <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center justify-content-end">
                     <label class="form-label mb-0 me-3 text-end">Fecha de nacimiento</label>
-                    <input type="text" class="form-control custom-input" formControlName="birthdate">
+                    <input type="text" class="form-control custom-input" formControlName="birthdate"
+                    [ngClass]="{'is-invalid': newOwner.controls['birthdate'].invalid  && (newOwner.get('birthdate')?.dirty|| newOwner.get('birthdate')?.touched),'is-valid': newOwner.controls['birthdate'].valid }">
                 </div>   
                 @if(newOwner.controls['birthdate'].invalid && (newOwner.controls['birthdate'].dirty || newOwner.controls['birthdate'].touched)){
                     <div class="text-danger align-self-end" style="width: 500px;">
@@ -66,7 +72,8 @@
             <div class="col d-flex flex-column ">
                 <div class="d-flex align-items-center justify-content-end">
                     <label class="form-label mb-0 me-3 text-end">Email</label>
-                    <input type="text" class="form-control custom-input" formControlName="email">
+                    <input type="text" class="form-control custom-input" formControlName="email"
+                    [ngClass]="{'is-invalid': newOwner.controls['email'].invalid  && (newOwner.get('email')?.dirty|| newOwner.get('email')?.touched),'is-valid': newOwner.controls['email'].valid }">
                 </div>   
                 @if(newOwner.controls['email'].invalid && (newOwner.controls['email'].dirty || newOwner.controls['email'].touched)){
                     <div class="text-danger align-self-end" style="width: 500px;">
@@ -80,7 +87,8 @@
             <div class="col d-flex flex-column ">
                 <div class="d-flex align-items-center justify-content-end">
                     <label class="form-label mb-0 me-3 text-end">Teléfono</label>
-                    <input type="text" class="form-control custom-input" formControlName="phone_number">
+                    <input type="text" class="form-control custom-input" formControlName="phone_number"
+                    [ngClass]="{'is-invalid': newOwner.controls['phone_number'].invalid  && (newOwner.get('phone_number')?.dirty|| newOwner.get('emaphone_numberil')?.touched),'is-valid': newOwner.controls['phone_number'].valid }">
                 </div>   
                 @if(newOwner.controls['phone_number'].invalid && (newOwner.controls['phone_number'].dirty || newOwner.controls['phone_number'].touched)){
                     <div class="text-danger align-self-end" style="width: 500px;">
