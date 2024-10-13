@@ -30,7 +30,8 @@ export class ModalInfoUserComponent implements OnChanges{
       email: new FormControl(this.userModal.email, []),
       dni: new FormControl(this.userModal.dni, []),
       phoneNumber: new FormControl(this.userModal.phone_number, []),
-      birthdate: new FormControl(this.userModal.datebirth, [])
+      birthdate: new FormControl(this.userModal.datebirth, []),
+      roles : new FormControl(this.rolesInput, [])
     });
     this.changeEdit();
     this.loadRoles(); 
@@ -42,7 +43,8 @@ export class ModalInfoUserComponent implements OnChanges{
     email: new FormControl(this.userModal.email, []),
     dni: new FormControl(this.userModal.dni, []),
     phoneNumber: new FormControl(this.userModal.phone_number, []),
-    birthdate: new FormControl(this.userModal.datebirth, [])
+    birthdate: new FormControl(this.userModal.datebirth, []),
+    roles : new FormControl(this.rolesInput, [])
   });
 
   canEdit: boolean = false;

@@ -80,7 +80,7 @@
             <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center justify-content-end">
                     <label class="form-label mb-0 me-3 text-end">Fecha de nacimiento</label>
-                    <input type="text" class="form-control custom-input"
+                    <input type="date" class="form-control custom-input"
                     [ngClass]="{'is-invalid': formReactivo.controls['fecha'].invalid  && (formReactivo.get('fecha')?.dirty|| formReactivo.get('fecha')?.touched),'is-valid': formReactivo.controls['fecha'].valid }" formControlName="fecha">
                 </div>   
                 @if(formReactivo.controls['fecha'].invalid && (formReactivo.get('fecha')?.dirty || formReactivo.get('fecha')?.touched)){     
