@@ -1,18 +1,9 @@
-.mynav{
-    background-color: var(--color-nav);
-}
-
-.myside{
-    width: 220px;
-    background-color: var(--color-side);
-}
-
 .myside .sub-menu{
-    background-color: var(--color-nav);
+    background-color: black;
 }
 
 .nav-link:hover{
-    background-color: var(--color-hover);
+    background-color: #6c757d;
 }
 
 .side-compressed{

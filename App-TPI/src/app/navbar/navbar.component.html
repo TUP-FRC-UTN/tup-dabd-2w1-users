@@ -2,7 +2,7 @@
     <!-- Background opacity  -->
     <div class="overlay-off" [class]="!expand ? 'overlay-off' : 'overlay-on'"></div>
     <!-- NavBar -->
-    <nav class="navbar mynav d-flex justify-content-between shadow z-3 fixed-top text-light">
+    <nav class="navbar mynav d-flex justify-content-between shadow z-3 fixed-top text-bg-dark">
         <button class="btn text-light fs-4" (click)="changeState()">
             <i [class]="expand ? 'bi bi-x-lg' : 'bi bi-list'"></i>
         </button>
@@ -10,7 +10,7 @@
         <img src="assets/images/icono_image.png" alt="" style="width: 100px; padding-right: 16px;">
     </nav>
     <!-- SideBar -->
-        <aside class="myside z-2 h-100 pt-5 fixed-top animation"
+        <aside class="myside text-bg-dark z-2 h-100 pt-5 fixed-top animation"
             [class]="expand ? 'side-expand' : 'side-compressed'">
             <div class="pt-3 fs-5 d-flex flex-column h-100">
                 <ul class="nav flex-column">
