@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, formatDate } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RolModel } from '../models/Rol';
@@ -22,9 +22,13 @@ export class NewUserComponent implements OnInit {
     email: new FormControl('', [Validators.email, Validators.required]),
     dni: new FormControl('', [Validators.required]),
     telefono: new FormControl('', [Validators.required]),
-    fecha: new FormControl(null, [Validators.required]),
+    fecha: new FormControl(this.formatDate(new Date()), [Validators.required]),
     rol: new FormControl('') 
   });
+
+  private formatDate(date: Date): string {
+    return formatDate(date, 'yyyy-MM-dd', 'en-US');
+  }
 
   private readonly apiService = inject(ApiServiceService);
 

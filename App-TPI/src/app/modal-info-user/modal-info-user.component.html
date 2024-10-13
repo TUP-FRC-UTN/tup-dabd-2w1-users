@@ -8,7 +8,7 @@
             </div>
             <div class="modal-body">
                 <!-- formulario usuario -->
-                <form [formGroup]="editUser" (ngSubmit)="edit(editUser)">
+                <form [formGroup]="editUser">
                     <div class="row mb-3">
                         <div class="col">
                             <label for="inputName" class="form-label">Nombre</label>
@@ -73,10 +73,6 @@
             </div>
             
             <div class="modal-footer">
-                <div class="d-grid gap-2 d-md-block">
-                    <button type="button" class="btn btn-style btn-hoover" (click)="changeEdit()">Editar</button>
-                </div>
-                
                 <button type="button" class="btn btn-style btn-hoover" data-bs-dismiss="modal">Atrás</button>
               </div>
         </div>
