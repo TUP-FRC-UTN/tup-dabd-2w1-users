@@ -67,13 +67,24 @@ export class UsersUpdateUserComponent implements OnInit {
         next: (response) => {
             console.log('Usuario actualizado exitosamente:', response);
             alert('Usuario actualizado exitosamente');
+            this.router.navigate(['home/users/list']);
         },
         error: (error) => {
             console.error('Error al actualizar el usuario:', error);
             // Manejo de errores
         },
     });
+  }
+
+redirectList() {
+  const result = window.confirm("¿Estás seguro que quieres salir? No se guardarán los cambios realizados.");
+  
+  if (result) {
+    this.router.navigate(['home/users/list']);
+  }
 }
+
+
   
   ngOnInit() {
     this.loadRoles();
