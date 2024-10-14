@@ -1,21 +1,3 @@
-
 <section>
-  
-  <!-- @if(showLoginPage){
-    <app-login (validacion)="redirect('Landing')" [hidden]="showLandingPage"></app-login>
-  }
-  @else { -->
-    <app-navbar (navigation)="redirect($event)" ></app-navbar>
-    @if (showLandingPage) {
-      <!-- <app-landing-page></app-landing-page> -->
-      <!-- <app-usuarios-new-owner /> -->
-      
-    }
-    @if(showListUsersPage){
-      <app-list-users></app-list-users>
-    } 
-    @if(showAddUserPage){
-      <app-new-user></app-new-user>   
-    }
-  <!-- } -->
+  <router-outlet/>
 </section>

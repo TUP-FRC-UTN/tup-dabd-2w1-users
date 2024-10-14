@@ -1,24 +1,60 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { tick } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { SideButton } from '../models/SideButton';
+import { UsersSideButtonComponent } from "../users-side-button/users-side-button.component";
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [FormsModule],
+  imports: [RouterModule, FormsModule, UsersSideButtonComponent],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
-export class NavbarComponent {
-  @Output() navigation = new EventEmitter<String>();
+export class NavbarComponent implements OnInit {
+  expand: boolean = false;
+  //
+  buttonsList: SideButton[] = [];
 
-  expand : boolean = false;
+  ngOnInit(): void {
+    this.buttonsList = [
+      {
+        icon : "bi-person",
+        title : "Perfil",
+        route : "/profile",
+        roles : ["SuperAdmin", "Admin", "Security", "Owner"] //ver
+      },
+      {
+        icon : "bi-people",
+        title : "Usuarios",
+        roles : ["SuperAdmin", "Admin"],
+        childButtons: [{
 
-  changeState(){
+          //botón agregar usuario
+          icon : "bi-person-plus-fill",
+          title : "Añadir",
+          route : "users/add",
+          roles : ["SuperAdmin", "Admin", "Owner"]
+        },
+        {
+
+          //botón listado
+          icon : "bi-person-lines-fill",
+          title : "Listado",
+          route : "/users/list",
+          roles : ["SuperAdmin", "Admin", "Owner"]
+        }] 
+      }
+    ]
+  }
+
+
+
+  //Expandir y contraer el sidebar
+  changeState() {
     this.expand = !this.expand;
   }
 
-  redirect(page : string){
-    this.navigation.emit(page);
-  }
+
 }

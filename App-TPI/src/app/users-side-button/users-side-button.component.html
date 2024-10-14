@@ -1,0 +1,20 @@
+@if(!info.childButtons){
+    <button class="nav-link d-flex text-light w-100" (click)="redirect(info.route!)">
+        <i [ngClass]="info.icon"></i>
+        @if (expanded) {<span class="ms-2">{{info.title}}</span>}
+    </button>    
+}
+@else {
+    <button class="nav-link d-flex text-light w-100" data-bs-toggle="collapse" data-bs-target="#dropmenu">
+        <i [ngClass]="info.icon"></i>
+        @if (expanded) {<span class="ms-2">{{info.title}}</span>}
+    </button>
+    @for (child of info.childButtons; track $index) {
+        <div class="sub-menu collapse fs-6 animation" [class]="expanded ? 'side-expandido' : 'side-comprimido'" id="dropmenu">
+            <button class="nav-link d-flex text-light w-100" (click)="redirect(child.route!)">
+                <i [ngClass]="child.icon"></i>
+                @if (expanded) {<span class="ms-2">{{child.title}}</span>}
+            </button>
+        </div>
+    }
+}

@@ -3,16 +3,19 @@ import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiServiceService } from '../servicies/api-service.service';
 import { LoginUser } from '../models/Login';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent { 
   @Output() validacion = new EventEmitter<void>();
+
+  constructor(private router : Router){}
 
   user : LoginUser = new LoginUser();
   correoInput : string = "";
@@ -34,21 +37,22 @@ export class LoginComponent {
       this.user.dni = this.loginForm.value.name!;
       this.user.password = this.loginForm.value.password!;
 
-      this.apiService.verifyLogin(this.user).subscribe({
-        next: (data) => {
+      this.router.navigate(['/home']);
+      // this.apiService.verifyLogin(this.user).subscribe({
+      //   next: (data) => {
           
-          if(data){
-            alert("se logueo")
-            this.validacion.emit();
-          }
-          else{
-            alert("Dni o contraseña incorrectos")
-          }
-        },
-        error: (error) => {
-          alert("Dni o contraseña incorrectos")
-        }
-      });
+      //     if(data){
+      //       alert("se logueo")
+      //       this.router.navigate(['/home']);
+      //     }
+      //     else{
+      //       alert("Dni o contraseña incorrectos")
+      //     }
+      //   },
+      //   error: (error) => {
+      //     alert("Dni o contraseña incorrectos")
+      //   }
+      // });
       };
   }
 }

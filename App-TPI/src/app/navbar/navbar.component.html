@@ -15,72 +15,10 @@
             <div class="pt-3 fs-5 d-flex flex-column h-100">
                 <ul class="nav flex-column">
                     <li class="nav-item mb-2">
-                        <button class="nav-link d-flex text-light w-100" (click)="redirect('AddUser')">
-                            <i class="bi-person"></i>
-                            @if (expand) {<span class="ms-2">Añadir Usuario</span>}
-                        </button>
+                        @for (button of buttonsList; track $index) {
+                            <app-users-side-button [expanded]="expand" [info]="button"/>
+                        }
                     </li>
-
-                    <li class="nav-item mb-2">
-                        <button class="nav-link d-flex text-light w-100" (click)="redirect('ListUsers')">
-                            <i class="bi-person"></i>
-                            @if (expand) {<span class="ms-2">Perfil</span>}
-                        </button>
-                    </li>
-
-                    <li class="nav-item mb-2">
-                        <button class="nav-link d-flex text-light w-100">
-                            <i class="bi-people"></i>
-                            @if (expand) {<span class="ms-2">Familia</span>}
-                        </button>
-                    </li>
-
-                    <li class="nav-item mb-2">
-                        <button class="nav-link d-flex text-light w-100">
-                            <i class="bi-file-text"></i>
-                            @if (expand) {<span class="ms-2">Facturas</span>}
-                        </button>
-                    </li>
-
-                    <li class="nav-item mb-2">
-                        <button class="nav-link d-flex text-light w-100" data-bs-toggle="collapse"
-                            data-bs-target="#dropmenu">
-                            <i class="bi-exclamation-triangle"></i>
-                            @if (expand) {<span class="ms-2">Infracciones</span>}
-                        </button>
-
-                        <!-- Dropdown items -->
-                        <div class="sub-menu collapse fs-6 animacion" [class]="expand ? 'side-expandido' : 'side-comprimido'" id="dropmenu">
-                            <button class="nav-link d-flex text-light w-100">
-                                <i class="bi-list-task"></i>
-                                @if (expand) {<span class="ms-2">Listado</span>}
-                            </button>
-
-                            <button class="nav-link d-flex text-light w-100">
-                                <i class="bi-file-earmark-plus"></i>
-                                @if (expand) {<span class="ms-2">Nueva</span>}
-                            </button>
-
-                            <button class="nav-link d-flex text-light w-100">
-                                <i class="bi-graph-up"></i>
-                                @if (expand) {<span class="ms-2">Estadisticas</span>}
-                            </button>
-                        </div>
-                    </li>
-
-                    <li class="nav-item mb-2">
-                        <button class="nav-link d-flex text-light w-100">
-                            <i class="bi-gear"></i>
-                            @if (expand) {<span class="ms-2">Configuración</span>}
-                        </button>
-                    </li>
-
-                    <!-- <li class="nav-item mb-2">
-                        <button class="nav-link d-flex text-light w-100">
-                            <i class="bi-info-circle"></i>
-                            @if (expandir) {<span class="ms-2">Ayuda</span>}
-                        </button>
-                    </li> -->
                 </ul>
 
                 
@@ -89,7 +27,7 @@
                         <i class="bi-info-circle"></i>
                         @if (expand) {<span class="ms-2">Ayuda</span>}
                     </button>
-                    <button class="nav-link d-flex text-light w-100 px-3 py-2" (click)="redirect('Login')">
+                    <button class="nav-link d-flex text-light w-100 px-3 py-2">
                         <i class="bi-box-arrow-left"></i>
                         @if (expand) {<span class="ms-2">Salir</span>}
                     </button>
