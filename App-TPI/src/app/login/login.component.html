@@ -1,50 +1,54 @@
-<section class="fondo min-vh-100 d-flex align-items-center justify-content-center">
+<section class="fondo bg-dark min-vh-100 d-flex align-items-center justify-content-center">
     <div class="container">
-        <form [formGroup]="loginForm" (ngSubmit)="ingresar(loginForm)">
+        <form #login="ngForm" action="" (ngSubmit)="ingresar(login)" novalidate>
             <div class="row mb-3">
-                <div class="col mb-3">
-                    <img src="assets/images/icono_image.png" style="height: 150px; width: 200px;" alt="">
+                <h2>Inicio de sesión</h2>
+            </div>
+    
+            <div class="row mb-3 align-items-center d-flex">
+                <div class="col-3 text-end">
+                    <label for="inputCorreo" class="form-label">Email</label>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control custom-input" 
+                           [ngClass]="{'is-invalid': correo.invalid && (correo.dirty || correo.touched)}" 
+                           id="inputCorreo" #correo="ngModel" name="correo" [(ngModel)]="correoInput" required>
+                    @if(correo.invalid && (correo.dirty || correo.touched)){
+                        <div class="text-danger alinear-texto">Ingrese su correo</div>  
+                    }
                 </div>
             </div>
     
-            <div class="row mb-3">
-                <div class="col">
-                        <input type="text" class="form-control custom-input" [ngClass]="{'is-invalid': loginForm.controls['name'].invalid  && (loginForm.get('name')?.dirty|| loginForm.get('name')?.touched),'is-valid': loginForm.controls['name'].valid }" 
-                         placeholder="Correo electrónico o dni" formControlName="name">
-                         @if(loginForm.controls['name'].invalid && (loginForm.controls['name'].dirty || loginForm.controls['name'].touched)){
-                    
-                            <div class="text-danger alinear-texto">Ingrese su correo</div>  
-                        }             
+            <div class="row mb-3 align-items-center d-flex">
+                <div class="col-3 text-end">
+                    <label for="inputClave" class="form-label">Contraseña</label>
                 </div>
-            </div>
-    
-            <div class="row mb-3">
                 <div class="col">
-                    <input type="password" class="form-control custom-input" [ngClass]="{'is-invalid': loginForm.controls['password'].invalid  && (loginForm.get('password')?.dirty|| loginForm.get('password')?.touched),'is-valid': loginForm.controls['password'].valid }"
-                     placeholder="Contraseña" formControlName="password" >
-                     @if(loginForm.controls['password'].errors?.["required"] && (loginForm.controls['password'].dirty || loginForm.controls['password'].touched)){
-                    
-                        <div class="text-danger alinear-texto">Ingrese su contraseña</div>  
-                    }   
-                    @if(loginForm.controls["password"].errors?.["minlength"] && (loginForm.controls["password"].dirty || loginForm.controls["password"].touched)){ 
-                        <div class="text-danger alinear-texto">Mínimo 8 caracteres</div>
+                    <input type="password" class="form-control custom-input" 
+                           [ngClass]="{'is-invalid': clave.invalid && (clave.dirty || clave.touched)}"
+                           id="inputClave" #clave="ngModel" name="clave" [(ngModel)]="claveInput" required minlength="6">
+                    @if(clave.errors && clave.errors['required'] && (clave.dirty || clave.touched)){
+                        <div class="text-danger alinear-texto">Ingrese su contraseña</div>
+                    }
+                    @if(clave.dirty && clave.getError('minlength')) {
+                        <div class="text-danger alinear-texto">Mínimo 6 caracteres</div>
                     }
                 </div>
             </div>
     
             <div class="row mb-3">
                 <div class="col">
-                    <!-- Documetación pide negro el boton de iniciar sesión -->
-                    <button type="submit" class="btn btn-dark rounded-pill w-100" [disabled]="loginForm.invalid">Ingresar</button>
+                    <button type="submit" class="btn btn-dark rounded-pill w-100" [disabled]="login.invalid">Ingresar</button>
                 </div>
             </div>
     
             <div class="row">
-                <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="#">
-                    ¿Olvidaste tu contraseña?
-                  </a>
+                <div class="col text-center">
+                    <a class="custom-link" href="#" style="color: black;">
+                        ¿Olvidaste tu contraseña?
+                    </a>
+                </div>
             </div>
         </form>
-        
     </div>    
 </section>

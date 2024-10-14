@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
 import { SideButton } from '../models/SideButton';
-import { empty } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 
@@ -12,8 +11,14 @@ import { Router, RouterModule } from '@angular/router';
   styleUrl: './users-side-button.component.css'
 })
 export class UsersSideButtonComponent {
+  //Expandir o cerrar
   @Input() expanded : boolean = false;
+
+  //Botones
   @Input() info : SideButton = new SideButton();
+
+  //Rol del usuario logeado
+  @Input() userRole : string = "";
 
   constructor(private route : Router){
   }

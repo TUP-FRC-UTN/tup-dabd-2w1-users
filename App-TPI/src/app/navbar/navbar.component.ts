@@ -1,7 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { tick } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { SideButton } from '../models/SideButton';
 import { UsersSideButtonComponent } from "../users-side-button/users-side-button.component";
 
@@ -13,8 +12,14 @@ import { UsersSideButtonComponent } from "../users-side-button/users-side-button
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent implements OnInit {
+  //Expande el side
   expand: boolean = false;
-  //
+
+  constructor(private router : Router){}
+
+  userRole : string = "SuperAdmin" //Cambiar según el rol del usuario que se loguee
+
+  //Lista de botones
   buttonsList: SideButton[] = [];
 
   ngOnInit(): void {
@@ -23,7 +28,7 @@ export class NavbarComponent implements OnInit {
         icon : "bi-person",
         title : "Perfil",
         route : "/profile",
-        roles : ["SuperAdmin", "Admin", "Security", "Owner"] //ver
+        roles : ["SuperAdmin", "Admin", "Security", "Owner", "Spouse", "FamilyOld", "FamilyYoung", "Tenant"] //ver
       },
       {
         icon : "bi-people",
@@ -49,12 +54,13 @@ export class NavbarComponent implements OnInit {
     ]
   }
 
-
-
   //Expandir y contraer el sidebar
   changeState() {
     this.expand = !this.expand;
   }
 
+  redirect(path : string){
+    this.router.navigate([path]);
+  }
 
 }
