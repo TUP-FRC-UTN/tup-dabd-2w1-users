@@ -5,16 +5,20 @@ import { RolModel } from '../models/Rol';
 import { ApiServiceService } from '../servicies/api-service.service';
 import { UserModel } from '../models/User';
 import { UserPost } from '../models/UserPost';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-new-user',
   standalone: true,
-  imports: [FormsModule, CommonModule, ReactiveFormsModule],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule,RouterModule],
   templateUrl: './new-user.component.html',
   styleUrl: './new-user.component.css'
 })
 export class NewUserComponent implements OnInit {
 
+  constructor(private router:Router){
+    
+  }
   formReactivo = new FormGroup({
     nombre: new FormControl('', [Validators.required]),
     apellido: new FormControl('', [Validators.required]),
@@ -22,7 +26,7 @@ export class NewUserComponent implements OnInit {
     email: new FormControl('', [Validators.email, Validators.required]),
     dni: new FormControl('', [Validators.required]),
     telefono: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(20)]),
-    fecha: new FormControl(this.formatDate(new Date()), [Validators.required]),
+    fecha: new FormControl(this.formatDate(new Date("2000-01-01")), [Validators.required]),
     rol: new FormControl('') 
   });
 
@@ -61,6 +65,10 @@ export class NewUserComponent implements OnInit {
       this.rolesInput.push(rolSeleccionado);  
     }
     this.formReactivo.get('rol')?.setValue('');
+  }
+
+  redirect(path:string){
+    this.router.navigate([path]);
   }
 
   quitarRol(rol: string) {

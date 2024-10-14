@@ -1,39 +1,19 @@
 <section class="container pt-5">
-  <h3>Listado de Usuarios</h3>
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <h3>Listado de Usuarios</h3>
+    <div>
+      <button class="btn btn-primary me-2" (click)="exportPdf()">Generar PDF</button>
+      <button class="btn btn-success" (click)="exportExcel()">Generar Excel</button>
+    </div>
+  </div>
 
-  <table id="myTable" class="display">
+  <div class="mb-3"></div> 
 
-  </table>
+  <table id="myTable" class="display"></table>
 
   <div style="background-color: #362e2e">
-    <!-- <table class="table" style="background-color: #6c757d">
-      <thead>
-        <tr>
-          <th scope="col">Nombre</th>
-          <th scope="col">Rol</th>
-          <th scope="col">Fecha de creación</th>
-          <th scope="col">Nro. de lote</th>
-          <th scope="col">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (user of filteredUsers; track $index) {
-          <tr>
-            <td>{{user.name + ", " + user.lastname}}</td>
-            <td>{{user.roles}}</td>
-            <td>{{user.datebirth}}</td>
-            <td>0</td>
-            <td>
-              <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#infoUser"
-              (click)="selectUser(user.id)">
-                Ver más
-              </button>
-            </td>
-          </tr>
-        }
-      </tbody>
-    </table> -->
+    <div class="container"></div>
   </div>
 </section>
 
-<app-modal-info-user [userModal]="userModal"/>
+<app-modal-info-user [userModal]="userModal"></app-modal-info-user>

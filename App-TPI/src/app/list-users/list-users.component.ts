@@ -1,5 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Component, inject, OnInit, Query } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { UserModel } from '../models/User';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -9,51 +9,58 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import $ from 'jquery';
-import 'datatables.net'
+import 'datatables.net';
 import 'datatables.net-bs5';
 import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-list-users',
   standalone: true,
-  imports: [HttpClientModule, CommonModule, FormsModule, ModalInfoUserComponent, RouterModule], // Importa aquí el HttpClientModule
+  imports: [HttpClientModule, CommonModule, FormsModule, ModalInfoUserComponent, RouterModule],
   templateUrl: './list-users.component.html',
   styleUrls: ['./list-users.component.css']
-})export class ListUsersComponent implements OnInit { 
+})
+export class ListUsersComponent implements OnInit { 
 
   user: number = 0; 
   users: UserModel[] = [];
   private readonly apiService = inject(ApiServiceService);
 
-  constructor(private router: Router){ }
-  
+  constructor(private router: Router) { }
 
   ngOnInit() {
     this.apiService.getAllUsers().subscribe({
       next: (data: UserModel[]) => {
-        this.users = data;
-        
-  
+        // Cambiar guiones por barras en la fecha de nacimiento
+        this.users = data.map(user => ({
+          ...user,
+          datebirth: user.datebirth.replace(/-/g, '/') // Cambia 'dd-mm-yyyy' a 'dd/mm/yyyy'
+        }));
+
         // Inicializar DataTables después de cargar los datos
         setTimeout(() => {
-          $('#myTable').DataTable({
+          const table = $('#myTable').DataTable({
             paging: true,
             searching: true,
-            ordering: false,
-            lengthChange: false,
+            ordering: true,
+            lengthChange: true,
+            order: [[0, 'asc']],
             pageLength: 10,
             columns: [
-              { title: 'Nombre' },
-              { title: 'Rol' },
-              { title: 'Nro. de lote', className: 'text-start' },
-              { title: 'Fecha de creación' },
+              { title: 'Nombre', width: '30%' },
+              { title: 'Rol', width: '20%' },
+              { title: 'Nro. de lote', className: 'text-start', width: '15%' },
+              { title: 'Fecha de creación', width: '20%' },
               {
-                title: 'Acciones', 
+                title: 'Acciones',
+                orderable: false,
+                width: '15%',
+                className: 'text-left',  
                 render: (data, type, row, meta) => {
                   const userId = this.users[meta.row].id;
                   return `
                     <div class="dropdown-center d-flex align-items-center">
-                      <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      <button class="btn btn-light border border-1 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-three-dots-vertical"></i>
                       </button>
                       <ul class="dropdown-menu">
@@ -64,13 +71,12 @@ import { Router, RouterModule } from '@angular/router';
                   `;
                 }
               }
-              
             ],
             data: this.users.map(user => [
               `${user.lastname}, ${user.name}`,  // Nombre completo
-              user.roles.join(', '),            // Roles
-              1234,                             // Nro. de lote (puedes ajustar esto)
-              user.datebirth,                   // Fecha de nacimiento
+              user.roles.join(', '),              // Roles
+              1234,                                // Nro. de lote (puedes ajustar esto)
+              user.datebirth,                      // Fecha de nacimiento ya con el formato deseado
               '<button class="btn btn-info">Ver más</button>'  // Ejemplo de acción
             ]),
             language: {
@@ -89,27 +95,55 @@ import { Router, RouterModule } from '@angular/router';
               loadingRecords: "Cargando...",
               processing: "Procesando...",
               emptyTable: "No hay datos disponibles en la tabla"
+            },
+            createdRow: function (row, data, dataIndex) {
+              if (dataIndex % 2 === 0) {
+                $(row).css('background-color', '#f9f9f9');  // Color de fondo para filas pares
+              } else {
+                $(row).css('background-color', '#ffffff');  // Color de fondo para filas impares
+              }
             }
+          });    
+
+          // Añadir estilos adicionales al DataTable
+          $('#myTable').css({
+            'border-collapse': 'separate',
+            'border-spacing': '0 10px',  // Espacio entre filas
+            'width': '100%',  // Ancho completo de la tabla
+            'border': '1px solid #ddd',
+            'padding-left': '15px'  // Borde para toda la tabla
           });
-  
+
           // Alinear la caja de búsqueda a la derecha
           const searchInputWrapper = $('#myTable_filter');
           searchInputWrapper.addClass('d-flex justify-content-start');
 
-                  // Asignar el evento click a los botones "Ver más"
-        $('#myTable').on('click', '.view-user', (event) => {
-          const id = $(event.currentTarget).data('id');
-          const userId = this.users[id].id; // Obtén el ID real del usuario
-          this.selectUser(userId); // Llama al método selectUser con el ID correcto
-        });
-        }, 0);  // Asegurar que la tabla se inicializa en el próximo ciclo del evento
+          // Desvincular el comportamiento predeterminado de búsqueda
+          $('#myTable_filter input').unbind(); 
+          $('#myTable_filter input').bind('input', (event) => { // Usar función de flecha aquí
+              const searchValue = (event.target as HTMLInputElement).value; // Acceder al valor correctamente
+          
+              // Comienza a buscar solo si hay 3 o más caracteres
+              if (searchValue.length >= 3) {
+                  table.search(searchValue).draw();
+              } else {
+                  table.search('').draw(); // Limpia la búsqueda si hay menos de 3 caracteres
+              }
+          });
 
-        // Asignar el evento click a los botones "Editar"
-        $('#myTable').on('click', '.edit-user', (event) => {
-          const userId = $(event.currentTarget).data('id');
-          this.redirectEdit(userId); // Redirigir al método de edición
-        });// Asegurar que la tabla se inicializa en el próximo ciclo del evento
-        
+          // Asignar el evento click a los botones "Ver más"
+          $('#myTable').on('click', '.view-user', (event) => {
+            const id = $(event.currentTarget).data('id');
+            const userId = this.users[id].id; // Obtén el ID real del usuario
+            this.selectUser(userId); // Llama al método selectUser con el ID correcto
+          });
+
+          // Asignar el evento click a los botones "Editar"
+          $('#myTable').on('click', '.edit-user', (event) => {
+            const userId = $(event.currentTarget).data('id');
+            this.redirectEdit(userId); // Redirigir al método de edición
+          });
+        }, 0); // Asegurar que la tabla se inicializa en el próximo ciclo del evento
       },
       error: (error) => {
         console.error('Error al cargar los usuarios:', error);
@@ -122,17 +156,14 @@ import { Router, RouterModule } from '@angular/router';
     this.router.navigate(['/home/users/edit', id]);  
   }
   
-  
-
   // Busca el user y se lo pasa al modal
-  userModal : UserModel = new UserModel();
+  userModal: UserModel = new UserModel();
   selectUser(id: number) {    
     this.user = id;
     this.apiService.getUserById(id)
       .subscribe({
         next: (data: UserModel) => {
           this.userModal = data;
-          
         },
         error: (error) => {
           console.error('Error al cargar el usuario:', error);
@@ -140,7 +171,7 @@ import { Router, RouterModule } from '@angular/router';
       });
   }
 
-  //SE PUEDEN MODIFICAR LOS VALORES A MOSTRAR EN EL PDF
+  // SE PUEDEN MODIFICAR LOS VALORES A MOSTRAR EN EL PDF
   exportPdf() {
     const doc = new jsPDF();
   
@@ -152,15 +183,20 @@ import { Router, RouterModule } from '@angular/router';
     doc.text(title, (pageWidth - textWidth) / 2, 20);
   
     // Obtener columnas de la tabla (añadido 'Email')
-    const columns = ['Nombre', 'Email', 'Rol', 'Fecha de creación', 'Nro. de lote'];
+    const columns = ['Nombre', 'Rol', 'Nro. de lote', 'Fecha de nacimiento'];
+  
+    // Filtrar datos visibles en la tabla
+    const table = $('#myTable').DataTable(); // Inicializa DataTable una vez
+  
+    // Cambia la forma de obtener las filas visibles usando 'search' en lugar de 'filter'
+    const visibleRows = table.rows({ search: 'applied' }).data().toArray(); // Usar 'search: applied'
   
     // Mapear los datos filtrados a un formato adecuado para jsPDF
-    const rows = this.users.map(user => [
-      `${user.name}, ${user.lastname}`,
-      user.email, // Agregado el email
-      user.roles.join(', '), // Unir roles en un solo string
-      user.datebirth,
-      0 // Obtener el lote con el índice correspondiente
+    const rows = visibleRows.map((row: any) => [
+      `${row[0]}`,       // Nombre
+      `${row[1]}`,       // Rol
+      `${row[2]}`,       // Lote
+      row[3].replace(/-/g, '/'), // Fecha nacimiento
     ]);
   
     // Generar la tabla en el PDF usando autoTable
@@ -169,50 +205,32 @@ import { Router, RouterModule } from '@angular/router';
       body: rows,
       startY: 30, // Ajusta la posición de inicio de la tabla
       theme: 'striped', // Tema de tabla con filas alternadas
-      headStyles: { 
-        fillColor: [0, 0, 0], // Fondo negro
-        textColor: [255, 255, 255], // Texto blanco
-        fontStyle: 'bold' // Texto en negrita
-      },
+      headStyles: { fillColor: [0, 0, 0] }, // Color de fondo del encabezado
+      styles: { halign: 'center', valign: 'middle' }, // Alineación del contenido
+      columnStyles: { 
+        0: { cellWidth: 50 }, 
+        1: { cellWidth: 30 }, 
+        2: { cellWidth: 30 }, 
+        3: { cellWidth: 50 }, 
+        4: { cellWidth: 30 } 
+      }, // Ajusta el ancho de las columnas
     });
   
-    // Guardar el PDF
-    doc.save('ListaUsuarios.pdf');
+    doc.save('usuarios.pdf'); // Descarga el archivo PDF
   }
+  
 
-  //SE PUEDEN MODIFICAR LOS VALORES A MOSTRAR EN EL EXCEL
-  exportexcel() {
-    // Crear los datos personalizados para la exportación
-    const rows = this.users.map(user => [
-      `${user.name} ${user.lastname}`,  // Nombre completo
-      user.email,                       // Email
-      user.roles.join(', '),            // Roles
-      user.datebirth,                   // Fecha de nacimiento
-      0 // Nro. de lote
-    ]);
+  exportExcel() {
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.users.map(user => ({
+      Nombre: `${user.lastname}, ${user.name}`,
+      Rol: user.roles.join(', '),
+      Lote: 1234,
+      FechaNacimiento: user.datebirth.replace(/-/g, '/'), // Cambia el formato de la fecha aquí
+    })));
   
-    // Definir las cabeceras de las columnas
-    const headers = ['Nombre', 'Email', 'Rol', 'Fecha de nacimiento', 'Nro. de lote'];
-  
-    // Crear un worksheet (hoja de trabajo) con los datos
-    const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet([headers, ...rows]);
-  
-    // Personalizar estilos (opcional)
-    const wsOpts = {
-      "!cols": [                       // Establecer el ancho de las columnas
-        { wch: 25 },                   // Columna 1
-        { wch: 35 },                   // Columna 2
-        { wch: 20 },                   // Columna 3
-        { wch: 15 },                   // Columna 4
-        { wch: 10 }                    // Columna 5
-      ]
-    };
-  
-    // Crear el libro de trabajo
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Usuarios');  // Asignar nombre a la hoja
+    XLSX.utils.book_append_sheet(wb, ws, 'Usuarios');
   
-    // Guardar el archivo Excel con el nombre definido
-    XLSX.writeFile(wb, 'usuarios.xlsx');
+    XLSX.writeFile(wb, 'usuarios.xlsx'); // Descarga el archivo Excel
   }
 }

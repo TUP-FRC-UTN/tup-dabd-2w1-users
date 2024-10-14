@@ -12,14 +12,14 @@ import { Router, RouterModule } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent { 
+export class LoginComponent {
   @Output() validacion = new EventEmitter<void>();
 
-  constructor(private router : Router){}
+  constructor(private router: Router) { }
 
-  user : LoginUser = new LoginUser();
-  correoInput : string = "";
-  claveInput : string = "";
+  user: LoginUser = new LoginUser();
+  correoInput: string = "";
+  claveInput: string = "";
 
   private readonly apiService = inject(ApiServiceService);
 
@@ -29,30 +29,29 @@ export class LoginComponent {
   });
 
 
-  ingresar(form : any){
-    if(form.invalid){
+  ingresar(form: any) {
+    if (form.invalid) {
       alert("no se logueo")
     }
-    else{
+    else {
       this.user.dni = this.loginForm.value.name!;
       this.user.password = this.loginForm.value.password!;
 
-      this.router.navigate(['/home']);
-      // this.apiService.verifyLogin(this.user).subscribe({
-      //   next: (data) => {
-          
-      //     if(data){
-      //       alert("se logueo")
-      //       this.router.navigate(['/home']);
-      //     }
-      //     else{
-      //       alert("Dni o contraseña incorrectos")
-      //     }
-      //   },
-      //   error: (error) => {
-      //     alert("Dni o contraseña incorrectos")
-      //   }
-      // });
-      };
+      this.apiService.verifyLogin(this.user).subscribe({
+        next: (data) => {
+
+          if (data) {
+            alert("se logueo")
+            this.router.navigate(['/home']);
+          }
+          else {
+            alert("Dni o contraseña incorrectos")
+          }
+        },
+        error: (error) => {
+          alert("Dni o contraseña incorrectos")
+        }
+      });
+    };
   }
 }

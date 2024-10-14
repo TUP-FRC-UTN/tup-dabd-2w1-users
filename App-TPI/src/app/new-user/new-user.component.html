@@ -1,148 +1,127 @@
-<section class="container pt-5">
-    <h3>Añadir Usuario</h3>
+<section class="container p-5 border rounded border-3 border-secundary" style="min-height: 70vh;">
+    <h3 class="mb-3">Añadir Usuario</h3>
 
     <form (ngSubmit)="createUser()" [formGroup]="formReactivo">
-
         <div class="row mb-3">
-            <!-- <div class="col">
-                <label for="inputName" class="form-label">Nombre</label>
-                <input type="text" class="form-control custom-input" placeholder="Nombre"
-                [ngClass]="{'is-invalid': formReactivo.controls['nombre'].invalid  && (formReactivo.get('nombre')?.dirty|| formReactivo.get('nombre')?.touched),'is-valid': formReactivo.controls['nombre'].valid }" formControlName="nombre">
-                        @if(formReactivo.controls['nombre'].invalid && (formReactivo.get('nombre')?.dirty || formReactivo.get('nombre')?.touched)){
-                            <div class="text-danger alinear-texto">Ingrese su nombre</div>
-                        }
-            </div> -->
-            <div class="col d-flex flex-column">
-                <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-end">Nombre</label>
+            <div class="col-md-6">
+                <div class="d-flex align-items-center">
+                    <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Nombre</label>
                     <input type="text" class="form-control custom-input"
-                    [ngClass]="{'is-invalid': formReactivo.controls['nombre'].invalid  && (formReactivo.get('nombre')?.dirty|| formReactivo.get('nombre')?.touched),'is-valid': formReactivo.controls['nombre'].valid }" formControlName="nombre">
-                </div>   
-                @if(formReactivo.controls['nombre'].invalid && (formReactivo.get('nombre')?.dirty || formReactivo.get('nombre')?.touched)){     
-                    <div class="text-danger align-self-end" style="width: 500px;">
-                        Ingrese su nombre
-                    </div>
-                }
+                        [ngClass]="{'is-invalid': formReactivo.controls['nombre'].invalid && (formReactivo.get('nombre')?.dirty || formReactivo.get('nombre')?.touched), 'is-valid': formReactivo.controls['nombre'].valid }"
+                        formControlName="nombre">
+                </div>
+                <div *ngIf="formReactivo.controls['nombre'].invalid && (formReactivo.get('nombre')?.dirty || formReactivo.get('nombre')?.touched)" class="text-danger" style="margin-left: 130px;">
+                    Ingrese su nombre
+                </div>
             </div>
-            <div class="col d-flex flex-column">
-                <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-end">Apellido</label>
+            <div class="col-md-6">
+                <div class="d-flex align-items-center">
+                    <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Apellido</label>
                     <input type="text" class="form-control custom-input"
-                    [ngClass]="{'is-invalid': formReactivo.controls['apellido'].invalid  && (formReactivo.get('apellido')?.dirty|| formReactivo.get('apellido')?.touched),'is-valid': formReactivo.controls['apellido'].valid }" formControlName="apellido">
-                </div>   
-                @if(formReactivo.controls['apellido'].invalid && (formReactivo.get('apellido')?.dirty || formReactivo.get('apellido')?.touched)){     
-                    <div class="text-danger align-self-end" style="width: 500px;">
-                        Ingrese su apellido
-                    </div>
-                }
-            </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col d-flex flex-column">
-                <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-end">Email</label>
-                    <input type="text" class="form-control custom-input"
-                    [ngClass]="{'is-invalid': formReactivo.controls['email'].invalid  && (formReactivo.get('email')?.dirty|| formReactivo.get('email')?.touched),'is-valid': formReactivo.controls['email'].valid }" formControlName="email">
-                </div>   
-                @if(formReactivo.controls['email'].invalid && (formReactivo.get('email')?.dirty || formReactivo.get('email')?.touched)){     
-                    <div class="text-danger align-self-end" style="width: 500px;">
-                        Ingrese su email
-                    </div>
-                }
-            </div>
-            <div class="col d-flex flex-column">
-                <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-end">Dni</label>
-                    <input type="number" class="form-control custom-input"
-                    [ngClass]="{'is-invalid': formReactivo.controls['dni'].invalid  && (formReactivo.get('dni')?.dirty|| formReactivo.get('dni')?.touched),'is-valid': formReactivo.controls['dni'].valid }" formControlName="dni">
-                </div>   
-                @if(formReactivo.controls['dni'].invalid && (formReactivo.get('dni')?.dirty || formReactivo.get('dni')?.touched)){     
-                    <div class="text-danger align-self-end" style="width: 500px;">
-                        Ingrese su dni
-                    </div>
-                }
+                        [ngClass]="{'is-invalid': formReactivo.controls['apellido'].invalid && (formReactivo.get('apellido')?.dirty || formReactivo.get('apellido')?.touched), 'is-valid': formReactivo.controls['apellido'].valid }"
+                        formControlName="apellido">
+                </div>
+                <div *ngIf="formReactivo.controls['apellido'].invalid && (formReactivo.get('apellido')?.dirty || formReactivo.get('apellido')?.touched)" class="text-danger" style="margin-left: 130px;">
+                    Ingrese su apellido
+                </div>
             </div>
         </div>
 
         <div class="row mb-3">
-            <div class="col d-flex flex-column">
-                <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-end">Télefono</label>
-                    <input type="number" class="form-control custom-input"
-                    [ngClass]="{'is-invalid': formReactivo.controls['telefono'].invalid  && (formReactivo.get('telefono')?.dirty|| formReactivo.get('telefono')?.touched),'is-valid': formReactivo.controls['telefono'].valid }" formControlName="telefono">
-                </div>   
-                @if(formReactivo.controls['telefono'].invalid && (formReactivo.get('telefono')?.dirty || formReactivo.get('telefono')?.touched)){     
-                    <div class="text-danger align-self-end" style="width: 500px;">
-                        Ingrese su teléfono
-                    </div>
-                }
+            <div class="col-md-6">
+                <div class="d-flex align-items-center">
+                    <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Email</label>
+                    <input type="text" class="form-control custom-input"
+                        [ngClass]="{'is-invalid': formReactivo.controls['email'].invalid && (formReactivo.get('email')?.dirty || formReactivo.get('email')?.touched), 'is-valid': formReactivo.controls['email'].valid }"
+                        formControlName="email">
+                </div>
+                <div *ngIf="formReactivo.controls['email'].invalid && (formReactivo.get('email')?.dirty || formReactivo.get('email')?.touched)" class="text-danger" style="margin-left: 130px;">
+                    Ingrese su email
+                </div>
             </div>
-            <div class="col d-flex flex-column">
-                <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-end">Fecha de nacimiento</label>
+            <div class="col-md-6">
+                <div class="d-flex align-items-center">
+                    <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">DNI</label>
+                    <input type="text" class="form-control custom-input"
+                        [ngClass]="{'is-invalid': formReactivo.controls['dni'].invalid && (formReactivo.get('dni')?.dirty || formReactivo.get('dni')?.touched), 'is-valid': formReactivo.controls['dni'].valid }"
+                        formControlName="dni" style="appearance: none;" pattern="[0-9]*">
+                </div>
+                <div *ngIf="formReactivo.controls['dni'].invalid && (formReactivo.get('dni')?.dirty || formReactivo.get('dni')?.touched)" class="text-danger" style="margin-left: 130px;">
+                    Ingrese un DNI válido (solo números)
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <div class="d-flex align-items-center">
+                    <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Teléfono</label>
+                    <input type="text" class="form-control custom-input"
+                        [ngClass]="{'is-invalid': formReactivo.controls['telefono'].invalid && (formReactivo.get('telefono')?.dirty || formReactivo.get('telefono')?.touched), 'is-valid': formReactivo.controls['telefono'].valid }"
+                        formControlName="telefono" style="appearance: none;">
+                </div>
+                <div *ngIf="formReactivo.controls['telefono'].invalid && (formReactivo.get('telefono')?.dirty || formReactivo.get('telefono')?.touched)" class="text-danger" style="margin-left: 130px;">
+                    Ingrese su teléfono
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="d-flex align-items-center">
+                    <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Fecha de nacimiento</label>
                     <input type="date" class="form-control custom-input"
-                    [ngClass]="{'is-invalid': formReactivo.controls['fecha'].invalid  && (formReactivo.get('fecha')?.dirty|| formReactivo.get('fecha')?.touched),'is-valid': formReactivo.controls['fecha'].valid }" formControlName="fecha">
-                </div>   
-                @if(formReactivo.controls['fecha'].invalid && (formReactivo.get('fecha')?.dirty || formReactivo.get('fecha')?.touched)){     
-                    <div class="text-danger align-self-end" style="width: 500px;">
-                        Ingrese su fecha de nacimiento
-                    </div>
-                }
+                        [ngClass]="{'is-invalid': formReactivo.controls['fecha'].invalid && (formReactivo.get('fecha')?.dirty || formReactivo.get('fecha')?.touched), 'is-valid': formReactivo.controls['fecha'].valid }"
+                        formControlName="fecha" value="2000-01-01">
+                </div>
+                <div *ngIf="formReactivo.controls['fecha'].invalid && (formReactivo.get('fecha')?.dirty || formReactivo.get('fecha')?.touched)" class="text-danger" style="margin-left: 130px;">
+                    Ingrese su fecha de nacimiento
+                </div>
             </div>
         </div>
 
         <div class="row mb-3">
-            <div class="col d-flex flex-column">
-                <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-end">Nombre de usuario</label>
-                    <input type="text" class="form-control custom-input"
-                    [ngClass]="{'is-invalid': formReactivo.controls['username'].invalid  && (formReactivo.get('username')?.dirty|| formReactivo.get('username')?.touched),'is-valid': formReactivo.controls['username'].valid }" formControlName="username">
-                </div>   
-                @if(formReactivo.controls['username'].invalid && (formReactivo.get('username')?.dirty || formReactivo.get('username')?.touched)){     
-                    <div class="text-danger align-self-end" style="width: 500px;">
-                        Ingrese su nombre de usuario
-                    </div>
-                }
-            </div>
-        </div>
-        <!-- JUNTAR ESTO CON LO DE ARRIBA, O SEA PONER USERNAME Y ROLES EN UNA MISMA COL, VER EL TEMA DEL MULTIPLE SELECT EN EL ROL -->
-        <div>
-            <div class="row mb-3">
-                <div class="col">
-                    <label for="exampleInputEmail1" class="form-label">Rol</label>
-                    <div class="d-flex">
-                        <select class="form-select me-2" aria-label="Default select example"
-                                id="selectType" required formControlName="rol">
+            <div class="col-md-6">
+                <div class="d-flex align-items-center">
+                    <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0; margin-right: 10px;">Rol</label>
+                    <div class="d-flex" style="flex: 1;">
+                        <select class="form-select me-2" id="rol" required formControlName="rol" style="width: 418px;">
                             <option value="">Seleccione un rol</option>
-                            @for(rol of roles; track $index){
-                                <option value="{{rol.description}}">{{rol.description}}</option>
-                            }   
+                            <option *ngFor="let rol of roles" [value]="rol.description">{{rol.description}}</option>
                         </select>
-                        <button type="button" class="btn btn-secondary" (click)="aniadirRol()"> Añadir</button>
+                        <button type="button" class="btn btn-secondary" (click)="aniadirRol()">Añadir</button>
                     </div>
                 </div>
             </div>
-            <div class="row mb-3">
-                <ul>
-                    @if(rolesInput.length > 0){
-                        <p>Roles añadidos: </p>
-                    }
-                    @for(rol of rolesInput; track $index){
-                        <li class="">{{rol}} <button class="btn btn-secondary" (click)="quitarRol(rol)">Quitar</button></li>
-                    }
-                  </ul>
-            </div>
-            <div class="row mb-3 justify-content-end">
-                <div class="col-auto">
-                    <button type="button" class="btn btn-danger">Cancelar</button>
+            <div class="col-md-6">
+                <div class="d-flex align-items-center">
+                    <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Nombre de usuario</label>
+                    <input type="text" class="form-control custom-input"
+                        [ngClass]="{'is-invalid': formReactivo.controls['username'].invalid && (formReactivo.get('username')?.dirty || formReactivo.get('username')?.touched), 'is-valid': formReactivo.controls['username'].valid }"
+                        formControlName="username">
                 </div>
-                <div class="col-auto">
-                    <button type="submit" class="btn btn-primary">Guardar</button>
+                <div *ngIf="formReactivo.controls['username'].invalid && (formReactivo.get('username')?.dirty || formReactivo.get('username')?.touched)" class="text-danger" style="margin-left: 130px;">
+                    Ingrese su nombre de usuario
                 </div>
             </div>
         </div>
 
-        
+        <div class="row mb-3">
+            <div class="col-6">
+                <ul *ngIf="rolesInput.length > 0">
+                    <p>Roles añadidos:</p>
+                    <li *ngFor="let rol of rolesInput" class="my-1">
+                        {{rol}} <button class="btn btn-secondary" (click)="quitarRol(rol)">Quitar</button>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-6">
+                <div class="row mb-3 justify-content-end">
+                    <div class="col-auto">
+                        <button type="button" class="btn btn-secondary" (click)="redirect('/home')">Cancelar</button>
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </form>
-
 </section>
