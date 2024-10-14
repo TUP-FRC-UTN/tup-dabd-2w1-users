@@ -16,10 +16,6 @@ export class ModalInfoUserComponent implements OnChanges{
 
   @Input() userModal: UserModel = new UserModel();
 
-  private readonly apiService = inject(ApiServiceService);
-
-  roles: RolModel[] = [];
-  select: string = "";
   rolesInput: string[] = [];
 
 
@@ -33,8 +29,6 @@ export class ModalInfoUserComponent implements OnChanges{
       birthdate: new FormControl(this.userModal.datebirth, []),
       roles : new FormControl(this.rolesInput, [])
     });
-    this.changeEdit();
-    this.loadRoles(); 
   }
 
   editUser = new FormGroup({
@@ -46,49 +40,5 @@ export class ModalInfoUserComponent implements OnChanges{
     birthdate: new FormControl(this.userModal.datebirth, []),
     roles : new FormControl(this.rolesInput, [])
   });
-
-  canEdit: boolean = false;
-
-  changeEdit() {
-    if (this.canEdit) {
-      this.editUser.disable();
-    } else {
-      this.editUser.enable();
-    }
-    this.canEdit = !this.canEdit;
-  }
-
-  edit(form: any) {
-    if (this.editUser.valid) {
-      console.log('Formulario enviado:', this.editUser.value);
-    } else {
-      console.log('Formulario inválido');
-    }
-  }
-
-  loadRoles() {
-    this.apiService.getAllRoles().subscribe({
-      next: (data: RolModel[]) => {
-        this.roles = data;
-      },
-      error: (error) => {
-        console.error('Error al cargar los roles:', error);
-      }
-    });
-  }
-
-   aniadirRol() {
-    if (this.select && !this.rolesInput.includes(this.select)) {  // Evita duplicados
-      this.rolesInput.push(this.select);  
-    }
-  }
-
-  quitarRol(rol: string) {
-    const index = this.rolesInput.indexOf(rol);
-    if (index > -1) {
-      this.rolesInput.splice(index, 1);
-    }
-  }
-
 }
 

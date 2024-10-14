@@ -5,6 +5,7 @@ import { UserModel } from '../models/User';
 import { RolModel } from '../models/Rol';
 import { UserPost } from '../models/UserPost';
 import { LoginUser } from '../models/Login';
+import { UserPut } from '../models/UserPut';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +32,15 @@ export class ApiServiceService {
     return this.http.get<UserModel>(this.url + "users/get/" + id);
   }
 
+  getUserByEmail(email: string): Observable<UserModel> {
+    return this.http.get<UserModel>(this.url + "users/" + email);
+  }
+
   postUser(user: UserPost): Observable<UserModel> {    
     return this.http.post<UserModel>(this.url + "users", user);
   } 
+
+  putUser(user: UserPut, id: number): Observable<UserPut> {
+    return this.http.put<UserPut>(`${this.url}users/${id}`, user); // Incluye el ID en la URL
+  }
 }

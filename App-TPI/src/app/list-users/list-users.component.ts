@@ -95,7 +95,6 @@ import 'datatables.net-bs5';
 
                   // Asignar el evento click a los botones "Ver más"
         $('#myTable').on('click', '.view-user', (event) => {
-          console.log('AAAAAAAAAA');
           const id = $(event.currentTarget).data('id');
           const userId = this.users[id].id; // Obtén el ID real del usuario
           this.selectUser(userId); // Llama al método selectUser con el ID correcto
@@ -120,7 +119,6 @@ import 'datatables.net-bs5';
       .subscribe({
         next: (data: UserModel) => {
           this.userModal = data;
-          console.log(this.userModal);
           
         },
         error: (error) => {

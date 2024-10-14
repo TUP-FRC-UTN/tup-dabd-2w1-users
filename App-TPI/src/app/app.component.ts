@@ -7,11 +7,12 @@ import { NewUserComponent } from './new-user/new-user.component';
 import { ListUsersComponent } from './list-users/list-users.component';
 import { ModalInfoUserComponent } from './modal-info-user/modal-info-user.component';
 import { UsuariosNewOwnerComponent } from "./usuarios-new-owner/usuarios-new-owner.component";
+import { UsersUpdateUserComponent } from './users-update-user/users-update-user.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, LoginComponent, NavbarComponent, LandingPageComponent, NewUserComponent, ListUsersComponent, ModalInfoUserComponent, UsuariosNewOwnerComponent, ],
+  imports: [RouterOutlet, LoginComponent, NavbarComponent, LandingPageComponent, NewUserComponent, ListUsersComponent, ModalInfoUserComponent, UsuariosNewOwnerComponent, UsersUpdateUserComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
