@@ -8,15 +8,15 @@ import { ApiServiceService } from '../servicies/api-service.service';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
-
 import $ from 'jquery';
 import 'datatables.net'
 import 'datatables.net-bs5';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-list-users',
   standalone: true,
-  imports: [HttpClientModule, CommonModule, FormsModule, ModalInfoUserComponent], // Importa aquí el HttpClientModule
+  imports: [HttpClientModule, CommonModule, FormsModule, ModalInfoUserComponent, RouterModule], // Importa aquí el HttpClientModule
   templateUrl: './list-users.component.html',
   styleUrls: ['./list-users.component.css']
 })export class ListUsersComponent implements OnInit { 
@@ -24,6 +24,9 @@ import 'datatables.net-bs5';
   user: number = 0; 
   users: UserModel[] = [];
   private readonly apiService = inject(ApiServiceService);
+
+  constructor(private router: Router){ }
+  
 
   ngOnInit() {
     this.apiService.getAllUsers().subscribe({
@@ -44,24 +47,24 @@ import 'datatables.net-bs5';
               { title: 'Rol' },
               { title: 'Nro. de lote', className: 'text-start' },
               { title: 'Fecha de creación' },
-              { 
+              {
                 title: 'Acciones', 
                 render: (data, type, row, meta) => {
+                  const userId = this.users[meta.row].id;
                   return `
                     <div class="dropdown-center d-flex align-items-center">
                       <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-three-dots-vertical"></i>
                       </button>
                       <ul class="dropdown-menu">
-                        <li><a class="dropdown-item view-user" data-id="${meta.row}"
-                         data-bs-toggle="modal" data-bs-target="#infoUser">Ver más</a></li>
-                        <li><a class="dropdown-item">Editar</a></li>
+                        <li><a class="dropdown-item view-user" data-id="${meta.row}" data-bs-toggle="modal" data-bs-target="#infoUser">Ver más</a></li>
+                        <li><a class="dropdown-item edit-user" data-id="${userId}">Editar</a></li>
                       </ul>
                     </div>
                   `;
                 }
-                
               }
+              
             ],
             data: this.users.map(user => [
               `${user.lastname}, ${user.name}`,  // Nombre completo
@@ -100,6 +103,13 @@ import 'datatables.net-bs5';
           this.selectUser(userId); // Llama al método selectUser con el ID correcto
         });
         }, 0);  // Asegurar que la tabla se inicializa en el próximo ciclo del evento
+
+        // Asignar el evento click a los botones "Editar"
+        $('#myTable').on('click', '.edit-user', (event) => {
+          const userId = $(event.currentTarget).data('id');
+          this.redirectEdit(userId); // Redirigir al método de edición
+        });// Asegurar que la tabla se inicializa en el próximo ciclo del evento
+        
       },
       error: (error) => {
         console.error('Error al cargar los usuarios:', error);
@@ -107,13 +117,16 @@ import 'datatables.net-bs5';
     });
   }
   
+  redirectEdit(id: number) {
+    console.log("Redirigiendo a la edición del usuario con ID:", id);
+    this.router.navigate(['/home/users/edit', id]);  
+  }
+  
   
 
   // Busca el user y se lo pasa al modal
   userModal : UserModel = new UserModel();
-  selectUser(id: number) {
-    console.log(id);
-    
+  selectUser(id: number) {    
     this.user = id;
     this.apiService.getUserById(id)
       .subscribe({

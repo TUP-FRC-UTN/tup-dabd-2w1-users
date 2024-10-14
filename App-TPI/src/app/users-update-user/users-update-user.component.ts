@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, formatDate } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiServiceService } from '../servicies/api-service.service';
@@ -6,6 +6,7 @@ import { RolModel } from '../models/Rol';
 import { UserModel } from '../models/User';
 import { UserPut } from '../models/UserPut';
 import { data } from 'jquery';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-users-update-user',
@@ -19,15 +20,18 @@ export class UsersUpdateUserComponent implements OnInit {
   
   private readonly apiService = inject(ApiServiceService);
 
+  constructor(private router: Router, private route: ActivatedRoute){ }
+
     
   roles: RolModel[] = [];
   rolesInput: string[] = [];
+  id: string = '';
 
   updateForm = new FormGroup({
     name: new FormControl('', [Validators.required]),
     lastname: new FormControl('', [Validators.required]),
     dni: new FormControl('', [Validators.required]),
-    phoneNumber: new FormControl('', [Validators.required]),
+    phoneNumber: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(20)]),
     email: new FormControl('', [Validators.email, Validators.required]),
     avatar_url: new FormControl('', [Validators.required]),
     datebirth: new FormControl('', [Validators.required]),
@@ -70,13 +74,16 @@ export class UsersUpdateUserComponent implements OnInit {
         },
     });
 }
-
-
   
   ngOnInit() {
     this.loadRoles();
 
-    this.apiService.getUserByEmail('123@123asd').subscribe({
+    this.id = this.route.snapshot.paramMap.get('id') || '';  // Obtiene el parámetro 'name'
+
+    console.log(this.id);
+    
+
+    this.apiService.getUserById(parseInt(this.id)).subscribe({
       next: (data: UserModel) => {        
         this.updateForm.get('name')?.setValue(data.name);
         this.updateForm.get('lastname')?.setValue(data.lastname);
@@ -84,6 +91,10 @@ export class UsersUpdateUserComponent implements OnInit {
         this.updateForm.get('email')?.setValue(data.email);
         this.updateForm.get('avatar_url')?.setValue(data.avatar_url);
         this.updateForm.get('datebirth')?.setValue(data.datebirth);
+        const formattedDate = this.parseDateString(data.datebirth);
+        this.updateForm.patchValue({
+          datebirth: formattedDate ? this.formatDate(formattedDate) : ''
+        });
         this.rolesInput = data.roles;
         this.updateForm.get('phoneNumber')?.setValue(data.phone_number.toString());
       },
@@ -91,6 +102,20 @@ export class UsersUpdateUserComponent implements OnInit {
         console.error('Error al cargar el usuario:', error);
       }
     });
+  }
+
+  private parseDateString(dateString: string): Date | null {
+    const [day, month, year] = dateString.split('-').map(Number);
+    if (!day || !month || !year) {
+      return null;
+    }
+    // Crea un objeto Date con formato "yyyy-MM-dd"
+    return new Date(year, month - 1, day); // Restamos 1 al mes porque en JavaScript los meses son 0-indexed
+  }
+
+  // Formatea una fecha en "yyyy-MM-dd"
+  private formatDate(date: Date): string {
+    return formatDate(date, 'yyyy-MM-dd', 'en-US');
   }
 
   loadRoles() {
