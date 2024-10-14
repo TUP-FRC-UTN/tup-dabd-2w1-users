@@ -6,6 +6,7 @@ import { RolModel } from '../models/Rol';
 import { UserPost } from '../models/UserPost';
 import { LoginUser } from '../models/Login';
 import { UserPut } from '../models/UserPut';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,9 @@ export class ApiServiceService {
   constructor() { }
 
   getAllUsers(): Observable<UserModel[]> {
-    return this.http.get<UserModel[]>(this.url + "users");
+    return this.http.get<UserModel[]>(this.url + "users").pipe(
+      map((users: UserModel[]) => users.filter(user => user.active)) // Filtra solo los usuarios activos
+    );
   }
 
   verifyLogin(user: LoginUser): Observable<LoginUser> {
@@ -42,5 +45,9 @@ export class ApiServiceService {
 
   putUser(user: UserPut, id: number): Observable<UserPut> {
     return this.http.put<UserPut>(`${this.url}users/${id}`, user); // Incluye el ID en la URL
+  }
+
+  deactivateUser(id: number): Observable<any> {
+    return this.http.delete(`${this.url}users/${id}`); // Asegúrate de que la URL sea correcta
   }
 }

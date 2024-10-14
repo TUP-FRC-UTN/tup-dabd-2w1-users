@@ -25,6 +25,8 @@ export class ListUsersComponent implements OnInit {
   user: number = 0; 
   users: UserModel[] = [];
   private readonly apiService = inject(ApiServiceService);
+  showDeactivateModal: boolean = false;
+  userToDeactivate: number = 0;
 
   constructor(private router: Router) { }
 
@@ -36,7 +38,8 @@ export class ListUsersComponent implements OnInit {
           ...user,
           datebirth: user.datebirth.replace(/-/g, '/') // Cambia 'dd-mm-yyyy' a 'dd/mm/yyyy'
         }));
-
+        
+        
         // Inicializar DataTables después de cargar los datos
         setTimeout(() => {
           const table = $('#myTable').DataTable({
@@ -138,11 +141,14 @@ export class ListUsersComponent implements OnInit {
             this.selectUser(userId); // Llama al método selectUser con el ID correcto
           });
 
+
           // Asignar el evento click a los botones "Editar"
           $('#myTable').on('click', '.edit-user', (event) => {
             const userId = $(event.currentTarget).data('id');
             this.redirectEdit(userId); // Redirigir al método de edición
           });
+
+
         }, 0); // Asegurar que la tabla se inicializa en el próximo ciclo del evento
       },
       error: (error) => {
@@ -155,7 +161,7 @@ export class ListUsersComponent implements OnInit {
     console.log("Redirigiendo a la edición del usuario con ID:", id);
     this.router.navigate(['/home/users/edit', id]);  
   }
-  
+
   // Busca el user y se lo pasa al modal
   userModal: UserModel = new UserModel();
   selectUser(id: number) {    
@@ -218,7 +224,6 @@ export class ListUsersComponent implements OnInit {
   
     doc.save('usuarios.pdf'); // Descarga el archivo PDF
   }
-  
 
   exportExcel() {
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.users.map(user => ({
@@ -232,5 +237,19 @@ export class ListUsersComponent implements OnInit {
     XLSX.utils.book_append_sheet(wb, ws, 'Usuarios');
   
     XLSX.writeFile(wb, 'usuarios.xlsx'); // Descarga el archivo Excel
+  }
+
+  confirmDeactivate(id: number) {
+    this.apiService.deactivateUser(id).subscribe({
+      next: () => {
+        // Aquí puedes manejar la respuesta, como actualizar la lista de usuarios
+        this.users = this.users.filter(user => user.id !== id); // Remover el usuario de la lista
+        this.showDeactivateModal = false; // Cerrar el modal
+      },
+      error: (error) => {
+        console.error('Error al desactivar el usuario:', error);
+        this.showDeactivateModal = false; // Cerrar el modal en caso de error
+      }
+    });
   }
 }

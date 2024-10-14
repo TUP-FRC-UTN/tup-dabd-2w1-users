@@ -63,7 +63,7 @@ export class UsersUpdateUserComponent implements OnInit {
     console.log(user);
 
     // Llama al servicio para actualizar el usuario
-    this.apiService.putUser(user, 14).subscribe({
+    this.apiService.putUser(user, parseInt(this.id)).subscribe({
         next: (response) => {
             console.log('Usuario actualizado exitosamente:', response);
             alert('Usuario actualizado exitosamente');
