@@ -1,8 +1,8 @@
 export class UserPut {
     name: string;
-    lastname: string;     
+    lastName: string;     
     dni: string;   
-    phone_number: string;
+    phoneNumber: string;
     email: string;                  
     avatar_url: string;   
     datebirth: string;    
@@ -10,12 +10,12 @@ export class UserPut {
 
     constructor() {
         this.name = '';
-        this.lastname = '';
+        this.lastName = '';
         this.email = '';
         this.dni = '';
         this.avatar_url = '';
         this.datebirth = '';
         this.roles = [];
-        this.phone_number = ''
+        this.phoneNumber = ''
     }
 }

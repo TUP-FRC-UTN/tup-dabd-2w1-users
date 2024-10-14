@@ -42,7 +42,5 @@ export class ApiServiceService {
 
   putUser(user: UserPut, id: number): Observable<UserPut> {
     return this.http.put<UserPut>(`${this.url}users/${id}`, user); // Incluye el ID en la URL
-}
-
-  
+  }
 }

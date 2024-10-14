@@ -5,6 +5,7 @@ import { ApiServiceService } from '../servicies/api-service.service';
 import { RolModel } from '../models/Rol';
 import { UserModel } from '../models/User';
 import { UserPut } from '../models/UserPut';
+import { data } from 'jquery';
 
 @Component({
   selector: 'app-users-update-user',
@@ -37,15 +38,21 @@ export class UsersUpdateUserComponent implements OnInit {
   updateUser() {
     const user: UserPut = new UserPut();
     user.name = this.updateForm.get('name')?.value || '';
-    user.lastname = this.updateForm.get('lastname')?.value || '';
+    user.lastName = this.updateForm.get('lastname')?.value || '';
     user.dni = this.updateForm.get('dni')?.value || '';
-    user.phone_number = this.updateForm.get('phoneNumber')?.value || '';
+    user.phoneNumber = this.updateForm.get('phoneNumber')?.value?.toString() || '';
     user.email = this.updateForm.get('email')?.value || '';
     user.avatar_url = this.updateForm.get('avatar_url')?.value || '';
 
     // Formatea la fecha correctamente (año-mes-día)
-    const date = new Date(this.updateForm.get('datebirth')?.value || ''); 
-    user.datebirth = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+    const date: Date = new Date(this.updateForm.get('datebirth')?.value || '');
+
+// Formatear la fecha como YYYY-MM-DD
+    const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+
+    user.datebirth = formattedDate;
+
+    
 
     user.roles = this.rolesInput || ['Admin']; // Asegúrate de que roles sea un arreglo
 
