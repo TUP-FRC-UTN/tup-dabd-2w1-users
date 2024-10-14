@@ -21,7 +21,7 @@ export class NewUserComponent implements OnInit {
     username: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.email, Validators.required]),
     dni: new FormControl('', [Validators.required]),
-    telefono: new FormControl('', [Validators.required]),
+    telefono: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(20)]),
     fecha: new FormControl(this.formatDate(new Date()), [Validators.required]),
     rol: new FormControl('') 
   });

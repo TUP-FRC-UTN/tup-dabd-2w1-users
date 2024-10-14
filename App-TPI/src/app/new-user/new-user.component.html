@@ -53,7 +53,7 @@
             <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center justify-content-end">
                     <label class="form-label mb-0 me-3 text-end">Dni</label>
-                    <input type="text" class="form-control custom-input"
+                    <input type="number" class="form-control custom-input"
                     [ngClass]="{'is-invalid': formReactivo.controls['dni'].invalid  && (formReactivo.get('dni')?.dirty|| formReactivo.get('dni')?.touched),'is-valid': formReactivo.controls['dni'].valid }" formControlName="dni">
                 </div>   
                 @if(formReactivo.controls['dni'].invalid && (formReactivo.get('dni')?.dirty || formReactivo.get('dni')?.touched)){     
@@ -68,7 +68,7 @@
             <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center justify-content-end">
                     <label class="form-label mb-0 me-3 text-end">Télefono</label>
-                    <input type="text" class="form-control custom-input"
+                    <input type="number" class="form-control custom-input"
                     [ngClass]="{'is-invalid': formReactivo.controls['telefono'].invalid  && (formReactivo.get('telefono')?.dirty|| formReactivo.get('telefono')?.touched),'is-valid': formReactivo.controls['telefono'].valid }" formControlName="telefono">
                 </div>   
                 @if(formReactivo.controls['telefono'].invalid && (formReactivo.get('telefono')?.dirty || formReactivo.get('telefono')?.touched)){     
@@ -134,10 +134,10 @@
             </div>
             <div class="row mb-3 justify-content-end">
                 <div class="col-auto">
-                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <button type="button" class="btn btn-danger">Cancelar</button>
                 </div>
                 <div class="col-auto">
-                    <button type="button" class="btn btn-danger">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
                 </div>
             </div>
         </div>

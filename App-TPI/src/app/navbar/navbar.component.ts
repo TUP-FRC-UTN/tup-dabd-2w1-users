@@ -34,7 +34,7 @@ export class NavbarComponent implements OnInit {
           //botón agregar usuario
           icon : "bi-person-plus-fill",
           title : "Añadir",
-          route : "users/add",
+          route : "home/users/add",
           roles : ["SuperAdmin", "Admin", "Owner"]
         },
         {
@@ -42,7 +42,7 @@ export class NavbarComponent implements OnInit {
           //botón listado
           icon : "bi-person-lines-fill",
           title : "Listado",
-          route : "/users/list",
+          route : "home/users/list",
           roles : ["SuperAdmin", "Admin", "Owner"]
         }] 
       }
