@@ -1,0 +1,82 @@
+<div class="modal fade" id="infoLote" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Informacion del Lote</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form >
+            <div class="row mb-3 mt-4">
+                <div class="col-md-4">
+                  <div class="d-flex align-items-center">
+                    <label class="form-label mb-0 me-3 text-center" style="width: 140px;" for="number">Número</label>
+                    <input type="text" class="form-control custom-input" formControlName="number" id="number">
+                  </div>   
+                </div>
+                <div class="col-md-4">
+                  <div class="d-flex align-items-center">
+                    <label class="form-label mb-0 me-3 text-center" style="width: 140px;" for="apple">Manzana</label>
+                    <input type="text" class="form-control custom-input" formControlName="apple" id="apple">
+                  </div>   
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center">
+                      <label class="form-label mb-0 me-3 text-center" style="width: 140px;" for="meters">Metros cuadrados(m2)</label>
+                      <input type="text" class="form-control custom-input" formControlName="meters" id="meters">
+                    </div>   
+                  </div>
+            </div>
+  
+            <div class="row mb-3 mt-4">
+                <div class="col-md-6">
+                  <div class="d-flex align-items-center">
+                    <label class="form-label mb-0 me-3 text-center" style="width: 140px;" for="dni">Metros cuadrados construidos</label>
+                    <input type="text" class="form-control custom-input" formControlName="dni" id="dni">
+                  </div>   
+                </div>
+
+                <div class="col-md-6">
+                  <div class="d-flex align-items-center">
+                    <label class="form-label mb-0 me-3 text-center" style="width: 140px;" for="cuit_cuil">Propietario</label>
+                    <input type="text" class="form-control custom-input" formControlName="cuitCuil" id="cuit_cuil">
+                  </div>   
+                </div>
+            </div>
+
+            <div class="row mb-3 mt-4">
+                <div class="col-md-12">
+                  <div class="d-flex align-items-center">
+                    <label class="form-label mb-0 me-3 text-center" style="width: 140px;" for="phone">Tipo de Lote</label>
+                    <!-- <input type="text" class="form-control custom-input" formControlName="phone" id="phone"> -->
+                     <select class="form-select" aria-label="Default select example">
+                        <option selected>Seleccione el tipo de lote</option>
+                     </select>
+                  </div>   
+                </div>
+                
+                <div class="row mb-3 mt-4">
+                <div class="col-md-12">
+                    <div class="d-flex align-items-center">
+                        <label class="form-label mb-0 me-3 text-center" style="width: 150px;">Archivos</label>
+                        <div class="form-control custom-input" style="background-color: #e9ecef; height: 120px; overflow-y: auto;">
+                           
+                            <p class="text-muted">No se han agregado archivos</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                
+          </form>
+        </div>
+  
+        <div class="modal-footer">
+          
+          <button type="button" class="btn btn-primary">Guardar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
