@@ -1,7 +1,10 @@
 import { CommonModule, formatDate } from '@angular/common';
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserModel } from '../models/User';
+import { ApiServiceService } from '../servicies/api-service.service';
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-modal-info-user',
@@ -13,7 +16,12 @@ import { UserModel } from '../models/User';
 export class ModalInfoUserComponent implements OnChanges {
 
   @Input() userModal: UserModel = new UserModel();
+  @Input() typeModal: string = '';
+
+  private readonly apiService = inject(ApiServiceService);
   rolesInput: string[] = [];
+
+
 
   // Inicializa el formulario
   editUser = new FormGroup({
@@ -28,12 +36,10 @@ export class ModalInfoUserComponent implements OnChanges {
 
   // Método para detectar cambios en el @Input
   ngOnChanges(changes: SimpleChanges): void {
-    
     if (changes['userModal'] && changes['userModal'].currentValue) {
       // Actualiza los valores del formulario cuando cambian los datos del usuario
       if (this.userModal.datebirth) {
         const formattedDate = this.parseDateString(this.userModal.datebirth);
-
         this.editUser.patchValue({
           name: this.userModal.name,
           lastName: this.userModal.lastname,
@@ -62,4 +68,33 @@ export class ModalInfoUserComponent implements OnChanges {
     return formatDate(date, 'yyyy-MM-dd', 'en-US');
   }
 
+  confirmDeactivate() {
+    this.apiService.desactivateUser(this.userModal.id).subscribe({
+      next: () => {
+        console.log('Usuario eliminado correctamente');
+        // Poner un sweetAlert
+      },
+      error: (error) => {
+        console.error('Error al eliminar el usuario:', error);
+        // Poner un sweetAlert
+      }
+    });
+  }
+
+  confirmDelete() {
+    Swal .fire({
+      title: '¿Seguro que desea eliminar el usuario?',
+      showDenyButton: true,
+      showCancelButton: false,
+      confirmButtonText: 'Eliminar',
+      denyButtonText: `Cancelar`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire('Eliminado!', '', 'success');
+        this.confirmDeactivate();
+      } else{
+        Swal.fire('Operación cancelada!', '', 'info');
+      }
+    });
+  }
 }

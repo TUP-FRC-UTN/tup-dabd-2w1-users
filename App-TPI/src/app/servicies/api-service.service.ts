@@ -47,7 +47,7 @@ export class ApiServiceService {
     return this.http.put<UserPut>(`${this.url}users/${id}`, user); // Incluye el ID en la URL
   }
 
-  deactivateUser(id: number): Observable<any> {
+  desactivateUser(id: number): Observable<any> {
     return this.http.delete(`${this.url}users/${id}`); // Asegúrate de que la URL sea correcta
   }
 }

@@ -1,5 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { UserModel } from '../models/User';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -22,6 +22,7 @@ import { Router, RouterModule } from '@angular/router';
 })
 export class ListUsersComponent implements OnInit { 
 
+  typeModal: string = '';
   user: number = 0; 
   users: UserModel[] = [];
   private readonly apiService = inject(ApiServiceService);
@@ -29,6 +30,8 @@ export class ListUsersComponent implements OnInit {
   userToDeactivate: number = 0;
 
   constructor(private router: Router) { }
+
+  
 
   ngOnInit() {
     this.apiService.getAllUsers().subscribe({
@@ -69,6 +72,7 @@ export class ListUsersComponent implements OnInit {
                       <ul class="dropdown-menu">
                         <li><a class="dropdown-item view-user" data-id="${meta.row}" data-bs-toggle="modal" data-bs-target="#infoUser">Ver más</a></li>
                         <li><a class="dropdown-item edit-user" data-id="${userId}">Editar</a></li>
+                        <li><a class="dropdown-item delete-user" data-id="${meta.row}" data-bs-toggle="modal" data-bs-target="#infoUser">Eliminar</a></li>
                       </ul>
                     </div>
                   `;
@@ -141,6 +145,20 @@ export class ListUsersComponent implements OnInit {
             this.selectUser(userId); // Llama al método selectUser con el ID correcto
           });
 
+          $('#myTable').on('click', '.delete-user', (event) => {
+            const id = $(event.currentTarget).data('id');
+            const userId = this.users[id].id; // Obtén el ID real del usuario
+            this.selectUser(userId); // Llama al método selectUser con el ID correcto
+          });
+
+          $('#myTable').on('click', '.view-user', (event) => {
+            this.changeTypeModal('info');
+          });
+
+          $('#myTable').on('click', '.delete-user', (event) => {
+            this.changeTypeModal('delete');
+          });
+
 
           // Asignar el evento click a los botones "Editar"
           $('#myTable').on('click', '.edit-user', (event) => {
@@ -156,6 +174,11 @@ export class ListUsersComponent implements OnInit {
       }
     });
   }
+
+  changeTypeModal(type: string) {
+    this.typeModal = type;
+  }
+
   
   redirectEdit(id: number) {
     console.log("Redirigiendo a la edición del usuario con ID:", id);
@@ -237,19 +260,5 @@ export class ListUsersComponent implements OnInit {
     XLSX.utils.book_append_sheet(wb, ws, 'Usuarios');
   
     XLSX.writeFile(wb, 'usuarios.xlsx'); // Descarga el archivo Excel
-  }
-
-  confirmDeactivate(id: number) {
-    this.apiService.deactivateUser(id).subscribe({
-      next: () => {
-        // Aquí puedes manejar la respuesta, como actualizar la lista de usuarios
-        this.users = this.users.filter(user => user.id !== id); // Remover el usuario de la lista
-        this.showDeactivateModal = false; // Cerrar el modal
-      },
-      error: (error) => {
-        console.error('Error al desactivar el usuario:', error);
-        this.showDeactivateModal = false; // Cerrar el modal en caso de error
-      }
-    });
   }
 }
