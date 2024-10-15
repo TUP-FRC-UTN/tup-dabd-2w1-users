@@ -1,18 +1,18 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { LoginComponent } from "./login/login.component";
-import { NavbarComponent } from "./navbar/navbar.component";
-import { LandingPageComponent } from "./landing-page/landing-page.component";
-import { NewUserComponent } from './new-user/new-user.component';
-import { ListUsersComponent } from './list-users/list-users.component';
-import { ModalInfoUserComponent } from './modal-info-user/modal-info-user.component';
-import { UsuariosNewOwnerComponent } from "./usuarios-new-owner/usuarios-new-owner.component";
+import { LoginComponent } from "./users-login/login.component";
+import { NavbarComponent } from "./users-navbar/navbar.component";
+import { LandingPageComponent } from "./users-landing-page/landing-page.component";
+import { NewUserComponent } from './users-new-user/new-user.component';
+import { ListUsersComponent } from './users-list-users/list-users.component';
+import { ModalInfoUserComponent } from './users-modal-info-user/modal-info-user.component';
+import { UsersNewPlotComponent } from './users-new-plot/users-new-plot.component';
 import { UsersUpdateUserComponent } from './users-update-user/users-update-user.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, LoginComponent, NavbarComponent, LandingPageComponent, NewUserComponent, ListUsersComponent, ModalInfoUserComponent, UsuariosNewOwnerComponent, UsersUpdateUserComponent],
+  imports: [RouterOutlet, LoginComponent, NavbarComponent, LandingPageComponent, NewUserComponent, ListUsersComponent, ModalInfoUserComponent, UsersNewPlotComponent, UsersUpdateUserComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

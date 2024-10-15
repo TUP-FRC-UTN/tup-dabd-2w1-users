@@ -1,10 +1,10 @@
 import { CommonModule, formatDate } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ApiServiceService } from '../servicies/api-service.service';
-import { RolModel } from '../models/Rol';
-import { UserModel } from '../models/User';
-import { UserPut } from '../models/UserPut';
+import { ApiServiceService } from '../users-servicies/api-service.service';
+import { RolModel } from '../users-models/Rol';
+import { UserModel } from '../users-models/User';
+import { UserPut } from '../users-models/UserPut';
 import { data } from 'jquery';
 import { Router, ActivatedRoute } from '@angular/router';
 

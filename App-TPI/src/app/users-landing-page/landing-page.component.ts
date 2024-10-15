@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavbarComponent } from "../navbar/navbar.component";
-import { ModalInfoUserComponent } from '../modal-info-user/modal-info-user.component';
+import { NavbarComponent } from "../users-navbar/navbar.component";
+import { ModalInfoUserComponent } from '../users-modal-info-user/modal-info-user.component';
 import { RouterOutlet } from '@angular/router';
 
 @Component({

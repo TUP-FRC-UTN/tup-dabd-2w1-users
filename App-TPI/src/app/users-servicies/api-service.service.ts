@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { UserModel } from '../models/User';
-import { RolModel } from '../models/Rol';
-import { UserPost } from '../models/UserPost';
-import { LoginUser } from '../models/Login';
-import { UserPut } from '../models/UserPut';
+import { UserModel } from '../users-models/User';
+import { RolModel } from '../users-models/Rol';
+import { UserPost } from '../users-models/UserPost';
+import { LoginUser } from '../users-models/Login';
+import { UserPut } from '../users-models/UserPut';
 import { map } from 'rxjs/operators';
 
 @Injectable({

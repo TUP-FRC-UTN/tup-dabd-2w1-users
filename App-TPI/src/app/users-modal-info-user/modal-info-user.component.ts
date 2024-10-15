@@ -1,7 +1,7 @@
 import { CommonModule, formatDate } from '@angular/common';
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { UserModel } from '../models/User';
+import { UserModel } from '../users-models/User';
 
 @Component({
   selector: 'app-modal-info-user',

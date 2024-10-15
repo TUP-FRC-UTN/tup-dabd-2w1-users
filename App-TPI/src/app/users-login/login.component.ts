@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ApiServiceService } from '../servicies/api-service.service';
-import { LoginUser } from '../models/Login';
+import { ApiServiceService } from '../users-servicies/api-service.service';
+import { LoginUser } from '../users-models/Login';
 import { Router, RouterModule } from '@angular/router';
 
 @Component({
