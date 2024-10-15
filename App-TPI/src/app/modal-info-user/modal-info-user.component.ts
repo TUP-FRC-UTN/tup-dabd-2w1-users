@@ -92,9 +92,20 @@ export class ModalInfoUserComponent implements OnChanges {
       if (result.isConfirmed) {
         Swal.fire('Eliminado!', '', 'success');
         this.confirmDeactivate();
+        this.closeModal();
       } else{
         Swal.fire('Operación cancelada!', '', 'info');
       }
     });
   }
+
+  closeModal(){
+    const modal = document.getElementById('infoUser');
+    if(modal != null){
+      modal.style.display = 'none';
+      modal.className = 'modal fade';
+    }
+  }
+  
+  
 }
