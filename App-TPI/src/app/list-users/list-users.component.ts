@@ -12,6 +12,7 @@ import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs5';
 import { Router, RouterModule } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-list-users',
@@ -29,7 +30,7 @@ export class ListUsersComponent implements OnInit {
   showDeactivateModal: boolean = false;
   userToDeactivate: number = 0;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router,private modal: NgbModal) { }
 
   
 
@@ -70,9 +71,9 @@ export class ListUsersComponent implements OnInit {
                         <i class="bi bi-three-dots-vertical"></i>
                       </button>
                       <ul class="dropdown-menu">
-                        <li><a class="dropdown-item view-user" data-id="${meta.row}" data-bs-toggle="modal" data-bs-target="#infoUser">Ver más</a></li>
+                        <li><a class="dropdown-item view-user" data-id="${meta.row}">Ver más</a></li>
                         <li><a class="dropdown-item edit-user" data-id="${userId}">Editar</a></li>
-                        <li><a class="dropdown-item delete-user" data-id="${meta.row}" data-bs-toggle="modal" data-bs-target="#infoUser">Eliminar</a></li>
+                        <li><a class="dropdown-item delete-user" data-id="${meta.row}">Eliminar</a></li>
                       </ul>
                     </div>
                   `;
@@ -153,10 +154,16 @@ export class ListUsersComponent implements OnInit {
 
           $('#myTable').on('click', '.view-user', (event) => {
             this.changeTypeModal('info');
+            const id = $(event.currentTarget).data('id');
+            const userId = this.users[id].id; // Obtén el ID real del usuario
+            this.abrirModal(userId, "info");
           });
 
           $('#myTable').on('click', '.delete-user', (event) => {
             this.changeTypeModal('delete');
+            const id = $(event.currentTarget).data('id');
+            const userId = this.users[id].id; // Obtén el ID real del usuario
+            this.abrirModal(userId, "delete");
           });
 
 
@@ -174,6 +181,32 @@ export class ListUsersComponent implements OnInit {
       }
     });
   }
+
+
+  abrirModal(id: number, type: string) {
+    console.log("El modal se está abriendo...");
+  
+    const modalRef = this.modal.open(ModalInfoUserComponent, { size: 'lg', keyboard: false });
+  
+    modalRef.componentInstance.idUsuario = id; // Pasar idUsuario al componente hijo
+    modalRef.componentInstance.typeModal = type; // Pasar el tipo de modal al componente hijo
+    modalRef.componentInstance.userModal = this.userModal;
+    
+    modalRef.result.then((result) => {
+      // Procesar el resultado cuando el modal se cierra correctamente
+      console.log('Modal cerrado con resultado:', result);
+    }).catch((error) => {
+      // Manejar el caso cuando el modal es descartado
+      console.log('Modal cerrado con error:', error);
+    });
+
+
+  }
+
+  closeModal(){
+    this.modal.dismissAll();
+  }
+  
 
   changeTypeModal(type: string) {
     this.typeModal = type;

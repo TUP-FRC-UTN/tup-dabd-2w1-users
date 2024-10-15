@@ -4,6 +4,7 @@ import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule }
 import { UserModel } from '../models/User';
 import { ApiServiceService } from '../servicies/api-service.service';
 import Swal from 'sweetalert2';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
@@ -17,25 +18,38 @@ export class ModalInfoUserComponent implements OnChanges {
 
   @Input() userModal: UserModel = new UserModel();
   @Input() typeModal: string = '';
+  @Input() idUsuario: number = 0;
 
+  //activeModal = inject(NgbActiveModal);
   private readonly apiService = inject(ApiServiceService);
   rolesInput: string[] = [];
 
+  editUser: FormGroup;
 
+  constructor(public activeModal: NgbActiveModal, private fb: FormBuilder) {
+    this.editUser = this.fb.group({
+      name: [''],
+      lastName: [''],
+      email: [''],
+      dni: [''],
+      phoneNumber: [''],
+      birthdate: ['']
+    });
+  }
 
   // Inicializa el formulario
-  editUser = new FormGroup({
-    name: new FormControl({ value: this.userModal.name, disabled: true }),
-    lastName: new FormControl({ value: this.userModal.lastname, disabled: true }),
-    email: new FormControl({ value: this.userModal.email, disabled: true }),
-    dni: new FormControl({ value: this.userModal.dni, disabled: true }),
-    phoneNumber: new FormControl({ value: this.userModal.phone_number, disabled: true }),
-    birthdate: new FormControl({ value: this.userModal.datebirth, disabled: true }),
-    roles: new FormControl({ value: this.rolesInput, disabled: true })
-  });
+  // editUser = new FormGroup({
+  //   name: new FormControl({ value: this.userModal.name, disabled: true }),
+  //   lastName: new FormControl({ value: this.userModal.lastname, disabled: true }),
+  //   email: new FormControl({ value: this.userModal.email, disabled: true }),
+  //   dni: new FormControl({ value: this.userModal.dni, disabled: true }),
+  //   phoneNumber: new FormControl({ value: this.userModal.phone_number, disabled: true }),
+  //   birthdate: new FormControl({ value: this.userModal.datebirth, disabled: true }),
+  //   roles: new FormControl({ value: this.rolesInput, disabled: true })
+  // });
 
   // Método para detectar cambios en el @Input
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(changes: SimpleChanges): void {    
     if (changes['userModal'] && changes['userModal'].currentValue) {
       // Actualiza los valores del formulario cuando cambian los datos del usuario
       if (this.userModal.datebirth) {
@@ -79,6 +93,10 @@ export class ModalInfoUserComponent implements OnChanges {
         // Poner un sweetAlert
       }
     });
+  }
+
+  closeModal(){
+    this.activeModal.close();
   }
 
   confirmDelete() {
