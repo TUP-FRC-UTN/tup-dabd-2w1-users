@@ -10,8 +10,15 @@
                         [ngClass]="{'is-invalid': formReactivo.controls['nombre'].invalid && (formReactivo.get('nombre')?.dirty || formReactivo.get('nombre')?.touched), 'is-valid': formReactivo.controls['nombre'].valid }"
                         formControlName="nombre">
                 </div>
-                <div *ngIf="formReactivo.controls['nombre'].invalid && (formReactivo.get('nombre')?.dirty || formReactivo.get('nombre')?.touched)" class="text-danger" style="margin-left: 130px;">
-                    Ingrese su nombre
+                <div class="text-danger" style="margin-left: 130px;">
+                    @if(formReactivo.get('nombre')?.dirty || formReactivo.get('nombre')?.touched){
+                        @if(formReactivo.controls['nombre'].errors?.["required"]){
+                            Ingrese su nombre
+                        }
+                        @if(formReactivo.controls['nombre'].errors?.["maxlength"]){
+                            El nombre no puede superar los 50 caracteres
+                        }
+                    }
                 </div>
             </div>
             <div class="col-md-6">
@@ -21,8 +28,15 @@
                         [ngClass]="{'is-invalid': formReactivo.controls['apellido'].invalid && (formReactivo.get('apellido')?.dirty || formReactivo.get('apellido')?.touched), 'is-valid': formReactivo.controls['apellido'].valid }"
                         formControlName="apellido">
                 </div>
-                <div *ngIf="formReactivo.controls['apellido'].invalid && (formReactivo.get('apellido')?.dirty || formReactivo.get('apellido')?.touched)" class="text-danger" style="margin-left: 130px;">
-                    Ingrese su apellido
+                <div class="text-danger" style="margin-left: 130px;">
+                    @if(formReactivo.get('apellido')?.dirty || formReactivo.get('apellido')?.touched){
+                        @if(formReactivo.controls['apellido'].errors?.["required"]){
+                            Ingrese su apellido
+                        }
+                        @if(formReactivo.controls['apellido'].errors?.["maxlength"]){
+                            El apellido no puede superar los 50 caracteres
+                        }
+                    }
                 </div>
             </div>
         </div>
@@ -35,8 +49,15 @@
                         [ngClass]="{'is-invalid': formReactivo.controls['email'].invalid && (formReactivo.get('email')?.dirty || formReactivo.get('email')?.touched), 'is-valid': formReactivo.controls['email'].valid }"
                         formControlName="email">
                 </div>
-                <div *ngIf="formReactivo.controls['email'].invalid && (formReactivo.get('email')?.dirty || formReactivo.get('email')?.touched)" class="text-danger" style="margin-left: 130px;">
-                    Ingrese su email
+                <div class="text-danger" style="margin-left: 130px;">
+                    @if(formReactivo.get('email')?.dirty || formReactivo.get('email')?.touched){
+                        @if(formReactivo.controls['email'].errors?.["required"]){
+                            Ingrese su email
+                        }
+                        @if(formReactivo.controls['email'].errors?.["email"]){
+                            Ingrese un email válido
+                        }
+                    }
                 </div>
             </div>
             <div class="col-md-6">
@@ -46,8 +67,15 @@
                         [ngClass]="{'is-invalid': formReactivo.controls['dni'].invalid && (formReactivo.get('dni')?.dirty || formReactivo.get('dni')?.touched), 'is-valid': formReactivo.controls['dni'].valid }"
                         formControlName="dni" style="appearance: none;" pattern="[0-9]*">
                 </div>
-                <div *ngIf="formReactivo.controls['dni'].invalid && (formReactivo.get('dni')?.dirty || formReactivo.get('dni')?.touched)" class="text-danger" style="margin-left: 130px;">
-                    Ingrese un DNI válido (solo números)
+                <div class="text-danger" style="margin-left: 130px;">
+                    @if(formReactivo.get('dni')?.dirty || formReactivo.get('dni')?.touched){
+                        @if(formReactivo.controls['dni'].errors?.["required"]){
+                            Ingrese un DNI
+                        }
+                        @if(formReactivo.controls['dni'].errors?.["minlength"] || formReactivo.controls['dni'].errors?.["maxlength"]){
+                            El DNI debe tener entre 1 y 11 caracteres
+                        }
+                    }
                 </div>
             </div>
         </div>
@@ -60,8 +88,15 @@
                         [ngClass]="{'is-invalid': formReactivo.controls['telefono'].invalid && (formReactivo.get('telefono')?.dirty || formReactivo.get('telefono')?.touched), 'is-valid': formReactivo.controls['telefono'].valid }"
                         formControlName="telefono" style="appearance: none;">
                 </div>
-                <div *ngIf="formReactivo.controls['telefono'].invalid && (formReactivo.get('telefono')?.dirty || formReactivo.get('telefono')?.touched)" class="text-danger" style="margin-left: 130px;">
-                    Ingrese su teléfono
+                <div class="text-danger" style="margin-left: 130px;">
+                    @if(formReactivo.get('telefono')?.dirty || formReactivo.get('telefono')?.touched){
+                        @if(formReactivo.controls['telefono'].errors?.["required"]){
+                            Ingrese su teléfono
+                        }
+                        @if(formReactivo.controls['telefono'].errors?.["minlength"] || formReactivo.controls['telefono'].errors?.["maxlength"]){
+                            El teléfono debe tener entre 10 y 20 caracteres
+                        }
+                    }
                 </div>
             </div>
             <div class="col-md-6">
@@ -71,23 +106,37 @@
                         [ngClass]="{'is-invalid': formReactivo.controls['fecha'].invalid && (formReactivo.get('fecha')?.dirty || formReactivo.get('fecha')?.touched), 'is-valid': formReactivo.controls['fecha'].valid }"
                         formControlName="fecha" value="2000-01-01">
                 </div>
-                <div *ngIf="formReactivo.controls['fecha'].invalid && (formReactivo.get('fecha')?.dirty || formReactivo.get('fecha')?.touched)" class="text-danger" style="margin-left: 130px;">
-                    Ingrese su fecha de nacimiento
+                <div class="text-danger" style="margin-left: 130px;">
+                    @if(formReactivo.get('fecha')?.dirty || formReactivo.get('fecha')?.touched){
+                        @if(formReactivo.controls['fecha'].errors?.["required"]){
+                            Ingrese su fecha de nacimiento
+                        }
+                    }
                 </div>
             </div>
         </div>
 
         <div class="row mb-3">
             <div class="col-md-6">
-                <div class="d-flex align-items-center">
-                    <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0; margin-right: 10px;">Rol</label>
-                    <div class="d-flex" style="flex: 1;">
-                        <select class="form-select me-2" id="rol" required formControlName="rol" style="width: 418px;">
-                            <option value="">Seleccione un rol</option>
-                            <option *ngFor="let rol of roles" [value]="rol.description">{{rol.description}}</option>
-                        </select>
-                        <button type="button" class="btn btn-secondary" (click)="aniadirRol()">Añadir</button>
+                <div class="d-flex">
+                    <label class="form-label text-start" style="width: 150px; margin-bottom: 0; margin-right: 10px;">Roles</label>
+                    <div>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#droproles">
+                            Seleccione un rol
+                        </button>
+                        <div class="sub-menu collapse" id="droproles">
+                            <input type="checkbox" class="nav-link d-flex w-100 h-50form-control custom-input">Rol1
+                        </div>
                     </div>
+
+                </div>
+                <div class="col-6">
+                    <ul *ngIf="rolesInput.length > 0">
+                        <p>Roles añadidos:</p>
+                        <li *ngFor="let rol of rolesInput" class="my-1">
+                            {{rol}} <button class="btn btn-secondary" (click)="quitarRol(rol)">Quitar</button>
+                        </li>
+                    </ul>
                 </div>
             </div>
             <div class="col-md-6">
@@ -97,31 +146,28 @@
                         [ngClass]="{'is-invalid': formReactivo.controls['username'].invalid && (formReactivo.get('username')?.dirty || formReactivo.get('username')?.touched), 'is-valid': formReactivo.controls['username'].valid }"
                         formControlName="username">
                 </div>
-                <div *ngIf="formReactivo.controls['username'].invalid && (formReactivo.get('username')?.dirty || formReactivo.get('username')?.touched)" class="text-danger" style="margin-left: 130px;">
-                    Ingrese su nombre de usuario
+                <div class="text-danger" style="margin-left: 130px;">
+                    @if(formReactivo.get('username')?.dirty || formReactivo.get('username')?.touched){
+                        @if(formReactivo.controls['username'].errors?.["required"]){
+                            Ingrese su nombre de usuario
+                        }
+                        @if(formReactivo.controls['username'].errors?.["maxlength"]){
+                            El nombre de usuario no puede superar los 20 caracteres
+                        }
+                        @if(formReactivo.controls['username'].errors?.["pattern"]){
+                            El nombre de usuario solo puede contener letras, números y guiones bajos
+                        }
+                    }
                 </div>
             </div>
         </div>
 
         <div class="row mb-3">
-            <div class="col-6">
-                <ul *ngIf="rolesInput.length > 0">
-                    <p>Roles añadidos:</p>
-                    <li *ngFor="let rol of rolesInput" class="my-1">
-                        {{rol}} <button class="btn btn-secondary" (click)="quitarRol(rol)">Quitar</button>
-                    </li>
-                </ul>
-            </div>
-            <div class="col-6">
-                <div class="row mb-3 justify-content-end">
-                    <div class="col-auto">
-                        <button type="button" class="btn btn-secondary" (click)="redirect('/home')">Cancelar</button>
-                    </div>
-                    <div class="col-auto">
-                        <button type="submit" class="btn btn-primary">Guardar</button>
-                    </div>
-                </div>
-            </div>
+            @if(formReactivo.invalid){
+                <button type="submit" class="btn btn-primary" disabled>Crear Usuario</button>
+            }@else {
+                <button type="submit" class="btn btn-primary">Crear Usuario</button>
+            }
         </div>
     </form>
 </section>

@@ -19,16 +19,42 @@ export class NewUserComponent implements OnInit {
   constructor(private router:Router){
     
   }
+
   formReactivo = new FormGroup({
-    nombre: new FormControl('', [Validators.required]),
-    apellido: new FormControl('', [Validators.required]),
-    username: new FormControl('', [Validators.required]),
-    email: new FormControl('', [Validators.email, Validators.required]),
-    dni: new FormControl('', [Validators.required]),
-    telefono: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(20)]),
+    nombre: new FormControl('', [
+        Validators.required,
+        Validators.minLength(1),
+        Validators.maxLength(50)
+    ]),
+    apellido: new FormControl('', [
+        Validators.required,
+        Validators.minLength(1),
+        Validators.maxLength(50)
+    ]),
+    username: new FormControl('', [
+        Validators.required,
+        Validators.minLength(1),
+        Validators.maxLength(30)
+    ]),
+    email: new FormControl('', [
+        Validators.required,
+        Validators.email
+    ]),
+    telefono: new FormControl('', [
+        Validators.required,
+        Validators.minLength(10),
+        Validators.maxLength(20)
+    ]),
+    dni: new FormControl('', [
+        Validators.required,
+        Validators.minLength(1),
+        Validators.maxLength(11)
+    ]),
+    active: new FormControl(true, [Validators.required]), 
+    avatar_url: new FormControl(''),
     fecha: new FormControl(this.formatDate(new Date("2000-01-01")), [Validators.required]),
     rol: new FormControl('') 
-  });
+});
 
   private formatDate(date: Date): string {
     return formatDate(date, 'yyyy-MM-dd', 'en-US');
@@ -60,6 +86,8 @@ export class NewUserComponent implements OnInit {
   }
 
   aniadirRol() {
+    console.log(this.formReactivo.errors);
+    
     const rolSeleccionado = this.formReactivo.get('rol')?.value;
     if (rolSeleccionado && !this.rolesInput.includes(rolSeleccionado)) {  
       this.rolesInput.push(rolSeleccionado);  
@@ -93,7 +121,7 @@ export class NewUserComponent implements OnInit {
     username: this.formReactivo.get('username')?.value || '',
     password: this.formReactivo.get('dni')?.value || '',
     email: this.formReactivo.get('email')?.value || '',
-    dni: Number(this.formReactivo.get('dni')?.value) || 0,
+    dni: this.formReactivo.get('dni')?.value || "",
     active: true,
     avatar_url: '',
     datebirth: fechaValue ? 

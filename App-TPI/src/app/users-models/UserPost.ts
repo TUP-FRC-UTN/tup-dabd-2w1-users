@@ -3,7 +3,7 @@ export class UserPost {
     lastname: string;   
     username: string;     
     email: string;        
-    dni: number;         
+    dni: string;         
     active: boolean;      
     avatar_url: string;   
     datebirth: string;    
@@ -16,7 +16,7 @@ export class UserPost {
         this.lastname = '';
         this.username = '';
         this.email = '';
-        this.dni = 0;
+        this.dni = "";
         this.active = true;
         this.avatar_url = '';
         this.datebirth = '';

@@ -1,10 +1,10 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
-import { UserModel } from '../models/User';
+import { UserModel } from '../users-models/User';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ModalInfoUserComponent } from '../modal-info-user/modal-info-user.component';
-import { ApiServiceService } from '../servicies/api-service.service';
+import { ModalInfoUserComponent } from '../users-modal-info-user/modal-info-user.component';
+import { ApiServiceService } from '../users-servicies/api-service.service';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
