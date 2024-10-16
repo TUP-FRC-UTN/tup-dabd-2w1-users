@@ -1,10 +1,10 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Component, inject, OnInit } from '@angular/core';
-import { UserModel } from '../users-models/User';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import { UserModel } from '../models/User';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ModalInfoUserComponent } from '../users-modal-info-user/modal-info-user.component';
-import { ApiServiceService } from '../users-servicies/api-service.service';
+import { ModalInfoUserComponent } from '../modal-info-user/modal-info-user.component';
+import { ApiServiceService } from '../servicies/api-service.service';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
@@ -12,6 +12,9 @@ import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs5';
 import { Router, RouterModule } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-list-users',
@@ -22,13 +25,16 @@ import { Router, RouterModule } from '@angular/router';
 })
 export class ListUsersComponent implements OnInit { 
 
+  typeModal: string = '';
   user: number = 0; 
   users: UserModel[] = [];
   private readonly apiService = inject(ApiServiceService);
   showDeactivateModal: boolean = false;
   userToDeactivate: number = 0;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router,private modal: NgbModal) { }
+
+  
 
   ngOnInit() {
     this.apiService.getAllUsers().subscribe({
@@ -67,8 +73,9 @@ export class ListUsersComponent implements OnInit {
                         <i class="bi bi-three-dots-vertical"></i>
                       </button>
                       <ul class="dropdown-menu">
-                        <li><a class="dropdown-item view-user" data-id="${meta.row}" data-bs-toggle="modal" data-bs-target="#infoUser">Ver más</a></li>
+                        <li><a class="dropdown-item view-user" data-id="${meta.row}">Ver más</a></li>
                         <li><a class="dropdown-item edit-user" data-id="${userId}">Editar</a></li>
+                        <li><a class="dropdown-item delete-user" data-id="${meta.row}">Eliminar</a></li>
                       </ul>
                     </div>
                   `;
@@ -135,12 +142,19 @@ export class ListUsersComponent implements OnInit {
           });
 
           // Asignar el evento click a los botones "Ver más"
-          $('#myTable').on('click', '.view-user', (event) => {
+          // Asignar el evento click a los botones "Ver más"
+        $('#myTable').on('click', '.view-user', (event) => {
+          const id = $(event.currentTarget).data('id');
+          const userId = this.users[id].id; // Obtén el ID real del usuario
+          this.abrirModal("info", userId); // Pasa el ID del usuario al abrir el modal
+        });
+
+
+          $('#myTable').on('click', '.delete-user', (event) => {
             const id = $(event.currentTarget).data('id');
             const userId = this.users[id].id; // Obtén el ID real del usuario
-            this.selectUser(userId); // Llama al método selectUser con el ID correcto
+            this.abrirModal("delete", userId); // Pasa el ID del usuario al abrir el modal
           });
-
 
           // Asignar el evento click a los botones "Editar"
           $('#myTable').on('click', '.edit-user', (event) => {
@@ -156,6 +170,38 @@ export class ListUsersComponent implements OnInit {
       }
     });
   }
+
+
+
+
+  async abrirModal(type: string, userId: number) {
+    console.log("Esperando a que userModal se cargue...");
+  
+    // Espera a que se cargue el usuario seleccionado
+    try {
+      await this.selectUser(userId);
+      console.log("userModal cargado:", this.userModal);
+  
+      // Una vez cargado, abre el modal
+      const modalRef = this.modal.open(ModalInfoUserComponent, { size: 'lg', keyboard: false });
+      modalRef.componentInstance.typeModal = type; // Pasar el tipo de modal al componente hijo
+      modalRef.componentInstance.userModal = this.userModal;
+
+      modalRef.result.then((result) => {
+        console.log("a");
+        
+        $('#miDataTable').DataTable().ajax.reload();
+      });
+
+    } catch (error) {
+      console.error('Error al abrir el modal:', error);
+    }
+  }
+
+  changeTypeModal(type: string) {
+    this.typeModal = type;
+  }
+
   
   redirectEdit(id: number) {
     console.log("Redirigiendo a la edición del usuario con ID:", id);
@@ -164,18 +210,38 @@ export class ListUsersComponent implements OnInit {
 
   // Busca el user y se lo pasa al modal
   userModal: UserModel = new UserModel();
-  selectUser(id: number) {    
-    this.user = id;
-    this.apiService.getUserById(id)
-      .subscribe({
+  selectUser(id: number): Promise<UserModel> {
+      // Mostrar SweetAlert de tipo 'cargando'
+    Swal.fire({
+      title: 'Cargando usuario...',
+      html: 'Por favor, espera un momento',
+      allowOutsideClick: false, // No permitir cerrar la alerta haciendo clic fuera
+      didOpen: () => {
+        Swal.showLoading(); // Mostrar indicador de carga
+      }
+    });
+    return new Promise((resolve, reject) => {
+      this.user = id;
+      this.apiService.getUserById(id).subscribe({
         next: (data: UserModel) => {
           this.userModal = data;
+          Swal.close(); // Cerrar SweetAlert
+          resolve(data); // Resuelve la promesa cuando los datos se cargan
         },
         error: (error) => {
           console.error('Error al cargar el usuario:', error);
+          reject(error); // Rechaza la promesa si ocurre un error
+          Swal.close();
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Hubo un problema al cargar el usuario. Por favor, inténtalo de nuevo.'
+          });
         }
       });
+    });
   }
+  
 
   // SE PUEDEN MODIFICAR LOS VALORES A MOSTRAR EN EL PDF
   exportPdf() {
@@ -237,19 +303,5 @@ export class ListUsersComponent implements OnInit {
     XLSX.utils.book_append_sheet(wb, ws, 'Usuarios');
   
     XLSX.writeFile(wb, 'usuarios.xlsx'); // Descarga el archivo Excel
-  }
-
-  confirmDeactivate(id: number) {
-    this.apiService.deactivateUser(id).subscribe({
-      next: () => {
-        // Aquí puedes manejar la respuesta, como actualizar la lista de usuarios
-        this.users = this.users.filter(user => user.id !== id); // Remover el usuario de la lista
-        this.showDeactivateModal = false; // Cerrar el modal
-      },
-      error: (error) => {
-        console.error('Error al desactivar el usuario:', error);
-        this.showDeactivateModal = false; // Cerrar el modal en caso de error
-      }
-    });
   }
 }

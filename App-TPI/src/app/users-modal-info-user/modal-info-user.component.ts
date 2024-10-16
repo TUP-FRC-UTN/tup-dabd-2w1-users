@@ -1,9 +1,10 @@
 import { CommonModule, formatDate } from '@angular/common';
-import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserModel } from '../models/User';
 import { ApiServiceService } from '../servicies/api-service.service';
 import Swal from 'sweetalert2';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
@@ -13,30 +14,41 @@ import Swal from 'sweetalert2';
   templateUrl: './modal-info-user.component.html',
   styleUrl: './modal-info-user.component.css'
 })
-export class ModalInfoUserComponent implements OnChanges {
+export class ModalInfoUserComponent implements OnInit {
 
   @Input() userModal: UserModel = new UserModel();
   @Input() typeModal: string = '';
 
+  //activeModal = inject(NgbActiveModal);
   private readonly apiService = inject(ApiServiceService);
   rolesInput: string[] = [];
 
+  editUser: FormGroup;
 
+  constructor(public activeModal: NgbActiveModal, private fb: FormBuilder) {
+    this.editUser = this.fb.group({
+      name: [''],
+      lastName: [''],
+      email: [''],
+      dni: [''],
+      phoneNumber: [''],
+      birthdate: ['']
+    });
+  }
 
   // Inicializa el formulario
-  editUser = new FormGroup({
-    name: new FormControl({ value: this.userModal.name, disabled: true }),
-    lastName: new FormControl({ value: this.userModal.lastname, disabled: true }),
-    email: new FormControl({ value: this.userModal.email, disabled: true }),
-    dni: new FormControl({ value: this.userModal.dni, disabled: true }),
-    phoneNumber: new FormControl({ value: this.userModal.phone_number, disabled: true }),
-    birthdate: new FormControl({ value: this.userModal.datebirth, disabled: true }),
-    roles: new FormControl({ value: this.rolesInput, disabled: true })
-  });
+  // editUser = new FormGroup({
+  //   name: new FormControl({ value: this.userModal.name, disabled: true }),
+  //   lastName: new FormControl({ value: this.userModal.lastname, disabled: true }),
+  //   email: new FormControl({ value: this.userModal.email, disabled: true }),
+  //   dni: new FormControl({ value: this.userModal.dni, disabled: true }),
+  //   phoneNumber: new FormControl({ value: this.userModal.phone_number, disabled: true }),
+  //   birthdate: new FormControl({ value: this.userModal.datebirth, disabled: true }),
+  //   roles: new FormControl({ value: this.rolesInput, disabled: true })
+  // });
 
   // Método para detectar cambios en el @Input
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['userModal'] && changes['userModal'].currentValue) {
+  ngOnInit() {        
       // Actualiza los valores del formulario cuando cambian los datos del usuario
       if (this.userModal.datebirth) {
         const formattedDate = this.parseDateString(this.userModal.datebirth);
@@ -50,7 +62,6 @@ export class ModalInfoUserComponent implements OnChanges {
           birthdate: formattedDate ? this.formatDate(formattedDate) : ''
         });
       }
-    }
   }
 
   // Convierte la cadena de fecha "dd-MM-yyyy" a un objeto Date
@@ -72,6 +83,7 @@ export class ModalInfoUserComponent implements OnChanges {
     this.apiService.desactivateUser(this.userModal.id).subscribe({
       next: () => {
         console.log('Usuario eliminado correctamente');
+        this.activeModal.close();
         // Poner un sweetAlert
       },
       error: (error) => {
@@ -79,6 +91,10 @@ export class ModalInfoUserComponent implements OnChanges {
         // Poner un sweetAlert
       }
     });
+  }
+
+  closeModal(){
+    this.activeModal.close();
   }
 
   confirmDelete() {
