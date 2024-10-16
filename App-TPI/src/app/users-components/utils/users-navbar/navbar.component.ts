@@ -15,9 +15,9 @@ export class NavbarComponent implements OnInit {
   //Expande el side
   expand: boolean = false;
 
-  constructor(private router : Router){}
+  constructor(private router: Router) { }
 
-  userRole : string = "SuperAdmin" //Cambiar según el rol del usuario que se loguee
+  userRole: string = "SuperAdmin" //Cambiar según el rol del usuario que se loguee
 
   //Lista de botones
   buttonsList: SideButton[] = [];
@@ -25,33 +25,42 @@ export class NavbarComponent implements OnInit {
   ngOnInit(): void {
     this.buttonsList = [
       {
-        icon : "bi-person",
-        title : "Perfil",
-        route : "/profile",
-        roles : ["SuperAdmin", "Admin", "Security", "Owner", "Spouse", "FamilyOld", "FamilyYoung", "Tenant"] //ver
+        icon: "bi-person",
+        title: "Perfil",
+        route: "/profile",
+        roles: ["SuperAdmin", "Admin", "Security", "Owner", "Spouse", "FamilyOld", "FamilyYoung", "Tenant"] //ver
       },
       {
-        icon : "bi-people",
-        title : "Usuarios",
-        roles : ["SuperAdmin", "Admin"],
+        icon: "bi-people",
+        title: "Usuarios",
+        roles: ["SuperAdmin", "Admin"],
         childButtons: [{
 
           //botón agregar usuario
-          icon : "bi-person-plus-fill",
-          title : "Añadir",
-          route : "home/users/add",
-          roles : ["SuperAdmin", "Admin", "Owner"]
+          icon: "bi-person-plus-fill",
+          title: "Añadir",
+          route: "home/users/add",
+          roles: ["SuperAdmin", "Admin", "Owner"]
         },
         {
 
           //botón listado
-          icon : "bi-person-lines-fill",
-          title : "Listado",
-          route : "home/users/list",
-          roles : ["SuperAdmin", "Admin", "Owner"]
-        }] 
+          icon: "bi-person-lines-fill",
+          title: "Listado",
+          route: "home/users/list",
+          roles: ["SuperAdmin", "Admin", "Owner"]
+        }
+        ]
+      },
+
+      {
+        icon: "bi-box",
+        title: "Añadir Lote",
+        route: "home/lote/add",
+        roles: ["SuperAdmin", "Admin"]
       }
-    ]
+
+    ];
   }
 
   //Expandir y contraer el sidebar
@@ -59,7 +68,7 @@ export class NavbarComponent implements OnInit {
     this.expand = !this.expand;
   }
 
-  redirect(path : string){
+  redirect(path: string) {
     this.router.navigate([path]);
   }
 
