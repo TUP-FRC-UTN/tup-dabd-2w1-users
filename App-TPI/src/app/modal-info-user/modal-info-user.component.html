@@ -28,7 +28,7 @@
 
       <div class="row mb-3">
           <div class="col">
-              <label for="inputTelefono" class="form-label">TelÃ©fono</label>
+              <label for="inputTelefono" class="form-label">Teléfono</label>
               <input type="text" class="form-control custom-input" formControlName="phoneNumber">
           </div>
           <div class="col">
@@ -54,7 +54,7 @@
   </div>
   @if(typeModal == "info"){
     <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Atrás</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeModal()">Atrás</button>
       </div>
     }
   @if(typeModal == "delete") {
@@ -64,7 +64,7 @@
                 <button type="submit" class="btn btn-danger" (click)="confirmDelete()">Eliminar</button>
             </div>
             <div class="col-auto">
-                <button type="button" class="btn btn-secondary" id="btn-close" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-secondary" id="btn-close" data-bs-dismiss="modal" (click)="closeModal()">Cancelar</button>
             </div>
         </div>
     </div>

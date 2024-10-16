@@ -1,5 +1,5 @@
 import { CommonModule, formatDate } from '@angular/common';
-import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserModel } from '../models/User';
 import { ApiServiceService } from '../servicies/api-service.service';
@@ -14,11 +14,10 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './modal-info-user.component.html',
   styleUrl: './modal-info-user.component.css'
 })
-export class ModalInfoUserComponent implements OnChanges {
+export class ModalInfoUserComponent implements OnInit {
 
   @Input() userModal: UserModel = new UserModel();
   @Input() typeModal: string = '';
-  @Input() idUsuario: number = 0;
 
   //activeModal = inject(NgbActiveModal);
   private readonly apiService = inject(ApiServiceService);
@@ -49,8 +48,7 @@ export class ModalInfoUserComponent implements OnChanges {
   // });
 
   // Método para detectar cambios en el @Input
-  ngOnChanges(changes: SimpleChanges): void {    
-    if (changes['userModal'] && changes['userModal'].currentValue) {
+  ngOnInit() {        
       // Actualiza los valores del formulario cuando cambian los datos del usuario
       if (this.userModal.datebirth) {
         const formattedDate = this.parseDateString(this.userModal.datebirth);
@@ -64,7 +62,6 @@ export class ModalInfoUserComponent implements OnChanges {
           birthdate: formattedDate ? this.formatDate(formattedDate) : ''
         });
       }
-    }
   }
 
   // Convierte la cadena de fecha "dd-MM-yyyy" a un objeto Date
@@ -86,6 +83,7 @@ export class ModalInfoUserComponent implements OnChanges {
     this.apiService.desactivateUser(this.userModal.id).subscribe({
       next: () => {
         console.log('Usuario eliminado correctamente');
+        this.activeModal.close();
         // Poner un sweetAlert
       },
       error: (error) => {

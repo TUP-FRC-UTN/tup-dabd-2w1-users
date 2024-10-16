@@ -13,6 +13,8 @@ import 'datatables.net';
 import 'datatables.net-bs5';
 import { Router, RouterModule } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-list-users',
@@ -140,32 +142,19 @@ export class ListUsersComponent implements OnInit {
           });
 
           // Asignar el evento click a los botones "Ver más"
-          $('#myTable').on('click', '.view-user', (event) => {
-            const id = $(event.currentTarget).data('id');
-            const userId = this.users[id].id; // Obtén el ID real del usuario
-            this.selectUser(userId); // Llama al método selectUser con el ID correcto
-          });
+          // Asignar el evento click a los botones "Ver más"
+        $('#myTable').on('click', '.view-user', (event) => {
+          const id = $(event.currentTarget).data('id');
+          const userId = this.users[id].id; // Obtén el ID real del usuario
+          this.abrirModal("info", userId); // Pasa el ID del usuario al abrir el modal
+        });
+
 
           $('#myTable').on('click', '.delete-user', (event) => {
             const id = $(event.currentTarget).data('id');
             const userId = this.users[id].id; // Obtén el ID real del usuario
-            this.selectUser(userId); // Llama al método selectUser con el ID correcto
+            this.abrirModal("delete", userId); // Pasa el ID del usuario al abrir el modal
           });
-
-          $('#myTable').on('click', '.view-user', (event) => {
-            this.changeTypeModal('info');
-            const id = $(event.currentTarget).data('id');
-            const userId = this.users[id].id; // Obtén el ID real del usuario
-            this.abrirModal(userId, "info");
-          });
-
-          $('#myTable').on('click', '.delete-user', (event) => {
-            this.changeTypeModal('delete');
-            const id = $(event.currentTarget).data('id');
-            const userId = this.users[id].id; // Obtén el ID real del usuario
-            this.abrirModal(userId, "delete");
-          });
-
 
           // Asignar el evento click a los botones "Editar"
           $('#myTable').on('click', '.edit-user', (event) => {
@@ -183,30 +172,31 @@ export class ListUsersComponent implements OnInit {
   }
 
 
-  abrirModal(id: number, type: string) {
-    console.log("El modal se está abriendo...");
-  
-    const modalRef = this.modal.open(ModalInfoUserComponent, { size: 'lg', keyboard: false });
-  
-    modalRef.componentInstance.idUsuario = id; // Pasar idUsuario al componente hijo
-    modalRef.componentInstance.typeModal = type; // Pasar el tipo de modal al componente hijo
-    modalRef.componentInstance.userModal = this.userModal;
-    
-    modalRef.result.then((result) => {
-      // Procesar el resultado cuando el modal se cierra correctamente
-      console.log('Modal cerrado con resultado:', result);
-    }).catch((error) => {
-      // Manejar el caso cuando el modal es descartado
-      console.log('Modal cerrado con error:', error);
-    });
 
 
+  async abrirModal(type: string, userId: number) {
+    console.log("Esperando a que userModal se cargue...");
+  
+    // Espera a que se cargue el usuario seleccionado
+    try {
+      await this.selectUser(userId);
+      console.log("userModal cargado:", this.userModal);
+  
+      // Una vez cargado, abre el modal
+      const modalRef = this.modal.open(ModalInfoUserComponent, { size: 'lg', keyboard: false });
+      modalRef.componentInstance.typeModal = type; // Pasar el tipo de modal al componente hijo
+      modalRef.componentInstance.userModal = this.userModal;
+
+      modalRef.result.then((result) => {
+        console.log("a");
+        
+        $('#miDataTable').DataTable().ajax.reload();
+      });
+
+    } catch (error) {
+      console.error('Error al abrir el modal:', error);
+    }
   }
-
-  closeModal(){
-    this.modal.dismissAll();
-  }
-  
 
   changeTypeModal(type: string) {
     this.typeModal = type;
@@ -220,18 +210,38 @@ export class ListUsersComponent implements OnInit {
 
   // Busca el user y se lo pasa al modal
   userModal: UserModel = new UserModel();
-  selectUser(id: number) {    
-    this.user = id;
-    this.apiService.getUserById(id)
-      .subscribe({
+  selectUser(id: number): Promise<UserModel> {
+      // Mostrar SweetAlert de tipo 'cargando'
+    Swal.fire({
+      title: 'Cargando usuario...',
+      html: 'Por favor, espera un momento',
+      allowOutsideClick: false, // No permitir cerrar la alerta haciendo clic fuera
+      didOpen: () => {
+        Swal.showLoading(); // Mostrar indicador de carga
+      }
+    });
+    return new Promise((resolve, reject) => {
+      this.user = id;
+      this.apiService.getUserById(id).subscribe({
         next: (data: UserModel) => {
           this.userModal = data;
+          Swal.close(); // Cerrar SweetAlert
+          resolve(data); // Resuelve la promesa cuando los datos se cargan
         },
         error: (error) => {
           console.error('Error al cargar el usuario:', error);
+          reject(error); // Rechaza la promesa si ocurre un error
+          Swal.close();
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Hubo un problema al cargar el usuario. Por favor, inténtalo de nuevo.'
+          });
         }
       });
+    });
   }
+  
 
   // SE PUEDEN MODIFICAR LOS VALORES A MOSTRAR EN EL PDF
   exportPdf() {
