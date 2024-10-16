@@ -1,10 +1,10 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
-import { UserModel } from '../users-models/User';
+import { UserModel } from '../../../users-models/User';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ModalInfoUserComponent } from '../users-modal-info-user/modal-info-user.component';
-import { ApiServiceService } from '../users-servicies/api-service.service';
+import { ApiServiceService } from '../../../users-servicies/api-service.service';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
@@ -183,14 +183,12 @@ export class ListUsersComponent implements OnInit {
       console.log("userModal cargado:", this.userModal);
   
       // Una vez cargado, abre el modal
-      const modalRef = this.modal.open(ModalInfoUserComponent, { size: 'lg', keyboard: false });
+      const modalRef = this.modal.open(ModalInfoUserComponent, { size: 'md', keyboard: false });
       modalRef.componentInstance.typeModal = type; // Pasar el tipo de modal al componente hijo
       modalRef.componentInstance.userModal = this.userModal;
 
-      modalRef.result.then((result) => {
-        console.log("a");
-        
-        $('#miDataTable').DataTable().ajax.reload();
+      modalRef.result.then((result) => {        
+        $('#myTable').DataTable().ajax.reload();
       });
 
     } catch (error) {

@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ApiServiceService } from '../../../users-servicies/api-service.service';
+import { RolModel } from '../../../users-models/Rol';
 
 @Component({
   selector: 'app-users-select-multiple',
@@ -9,16 +11,43 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './users-select-multiple.component.html',
   styleUrl: './users-select-multiple.component.css'
 })
-export class UsersSelectMultipleComponent {
+export class UsersSelectMultipleComponent implements OnInit, OnChanges {
   //pasar los roles desde el padre
   // @Input() roles = [];
 
   //enviar los roles seleccionados
   @Input() rolesSelected : string[] = [];
+  roles: RolModel[] = [];
 
   title : string = "Seleccione un rol..."
 
-  roles = ["SuperAdmin", "Admin", "Security", "Owner"]
+
+  private readonly apiService = inject(ApiServiceService);
+
+  ngOnInit(): void {
+    this.apiService.getAllRoles().subscribe({
+      next: (data) => {
+        this.roles = data;
+        
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
+    
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(this.rolesSelected);
+    this.roles.forEach( r => {
+      if(this.rolesSelected.includes(r.description)){
+        $("#"+r.id).prop('checked', true);
+      }
+    })
+
+    this.setTitle();
+  }
+
 
   setTitle(){
     this.title = ""
@@ -27,6 +56,8 @@ export class UsersSelectMultipleComponent {
       this.rolesSelected.forEach( r => {
         this.title += r + ", ";
       })
+
+      this.title = this.title.slice(0, -2);
       
     }
     else{

@@ -1,17 +1,18 @@
 import { CommonModule, formatDate } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ApiServiceService } from '../users-servicies/api-service.service';
-import { RolModel } from '../users-models/Rol';
-import { UserModel } from '../users-models/User';
-import { UserPut } from '../users-models/UserPut';
+import { ApiServiceService } from '../../../users-servicies/api-service.service';
+import { RolModel } from '../../../users-models/Rol';
+import { UserModel } from '../../../users-models/User';
+import { UserPut } from '../../../users-models/UserPut';
 import { data } from 'jquery';
 import { Router, ActivatedRoute } from '@angular/router';
+import { UsersSelectMultipleComponent } from '../../utils/users-select-multiple/users-select-multiple.component';
 
 @Component({
   selector: 'app-users-update-user',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, UsersSelectMultipleComponent],
   templateUrl: './users-update-user.component.html',
   styleUrl: './users-update-user.component.css'
 })
@@ -22,6 +23,8 @@ export class UsersUpdateUserComponent implements OnInit {
 
   constructor(private router: Router, private route: ActivatedRoute){ }
 
+
+  rolesSelected : string[] = [];
     
   roles: RolModel[] = [];
   rolesInput: string[] = [];
@@ -87,8 +90,6 @@ redirectList() {
 
   
   ngOnInit() {
-    this.loadRoles();
-
     this.id = this.route.snapshot.paramMap.get('id') || '';  // Obtiene el parámetro 'name'
 
     console.log(this.id);
@@ -106,8 +107,11 @@ redirectList() {
         this.updateForm.patchValue({
           datebirth: formattedDate ? this.formatDate(formattedDate) : ''
         });
-        this.rolesInput = data.roles;
+        this.rolesInput = this.rolesSelected = data.roles;
         this.updateForm.get('phoneNumber')?.setValue(data.phone_number.toString());
+        this.rolesSelected = data.roles;
+        console.log(this.rolesSelected);
+        console.log(data.roles);
       },
       error: (error) => {
         console.error('Error al cargar el usuario:', error);
@@ -127,32 +131,6 @@ redirectList() {
   // Formatea una fecha en "yyyy-MM-dd"
   private formatDate(date: Date): string {
     return formatDate(date, 'yyyy-MM-dd', 'en-US');
-  }
-
-  loadRoles() {
-    this.apiService.getAllRoles().subscribe({
-      next: (data: RolModel[]) => {
-        this.roles = data;
-      },
-      error: (error) => {
-        console.error('Error al cargar los roles:', error);
-      }
-    });
-  }
-
-  aniadirRol() {
-    const rolSeleccionado = this.updateForm.get('roles')?.value;
-    if (rolSeleccionado && !this.rolesInput.includes(rolSeleccionado)) {  
-      this.rolesInput.push(rolSeleccionado);  
-    }
-    this.updateForm.get('roles')?.setValue('');
-  }
-
-  quitarRol(rol: string) {
-    const index = this.rolesInput.indexOf(rol);
-    if (index > -1) {
-      this.rolesInput.splice(index, 1);
-    }
   }
 
 }

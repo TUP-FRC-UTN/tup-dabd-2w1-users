@@ -4,7 +4,10 @@
     border-radius: 0.375rem;
     padding: .375rem .75rem;
     background-color: #fff;;
+    border-color: #dbd8d8 !important;
 }
+
+
 
 .cbx{
     height: 40px;

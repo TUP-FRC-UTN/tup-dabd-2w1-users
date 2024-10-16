@@ -118,26 +118,6 @@
 
         <div class="row mb-3">
             <div class="col-md-6 d-flex justify-content-end">
-                <!-- <div class="d-flex">
-                    <label class="form-label text-start" style="width: 150px; margin-bottom: 0; margin-right: 10px;">Roles</label>
-                    <div>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#droproles">
-                            Seleccione un rol
-                        </button>
-                        <div class="sub-menu collapse" id="droproles">
-                            <input type="checkbox" class="nav-link d-flex w-100 h-50form-control custom-input">Rol1
-                        </div>
-                    </div>
-
-                </div>
-                <div class="col-6">
-                    <ul *ngIf="rolesInput.length > 0">
-                        <p>Roles añadidos:</p>
-                        <li *ngFor="let rol of rolesInput" class="my-1">
-                            {{rol}} <button class="btn btn-secondary" (click)="quitarRol(rol)">Quitar</button>
-                        </li>
-                    </ul>
-                </div> -->
                 <label class="form-label me-2 text-end pt-2" style="width: 150px; margin-bottom: 0;">Roles</label>
                 <app-users-select-multiple [rolesSelected]="rolesSelected"></app-users-select-multiple>
             </div>
@@ -163,13 +143,17 @@
                 </div>
             </div>
         </div>
-
-        <div class="row mb-3">
-            @if(formReactivo.invalid){
-                <button type="submit" class="btn btn-primary" disabled>Crear Usuario</button>
-            }@else {
-                <button type="submit" class="btn btn-primary">Crear Usuario</button>
-            }
+        <div class="row mb-3 justify-content-end sticky-right">
+            <div class="col-auto">
+                <button type="button" class="btn btn-secondary">Cancelar</button>
+            </div>
+            <div class="col-auto">
+                @if(formReactivo.invalid){
+                    <button type="submit" class="btn btn-primary" disabled>Guardar</button>
+                }@else {
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                }
+            </div>
         </div>
     </form>
 </section>

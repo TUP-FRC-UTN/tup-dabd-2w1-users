@@ -1,8 +1,8 @@
 import { CommonModule, formatDate } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { UserModel } from '../users-models/User';
-import { ApiServiceService } from '../users-servicies/api-service.service';
+import { UserModel } from '../../../users-models/User';
+import { ApiServiceService } from '../../../users-servicies/api-service.service';
 import Swal from 'sweetalert2';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -62,6 +62,9 @@ export class ModalInfoUserComponent implements OnInit {
           birthdate: formattedDate ? this.formatDate(formattedDate) : ''
         });
       }
+
+      this.editUser.disable();
+    
   }
 
   // Convierte la cadena de fecha "dd-MM-yyyy" a un objeto Date

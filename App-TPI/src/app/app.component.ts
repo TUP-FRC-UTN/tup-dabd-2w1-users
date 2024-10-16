@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { LoginComponent } from "./users-login/login.component";
-import { NavbarComponent } from "./users-navbar/navbar.component";
-import { LandingPageComponent } from "./users-landing-page/landing-page.component";
-import { NewUserComponent } from './users-new-user/new-user.component';
-import { ListUsersComponent } from './users-list-users/list-users.component';
-import { ModalInfoUserComponent } from './users-modal-info-user/modal-info-user.component';
-import { UsersNewPlotComponent } from './users-new-plot/users-new-plot.component';
-import { UsersUpdateUserComponent } from './users-update-user/users-update-user.component';
+import { LoginComponent } from "./users-components/utils/users-login/login.component";
+import { NavbarComponent } from "./users-components/utils/users-navbar/navbar.component";
+import { LandingPageComponent } from './users-components/utils/users-landing-page/landing-page.component';
+import { NewUserComponent } from './users-components/users/users-new-user/new-user.component';
+import { ListUsersComponent } from './users-components/users/users-list-users/list-users.component';
+import { ModalInfoUserComponent } from './users-components/users/users-modal-info-user/modal-info-user.component';
+import { UsersNewPlotComponent } from './users-components/plots/users-new-plot/users-new-plot.component';
+import { UsersUpdateUserComponent } from './users-components/users/users-update-user/users-update-user.component';
 
 @Component({
   selector: 'app-root',
