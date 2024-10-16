@@ -6,15 +6,18 @@ import { ApiServiceService } from '../users-servicies/api-service.service';
 import { UserModel } from '../users-models/User';
 import { UserPost } from '../users-models/UserPost';
 import { Router, RouterModule } from '@angular/router';
+import { UsersSelectMultipleComponent } from "../users-select-multiple/users-select-multiple.component";
 
 @Component({
   selector: 'app-new-user',
   standalone: true,
-  imports: [FormsModule, CommonModule, ReactiveFormsModule,RouterModule],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule, RouterModule, UsersSelectMultipleComponent],
   templateUrl: './new-user.component.html',
   styleUrl: './new-user.component.css'
 })
 export class NewUserComponent implements OnInit {
+
+  rolesSelected : string[] = [];
 
   constructor(private router:Router){
     
@@ -126,7 +129,7 @@ export class NewUserComponent implements OnInit {
     avatar_url: '',
     datebirth: fechaValue ? 
                    new Date(fechaValue).toISOString().split('T')[0] : '',
-    roles: this.rolesInput,
+    roles: this.rolesSelected,
     phone_number: this.formReactivo.get('telefono')?.value || ''
     };
 
