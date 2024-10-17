@@ -25,6 +25,10 @@ export class NavbarComponent implements OnInit {
   //Lista de botones
   buttonsList: SideButton[] = [];
 
+  changeRoles(role: string) {
+    this.userRoles = [role];
+  }
+
   async ngOnInit (): Promise<void> {
     console.log(this.userRoles);
     
