@@ -5,6 +5,7 @@ import { NewUserComponent } from './users-components/users/users-new-user/new-us
 import { ListUsersComponent } from './users-components/users/users-list-users/list-users.component';
 import { UsersUpdateUserComponent } from './users-components/users/users-update-user/users-update-user.component';
 import { UsersNewPlotComponent } from './users-components/plots/users-new-plot/users-new-plot.component';
+import { UsuariosNewOwnerComponent } from './users-components/owners/users-new-owner/usuarios-new-owner.component';
 
 export const routes: Routes = [
     {
@@ -45,6 +46,15 @@ export const routes: Routes = [
                     {
                         path: 'add',
                         component: UsersNewPlotComponent
+                    }
+                ]
+            },
+            {
+                path: 'owner',
+                children: [
+                    {
+                        path: 'add',
+                        component: UsuariosNewOwnerComponent
                     }
                 ]
             }

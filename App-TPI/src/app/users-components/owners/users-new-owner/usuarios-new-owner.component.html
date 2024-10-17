@@ -1,14 +1,14 @@
 <section class="container pt-5">
     <h3>Añadir Propietario</h3>
-    <form [formGroup]="newOwner" (ngSubmit)="createOwner()">
+    <form [formGroup]="formReactivo" (ngSubmit)="createOwner()">
         <div class="row mb-3 mt-5">
             <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center justify-content-end">
                     <label class="form-label mb-0 me-3 text-end">Nombre</label>
                     <input type="text" class="form-control custom-input" formControlName="name" 
-                    [ngClass]="{'is-invalid': newOwner.controls['name'].invalid  && (newOwner.get('name')?.dirty|| newOwner.get('name')?.touched),'is-valid': newOwner.controls['name'].valid }" >
+                    [ngClass]="{'is-invalid': formReactivo.controls['name'].invalid  && (formReactivo.get('name')?.dirty|| formReactivo.get('name')?.touched),'is-valid': formReactivo.controls['name'].valid }" >
                 </div>   
-                @if(newOwner.controls['name'].invalid && (newOwner.controls['name'].dirty || newOwner.controls['name'].touched)){
+                @if(formReactivo.controls['name'].invalid && (formReactivo.controls['name'].dirty || formReactivo.controls['name'].touched)){
                     
                     <div class="text-danger align-self-end" style="width: 500px;">
                         Ingrese su nombre
@@ -19,9 +19,9 @@
                 <div class="d-flex align-items-center justify-content-end">
                     <label class="form-label mb-0 me-3 text-end">Apellido</label>
                     <input type="text" class="form-control custom-input" formControlName="lastname"
-                    [ngClass]="{'is-invalid': newOwner.controls['lastname'].invalid  && (newOwner.get('lastname')?.dirty|| newOwner.get('lastname')?.touched),'is-valid': newOwner.controls['lastname'].valid }">
+                    [ngClass]="{'is-invalid': formReactivo.controls['lastname'].invalid  && (formReactivo.get('lastname')?.dirty|| formReactivo.get('lastname')?.touched),'is-valid': formReactivo.controls['lastname'].valid }">
                 </div>   
-                @if(newOwner.controls['lastname'].invalid && (newOwner.controls['lastname'].dirty || newOwner.controls['lastname'].touched)){
+                @if(formReactivo.controls['lastname'].invalid && (formReactivo.controls['lastname'].dirty || formReactivo.controls['lastname'].touched)){
                     <div class="text-danger align-self-end" style="width: 500px;">
                         Ingrese su apellido
                     </div>
@@ -34,9 +34,9 @@
                 <div class="d-flex align-items-center justify-content-end">
                     <label class="form-label mb-0 me-3 text-end">DNI</label>
                     <input type="text" class="form-control custom-input" formControlName="dni"
-                    [ngClass]="{'is-invalid': newOwner.controls['dni'].invalid  && (newOwner.get('dni')?.dirty|| newOwner.get('dni')?.touched),'is-valid': newOwner.controls['dni'].valid }">
+                    [ngClass]="{'is-invalid': formReactivo.controls['dni'].invalid  && (formReactivo.get('dni')?.dirty|| formReactivo.get('dni')?.touched),'is-valid': formReactivo.controls['dni'].valid }">
                 </div>   
-                @if(newOwner.controls['dni'].invalid && (newOwner.controls['dni'].dirty || newOwner.controls['dni'].touched)){
+                @if(formReactivo.controls['dni'].invalid && (formReactivo.controls['dni'].dirty || formReactivo.controls['dni'].touched)){
                     <div class="text-danger align-self-end" style="width: 500px;">
                         Ingrese su DNI
                     </div>
@@ -46,9 +46,9 @@
                 <div class="d-flex align-items-center justify-content-end">
                     <label class="form-label mb-0 me-3 text-end">CUIT - CUIL</label>
                     <input type="text" class="form-control custom-input" formControlName="cuit_cuil"
-                    [ngClass]="{'is-invalid': newOwner.controls['cuit_cuil'].invalid  && (newOwner.get('cuit_cuil')?.dirty|| newOwner.get('cuit_cuil')?.touched),'is-valid': newOwner.controls['cuit_cuil'].valid }">
+                    [ngClass]="{'is-invalid': formReactivo.controls['cuit_cuil'].invalid  && (formReactivo.get('cuit_cuil')?.dirty|| formReactivo.get('cuit_cuil')?.touched),'is-valid': formReactivo.controls['cuit_cuil'].valid }">
                 </div>   
-                @if(newOwner.controls['cuit_cuil'].invalid && (newOwner.controls['cuit_cuil'].dirty || newOwner.controls['cuit_cuil'].touched)){
+                @if(formReactivo.controls['cuit_cuil'].invalid && (formReactivo.controls['cuit_cuil'].dirty || formReactivo.controls['cuit_cuil'].touched)){
                     <div class="text-danger align-self-end" style="width: 500px;">
                         Ingrese su CUIT - CUIL
                     </div>
@@ -60,10 +60,10 @@
             <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center justify-content-end">
                     <label class="form-label mb-0 me-3 text-end">Fecha de nacimiento</label>
-                    <input type="text" class="form-control custom-input" formControlName="birthdate"
-                    [ngClass]="{'is-invalid': newOwner.controls['birthdate'].invalid  && (newOwner.get('birthdate')?.dirty|| newOwner.get('birthdate')?.touched),'is-valid': newOwner.controls['birthdate'].valid }">
+                    <input type="date" class="form-control custom-input" formControlName="birthdate"
+                    [ngClass]="{'is-invalid': formReactivo.controls['birthdate'].invalid  && (formReactivo.get('birthdate')?.dirty|| formReactivo.get('birthdate')?.touched),'is-valid': formReactivo.controls['birthdate'].valid }">
                 </div>   
-                @if(newOwner.controls['birthdate'].invalid && (newOwner.controls['birthdate'].dirty || newOwner.controls['birthdate'].touched)){
+                @if(formReactivo.controls['birthdate'].invalid && (formReactivo.controls['birthdate'].dirty || formReactivo.controls['birthdate'].touched)){
                     <div class="text-danger align-self-end" style="width: 500px;">
                         Ingrese su Fecha de nacimiento
                     </div>
@@ -73,9 +73,9 @@
                 <div class="d-flex align-items-center justify-content-end">
                     <label class="form-label mb-0 me-3 text-end">Email</label>
                     <input type="text" class="form-control custom-input" formControlName="email"
-                    [ngClass]="{'is-invalid': newOwner.controls['email'].invalid  && (newOwner.get('email')?.dirty|| newOwner.get('email')?.touched),'is-valid': newOwner.controls['email'].valid }">
+                    [ngClass]="{'is-invalid': formReactivo.controls['email'].invalid  && (formReactivo.get('email')?.dirty|| formReactivo.get('email')?.touched),'is-valid': formReactivo.controls['email'].valid }">
                 </div>   
-                @if(newOwner.controls['email'].invalid && (newOwner.controls['email'].dirty || newOwner.controls['email'].touched)){
+                @if(formReactivo.controls['email'].invalid && (formReactivo.controls['email'].dirty || formReactivo.controls['email'].touched)){
                     <div class="text-danger align-self-end" style="width: 500px;">
                         Ingrese su Email
                     </div>
@@ -83,31 +83,141 @@
             </div>
         </div>
 
-        <div class="row mb-3">
-            <div class="col d-flex flex-column ">
+
+
+
+
+        <div class="row mb-3 mt-5">
+            <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-end">Teléfono</label>
-                    <input type="text" class="form-control custom-input" formControlName="phone_number"
-                    [ngClass]="{'is-invalid': newOwner.controls['phone_number'].invalid  && (newOwner.get('phone_number')?.dirty|| newOwner.get('emaphone_numberil')?.touched),'is-valid': newOwner.controls['phone_number'].valid }">
+                    <label class="form-label mb-0 me-3 text-end">Estado fiscal</label>
+                     <!-- <div class="d-flex" style="flex: 1;"> -->
+                        <select class="form-select me-2" id="stateId" formControlName="state" style="width: 418px;"
+                            [ngClass]="{'is-invalid': formReactivo.controls['state'].invalid  && (formReactivo.get('state')?.dirty|| formReactivo.get('state')?.touched),'is-valid': formReactivo.controls['state'].valid }">
+                            @for (s of states; track $index) {
+                            <option value="{{s.id}}">{{s.description}}</option>
+                            }
+                        </select>
+                    <!-- </div> -->
+                </div>
+                @if(formReactivo.controls['state'].invalid && (formReactivo.get('state')?.dirty ||
+                formReactivo.get('state')?.touched)){
+                <div class="text-danger align-self-end" style="width: 500px;">
+                    Seleccione un estado fiscal
+                </div>
+                }
+            </div>
+            <div class="col d-flex flex-column">
+                <div class="d-flex align-items-center justify-content-end">
+                    <label class="form-label mb-0 me-3 text-end">Tipo</label>
+                     <!-- <div class="d-flex" style="flex: 1;"> -->
+                        <select class="form-select me-2" id="stateId" formControlName="type" style="width: 418px;"
+                            [ngClass]="{'is-invalid': formReactivo.controls['type'].invalid  && (formReactivo.get('type')?.dirty|| formReactivo.get('type')?.touched),'is-valid': formReactivo.controls['type'].valid }">
+                            @for (t of types; track $index) {
+                            <option value="{{t.id}}">{{t.description}}</option>
+                            }
+                        </select>
+                    <!-- </div> -->
+                </div>
+                @if(formReactivo.controls['type'].invalid && (formReactivo.get('type')?.dirty ||
+                formReactivo.get('type')?.touched)){
+                <div class="text-danger align-self-end" style="width: 500px;">
+                    Seleccione un tipo propietario
+                </div>
+                }
+            </div>
+        </div>
+
+
+        <div class="row mb-3">
+            <div class="col d-flex flex-column">
+                <div class="d-flex align-items-center justify-content-end">
+                    <label class="form-label mb-0 me-3 text-end">Nombre de usuario</label>
+                    <input type="text" class="form-control custom-input" formControlName="username"
+                    [ngClass]="{'is-invalid': formReactivo.controls['username'].invalid  && (formReactivo.get('username')?.dirty|| formReactivo.get('username')?.touched),'is-valid': formReactivo.controls['username'].valid }">
                 </div>   
-                @if(newOwner.controls['phone_number'].invalid && (newOwner.controls['phone_number'].dirty || newOwner.controls['phone_number'].touched)){
+                @if(formReactivo.controls['username'].invalid && (formReactivo.controls['username'].dirty || formReactivo.controls['username'].touched)){
                     <div class="text-danger align-self-end" style="width: 500px;">
-                        Ingrese su Teléfono
+                        Ingrese su nombre de usuario
                     </div>
                 }
             </div>
-            <div class="col">
+            <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-end">Empresa</label>
-                    <input type="text" class="form-control custom-input" formControlName="bussines_name">
-                </div>                              
+                    <label class="form-label mb-0 me-3 text-end">Contraseña</label>
+                    <input type="text" class="form-control custom-input" formControlName="password"
+                    [ngClass]="{'is-invalid': formReactivo.controls['password'].invalid  && (formReactivo.get('password')?.dirty|| formReactivo.get('password')?.touched),'is-valid': formReactivo.controls['password'].valid }">
+                </div>   
+                @if(formReactivo.controls['password'].invalid && (formReactivo.controls['password'].dirty || formReactivo.controls['password'].touched)){
+                    <div class="text-danger align-self-end" style="width: 500px;">
+                        Ingrese su contraseña
+                    </div>
+                }
             </div>
         </div>
+
+
+
+        <div class="row mb-3">
+            <div class="col-md-6 d-flex justify-content-end">
+                <label class="form-label me-2 text-end pt-2" style="width: 150px; margin-bottom: 0;">Roles</label>
+                <app-users-select-multiple [rolesSelected]="rolesSelected"></app-users-select-multiple>
+            </div>
+            <div class="col d-flex flex-column">
+                <div class="d-flex align-items-center justify-content-end">
+                    <label class="form-label mb-0 me-3 text-end">Nombre del negocio</label>
+                    <input type="text" class="form-control custom-input" formControlName="nombreNegocio"
+                    >
+                </div>   
+                @if(formReactivo.controls['nombreNegocio'].invalid && (formReactivo.controls['nombreNegocio'].dirty || formReactivo.controls['nombreNegocio'].touched)){
+                    <div class="text-danger align-self-end" style="width: 500px;">
+                        Ingrese un nombre de negocio válido
+                    </div>
+                }
+            </div>
+        </div>
+
+
+        <div class="row mb-3 mt-5">
+            <div class="col d-flex flex-column">
+                <div class="d-flex align-items-center justify-content-end">
+                    <label class="form-label mb-0 me-3 text-end">Lote</label>
+                     <!-- <div class="d-flex" style="flex: 1;"> -->
+                        <select class="form-select me-2" id="stateId" formControlName="lote" style="width: 418px;"
+                            [ngClass]="{'is-invalid': formReactivo.controls['lote'].invalid  && (formReactivo.get('lote')?.dirty|| formReactivo.get('lote')?.touched),'is-valid': formReactivo.controls['lote'].valid }">
+                            @for (s of lotes; track $index) {
+                            <option value="{{s.id}}">{{s.block_number}}</option>
+                            }
+                        </select>
+                    <!-- </div> -->
+                </div>
+                @if(formReactivo.controls['lote'].invalid && (formReactivo.get('lote')?.dirty ||
+                formReactivo.get('lote')?.touched)){
+                <div class="text-danger align-self-end" style="width: 500px;">
+                    Seleccione un lote
+                </div>
+                }
+            </div>
+            <div class="col d-flex flex-column">
+                <div class="d-flex align-items-center justify-content-end">
+                    <label class="form-label mb-0 me-3 text-end">Número de teléfono</label>
+                    <input type="text" class="form-control custom-input" formControlName="phone"
+                    [ngClass]="{'is-invalid': formReactivo.controls['phone'].invalid  && (formReactivo.get('phone')?.dirty|| formReactivo.get('phone')?.touched),'is-valid': formReactivo.controls['phone'].valid }">
+                </div>   
+                @if(formReactivo.controls['phone'].invalid && (formReactivo.controls['phone'].dirty || formReactivo.controls['phone'].touched)){
+                    <div class="text-danger align-self-end" style="width: 500px;">
+                        Ingrese su número de teléfono
+                    </div>
+                }
+            </div>
+        </div>
+
+        
         <div class="row mb-3">
             <div class="col">
                 <div class="d-flex justify-content-end">
                     <button type="button" class="btn btn-danger me-3">Cancelar</button>
-                    @if(newOwner.valid){
+                    @if(formReactivo.valid){
                         <button type="submit" class="btn btn-primary">Guardar</button>
                     }@else{
                         <button type="submit" class="btn btn-primary" disabled>Guardar</button>
