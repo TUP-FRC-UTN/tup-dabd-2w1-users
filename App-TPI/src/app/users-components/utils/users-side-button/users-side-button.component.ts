@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { SideButton } from '../../../users-models/SideButton';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
@@ -10,7 +10,7 @@ import { Router, RouterModule } from '@angular/router';
   templateUrl: './users-side-button.component.html',
   styleUrl: './users-side-button.component.css'
 })
-export class UsersSideButtonComponent {
+export class UsersSideButtonComponent{
   //Expandir o cerrar
   @Input() expanded : boolean = false;
 

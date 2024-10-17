@@ -1,0 +1,88 @@
+<ng-template #viewUser let-c="close" let-d="dismiss">
+	<div class="modal-header">
+		<h4 class="modal-title" id="modal-basic-title"></h4>
+		<button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+	</div>
+	<div class="modal-body">
+		<form [formGroup]="editUser">
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="inputName" class="form-label">Nombre</label>
+                    <input type="text" class="form-control custom-input" formControlName="name">
+                </div>
+                <div class="col">
+                    <label for="inputLastName" class="form-label">Apellido</label>
+                    <input type="text" class="form-control custom-input" formControlName="lastName"> 
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="inputEmail" class="form-label">Email</label>
+                    <input type="text" class="form-control custom-input" formControlName="email">
+                </div>
+                <div class="col">
+                    <label for="inputDni" class="form-label">Dni</label>
+                    <input type="text" class="form-control custom-input" formControlName="dni">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="inputTelefono" class="form-label">TelÃ©fono</label>
+                    <input type="text" class="form-control custom-input" formControlName="phoneNumber">
+                </div>
+                <div class="col">
+                    <label for="inputBirthdate" class="form-label">Fecha de nacimiento</label>
+                    <input type="date" class="form-control custom-input" formControlName="birthdate">
+                </div>
+            </div>
+
+            <div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="exampleInputEmail1" class="form-label">Roles</label>
+                        <div class="container">
+                            @for (rol of userModal.roles; track $index) {
+                                <p>{{rol}}</p>
+                            }
+                        </div>
+                            <!-- <option selected>Seleccione un rol</option>
+                            @for(rol of roles; track $index){
+                                <option value="{{rol.description}}">{{rol.description}}</option>
+                            }    -->
+                        <!-- @if(!canEdit){
+                            <div class="container">
+                                @for (rol of userModal.roles; track $index) {
+                                   <p>{{rol}}</p>
+                                }
+                           </div>
+                        }@else {
+                            @for(rol of userModal.roles; track $index){
+                                <li class="">{{rol}} <button (click)="quitarRol(rol)">Quitar</button></li>
+                            }
+                        } -->
+                    </div>
+                </div>
+            </div>
+        </form>
+	</div>
+	<div class="modal-footer">
+		@if(typeModal == "info"){
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Atrás</button>
+              </div>
+        }@if(typeModal == "delete") {
+            <div class="modal-footer">
+                <div class="row mb-3 ">
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-danger" (click)="confirmDelete()">Eliminar</button>
+                    </div>
+                    <div class="col-auto">
+                        <button type="button" class="btn btn-secondary" id="btn-close" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        }
+	</div>
+</ng-template>
