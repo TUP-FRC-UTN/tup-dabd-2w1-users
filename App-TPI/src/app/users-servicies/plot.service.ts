@@ -4,7 +4,8 @@ import { Observable } from 'rxjs';
 import { PlotTypeModel } from '../users-models/PlotType';
 import { PlotStateModel } from '../users-models/PlotState';
 import { PlotModel } from '../users-models/Plot';
-import { GetPlotDto } from '../users-models/GetPlotDto';
+import { GetPlotModel } from '../users-models/GetPlot';
+import { PutPlot } from '../users-models/PutPlot';
 
 @Injectable({
   providedIn: 'root'
@@ -12,26 +13,31 @@ import { GetPlotDto } from '../users-models/GetPlotDto';
 export class PlotService {
 
   private readonly http: HttpClient = inject(HttpClient);
-  private readonly urlTypes = 'http://localhost:8081/plots/types';
-  private readonly urlStates = 'http://localhost:8081/plots/states';
-  private readonly urlPlot = 'http://localhost:8081/plots';
-  private readonly urlGetPlots = 'http://localhost:8081/plots';
+  private readonly url = 'http://localhost:8081';
 
   constructor() { }
 
   getAllTypes(): Observable<PlotTypeModel[]>{
-    return this.http.get<PlotTypeModel[]>(this.urlTypes);
+    return this.http.get<PlotTypeModel[]>(this.url + '/plots/types');
+  }
+
+  getAllPlots(): Observable<GetPlotModel[]>{
+    return this.http.get<GetPlotModel[]>(this.url + '/plots');
+  }
+
+  gePlotById(plotId: number): Observable<GetPlotModel>{
+    return this.http.get<GetPlotModel>(this.url + '/plots/' + plotId);
   }
   
   getAllStates(): Observable<PlotStateModel[]>{
-    return this.http.get<PlotStateModel[]>(this.urlStates);
+    return this.http.get<PlotStateModel[]>(this.url + '/plots/states');
   }
 
   postPlot(plot: PlotModel): Observable<PlotModel>{
-    return this.http.post<PlotModel>(this.urlPlot, plot);
+    return this.http.post<PlotModel>(this.url + "/plots", plot);
   }
 
-  getAllPlots(): Observable<GetPlotDto[]>{
-    return this.http.get<GetPlotDto[]>(this.urlGetPlots);
+  putPlot(id: number,  plot: PutPlot): Observable<PutPlot>{
+    return this.http.put<PutPlot>(`${this.url}/plots?plotId=${id}`, plot);
   }
 }
