@@ -1,26 +1,31 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { ApiServiceService } from './api-service.service';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
   private userId: number | null = null;
-  private userRole: string | null = null;
+  private userRole: string[] | null = null;
+
+  private readonly apiService = inject(ApiServiceService);
 
   constructor() {}
-  setUserId(id: number): void {
-    if (this.userId === null) {
-      this.userId = id;
-    } else {
-      console.error('El ID del usuario ya ha sido establecido y no se puede modificar.');
-    }
-  }
 
-  setUserRole(role: string): void {
-    if (this.userRole === null) {
-      this.userRole = role;
+  async setUser(email: string): Promise<void> {
+    if (this.userId === null) {
+      try {
+        const data = await firstValueFrom(this.apiService.getUserByEmail(email));
+        console.log(data);
+        this.userId = data.id;
+        this.userRole = data.roles;
+      } catch (error) {
+        console.error('No se ha podido establecer el ID del usuario.', error);
+        throw error; // Lanzamos el error para que el flujo lo maneje adecuadamente
+      }
     } else {
-      console.error('El rol del usuario ya ha sido establecido y no se puede modificar.');
+      console.error('El usuario ya ha sido establecido y no se puede modificar.');
     }
   }
 
@@ -28,7 +33,7 @@ export class LoginService {
     return this.userId;
   }
 
-  getUserRole(): string | null {
+  getUserRoles(): string[] | null {
     return this.userRole;
   }
 }

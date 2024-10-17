@@ -132,7 +132,7 @@ export class NewUserComponent implements OnInit {
                     new Date(fechaValue).toISOString().split('T')[0] : '',
       roles: this.rolesSelected,
       phone_number: this.formReactivo.get('telefono')?.value || '',
-      user_update_id: 5
+      userUpdateId: 5
     };
 
     console.log(userData);

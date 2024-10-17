@@ -1,8 +1,9 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { SideButton } from '../../../users-models/SideButton';
 import { UsersSideButtonComponent } from "../users-side-button/users-side-button.component";
+import { LoginService } from '../../../users-servicies/login.service';
 
 @Component({
   selector: 'app-navbar',
@@ -16,13 +17,17 @@ export class NavbarComponent implements OnInit {
   expand: boolean = false;
 
   constructor(private router: Router) { }
+  private readonly loginService = inject(LoginService);
 
+  userRoles: string[] = this.loginService.getUserRoles()!; 
   userRole: string = "SuperAdmin" //Cambiar según el rol del usuario que se loguee
 
   //Lista de botones
   buttonsList: SideButton[] = [];
 
-  ngOnInit(): void {
+  async ngOnInit (): Promise<void> {
+    console.log(this.userRoles);
+    
     this.buttonsList = [
       {
         icon: "bi-person",
@@ -33,7 +38,7 @@ export class NavbarComponent implements OnInit {
       {
         icon: "bi-people",
         title: "Usuarios",
-        roles: ["SuperAdmin", "Admin"],
+        roles: ["SuperAdmin", "Admin", "Owner"],
         childButtons: [{
 
           //botón agregar usuario

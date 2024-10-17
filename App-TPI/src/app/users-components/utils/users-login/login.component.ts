@@ -26,33 +26,34 @@ export class LoginComponent {
   private readonly loginService = inject(LoginService);
 
   loginForm = new FormGroup({
-    name: new FormControl("", [Validators.required]),
-    password: new FormControl("", [Validators.required, Validators.minLength(8)]),
+    email: new FormControl("", [Validators.required]),
+    password: new FormControl("", [Validators.required, Validators.minLength(6)]),
   });
 
-
-  ingresar(form: any) {
-    if (form.invalid) {
-      alert("no se logueo")
-    }
-    else {
-      this.user.dni = this.loginForm.value.name!;
+  async login() {
+    if (this.loginForm.invalid) {
+      alert("no se logueo");
+    } else {
+      this.user.email = this.loginForm.value.email!;
       this.user.password = this.loginForm.value.password!;
 
       this.apiService.verifyLogin(this.user).subscribe({
-        next: (data) => {
-
+        next: async (data) => {
           if (data) {
-            this.router.navigate(['/home']);
-          }
-          else {
-            alert("Dni o contraseña incorrectos")
+            try {
+              await this.loginService.setUser(this.user.email);
+              this.router.navigate(['/home']); // Redirige solo cuando se haya obtenido el usuario
+            } catch (error) {
+              alert("Error obteniendo los datos del usuario.");
+            }
+          } else {
+            alert("Dni o contraseña incorrectos");
           }
         },
         error: (error) => {
-          alert("Dni o contraseña incorrectos")
+          alert("Dni o contraseña incorrectos");
         }
       });
-    };
+    }
   }
 }
