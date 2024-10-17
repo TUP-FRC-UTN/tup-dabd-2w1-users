@@ -1,9 +1,8 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule, TitleStrategy } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { SideButton } from '../../../users-models/SideButton';
 import { UsersSideButtonComponent } from "../users-side-button/users-side-button.component";
-import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-navbar',
@@ -54,30 +53,24 @@ export class NavbarComponent implements OnInit {
         ]
       },
       {
-        icon: "bi-person-vcard",
-        title: "Propietarios",
-        roles: ["SuperAdmin"],
-        childButtons:[
+        icon: "bi-houses",
+        title: "Lotes",
+        roles: ["SuperAdmin", "Admin"],
+        childButtons: [
           {
-            icon: "",
-            title: "Añadir",
-            route: "home/owners/edit",
-            roles: ["SuperAdmin"]
+            icon: "bi-house-add",
+            title: "Añadir Lote",
+            route: "home/plots/add",
+            roles: ["SuperAdmin", "Admin"]
+          },
+          {
+            icon: "bi-house-gear-fill",
+            title: "Listado ed  Lote",
+            route: "home/plots/list",
+            roles: ["SuperAdmin", "Admin"]
           }
-        ]
-      },
 
-      {
-        icon: "bi-box",
-        title: "Añadir Lote",
-        route: "home/plots/add",
-        roles: ["SuperAdmin", "Admin"]
-      },
-      {
-        icon: "bi-box",
-        title: "Listado ed  Lote",
-        route: "home/plots/list",
-        roles: ["SuperAdmin", "Admin"]
+        ]
       },
       {
         icon: "bi-key-fill",
@@ -85,7 +78,6 @@ export class NavbarComponent implements OnInit {
         route: "home/owner/add",
         roles: ["SuperAdmin", "Admin"]
       }
-
     ];
   }
 
