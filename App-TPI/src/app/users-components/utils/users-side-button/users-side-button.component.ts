@@ -18,7 +18,7 @@ export class UsersSideButtonComponent {
   @Input() info : SideButton = new SideButton();
 
   //Rol del usuario logeado
-  @Input() userRole : string = "";
+  @Input() userRoles : string[] = [];
 
   constructor(private route : Router){
   }
