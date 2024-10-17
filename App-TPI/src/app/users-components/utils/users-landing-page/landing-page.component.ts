@@ -4,11 +4,12 @@ import { ModalInfoUserComponent } from '../../users/users-modal-info-user/modal-
 import { RouterOutlet } from '@angular/router';
 import { UsersSelectMultipleComponent } from '../../utils/users-select-multiple/users-select-multiple.component';
 import { UsuariosNewOwnerComponent } from "../../owners/users-new-owner/usuarios-new-owner.component";
+import { UsersListOwnersComponent } from "../../owners/users-list-owners/users-list-owners.component";
 
 @Component({
   selector: 'app-landing-page',
   standalone: true,
-  imports: [RouterOutlet, ModalInfoUserComponent, NavbarComponent, UsersSelectMultipleComponent, UsuariosNewOwnerComponent, UsuariosNewOwnerComponent],
+  imports: [RouterOutlet, ModalInfoUserComponent, NavbarComponent, UsersSelectMultipleComponent, UsuariosNewOwnerComponent, UsuariosNewOwnerComponent, UsersListOwnersComponent],
   templateUrl: './landing-page.component.html',
   styleUrl: './landing-page.component.css'
 })

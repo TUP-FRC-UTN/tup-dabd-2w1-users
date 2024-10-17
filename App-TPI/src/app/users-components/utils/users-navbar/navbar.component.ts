@@ -1,8 +1,9 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, TitleStrategy } from '@angular/router';
 import { SideButton } from '../../../users-models/SideButton';
 import { UsersSideButtonComponent } from "../users-side-button/users-side-button.component";
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-navbar',
@@ -50,6 +51,19 @@ export class NavbarComponent implements OnInit {
           route: "home/users/list",
           roles: ["SuperAdmin", "Admin", "Owner"]
         }
+        ]
+      },
+      {
+        icon: "bi-person-vcard",
+        title: "Propietarios",
+        roles: ["SuperAdmin"],
+        childButtons:[
+          {
+            icon: "",
+            title: "Añadir",
+            route: "home/owners/edit",
+            roles: ["SuperAdmin"]
+          }
         ]
       },
 

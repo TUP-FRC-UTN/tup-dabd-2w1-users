@@ -21,4 +21,6 @@ export class UsersUpdateOwnerComponent {
     bussines_name: new FormControl("", []),  
     active : new FormControl(true, []),
   });
+
+  updateOwner(){}
 }

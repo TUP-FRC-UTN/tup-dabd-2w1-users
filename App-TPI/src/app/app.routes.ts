@@ -7,6 +7,7 @@ import { UsersUpdateUserComponent } from './users-components/users/users-update-
 import { UsersNewPlotComponent } from './users-components/plots/users-new-plot/users-new-plot.component';
 import { UsersListPlotsComponent } from './users-components/plots/users-list-plots/users-list-plots.component';
 import { UsersUpdatePlotComponent } from './users-components/plots/users-update-plot/users-update-plot.component';
+import { UsersUpdateOwnerComponent } from './users-components/owners/users-update-owner/users-update-owner.component';
 
 export const routes: Routes = [
     {
@@ -56,6 +57,19 @@ export const routes: Routes = [
                     {
                         path: 'edit/:id',
                         component: UsersUpdatePlotComponent
+                    }
+                ]
+            },
+            {
+                path: 'owners',
+                children: [
+                    // {
+                    //     path: 'add',
+                    //     component: UsernewOwner
+                    // },
+                    {
+                        path: 'edit/:id',
+                        component :UsersUpdateOwnerComponent
                     }
                 ]
             }

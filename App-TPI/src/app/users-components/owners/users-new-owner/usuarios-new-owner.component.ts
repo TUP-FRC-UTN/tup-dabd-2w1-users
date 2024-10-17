@@ -9,7 +9,7 @@ import { RolModel } from '../../../users-models/Rol';
 import { UsersSelectMultipleComponent } from '../../utils/users-select-multiple/users-select-multiple.component';
 import { PlotService } from '../../../users-servicies/plot.service';
 import { GetPlotDto } from '../../../users-models/GetPlotDto';
-import { OwnerModel } from '../../../users-models/PostOwnerDto';
+import { OwnerModel } from '../../../users-models/owner/PostOwnerDto';
 import Swal from 'sweetalert2';
 
 @Component({
