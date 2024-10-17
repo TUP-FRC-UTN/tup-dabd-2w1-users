@@ -56,7 +56,13 @@ export class NavbarComponent implements OnInit {
       {
         icon: "bi-box",
         title: "Añadir Lote",
-        route: "home/lote/add",
+        route: "home/plots/add",
+        roles: ["SuperAdmin", "Admin"]
+      },
+      {
+        icon: "bi-box",
+        title: "Listado ed  Lote",
+        route: "home/plots/list",
         roles: ["SuperAdmin", "Admin"]
       }
 

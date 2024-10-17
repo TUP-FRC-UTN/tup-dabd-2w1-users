@@ -80,6 +80,7 @@ export class NewUserComponent implements OnInit {
   loadRoles() {
     this.apiService.getAllRoles().subscribe({
       next: (data: RolModel[]) => {
+
         this.roles = data;
       },
       error: (error) => {
@@ -120,17 +121,18 @@ export class NewUserComponent implements OnInit {
     
     const userData : UserPost = {
       name: this.formReactivo.get('nombre')?.value || '',
-    lastname: this.formReactivo.get('apellido')?.value || '',
-    username: this.formReactivo.get('username')?.value || '',
-    password: this.formReactivo.get('dni')?.value || '',
-    email: this.formReactivo.get('email')?.value || '',
-    dni: this.formReactivo.get('dni')?.value || "",
-    active: true,
-    avatar_url: '',
-    datebirth: fechaValue ? 
-                   new Date(fechaValue).toISOString().split('T')[0] : '',
-    roles: this.rolesSelected,
-    phone_number: this.formReactivo.get('telefono')?.value || ''
+      lastname: this.formReactivo.get('apellido')?.value || '',
+      username: this.formReactivo.get('username')?.value || '',
+      password: this.formReactivo.get('dni')?.value || '',
+      email: this.formReactivo.get('email')?.value || '',
+      dni: this.formReactivo.get('dni')?.value || "",
+      active: true,
+      avatar_url: '',
+      datebirth: fechaValue ? 
+                    new Date(fechaValue).toISOString().split('T')[0] : '',
+      roles: this.rolesSelected,
+      phone_number: this.formReactivo.get('telefono')?.value || '',
+      user_update_id: 5
     };
 
     console.log(userData);

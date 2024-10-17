@@ -1,0 +1,45 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Información del Usuario</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="plotForm">
+      <div class="row mb-3">
+          <div class="col d-flex justify-content-center align-items-center">
+              <label for="inputName" class="form-label mb-0 me-2">Lote</label>
+              <input type="text" class="form-control custom-input" formControlName="plot">
+          </div>         
+          <div class="col  d-flex justify-content-center align-items-center">
+              <label for="inputLastName" class="form-label mb-0 me-2">Manzana</label>
+              <input type="text" class="form-control custom-input" formControlName="block"> 
+          </div>
+      </div>
+
+      <div class="row mb-3">
+          <div class="col d-flex justify-content-center align-items-center">
+              <label for="inputEmail" class="form-label mb-0 me-2">Mts Total</label>
+              <input type="text" class="form-control custom-input" formControlName="total_area">
+          </div>
+          <div class="col d-flex justify-content-center align-items-center">
+              <label for="inputDni" class="form-label mb-0 me-2">Mts Construidos</label>
+              <input type="text" class="form-control custom-input" formControlName="built_area">
+          </div>
+      </div>
+
+      <div class="row mb-3">
+          <div class="col d-flex justify-content-center align-items-center">
+              <label for="inputTelefono" class="form-label mb-0 me-2">Tipo</label>
+              <input type="text" class="form-control custom-input" formControlName="type">
+          </div>
+          <div class="col d-flex justify-content-center align-items-center">
+              <label for="inputBirthdate" class="form-label mb-0 me-2">Estado</label>
+              <input type="date" class="form-control custom-input" formControlName="state">
+          </div>
+      </div>
+  </form>
+  </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeModal()">Atrás</button>
+        </div>
+    
+

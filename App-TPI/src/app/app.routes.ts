@@ -5,6 +5,8 @@ import { NewUserComponent } from './users-components/users/users-new-user/new-us
 import { ListUsersComponent } from './users-components/users/users-list-users/list-users.component';
 import { UsersUpdateUserComponent } from './users-components/users/users-update-user/users-update-user.component';
 import { UsersNewPlotComponent } from './users-components/plots/users-new-plot/users-new-plot.component';
+import { UsersListPlotsComponent } from './users-components/plots/users-list-plots/users-list-plots.component';
+import { UsersUpdatePlotComponent } from './users-components/plots/users-update-plot/users-update-plot.component';
 
 export const routes: Routes = [
     {
@@ -40,11 +42,20 @@ export const routes: Routes = [
                 ]
             },
             {
-                path: 'lote',
+                path: 'plots',
                 children: [
                     {
                         path: 'add',
                         component: UsersNewPlotComponent
+                    },
+                    {
+                        path: 'list',
+                        component: UsersListPlotsComponent
+                    }
+                    ,
+                    {
+                        path: 'edit/:id',
+                        component: UsersUpdatePlotComponent
                     }
                 ]
             }

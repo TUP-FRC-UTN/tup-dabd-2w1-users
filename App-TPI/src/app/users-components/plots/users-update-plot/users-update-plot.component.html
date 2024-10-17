@@ -1,6 +1,6 @@
 <section class="container p-5 border rounded border-3 border-secundary" style="min-height: 70vh;">
-    <h3>Añadir Lote</h3>
-    <form [formGroup]="formReactivo" (ngSubmit)="createPlot()">
+    <h3>Editar Lote</h3>
+    <form [formGroup]="formReactivo" (ngSubmit)="updatePlot()">
 
         <div class="row mb-3 mt-5">
             <div class="col d-flex flex-column">
@@ -9,12 +9,6 @@
                     <input type="number" class="form-control custom-input" formControlName="plotNumber" min="0"
                         [ngClass]="{'is-invalid': formReactivo.controls['plotNumber'].invalid  && (formReactivo.get('plotNumber')?.dirty|| formReactivo.get('plotNumber')?.touched),'is-valid': formReactivo.controls['plotNumber'].valid }">
                 </div>
-                @if(formReactivo.controls['plotNumber'].invalid && (formReactivo.controls['plotNumber'].dirty ||
-                formReactivo.controls['plotNumber'].touched)){
-                <div class="text-danger align-self-end" style="width: 500px;">
-                    Ingrese un número de lote
-                </div>
-                }
             </div>
             <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center justify-content-end">
@@ -22,17 +16,8 @@
                     <input type="number" class="form-control custom-input" formControlName="blockNumber"
                         [ngClass]="{'is-invalid': formReactivo.controls['blockNumber'].invalid  && (formReactivo.get('blockNumber')?.dirty|| formReactivo.get('blockNumber')?.touched),'is-valid': formReactivo.controls['blockNumber'].valid }">
                 </div>
-                @if(formReactivo.controls['blockNumber'].invalid && (formReactivo.controls['blockNumber'].dirty ||
-                formReactivo.controls['blockNumber'].touched)){
-                <div class="text-danger align-self-end" style="width: 500px;">
-                    Ingrese un número de manzana
-                </div>
-                }
             </div>
         </div>
-
-
-
         <div class="row mb-3 mt-5">
             <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center justify-content-end">
@@ -61,12 +46,6 @@
                 }
             </div>
         </div>
-
-
-
-
-
-
         <div class="row mb-3 mt-5">
             <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center justify-content-end">
@@ -113,7 +92,5 @@
                 <button class="btn btn-primary" type="submit" [disabled]="formReactivo.invalid">Guardar</button>
             </div>
         </div>
-
-
     </form>
 </section>
