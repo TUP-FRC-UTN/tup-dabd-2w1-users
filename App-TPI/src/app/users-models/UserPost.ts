@@ -10,7 +10,7 @@ export class UserPost {
     roles: string[];      
     password: string;
     phone_number: string;
-    user_update_id: number;
+    userUpdateId: number;
 
     constructor() {
         this.name = '';
@@ -24,6 +24,6 @@ export class UserPost {
         this.roles = [];
         this.password = '';
         this.phone_number = '';
-        this.user_update_id = 0;
+        this.userUpdateId = 0;
     }
 }

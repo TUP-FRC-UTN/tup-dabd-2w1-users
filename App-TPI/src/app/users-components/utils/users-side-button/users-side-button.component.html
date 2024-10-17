@@ -1,3 +1,5 @@
+@for(userRole of userRoles; track $index)
+{
 @if(info.roles.includes(userRole)){
     @if(!info.childButtons){
         <button class="nav-link d-flex text-light w-100" (click)="redirect(info.route!)" [title]="info.title">
@@ -21,4 +23,5 @@
             }
         }
     }
+}
 }

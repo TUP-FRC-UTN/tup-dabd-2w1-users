@@ -1,9 +1,9 @@
 export class LoginUser {
-    dni: string;
+    email: string;
     password: string;
 
     constructor() {
-        this.dni = "";
+        this.email = "";
         this.password = "";
     }
 }

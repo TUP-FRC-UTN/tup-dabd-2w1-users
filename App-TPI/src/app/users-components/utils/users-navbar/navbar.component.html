@@ -16,7 +16,7 @@
                 <ul class="nav flex-column">
                     <li class="nav-item mb-2">
                         @for (button of buttonsList; track $index) {
-                            <app-users-side-button [expanded]="expand" [info]="button" [userRole]="userRole"/>
+                            <app-users-side-button [expanded]="expand" [info]="button" [userRoles]="userRoles"/>
                         }
                     </li>
                 </ul>
