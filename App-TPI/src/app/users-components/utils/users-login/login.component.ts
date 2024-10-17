@@ -4,6 +4,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { ApiServiceService } from '../../../users-servicies/api-service.service';
 import { LoginUser } from '../../../users-models/Login';
 import { Router, RouterModule } from '@angular/router';
+import { LoginService } from '../../../users-servicies/login.service';
 
 @Component({
   selector: 'app-login',
@@ -22,6 +23,7 @@ export class LoginComponent {
   claveInput: string = "";
 
   private readonly apiService = inject(ApiServiceService);
+  private readonly loginService = inject(LoginService);
 
   loginForm = new FormGroup({
     name: new FormControl("", [Validators.required]),
@@ -41,7 +43,6 @@ export class LoginComponent {
         next: (data) => {
 
           if (data) {
-            alert("se logueo")
             this.router.navigate(['/home']);
           }
           else {
