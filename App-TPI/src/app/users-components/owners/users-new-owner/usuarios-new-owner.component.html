@@ -201,8 +201,8 @@
             <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center justify-content-end">
                     <label class="form-label mb-0 me-3 text-end">Número de teléfono</label>
-                    <input type="number" class="form-control custom-input" formControlName="phone"
-                    [ngClass]="{'is-invalid': formReactivo.controls['phone'].invalid  && (formReactivo.get('phone')?.dirty|| formReactivo.get('phone')?.touched),'phone-valid': formReactivo.controls['phone'].valid }">
+                    <input type="text" class="form-control custom-input" formControlName="phone"
+                    [ngClass]="{'is-invalid': formReactivo.controls['phone'].invalid  && (formReactivo.get('phone')?.dirty|| formReactivo.get('phone')?.touched),'is-valid': formReactivo.controls['phone'].valid }">
                 </div>   
                 @if(formReactivo.controls['phone'].invalid && (formReactivo.controls['phone'].dirty || formReactivo.controls['phone'].touched)){
                     <div class="text-danger align-self-end" style="width: 500px;">

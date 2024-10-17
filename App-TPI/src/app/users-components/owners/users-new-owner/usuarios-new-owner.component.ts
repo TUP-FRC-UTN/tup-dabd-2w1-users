@@ -7,9 +7,10 @@ import { OwnerStateModel } from '../../../users-models/OwnerState';
 import { ApiServiceService } from '../../../users-servicies/api-service.service';
 import { RolModel } from '../../../users-models/Rol';
 import { UsersSelectMultipleComponent } from '../../utils/users-select-multiple/users-select-multiple.component';
-import { PlotModel } from '../../../users-models/Plot';
 import { PlotService } from '../../../users-servicies/plot.service';
 import { GetPlotDto } from '../../../users-models/GetPlotDto';
+import { OwnerModel } from '../../../users-models/PostOwnerDto';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-usuarios-new-owner',
@@ -34,7 +35,7 @@ export class UsuariosNewOwnerComponent {
     lastname: new FormControl("", [Validators.required]),
     dni: new FormControl("", [Validators.required]),
     cuit_cuil: new FormControl("", [Validators.required]),
-    birthdate: new FormControl("", [Validators.required]),
+    birthdate: new FormControl(null, [Validators.required]),
     email: new FormControl("", [Validators.required]),
     state: new FormControl(null, [Validators.required]),
     type: new FormControl(null, [Validators.required]),
@@ -42,7 +43,7 @@ export class UsuariosNewOwnerComponent {
     password: new FormControl("", [Validators.required]),
     rol: new FormControl(""),
     lote: new FormControl(null, [Validators.required]),
-    phone: new FormControl(null, [Validators.required]),
+    phone: new FormControl('', [Validators.required]),
     nombreNegocio: new FormControl('')
   });
 
@@ -114,6 +115,39 @@ export class UsuariosNewOwnerComponent {
   }
 
   createOwner() {
-    console.log(this.formReactivo.value);
+    const owner: OwnerModel = {
+      name: this.formReactivo.get('name')?.value || '',
+      lastname: this.formReactivo.get('lastname')?.value || '',
+      dni: this.formReactivo.get('dni')?.value || '',
+      cuitCuil: this.formReactivo.get('cuit_cuil')?.value || '',
+      dateBirth: this.formReactivo.get('birthdate')?.value || new Date(),
+      ownerTypeId: this.formReactivo.get('type')?.value || 0,
+      taxStatusId: this.formReactivo.get('state')?.value || 0,
+      active: true,
+      username: this.formReactivo.get('username')?.value || '',
+      password: this.formReactivo.get('password')?.value || '',
+      email: this.formReactivo.get('email')?.value || '',
+      phoneNumber: this.formReactivo.get('phone')?.value || '',
+      avatarUrl: 'nada',
+      roles: this.rolesSelected,
+      userCreateId: 1,
+      plotId: this.formReactivo.get('lote')?.value || 0
+    }
+
+
+    this.ownerService.postOwner(owner).subscribe({
+      next: (response) => {
+        Swal.fire({
+          icon: "success",
+          title: "Propietario guardado",
+          showConfirmButton: false,
+          timer: 1460
+        });
+      },
+      error: (error) => {
+        console.error('Error al crear el propietario:', error);
+        alert("Error al crear el propietario");
+      }
+    });
   }
 }

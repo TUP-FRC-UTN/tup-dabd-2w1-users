@@ -85,7 +85,7 @@ export class UsersNewPlotComponent {
       },
       error: (error) => {
         console.error('Error al crear el lote:', error);
-        alert("Error al crear la canción!");
+        alert("Error al crear el lote");
       }
     });
   }

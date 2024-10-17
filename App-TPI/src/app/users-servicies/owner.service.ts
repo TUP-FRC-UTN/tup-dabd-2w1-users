@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { OwnerTypeModel } from '../users-models/OwnerType';
 import { Observable } from 'rxjs';
 import { OwnerStateModel } from '../users-models/OwnerState';
+import { OwnerModel } from '../users-models/PostOwnerDto';
 
 @Injectable({
   providedIn: 'root'
@@ -23,4 +24,8 @@ export class OwnerService {
     return this.http.get<OwnerStateModel[]>(this.urlOwnerStates);
   }
 
+  postOwner(owner: OwnerModel): Observable<OwnerModel>{
+    return this.http.post<OwnerModel>('http://localhost:8081/owners', owner);
+  }
+  
 }
