@@ -46,6 +46,7 @@ export class UsersNewPlotComponent {
 
     this.plotService.getAllTypes().subscribe({
       next: (data: PlotTypeModel[]) => {
+        
         this.types = data;
       },
       error: (err) => {
@@ -53,8 +54,9 @@ export class UsersNewPlotComponent {
       }
     });
 
-    this.plotService.getAllStates().subscribe({
+    this.plotService.getAllStates().subscribe({ 
       next: (data: PlotStateModel[]) => {
+        console.log(data);
         this.states = data;
       },
       error: (err) => {
@@ -68,7 +70,7 @@ export class UsersNewPlotComponent {
       plot_number: this.formReactivo.get('plotNumber')?.value || 0,
       block_number: this.formReactivo.get('blockNumber')?.value || 0,
       total_area_in_m2: this.formReactivo.get('totalArea')?.value || 0,
-      built_area_in_m2: this.formReactivo.get('totalBuild')?.value || 0,
+      built_area_in_m2: this.formReactivo.get('totalBuild')?.value ||0,
       plot_state_id: this.formReactivo.get('state')?.value || 0,
       plot_type_id: this.formReactivo.get('type')?.value || 0
     }
@@ -82,10 +84,11 @@ export class UsersNewPlotComponent {
           timer: 1500
         });
         this.resetForm();
+        this.ngOnInit();
       },
       error: (error) => {
         console.error('Error al crear el lote:', error);
-        alert("Error al crear la canción!");
+        alert("Error al crear el lote");
       }
     });
   }

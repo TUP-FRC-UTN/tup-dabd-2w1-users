@@ -10,6 +10,7 @@ export class UserPost {
     roles: string[];      
     password: string;
     phone_number: string;
+    user_update_id: number;
 
     constructor() {
         this.name = '';
@@ -22,6 +23,7 @@ export class UserPost {
         this.datebirth = '';
         this.roles = [];
         this.password = '';
-        this.phone_number = ''
+        this.phone_number = '';
+        this.user_update_id = 0;
     }
 }

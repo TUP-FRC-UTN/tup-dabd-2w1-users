@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UsersModalPlotComponent } from './users-modal-plot.component';
+import { UsersUpdatePlotComponent } from './users-update-plot.component';
 
-describe('UsersModalPlotComponent', () => {
-  let component: UsersModalPlotComponent;
-  let fixture: ComponentFixture<UsersModalPlotComponent>;
+describe('UsersUpdatePlotComponent', () => {
+  let component: UsersUpdatePlotComponent;
+  let fixture: ComponentFixture<UsersUpdatePlotComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UsersModalPlotComponent]
+      imports: [UsersUpdatePlotComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(UsersModalPlotComponent);
+    fixture = TestBed.createComponent(UsersUpdatePlotComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
