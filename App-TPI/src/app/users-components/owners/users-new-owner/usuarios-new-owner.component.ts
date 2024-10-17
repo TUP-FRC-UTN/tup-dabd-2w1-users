@@ -69,7 +69,8 @@ export class UsuariosNewOwnerComponent {
       }
     });
 
-    this.plotService.getAllPlots().subscribe({
+    //SOLO MUESTRA LOS LOTES DISPONIBLES
+    this.plotService.getAllPlotsAvailables().subscribe({
       next: (data: GetPlotDto[]) => {
         this.lotes = data;
       },
