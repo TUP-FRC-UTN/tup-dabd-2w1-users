@@ -83,9 +83,9 @@ export class UsersUpdateOwnerComponent implements OnInit {
       dni: form.get('dni')?.value,
       cuitCuil: form.get('cuitCuil')?.value,
       dateBirth: form.get('birthdate')?.value,
-      ownerTypeId: form.get('ownerType')?.value,
-      taxStatusId: form.get('taxStatus')?.value,
-      bussinesName: form.get('bussinesName')?.value,
+      ownerTypeId: 1,//form.get('ownerType')?.value,
+      taxStatusId: 1,//form.get('taxStatus')?.value,
+      businessName: form.get('bussinesName')?.value,
       phoneNumber: form.get('phoneNumber')?.value,
       email: form.get('email')?.value
     } as PutOwnerDto

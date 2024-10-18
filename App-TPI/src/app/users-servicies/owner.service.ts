@@ -37,7 +37,7 @@ export class OwnerService {
     return this.http.post<OwnerModel>(this.url + 'owners', owner);
   }
   
-  putOwner(owner: PutOwnerDto, id : number): Observable<OwnerModel>{
-    return this.http.put<OwnerModel>(this.url + `owners?ownerId=${id}`, owner)
+  putOwner(owner: PutOwnerDto, ownerId : number): Observable<OwnerModel>{
+    return this.http.put<OwnerModel>(this.url + `owners/${ownerId}`, owner)
   }
 }

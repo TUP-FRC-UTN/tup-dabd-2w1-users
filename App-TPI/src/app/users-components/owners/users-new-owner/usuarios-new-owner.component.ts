@@ -132,9 +132,12 @@ export class UsuariosNewOwnerComponent {
       avatarUrl: 'nada',
       roles: this.rolesSelected,
       userCreateId: 1,
-      plotId: this.formReactivo.get('lote')?.value || 0
+      plotId: this.formReactivo.get('lote')?.value || 0,
+      telegramId: 0
     }
 
+    console.log(owner);
+    
 
     this.ownerService.postOwner(owner).subscribe({
       next: (response) => {

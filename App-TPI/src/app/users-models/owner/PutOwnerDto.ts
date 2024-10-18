@@ -6,7 +6,7 @@ export class PutOwnerDto {
     dateBirth: Date;
     ownerTypeId: number;
     taxStatusId: number;
-    bussinesName?: string;
+    businessName?: string;
     phoneNumber: string;
     email: string;
     userUpdateId : number;
