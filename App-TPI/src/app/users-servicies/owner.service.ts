@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { OwnerStateModel } from '../users-models/OwnerState';
 import { OwnerModel } from '../users-models/owner/PostOwnerDto';
 import { Owner } from '../users-models/owner/Owner';
+import { PutOwnerDto } from '../users-models/owner/PutOwnerDto';
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +37,7 @@ export class OwnerService {
     return this.http.post<OwnerModel>(this.url + 'owners', owner);
   }
   
-  putOwner(owner: OwnerModel, id : number): Observable<OwnerModel>{
-    return this.http.put<OwnerModel>(this.url + 'owners/' + id, owner)
+  putOwner(owner: PutOwnerDto, id : number): Observable<OwnerModel>{
+    return this.http.put<OwnerModel>(this.url + `owners?ownerId=${id}`, owner)
   }
 }

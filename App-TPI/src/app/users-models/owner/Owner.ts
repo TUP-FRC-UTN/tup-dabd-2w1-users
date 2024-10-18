@@ -5,11 +5,12 @@ export class Owner{
     lastname: string;
     dni: string;
     cuitCuil: string;
-    dateBirth: Date;
-    businessName: string;
+    dateBirth: string;
+    bussinesName: string;
     taxStatus: string;
     active: boolean;
     ownerType: string;
+
     // files: string[]
 
     constructor(){
@@ -18,8 +19,8 @@ export class Owner{
         this.lastname = "";
         this.dni = "";
         this.cuitCuil = "";
-        this.dateBirth = new Date();
-        this.businessName = "";
+        this.dateBirth = "";
+        this.bussinesName = "";
         this.taxStatus = "";
         this.active = true;
         this.ownerType = "";

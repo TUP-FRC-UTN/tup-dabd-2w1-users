@@ -7,15 +7,10 @@ export class PutOwnerDto {
     ownerTypeId: number;
     taxStatusId: number;
     bussinesName?: string;
-    active: boolean;
-    username: string;
-    password: string;
-    email: string;
     phoneNumber: string;
-    avatarUrl: string;
-    roles: string[];
-    userCreateId: number;
-    plotId: number;
+    email: string;
+    userUpdateId : number;
+    active: boolean;
 
     constructor() {
         this.name = '';        
@@ -24,15 +19,10 @@ export class PutOwnerDto {
         this.cuitCuil = '';          
         this.dateBirth = new Date();
         this.ownerTypeId = 0;        
-        this.taxStatusId = 0;   
-        this.active = true;        
-        this.username = '';       
-        this.password = '';     
-        this.email = '';          
-        this.phoneNumber = '';  
-        this.avatarUrl = '';
-        this.roles = [];
-        this.userCreateId = 0;
-        this.plotId = 0;
+        this.taxStatusId = 0;
+        this.phoneNumber = '';
+        this.email = '';
+        this.userUpdateId = 0; 
+        this.active = true;
     }
 }

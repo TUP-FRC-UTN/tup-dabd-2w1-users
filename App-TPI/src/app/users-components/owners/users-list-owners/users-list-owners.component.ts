@@ -195,7 +195,7 @@ export class UsersListOwnersComponent {
   
   redirectEdit(id: number) {
     console.log("b");
-    this.router.navigate(['/home/owners/edit', id])
+    this.router.navigate(['/home/owner/edit', id])
   }
 
   // Busca el user y se lo pasa al modal
