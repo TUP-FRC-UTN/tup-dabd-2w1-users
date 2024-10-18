@@ -1,0 +1,98 @@
+<div class="modal fade" id="infoOwner" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Modificar Propietario</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form >
+            <div class="row mb-3 mt-4">
+                <div class="col-md-6">
+                  <div class="d-flex align-items-center">
+                    <label class="form-label mb-0 me-3 text-center" style="width: 140px;" for="name">Nombre</label>
+                    <input type="text" class="form-control custom-input" formControlName="name" id="name">
+                  </div>   
+                </div>
+                <div class="col-md-6">
+                  <div class="d-flex align-items-center">
+                    <label class="form-label mb-0 me-3 text-center" style="width: 140px;" for="lastname">Apellido</label>
+                    <input type="text" class="form-control custom-input" formControlName="lastname" id="lastname">
+                  </div>   
+                </div>
+            </div>
+  
+            <div class="row mb-3 mt-4">
+                <div class="col-md-6">
+                  <div class="d-flex align-items-center">
+                    <label class="form-label mb-0 me-3 text-center" style="width: 140px;" for="dni">DNI</label>
+                    <input type="text" class="form-control custom-input" formControlName="dni" id="dni">
+                  </div>   
+                </div>
+                <div class="col-md-6">
+                  <div class="d-flex align-items-center">
+                    <label class="form-label mb-0 me-3 text-center" style="width: 140px;" for="cuit_cuil">CUIT - CUIL</label>
+                    <input type="text" class="form-control custom-input" formControlName="cuitCuil" id="cuit_cuil">
+                  </div>   
+                </div>
+            </div>
+
+            <div class="row mb-3 mt-4">
+                <div class="col-md-6">
+                  <div class="d-flex align-items-center">
+                    <label class="form-label mb-0 me-3 text-center" style="width: 140px;" for="phone">Teléfono</label>
+                    <input type="text" class="form-control custom-input" formControlName="phone" id="phone">
+                  </div>   
+                </div>
+                <div class="col-md-6">
+                  <div class="d-flex align-items-center">
+                    <label class="form-label mb-0 me-3 text-end" style="width: 140px;" for="email">Email</label>
+                    <input type="text" class="form-control custom-input" formControlName="email" id="email">
+                  </div>   
+                </div>
+            </div>
+
+            <div class="row mb-3 mt-4">
+                <div class="col-md-6">
+                  <div class="d-flex align-items-center">
+                    <label class="form-label mb-0 me-3 text-center" style="width: 140px;" for="birthdate">Fecha de nacimiento</label>
+                    <input type="text" class="form-control custom-input" formControlName="birthdate" id="birthdate">
+                  </div>   
+                </div>
+                <div class="col-md-6">
+                  <div class="d-flex align-items-center">
+                    <label class="form-label mb-0 me-3 text-center" style="width: 140px;" for="company">Empresa (opcional)</label>
+                    <input type="text" class="form-control custom-input" formControlName="company" id="company">
+                  </div>   
+                </div>
+            </div>
+  
+            <div class="row mb-4">
+                <div class="col-md-6">
+                  <div class="d-flex align-items-center">
+                    <label class="form-label mb-0 me-3 text-center" style="width: 140px;">Lote</label>
+                    <select class="form-select custom-input" formControlName="lote">
+                      <option value="" disabled>Seleccione un lote</option>
+                      <!-- <option *ngFor="let lote of lotes" [value]="lote.id">{{ lote.nombre }}</option> -->
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="d-flex align-items-center">
+                    <label class="form-label mb-0 me-3 text-center" style="width: 140px;">Archivos</label>
+                    <button type="button" class="btn btn-secondary">Agregar archivo</button>
+                  </div>
+                </div>
+              </div>
+          </form>
+        </div>
+  
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger">Dar de baja</button>
+          <button type="button" class="btn btn-primary">Guardar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </div>
+    </div>
+</div>

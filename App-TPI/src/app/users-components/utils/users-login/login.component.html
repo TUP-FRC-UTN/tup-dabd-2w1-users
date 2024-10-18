@@ -1,0 +1,65 @@
+<section class="fondo bg-dark min-vh-100 d-flex align-items-center justify-content-center">
+    <div class="container">
+        <form [formGroup]="loginForm" action="" (ngSubmit)="login()" autocomplete="on">
+            <div class="row mb-3">
+                <h2>Inicio de sesión</h2>
+            </div>
+    
+            <div class="row mb-3 align-items-center d-flex">
+                <div class="col-3 text-end">
+                    <label for="inputCorreo" class="form-label">Email</label>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control custom-input" 
+                           formControlName="email" autocomplete="email">
+                    @if(loginForm.get('email')?.dirty || loginForm.get('email')?.touched){
+                        @if(loginForm.controls['email'].errors?.["required"]){
+                            Ingrese su nombre
+                        }
+                        @if(loginForm.controls['email'].errors?.["maxlength"]){
+                            El nombre no puede superar los 50 caracteres
+                        }
+                    }
+                </div>
+            </div>
+    
+            <div class="row mb-3 align-items-center d-flex">
+                <div class="col-3 text-end">
+                    <label for="inputClave" class="form-label">Contraseña</label>
+                </div>
+                <div class="col">
+                    <input type="password" class="form-control custom-input" 
+                           formControlName="password" autocomplete="current-password">
+                    @if(loginForm.get('password')?.dirty || loginForm.get('password')?.touched){
+                        @if(loginForm.controls['password'].errors?.["required"]){
+                            Ingrese su nombre
+                        }
+                        @if(loginForm.controls['password'].errors?.["maxlength"]){
+                            El nombre no puede superar los 50 caracteres
+                        }
+                    }
+                </div>
+            </div>
+    
+            <div class="row mb-3">
+                <div class="col">
+                    @if(loginForm.invalid){
+                        <button type="submit" class="btn btn-dark rounded-pill w-100" disabled>Ingresar</button>
+
+                    }@else {
+                        <button type="submit" class="btn btn-dark rounded-pill w-100">Ingresar</button>
+                    }
+
+                </div>
+            </div>
+    
+            <div class="row">
+                <div class="col text-center">
+                    <a class="custom-link" href="#" style="color: black;">
+                        ¿Olvidaste tu contraseña?
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>    
+</section>

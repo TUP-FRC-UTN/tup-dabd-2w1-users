@@ -1,0 +1,72 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Información del Usuario</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="editUser">
+      <div class="row mb-3">
+          <div class="col">
+              <label for="inputName" class="form-label">Nombre</label>
+              <input type="text" class="form-control custom-input" formControlName="name">
+          </div>
+          <div class="col">
+              <label for="inputLastName" class="form-label">Apellido</label>
+              <input type="text" class="form-control custom-input" formControlName="lastName"> 
+          </div>
+      </div>
+
+      <div class="row mb-3">
+          <div class="col">
+              <label for="inputEmail" class="form-label">Email</label>
+              <input type="text" class="form-control custom-input" formControlName="email">
+          </div>
+          <div class="col">
+              <label for="inputDni" class="form-label">Dni</label>
+              <input type="text" class="form-control custom-input" formControlName="dni">
+          </div>
+      </div>
+
+      <div class="row mb-3">
+          <div class="col">
+              <label for="inputTelefono" class="form-label">Teléfono</label>
+              <input type="text" class="form-control custom-input" formControlName="phoneNumber">
+          </div>
+          <div class="col">
+              <label for="inputBirthdate" class="form-label">Fecha de nacimiento</label>
+              <input type="date" class="form-control custom-input" formControlName="birthdate">
+          </div>
+      </div>
+
+      <div>
+          <div class="row mb-3">
+              <div class="col">
+                  <label for="exampleInputEmail1" class="form-label">Roles</label>
+                  <div class="container">
+                      @for (rol of userModal.roles; track $index) {
+                          <p>{{rol}}</p>
+                      }
+                  </div>
+                      
+              </div>
+          </div>
+      </div>
+  </form>
+  </div>
+  @if(typeModal == "info"){
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeModal()">Atrás</button>
+      </div>
+    }
+  @if(typeModal == "delete") {
+    <div class="modal-footer">
+        <div class="row mb-3 ">
+            <div class="col-auto">
+                <button type="submit" class="btn btn-danger" (click)="confirmDelete()">Eliminar</button>
+            </div>
+            <div class="col-auto">
+                <button type="button" class="btn btn-secondary" id="btn-close" data-bs-dismiss="modal" (click)="closeModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+  }
+  

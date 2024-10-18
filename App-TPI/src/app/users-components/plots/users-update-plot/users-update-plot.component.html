@@ -1,0 +1,96 @@
+<section class="container p-5 border rounded border-3 border-secundary" style="min-height: 70vh;">
+    <h3>Editar Lote</h3>
+    <form [formGroup]="formReactivo" (ngSubmit)="updatePlot()">
+
+        <div class="row mb-3 mt-5">
+            <div class="col d-flex flex-column">
+                <div class="d-flex align-items-center justify-content-end">
+                    <label class="form-label mb-0 me-3 text-end">N. de lote</label>
+                    <input type="number" class="form-control custom-input" formControlName="plotNumber" min="0"
+                        [ngClass]="{'is-invalid': formReactivo.controls['plotNumber'].invalid  && (formReactivo.get('plotNumber')?.dirty|| formReactivo.get('plotNumber')?.touched),'is-valid': formReactivo.controls['plotNumber'].valid }">
+                </div>
+            </div>
+            <div class="col d-flex flex-column">
+                <div class="d-flex align-items-center justify-content-end">
+                    <label class="form-label mb-0 me-3 text-end">N. de manzana</label>
+                    <input type="number" class="form-control custom-input" formControlName="blockNumber"
+                        [ngClass]="{'is-invalid': formReactivo.controls['blockNumber'].invalid  && (formReactivo.get('blockNumber')?.dirty|| formReactivo.get('blockNumber')?.touched),'is-valid': formReactivo.controls['blockNumber'].valid }">
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3 mt-5">
+            <div class="col d-flex flex-column">
+                <div class="d-flex align-items-center justify-content-end">
+                    <label class="form-label mb-0 me-3 text-end">Terreno del lote</label>
+                    <input type="number" class="form-control custom-input" formControlName="totalArea"
+                        [ngClass]="{'is-invalid': formReactivo.controls['totalArea'].invalid  && (formReactivo.get('totalArea')?.dirty|| formReactivo.get('totalArea')?.touched),'is-valid': formReactivo.controls['totalArea'].valid }">
+                </div>
+                @if(formReactivo.controls['totalArea'].invalid && (formReactivo.controls['totalArea'].dirty ||
+                formReactivo.controls['totalArea'].touched)){
+                <div class="text-danger align-self-end" style="width: 500px;">
+                    Ingrese un área de lote
+                </div>
+                }
+            </div>
+            <div class="col d-flex flex-column">
+                <div class="d-flex align-items-center justify-content-end">
+                    <label class="form-label mb-0 me-3 text-end">Área construida</label>
+                    <input type="number" class="form-control custom-input" formControlName="totalBuild"
+                        [ngClass]="{'is-invalid': formReactivo.controls['totalBuild'].invalid  && (formReactivo.get('totalBuild')?.dirty|| formReactivo.get('totalBuild')?.touched),'is-valid': formReactivo.controls['totalBuild'].valid }">
+                </div>
+                @if(formReactivo.controls['totalBuild'].invalid && (formReactivo.controls['totalBuild'].dirty ||
+                formReactivo.controls['totalBuild'].touched)){
+                <div class="text-danger align-self-end" style="width: 500px;">
+                    Ingrese una cantidad de metros construídos
+                </div>
+                }
+            </div>
+        </div>
+        <div class="row mb-3 mt-5">
+            <div class="col d-flex flex-column">
+                <div class="d-flex align-items-center justify-content-end">
+                    <label class="form-label mb-0 me-3 text-end">Estado</label>
+                     <!-- <div class="d-flex" style="flex: 1;"> -->
+                        <select class="form-select form-control me-2" id="stateId" formControlName="state" style="width: 418px;"
+                            [ngClass]="{'is-invalid': formReactivo.controls['state'].invalid  && (formReactivo.get('state')?.dirty|| formReactivo.get('state')?.touched),'is-valid': formReactivo.controls['state'].valid }">
+                            @for (s of states; track $index) {
+                            <option value="{{s.id}}">{{s.name}}</option>
+                            }
+                        </select>
+                    <!-- </div> -->
+                </div>
+                @if(formReactivo.controls['state'].invalid && (formReactivo.get('state')?.dirty ||
+                formReactivo.get('state')?.touched)){
+                <div class="text-danger align-self-end" style="width: 500px;">
+                    Seleccione un estado
+                </div>
+                }
+            </div>
+            <div class="col d-flex flex-column">
+                <div class="d-flex align-items-center justify-content-end">
+                    <label class="form-label mb-0 me-3 text-end">Tipo</label>
+                     <!-- <div class="d-flex" style="flex: 1;"> -->
+                        <select class="form-select  form-control me-2" id="stateId" formControlName="type" style="width: 418px;" placeholder="Seleccione un tipo"
+                            [ngClass]="{'is-invalid': formReactivo.controls['type'].invalid  && (formReactivo.get('type')?.dirty|| formReactivo.get('type')?.touched),'is-valid': formReactivo.controls['type'].valid }">
+                            @for (t of types; track $index) {
+                            <option value="{{t.id}}">{{t.name}}</option>
+                            }
+                        </select>
+                    <!-- </div> -->
+                </div>
+                @if(formReactivo.controls['type'].invalid && (formReactivo.get('type')?.dirty ||
+                formReactivo.get('type')?.touched)){
+                <div class="text-danger align-self-end" style="width: 500px;">
+                    Seleccione un tipo de lote
+                </div>
+                }
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col text-end">
+                <button class="btn btn-primary" type="submit" [disabled]="formReactivo.invalid">Guardar</button>
+            </div>
+        </div>
+    </form>
+</section>
