@@ -33,7 +33,58 @@ export class UsersListPlotsComponent {
 
   constructor(private router: Router,private modal: NgbModal) { }
 
+  exportPdf() {
+    const doc = new jsPDF();
+
+    const title = 'Lista de Lotes';
+    const pageWidth = doc.internal.pageSize.getWidth();
+    doc.setFontSize(16);
+    const textWidth = doc.getTextWidth(title);
+    doc.text(title, (pageWidth - textWidth) / 2, 20);
+    const columns = ['Lote', 'Manzana', 'Mts.2 Terreno', 'Mts.2 Construidos', 'Tipo Lote', 'Estado'];
   
+    const table = $('#myTable').DataTable();
+    const visibleRows = table.rows({ search: 'applied' }).data().toArray();
+  
+    const rows = visibleRows.map((row: any) => [
+      `${row[0]}`,
+      `${row[1]}`,
+      `${row[2]}`,
+      `${row[3]}`,
+      `${row[4]}`, 
+      `${row[5]}`, 
+    ]);
+  
+    autoTable(doc, {
+      head: [columns],
+      body: rows,
+      startY: 30,
+      theme: 'striped',
+      headStyles: { fillColor: [0, 0, 0] },
+      styles: { halign: 'center', valign: 'middle' },
+      tableWidth: 'auto',
+      margin: { top: 30, left: 20, right: 20 },
+    });
+  
+    doc.save('lotes.pdf');
+  }
+  
+    exportExcel() {
+        const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.plots.map(lote => ({
+          Lote: lote.plot_number,
+          Manzana: lote.block_number,
+          Mts2Terreno: lote.total_area_in_m2,
+          Mts2Construidos: lote.built_area_in_m2,
+          TipoLote: lote.plot_type,
+          Estado: lote.plot_state,
+        })));
+      
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Lotes');
+      
+        XLSX.writeFile(wb, 'lotes.xlsx');    
+    }
+    
 
   ngOnInit() {
     this.apiService.getAllPlots().subscribe({
