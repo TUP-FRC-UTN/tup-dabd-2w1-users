@@ -8,6 +8,7 @@ export class UserPut {
     datebirth: string;    
     roles: string[];      
     userUpdateId: number;
+    telegram_id: number;
 
     constructor() {
         this.name = '';
@@ -19,5 +20,6 @@ export class UserPut {
         this.roles = [];
         this.phoneNumber = '';
         this.userUpdateId= 0;
+        this.telegram_id = 0;
     }
 }

@@ -8,6 +8,7 @@ import { UserPut } from '../../../users-models/UserPut';
 import { data } from 'jquery';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UsersSelectMultipleComponent } from '../../utils/users-select-multiple/users-select-multiple.component';
+import { LoginComponent } from '../../utils/users-login/login.component';
 
 @Component({
   selector: 'app-users-update-user',
@@ -58,12 +59,11 @@ export class UsersUpdateUserComponent implements OnInit {
     const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
 
     user.datebirth = formattedDate;
-
-    
-
-    user.roles = this.rolesInput || ['Admin']; // Asegúrate de que roles sea un arreglo
-
+    user.roles = this.rolesInput || ['Admin']; // Asegúrate de que roles sea un arreglo    
     console.log(user);
+
+    console.log(this.id);
+    
 
     // Llama al servicio para actualizar el usuario
     this.apiService.putUser(user, parseInt(this.id)).subscribe({

@@ -89,26 +89,10 @@ export class NewUserComponent implements OnInit {
     });
   }
 
-  aniadirRol() {
-    console.log(this.formReactivo.errors);
-    
-    const rolSeleccionado = this.formReactivo.get('rol')?.value;
-    if (rolSeleccionado && !this.rolesInput.includes(rolSeleccionado)) {  
-      this.rolesInput.push(rolSeleccionado);  
-    }
-    this.formReactivo.get('rol')?.setValue('');
-  }
-
   redirect(path:string){
     this.router.navigate([path]);
   }
 
-  quitarRol(rol: string) {
-    const index = this.rolesInput.indexOf(rol);
-    if (index > -1) {
-      this.rolesInput.splice(index, 1);
-    }
-  }
 
   resetForm() {
     this.formReactivo.reset();
@@ -132,7 +116,9 @@ export class NewUserComponent implements OnInit {
                     new Date(fechaValue).toISOString().split('T')[0] : '',
       roles: this.rolesSelected,
       phone_number: this.formReactivo.get('telefono')?.value || '',
-      userUpdateId: 5
+      userUpdateId: 5,
+      telegram_id: 0,
+      plot_id: 0
     };
 
     console.log(userData);

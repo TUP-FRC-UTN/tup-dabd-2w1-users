@@ -11,6 +11,8 @@ export class UserPost {
     password: string;
     phone_number: string;
     userUpdateId: number;
+    telegram_id: number;
+    plot_id: number;
 
     constructor() {
         this.name = '';
@@ -25,5 +27,7 @@ export class UserPost {
         this.password = '';
         this.phone_number = '';
         this.userUpdateId = 0;
+        this.telegram_id = 0;
+        this.plot_id = 0;
     }
 }

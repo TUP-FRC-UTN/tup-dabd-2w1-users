@@ -88,7 +88,7 @@ export class UsersProfileComponent implements OnInit {
 
 ngOnInit(): void {
   // cuando se este logueado hay que poner esto this.loginService.getUserId()!
-  this.usersService.getUserById(1).subscribe({
+  this.usersService.getUserById(2).subscribe({
       next: (user: UserModel) => {
           this.user = user;
           console.log(user);
@@ -152,7 +152,7 @@ ngOnInit(): void {
     user.phoneNumber = this.formReactivo.get('telefono')?.value?.toString() || '';
     user.email = this.formReactivo.get('email')?.value || '';
     user.avatar_url = this.selectedIconUrl;
-
+    user.telegram_id = 0;
     // Formatea la fecha correctamente (año-mes-día)
     const date: Date = new Date(this.formReactivo.get('fecha')?.value || '');
 
@@ -160,16 +160,13 @@ ngOnInit(): void {
     const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
 
     user.datebirth = formattedDate;
-
-    
-
     user.roles = this.formReactivo.get('roles')?.value || [];
 
 
     console.log(user);
 
     // Llama al servicio para actualizar el usuario
-    this.usersService.putUser(user, 1).subscribe({
+    this.usersService.putUser(user, 2).subscribe({
         next: (response) => {
             console.log('Usuario actualizado exitosamente:', response);
             alert('Usuario actualizado exitosamente');
