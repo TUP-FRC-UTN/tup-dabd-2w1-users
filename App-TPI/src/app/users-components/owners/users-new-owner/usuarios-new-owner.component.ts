@@ -146,8 +146,12 @@ export class UsuariosNewOwnerComponent {
         });
       },
       error: (error) => {
-        console.error('Error al crear el propietario:', error);
-        alert("Error al crear el propietario");
+        Swal.fire({
+          icon: "error",
+          title: "Error al guardar los cambios",
+          showConfirmButton: false,
+          timer: 1460
+        });
       }
     });
   }

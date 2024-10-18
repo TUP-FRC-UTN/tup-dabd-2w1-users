@@ -8,6 +8,8 @@ import { UsersNewPlotComponent } from './users-components/plots/users-new-plot/u
 import { UsersListPlotsComponent } from './users-components/plots/users-list-plots/users-list-plots.component';
 import { UsersUpdatePlotComponent } from './users-components/plots/users-update-plot/users-update-plot.component';
 import { UsuariosNewOwnerComponent } from './users-components/owners/users-new-owner/usuarios-new-owner.component';
+import { UsersUpdateOwnerComponent } from './users-components/owners/users-update-owner/users-update-owner.component';
+import { UsersListOwnersComponent } from './users-components/owners/users-list-owners/users-list-owners.component';
 
 export const routes: Routes = [
     {
@@ -66,6 +68,14 @@ export const routes: Routes = [
                     {
                         path: 'add',
                         component: UsuariosNewOwnerComponent
+                    },
+                    {
+                        path: 'edit/:id',
+                        component: UsersUpdateOwnerComponent
+                    },
+                    {
+                        path: 'list',
+                        component: UsersListOwnersComponent
                     }
                 ]
             }
