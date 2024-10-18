@@ -36,7 +36,7 @@ export class NavbarComponent implements OnInit {
       {
         icon: "bi-person",
         title: "Perfil",
-        route: "/profile",
+        route: "home/users/profile",
         roles: ["SuperAdmin", "Admin", "Security", "Owner", "Spouse", "FamilyOld", "FamilyYoung", "Tenant"] //ver
       },
       {

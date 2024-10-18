@@ -7,7 +7,7 @@ export class UserPut {
     avatar_url: string;   
     datebirth: string;    
     roles: string[];      
-    user_update_id: number;
+    userUpdateId: number;
 
     constructor() {
         this.name = '';
@@ -18,6 +18,6 @@ export class UserPut {
         this.datebirth = '';
         this.roles = [];
         this.phoneNumber = '';
-        this.user_update_id= 0;
+        this.userUpdateId= 0;
     }
 }
