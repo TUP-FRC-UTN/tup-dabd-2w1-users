@@ -7,6 +7,7 @@ import { UserPost } from '../users-models/UserPost';
 import { LoginUser } from '../users-models/Login';
 import { UserPut } from '../users-models/UserPut';
 import { map } from 'rxjs/operators';
+import { DeleteUser } from '../users-models/owner/DeleteUser';
 
 @Injectable({
   providedIn: 'root'
@@ -44,10 +45,10 @@ export class ApiServiceService {
   } 
 
   putUser(user: UserPut, id: number): Observable<UserPut> {
-    return this.http.put<UserPut>(`${this.url}users/${id}`, user); // Incluye el ID en la URL
+    return this.http.put<UserPut>(`${this.url}users/${id}`, user);
   }
 
-  desactivateUser(id: number): Observable<any> {
-    return this.http.delete(`${this.url}users/${id}`); // Asegúrate de que la URL sea correcta
+  desactivateUser( user: DeleteUser): Observable<any> {
+    return this.http.delete(`${this.url}users/${user.id}/${user.userIdUpdate}`); 
   }
 }

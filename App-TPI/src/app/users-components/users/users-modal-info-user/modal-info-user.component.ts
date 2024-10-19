@@ -5,6 +5,7 @@ import { UserModel } from '../../../users-models/User';
 import { ApiServiceService } from '../../../users-servicies/api-service.service';
 import Swal from 'sweetalert2';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { DeleteUser } from '../../../users-models/owner/DeleteUser';
 
 
 @Component({
@@ -82,8 +83,11 @@ export class ModalInfoUserComponent implements OnInit {
     return formatDate(date, 'yyyy-MM-dd', 'en-US');
   }
 
-  confirmDeactivate() {
-    this.apiService.desactivateUser(this.userModal.id).subscribe({
+  confirmDesactivate() {
+    var user = new DeleteUser();
+    user.id = this.userModal.id;
+    user.userIdUpdate = 1; // Cambiar por el id del usuario logueado
+    this.apiService.desactivateUser(user).subscribe({
       next: () => {
         console.log('Usuario eliminado correctamente');
         this.activeModal.close();
@@ -110,7 +114,7 @@ export class ModalInfoUserComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire('Eliminado!', '', 'success');
-        this.confirmDeactivate();
+        this.confirmDesactivate();
       } else{
         Swal.fire('Operación cancelada!', '', 'info');
       }

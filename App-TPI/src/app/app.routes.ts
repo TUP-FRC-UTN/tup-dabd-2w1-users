@@ -10,6 +10,7 @@ import { UsersUpdatePlotComponent } from './users-components/plots/users-update-
 import { UsuariosNewOwnerComponent } from './users-components/owners/users-new-owner/usuarios-new-owner.component';
 import { UsersUpdateOwnerComponent } from './users-components/owners/users-update-owner/users-update-owner.component';
 import { UsersListOwnersComponent } from './users-components/owners/users-list-owners/users-list-owners.component';
+import { UsersProfileComponent } from './users-components/users/users-profile/users-profile.component';
 
 export const routes: Routes = [
     {
@@ -25,6 +26,10 @@ export const routes: Routes = [
         path:'home',
         component: LandingPageComponent,
         children:[
+            {
+                path: 'profile',
+                component: UsersProfileComponent
+            },
             {
                 path: 'users',
                 children: [

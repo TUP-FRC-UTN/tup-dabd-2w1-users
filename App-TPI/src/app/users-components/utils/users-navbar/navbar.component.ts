@@ -31,12 +31,13 @@ export class NavbarComponent implements OnInit {
 
   async ngOnInit (): Promise<void> {
     console.log(this.userRoles);
+    this.changeRoles("Admin");
     
     this.buttonsList = [
       {
         icon: "bi-person",
         title: "Perfil",
-        route: "home/users/profile",
+        route: "home/profile",
         roles: ["SuperAdmin", "Admin", "Security", "Owner", "Spouse", "FamilyOld", "FamilyYoung", "Tenant"] //ver
       },
       {
