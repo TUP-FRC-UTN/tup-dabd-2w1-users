@@ -9,7 +9,7 @@ import { RolModel } from '../../../users-models/Rol';
 import { UsersSelectMultipleComponent } from '../../utils/users-select-multiple/users-select-multiple.component';
 import { PlotService } from '../../../users-servicies/plot.service';
 import { GetPlotDto } from '../../../users-models/GetPlotDto';
-import { OwnerModel } from '../../../users-models/PostOwnerDto';
+import { OwnerModel } from '../../../users-models/owner/PostOwnerDto';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -132,9 +132,12 @@ export class UsuariosNewOwnerComponent {
       avatarUrl: 'nada',
       roles: this.rolesSelected,
       userCreateId: 1,
-      plotId: this.formReactivo.get('lote')?.value || 0
+      plotId: this.formReactivo.get('lote')?.value || 0,
+      telegramId: 0
     }
 
+    console.log(owner);
+    
 
     this.ownerService.postOwner(owner).subscribe({
       next: (response) => {
@@ -146,8 +149,12 @@ export class UsuariosNewOwnerComponent {
         });
       },
       error: (error) => {
-        console.error('Error al crear el propietario:', error);
-        alert("Error al crear el propietario");
+        Swal.fire({
+          icon: "error",
+          title: "Error al guardar los cambios",
+          showConfirmButton: false,
+          timer: 1460
+        });
       }
     });
   }

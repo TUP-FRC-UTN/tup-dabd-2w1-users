@@ -63,17 +63,17 @@ export class NavbarComponent implements OnInit {
       },
       {
         icon: "bi-houses",
-        title: "Usuarios",
+        title: "Lotes",
         roles: ["SuperAdmin", "Admin"],
         childButtons: [{
           icon: "bi-house-add",
-          title: "Añadir Lote",
+          title: "Añadir",
           route: "home/plots/add",
           roles: ["SuperAdmin", "Admin"]
         },
         {
           icon: "bi-house-gear-fill",
-          title: "Listado de Lote",
+          title: "Listado",
           route: "home/plots/list",
           roles: ["SuperAdmin", "Admin"]
         }],
@@ -81,9 +81,28 @@ export class NavbarComponent implements OnInit {
       },
       {
         icon: "bi-key-fill",
-        title: "Añadir Dueño",
-        route: "home/owner/add",
-        roles: ["SuperAdmin", "Admin"]
+        title: "Propietario",
+        roles: ["SuperAdmin", "Admin"],
+        childButtons: [
+          {
+            icon: "bi-key-fill",
+            title: "Añadir",
+            route: "home/owner/add",
+            roles: ["SuperAdmin", "Admin"]
+          },
+          {
+            icon: "bi-key-fill",
+            title: "Lista",
+            route: "home/owner/list",
+            roles: ["SuperAdmin", "Admin"]
+          },
+          {
+            icon: "bi-key-fill",
+            title: "Editar",
+            route: "home/owner/edit/:id",
+            roles: ["SuperAdmin", "Admin"]
+          }
+        ]
       }
 
     ];
