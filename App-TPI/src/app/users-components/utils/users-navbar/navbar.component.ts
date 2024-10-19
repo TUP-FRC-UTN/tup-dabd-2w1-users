@@ -31,7 +31,7 @@ export class NavbarComponent implements OnInit {
 
   async ngOnInit (): Promise<void> {
     console.log(this.userRoles);
-    this.changeRoles("Admin");
+    this.changeRoles("Owner");
     
     this.buttonsList = [
       {
@@ -41,16 +41,23 @@ export class NavbarComponent implements OnInit {
         roles: ["SuperAdmin", "Admin", "Security", "Owner", "Spouse", "FamilyOld", "FamilyYoung", "Tenant"] //ver
       },
       {
+         //botón grupo familiar
+        icon: "bi bi-house",
+        title: "Grupo Familiar",
+        route: "home/users/family",
+        roles: ["Owner"]
+      },
+      {
         icon: "bi-people",
         title: "Usuarios",
-        roles: ["SuperAdmin", "Admin", "Owner"],
+        roles: ["SuperAdmin", "Admin"],
         childButtons: [{
 
           //botón agregar usuario
           icon: "bi-person-plus-fill",
           title: "Añadir",
           route: "home/users/add",
-          roles: ["SuperAdmin", "Admin", "Owner"]
+          roles: ["SuperAdmin", "Admin"]
         },
         {
 
@@ -58,7 +65,7 @@ export class NavbarComponent implements OnInit {
           icon: "bi-person-lines-fill",
           title: "Listado",
           route: "home/users/list",
-          roles: ["SuperAdmin", "Admin", "Owner"]
+          roles: ["SuperAdmin", "Admin"]
         }
         ]
       },

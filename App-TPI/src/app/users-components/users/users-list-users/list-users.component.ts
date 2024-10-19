@@ -188,7 +188,6 @@ export class ListUsersComponent implements OnInit {
       modalRef.componentInstance.userModal = this.userModal;
 
       modalRef.result.then((result) => {        
-        $('#myTable').DataTable().ajax.reload();
       });
 
     } catch (error) {

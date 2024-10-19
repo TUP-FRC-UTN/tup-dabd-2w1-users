@@ -40,6 +40,10 @@ export class ApiServiceService {
     return this.http.get<UserModel>(this.url + "users/" + email);
   }
 
+  getUsersByPlotID(plotId: number): Observable<UserModel[]> {
+    return this.http.get<UserModel[]>(this.url + "users/all/plot/" + plotId);
+  }
+
   postUser(user: UserPost): Observable<UserModel> {    
     return this.http.post<UserModel>(this.url + "users", user);
   } 

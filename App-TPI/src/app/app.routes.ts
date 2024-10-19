@@ -11,6 +11,7 @@ import { UsuariosNewOwnerComponent } from './users-components/owners/users-new-o
 import { UsersUpdateOwnerComponent } from './users-components/owners/users-update-owner/users-update-owner.component';
 import { UsersListOwnersComponent } from './users-components/owners/users-list-owners/users-list-owners.component';
 import { UsersProfileComponent } from './users-components/users/users-profile/users-profile.component';
+import { UsersFamiliarGroupComponent } from './users-components/users/users-familiar-group/users-familiar-group.component';
 
 export const routes: Routes = [
     {
@@ -33,6 +34,10 @@ export const routes: Routes = [
             {
                 path: 'users',
                 children: [
+                    {
+                        path: 'family',
+                        component: UsersFamiliarGroupComponent
+                    },
                     {
                         path: 'add',
                         component: NewUserComponent

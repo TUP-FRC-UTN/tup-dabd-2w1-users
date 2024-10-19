@@ -17,6 +17,10 @@ export class UsersSelectMultipleComponent implements OnInit, OnChanges {
 
   //enviar los roles seleccionados
   @Input() rolesSelected : string[] = [];
+  @Input() rolChanger: string = '';
+
+  listRolesForOwner: string[] = ['User'];
+
   roles: RolModel[] = [];
 
   title : string = "Seleccione un rol..."
@@ -27,8 +31,12 @@ export class UsersSelectMultipleComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.apiService.getAllRoles().subscribe({
       next: (data) => {
-        this.roles = data;
-        
+        if(this.rolChanger == "Admin"){
+          this.roles = data;
+        }
+        if(this.rolChanger == "Owner"){
+          this.roles = data.filter( r => this.listRolesForOwner.includes(r.description));
+        }
       },
       error: (error) => {
         console.error(error);
@@ -63,6 +71,9 @@ export class UsersSelectMultipleComponent implements OnInit, OnChanges {
     else{
         this.title = "Seleccione un rol...";
     }
+
+    console.log("Roles cuando se agrega o quita un rol:" + this.rolesSelected);
+    
   }
 
   addRole(role: string) {

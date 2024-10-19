@@ -21,15 +21,19 @@ export class UsersUpdateUserComponent implements OnInit {
 
   
   private readonly apiService = inject(ApiServiceService);
-
   constructor(private router: Router, private route: ActivatedRoute){ }
-
+  rolChanger: string = 'Admin';
 
   rolesSelected : string[] = [];
     
   roles: RolModel[] = [];
   rolesInput: string[] = [];
   id: string = '';
+
+  changesRol(rol: string) {
+    this.rolChanger = rol;
+
+  }
 
   updateForm = new FormGroup({
     name: new FormControl('', [Validators.required]),
@@ -59,10 +63,10 @@ export class UsersUpdateUserComponent implements OnInit {
     const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
 
     user.datebirth = formattedDate;
-    user.roles = this.rolesInput || ['Admin']; // Asegúrate de que roles sea un arreglo    
-    console.log(user);
-
-    console.log(this.id);
+    user.roles = this.rolesSelected || []; // Asegúrate de que roles sea un arreglo   
+    
+    
+    console.log("aaaaaa" + this.rolesSelected);
     
 
     // Llama al servicio para actualizar el usuario
@@ -70,7 +74,12 @@ export class UsersUpdateUserComponent implements OnInit {
         next: (response) => {
             console.log('Usuario actualizado exitosamente:', response);
             alert('Usuario actualizado exitosamente');
+            if(this.rolChanger == 'Owner'){
+              this.router.navigate(['home/users/family']);
+            }
+            if(this.rolChanger == 'Admin'){
             this.router.navigate(['home/users/list']);
+            }
         },
         error: (error) => {
             console.error('Error al actualizar el usuario:', error);
@@ -79,13 +88,17 @@ export class UsersUpdateUserComponent implements OnInit {
     });
   }
 
-redirectList() {
-  const result = window.confirm("¿Estás seguro que quieres salir? No se guardarán los cambios realizados.");
-  
-  if (result) {
-    this.router.navigate(['home/users/list']);
+  redirectList() {
+    const result = window.confirm("¿Estás seguro que quieres salir? No se guardarán los cambios realizados.");
+    if (result) {
+      if(this.rolChanger == 'Owner'){
+        this.router.navigate(['home/users/family']);
+      }
+      if(this.rolChanger == 'Admin'){
+      this.router.navigate(['home/users/list']);
+      }
+    }
   }
-}
 
 
   

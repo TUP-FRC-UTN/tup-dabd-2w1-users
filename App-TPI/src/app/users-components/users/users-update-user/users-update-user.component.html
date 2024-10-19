@@ -1,6 +1,9 @@
 <section class="container p-5 border rounded border-3 border-secundary" style="min-height: 70vh;">
     <h3>Editar Usuario</h3>
-
+    <div>
+        <button type="button" (click)="changesRol('Admin')">Admin</button>
+        <button type="button" (click)="changesRol('Owner')">Owner</button>
+    </div>
     <form [formGroup]="updateForm" (ngSubmit)="updateUser()">
         <div class="row mb-3">
             <div class="col-md-6 d-flex flex-column">
@@ -79,7 +82,7 @@
         <div class="row mb-3">
             <div class="col-md-6 d-flex justify-content-end">
                 <label class="form-label me-2 text-end pt-2" style="width: 150px; margin-bottom: 0;">Roles</label>
-                <app-users-select-multiple [rolesSelected]="rolesSelected"></app-users-select-multiple>
+                <app-users-select-multiple [rolesSelected]="rolesSelected" [rolChanger]="rolChanger"></app-users-select-multiple>
             </div>
         </div>
         <div class="row mb-3 justify-content-end">
