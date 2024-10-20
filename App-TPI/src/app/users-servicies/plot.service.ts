@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { PlotTypeModel } from '../users-models/PlotType';
-import { PlotStateModel } from '../users-models/PlotState';
-import { PlotModel } from '../users-models/Plot';
-import { GetPlotModel } from '../users-models/GetPlot';
-import { PutPlot } from '../users-models/PutPlot';
+import { PlotTypeModel } from '../users-models/plot/PlotType';
+import { PlotStateModel } from '../users-models/plot/PlotState';
+import { PlotModel } from '../users-models/plot/Plot';
+import { GetPlotModel } from '../users-models/plot/GetPlot';
+import { PutPlot } from '../users-models/plot/PutPlot';
 
 @Injectable({
   providedIn: 'root'

@@ -1,10 +1,10 @@
 import { CommonModule, formatDate } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ApiServiceService } from '../../../users-servicies/api-service.service';
-import { RolModel } from '../../../users-models/Rol';
-import { UserModel } from '../../../users-models/User';
-import { UserPut } from '../../../users-models/UserPut';
+import { UserService } from '../../../users-servicies/user.service';
+import { RolModel } from '../../../users-models/users/Rol';
+import { UserModel } from '../../../users-models/users/User';
+import { UserPut } from '../../../users-models/users/UserPut';
 import { data } from 'jquery';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UsersSelectMultipleComponent } from '../../utils/users-select-multiple/users-select-multiple.component';
@@ -20,7 +20,7 @@ import { LoginComponent } from '../../utils/users-login/login.component';
 export class UsersUpdateUserComponent implements OnInit {
 
   
-  private readonly apiService = inject(ApiServiceService);
+  private readonly apiService = inject(UserService);
   constructor(private router: Router, private route: ActivatedRoute){ }
   rolChanger: string = 'Admin';
 

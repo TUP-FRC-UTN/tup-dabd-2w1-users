@@ -7,17 +7,6 @@
             <i [class]="expand ? 'bi bi-x-lg' : 'bi bi-list'"></i>
         </button>
         <h3>Página principal</h3>
-        <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Cambiar roles
-            </button>
-            <ul class="dropdown-menu">
-              <li (click)="changeRoles('Admin')"><a class="dropdown-item">Admin</a></li>
-              <li  (click)="changeRoles('Owner')"><a class="dropdown-item" >Owner</a></li>
-              <li  (click)="changeRoles('FamilyOld')"><a class="dropdown-item" >User</a></li>
-              <li  (click)="changeRoles('Security')"><a class="dropdown-item">Security</a></li>
-            </ul>
-          </div>
         <img src="assets/images/icono_image.png" alt="" style="width: 100px; padding-right: 16px;">
     </nav>
     <!-- SideBar -->

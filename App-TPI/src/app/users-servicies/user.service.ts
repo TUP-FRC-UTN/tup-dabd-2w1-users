@@ -1,18 +1,18 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { UserModel } from '../users-models/User';
-import { RolModel } from '../users-models/Rol';
-import { UserPost } from '../users-models/UserPost';
-import { LoginUser } from '../users-models/Login';
-import { UserPut } from '../users-models/UserPut';
+import { UserModel } from '../users-models/users/User';
+import { RolModel } from '../users-models/users/Rol';
+import { UserPost } from '../users-models/users/UserPost';
+import { LoginUser } from '../users-models/users/Login';
+import { UserPut } from '../users-models/users/UserPut';
 import { map } from 'rxjs/operators';
 import { DeleteUser } from '../users-models/owner/DeleteUser';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ApiServiceService {
+export class UserService {
   private readonly http: HttpClient = inject(HttpClient);
   private readonly url = 'http://localhost:8080/';
 
@@ -25,7 +25,7 @@ export class ApiServiceService {
   }
 
   verifyLogin(user: LoginUser): Observable<LoginUser> {
-    return this.http.post<LoginUser>(this.url + "users/login", user);
+    return this.http.post<LoginUser>(this.url + "api/auth/login", user);
   }   
 
   getAllRoles(): Observable<RolModel[]> {

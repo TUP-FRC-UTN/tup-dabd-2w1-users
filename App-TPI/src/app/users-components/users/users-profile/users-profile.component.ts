@@ -2,9 +2,9 @@ import { CommonModule, formatDate } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoginService } from '../../../users-servicies/login.service';
-import { ApiServiceService } from '../../../users-servicies/api-service.service';
-import { UserModel } from '../../../users-models/User';
-import { UserPut } from '../../../users-models/UserPut';
+import { UserService } from '../../../users-servicies/user.service';
+import { UserModel } from '../../../users-models/users/User';
+import { UserPut } from '../../../users-models/users/UserPut';
 
 @Component({
   selector: 'app-users-profile',
@@ -16,7 +16,7 @@ import { UserPut } from '../../../users-models/UserPut';
 export class UsersProfileComponent implements OnInit {
 
   private readonly loginService = inject(LoginService);
-  private readonly usersService = inject(ApiServiceService);
+  private readonly usersService = inject(UserService);
   type: string = 'info';
 
   selectedIconUrl: string = '../../../../assets/icons/icono1.svg';

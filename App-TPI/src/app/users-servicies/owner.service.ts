@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { OwnerTypeModel } from '../users-models/OwnerType';
+import { OwnerTypeModel } from '../users-models/owner/OwnerType';
 import { Observable } from 'rxjs';
-import { OwnerStateModel } from '../users-models/OwnerState';
+import { OwnerStateModel } from '../users-models/owner/OwnerState';
 import { OwnerModel } from '../users-models/owner/PostOwnerDto';
 import { Owner } from '../users-models/owner/Owner';
 import { PutOwnerDto } from '../users-models/owner/PutOwnerDto';

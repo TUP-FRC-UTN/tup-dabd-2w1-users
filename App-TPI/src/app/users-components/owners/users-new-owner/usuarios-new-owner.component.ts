@@ -2,13 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { OwnerService } from '../../../users-servicies/owner.service';
-import { OwnerTypeModel } from '../../../users-models/OwnerType';
-import { OwnerStateModel } from '../../../users-models/OwnerState';
-import { ApiServiceService } from '../../../users-servicies/api-service.service';
-import { RolModel } from '../../../users-models/Rol';
+import { OwnerTypeModel } from '../../../users-models/owner/OwnerType';
+import { OwnerStateModel } from '../../../users-models/owner/OwnerState';
+import { UserService } from '../../../users-servicies/user.service';
+import { RolModel } from '../../../users-models/users/Rol';
 import { UsersSelectMultipleComponent } from '../../utils/users-select-multiple/users-select-multiple.component';
 import { PlotService } from '../../../users-servicies/plot.service';
-import { GetPlotDto } from '../../../users-models/GetPlotDto';
+import { GetPlotDto } from '../../../users-models/plot/GetPlotDto';
 import { OwnerModel } from '../../../users-models/owner/PostOwnerDto';
 import Swal from 'sweetalert2';
 
@@ -22,7 +22,7 @@ import Swal from 'sweetalert2';
 export class UsuariosNewOwnerComponent {
 
   private readonly ownerService = inject(OwnerService);
-  private readonly apiService = inject(ApiServiceService);
+  private readonly apiService = inject(UserService);
   private readonly plotService = inject(PlotService);
 
   types: OwnerTypeModel[] = [];

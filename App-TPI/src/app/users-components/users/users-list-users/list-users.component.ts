@@ -1,10 +1,10 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
-import { UserModel } from '../../../users-models/User';
+import { UserModel } from '../../../users-models/users/User';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ModalInfoUserComponent } from '../users-modal-info-user/modal-info-user.component';
-import { ApiServiceService } from '../../../users-servicies/api-service.service';
+import { UserService } from '../../../users-servicies/user.service';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
@@ -28,7 +28,7 @@ export class ListUsersComponent implements OnInit {
   typeModal: string = '';
   user: number = 0; 
   users: UserModel[] = [];
-  private readonly apiService = inject(ApiServiceService);
+  private readonly apiService = inject(UserService);
   showDeactivateModal: boolean = false;
   userToDeactivate: number = 0;
 

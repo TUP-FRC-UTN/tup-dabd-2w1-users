@@ -12,6 +12,8 @@ export class UserModel {
     datebirth: string;    
     roles: string[];      
     password: string;
+    telegram_id: number;
+    plot_id: number;
 
     constructor() {
         this.id = 0;
@@ -27,5 +29,7 @@ export class UserModel {
         this.roles = [];
         this.password = ''; 
         this.phone_number = 0;
+        this.plot_id = 0;
+        this.telegram_id = 0;
     }
 }

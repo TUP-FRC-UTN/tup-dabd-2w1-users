@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ApiServiceService } from '../../../users-servicies/api-service.service';
-import { RolModel } from '../../../users-models/Rol';
+import { UserService } from '../../../users-servicies/user.service';
+import { RolModel } from '../../../users-models/users/Rol';
 
 @Component({
   selector: 'app-users-select-multiple',
@@ -26,7 +26,7 @@ export class UsersSelectMultipleComponent implements OnInit, OnChanges {
   title : string = "Seleccione un rol..."
 
 
-  private readonly apiService = inject(ApiServiceService);
+  private readonly apiService = inject(UserService);
 
   ngOnInit(): void {
     this.apiService.getAllRoles().subscribe({

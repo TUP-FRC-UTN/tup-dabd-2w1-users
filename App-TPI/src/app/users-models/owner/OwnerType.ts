@@ -1,9 +1,9 @@
-export class OwnerType{
-    id : number;
-    description : string;
+export class OwnerTypeModel {
+    id: number;      
+    description: string;
 
-    constructor(){
+    constructor() {
         this.id = 0;
-        this.description = "";
+        this.description = '';
     }
 }

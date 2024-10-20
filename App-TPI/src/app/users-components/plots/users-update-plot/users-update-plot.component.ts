@@ -3,12 +3,12 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { PlotService } from '../../../users-servicies/plot.service';
-import { PlotTypeModel } from '../../../users-models/PlotType';
-import { PlotStateModel } from '../../../users-models/PlotState';
-import { PlotModel } from '../../../users-models/Plot';
+import { PlotTypeModel } from '../../../users-models/plot/PlotType';
+import { PlotStateModel } from '../../../users-models/plot/PlotState';
+import { PlotModel } from '../../../users-models/plot/Plot';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GetPlotModel } from '../../../users-models/GetPlot';
-import { PutPlot } from '../../../users-models/PutPlot';
+import { GetPlotModel } from '../../../users-models/plot/GetPlot';
+import { PutPlot } from '../../../users-models/plot/PutPlot';
 
 @Component({
   selector: 'app-users-update-plot',

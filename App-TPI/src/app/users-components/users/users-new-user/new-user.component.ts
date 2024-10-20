@@ -1,10 +1,10 @@
 import { CommonModule, formatDate } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RolModel } from '../../../users-models/Rol';
-import { ApiServiceService } from '../../../users-servicies/api-service.service';
-import { UserModel } from '../../../users-models/User';
-import { UserPost } from '../../../users-models/UserPost';
+import { RolModel } from '../../../users-models/users/Rol';
+import { UserService } from '../../../users-servicies/user.service';
+import { UserModel } from '../../../users-models/users/User';
+import { UserPost } from '../../../users-models/users/UserPost';
 import { Router, RouterModule } from '@angular/router';
 import { UsersSelectMultipleComponent } from "../../utils/users-select-multiple/users-select-multiple.component";
 
@@ -63,7 +63,7 @@ export class NewUserComponent implements OnInit {
     return formatDate(date, 'yyyy-MM-dd', 'en-US');
   }
 
-  private readonly apiService = inject(ApiServiceService);
+  private readonly apiService = inject(UserService);
 
   
   roles: RolModel[] = [];

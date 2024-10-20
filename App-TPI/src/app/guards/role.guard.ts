@@ -11,9 +11,10 @@ export const roleGuard: CanActivateFn = (route, state) => {
   const requiredRoles = route.data['roles'] as string[];
   
   //ver si el usuario tiene alguno de los roles permitidos
-  const hasValidRole = requiredRoles.some((role) =>
+  console.log(requiredRoles);
+  
+  const hasValidRole = requiredRoles.some((role) =>    
     authService.hasRole(role)
-    
   );
 
   //si tiene permisos

@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ApiServiceService } from '../../../users-servicies/api-service.service';
+import { UserService } from '../../../users-servicies/user.service';
 import { LoginService } from '../../../users-servicies/login.service';
-import { UserModel } from '../../../users-models/User';
+import { UserModel } from '../../../users-models/users/User';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -18,7 +18,7 @@ export class UsersFamiliarGroupComponent implements OnInit {
 
   constructor(private router: Router,private modal: NgbModal) { }
 
-  private readonly apiService = inject(ApiServiceService);
+  private readonly apiService = inject(UserService);
   private readonly loginService = inject(LoginService);
 
   familyGroup: UserModel[] = [];

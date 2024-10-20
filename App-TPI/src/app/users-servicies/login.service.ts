@@ -1,39 +1,29 @@
 import { inject, Injectable } from '@angular/core';
-import { ApiServiceService } from './api-service.service';
+import { UserService } from './user.service';
 import { firstValueFrom } from 'rxjs';
+import { UserModel } from '../users-models/users/User';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
-  private userId: number | null = null;
-  private userRole: string[] | null = null;
-
-  private readonly apiService = inject(ApiServiceService);
+  private user : UserModel = new UserModel();
 
   constructor() {}
 
-  async setUser(email: string): Promise<void> {
-    if (this.userId === null) {
-      try {
-        const data = await firstValueFrom(this.apiService.getUserByEmail(email));
-        console.log(data);
-        this.userId = data.id;
-        this.userRole = data.roles;
-      } catch (error) {
-        console.error('No se ha podido establecer el ID del usuario.', error);
-        throw error; // Lanzamos el error para que el flujo lo maneje adecuadamente
-      }
+  async setUser(user: UserModel): Promise<void> {
+    if (this.user === null) {
+        this.user = user;
     } else {
       console.error('El usuario ya ha sido establecido y no se puede modificar.');
     }
   }
 
   getUserId(): number | null {
-    return this.userId;
+    return this.user.id;
   }
 
   getUserRoles(): string[] | null {
-    return this.userRole;
+    return this.user.roles;
   }
 }
