@@ -13,8 +13,19 @@ import { LoginService } from '../../../users-servicies/login.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit{
   @Output() validacion = new EventEmitter<void>();
+
+  userId = 3
+  userRoles = ['Admin']
+
+  ngOnInit(): void {
+    localStorage.setItem('userId', this.userId.toString());
+    localStorage.setItem('userRoles', JSON.stringify(this.userRoles));
+  }
+
+  //muestra un mensaje si los datos ingresados son incorrectos
+  errorLog : boolean = false;
 
   constructor(private router: Router) { }
 
@@ -42,6 +53,7 @@ export class LoginComponent {
           if (data) {
             try {
               await this.loginService.setUser(this.user.email);
+              this.errorLog = true;
               this.router.navigate(['/home']); // Redirige solo cuando se haya obtenido el usuario
             } catch (error) {
               alert("Error obteniendo los datos del usuario.");
@@ -51,7 +63,7 @@ export class LoginComponent {
           }
         },
         error: (error) => {
-          alert("Dni o contraseña incorrectos");
+          this.errorLog = true;
         }
       });
     }
