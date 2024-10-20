@@ -31,14 +31,14 @@
     </div>
     <form [formGroup]="formProfile" class="text-end mt-5" (ngSubmit)="updateUser()">
         <div class="row mb-3">
-            <div class="col-md-6">
+            <div class="col-md-6 d-flex flex-column align-items-end">
                 <div class="d-flex align-items-center">
                     <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Nombre</label>
                     <input type="text" class="form-control custom-input"
                         [ngClass]="{'is-invalid': formProfile.controls['name'].invalid && (formProfile.get('name')?.dirty || formProfile.get('name')?.touched), 'is-valid': formProfile.controls['name'].valid }"
                         formControlName="name">
                 </div>
-                <div class="text-danger" style="margin-left: 130px;">
+                <div class="text-danger form-error text-start">
                     @if(formProfile.get('name')?.dirty || formProfile.get('nombre')?.touched){
                         @if(formProfile.controls['name'].errors?.["required"]){
                             Ingrese su nombre
@@ -49,15 +49,15 @@
                     }
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 d-flex flex-column align-items-end">
                 <div class="d-flex align-items-center">
                     <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Apellido</label>
                     <input type="text" class="form-control custom-input"
                         [ngClass]="{'is-invalid': formProfile.controls['lastName'].invalid && (formProfile.get('lastName')?.dirty || formProfile.get('lastName')?.touched), 'is-valid': formProfile.controls['lastName'].valid }"
                         formControlName="lastName">
                 </div>
-                <div class="text-danger" style="margin-left: 130px;">
-                    @if(formProfile.get('apellido')?.dirty || formProfile.get('apellido')?.touched){
+                <div class="text-danger form-error text-start">
+                    @if(formProfile.get('lastName')?.dirty || formProfile.get('lastName')?.touched){
                         @if(formProfile.controls['lastName'].errors?.["required"]){
                             Ingrese su apellido
                         }
@@ -85,15 +85,15 @@
         </div>
 
         <div class="row mb-3">
-            <div class="col-md-6">
+            <div class="col-md-6 d-flex flex-column align-items-end">
                 <div class="d-flex align-items-center">
                     <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Teléfono</label>
-                    <input type="text" class="form-control custom-input"
+                    <input type="number" class="form-control custom-input"
                         [ngClass]="{'is-invalid': formProfile.controls['phoneNumber'].invalid && (formProfile.get('phoneNumber')?.dirty || formProfile.get('phoneNumber')?.touched), 'is-valid': formProfile.controls['phoneNumber'].valid }"
                         formControlName="phoneNumber" style="appearance: none;">
                 </div>
-                <div class="text-danger" style="margin-left: 130px;">
-                    @if(formProfile.get('telefono')?.dirty || formProfile.get('telefono')?.touched){
+                <div class="text-danger text-start form-error">
+                    @if(formProfile.get('phoneNumber')?.dirty || formProfile.get('phoneNumber')?.touched){
                         @if(formProfile.controls['phoneNumber'].errors?.["required"]){
                             Ingrese su teléfono
                         }
@@ -116,14 +116,14 @@
                 <label class="form-label me-2 text-end pt-2" style="width: 150px; margin-bottom: 0;">Roles</label>
                 <input type="text" class="form-control custom-input" formControlName="roles">
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 d-flex flex-column align-items-end">
                 <div class="d-flex align-items-center">
                     <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Telegram</label>
-                    <input type="text" class="form-control custom-input"
+                    <input type="number" class="form-control custom-input"
                         [ngClass]="{'is-invalid': formProfile.controls['telegram_id'].invalid && (formProfile.get('telegram_id')?.dirty || formProfile.get('telegram_id')?.touched), 'is-valid': formProfile.controls['telegram_id'].valid }"
                         formControlName="telegram_id">
                 </div>
-                <div class="text-danger" style="margin-left: 130px;">
+                <div class="text-danger text-start form-error">
                     @if(formProfile.get('telegram_id')?.dirty || formProfile.get('telegram_id')?.touched){
                         @if(formProfile.controls['telegram_id'].errors?.["required"]){
                             Ingrese su telegram id

@@ -157,14 +157,19 @@ export class UsersProfileComponent implements OnInit {
 
     this.usersService.putUser(updatedUser, this.authService.getUser().id).subscribe({
         next: (response) => {
-            console.log('Usuario actualizado exitosamente:', response);
             Swal.fire({
+                title: 'Perfil actualizado',
+                text: 'El perfil se actualizó correctamente',
+                icon: 'success',
             })
             this.changeType('info');
         },
         error: (error) => {
-            console.error('Error al actualizar el usuario:', error);
-            // Manejo de errores
+          Swal.fire({
+            title: 'Error',
+            text: 'Error al actualizar el perfil',
+            icon: 'error',
+        })
         },
     });
   }
