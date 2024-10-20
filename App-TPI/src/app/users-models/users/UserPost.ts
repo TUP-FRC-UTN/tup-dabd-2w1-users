@@ -2,17 +2,17 @@ export class UserPost {
     name: string;
     lastname: string;   
     username: string;     
-    email: string;        
+    password: string;
+    email: string;       
+    phone_number: string; 
     dni: string;         
     active: boolean;      
     avatar_url: string;   
     datebirth: string;    
-    roles: string[];      
-    password: string;
-    phone_number: string;
+    roles: string[];  
     userUpdateId: number;
-    telegram_id: number;
     plot_id: number;
+    telegram_id: number;
 
     constructor() {
         this.name = '';

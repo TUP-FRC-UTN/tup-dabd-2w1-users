@@ -1,63 +1,57 @@
 <section class="fondo bg-dark min-vh-100 d-flex align-items-center justify-content-center">
-    <div class="container">
+    <div class="container d-flex flex-column align-items-center">
         <form [formGroup]="loginForm" action="" (ngSubmit)="login()" autocomplete="on">
             <div class="row mb-3">
                 <h2>Inicio de sesión</h2>
             </div>
-    
-            <div class="row mb-3 align-items-center d-flex">
-                <div class="col-3 text-end">
-                    <label for="inputCorreo" class="form-label">Email</label>
+            <div class="d-flex flex-column align-items-end">
+                <div class="row mb-3">
+                    <div class="col d-flex">
+                        <label for="inputCorreo" class="form-label m-0 me-3 mt-2">Email</label>
+                        <div class="d-flex flex-column justify-content-start">
+                            <input type="text" class="form-control custom-input" 
+                                formControlName="email" autocomplete="email">
+                            @if(loginForm.get('email')?.dirty || loginForm.get('email')?.touched){
+                                @if(loginForm.controls['email'].errors?.["required"]){
+                                    <span class="error form-error text-start">Ingrese su nombre</span>
+                                }
+                                @if(loginForm.controls['email'].errors?.["maxlength"]){
+                                    <span class="error">>El nombre no puede superar los 50 caracteres</span>
+                                }
+                            }
+                        </div>
+                    </div>
                 </div>
-                <div class="col">
-                    <input type="text" class="form-control custom-input" 
-                           formControlName="email" autocomplete="email">
-                    @if(loginForm.get('email')?.dirty || loginForm.get('email')?.touched){
-                        @if(loginForm.controls['email'].errors?.["required"]){
-                            Ingrese su nombre
+
+                <div class="row mb-3">
+                    <div class="col d-flex">
+                        <label for="inputClave" class="form-label m-0 me-3 mt-2">Contraseña</label>
+                        <div class="d-flex flex-column justify-content-start">
+                            <input type="password" class="form-control custom-input" 
+                            formControlName="password" autocomplete="current-password">
+                        @if(loginForm.get('password')?.dirty || loginForm.get('password')?.touched){
+                            @if(loginForm.controls['password'].errors?.["required"]){
+                                <span class="error">Ingrese su contraseña</span>
+                            }
+                            @if(loginForm.controls['password'].errors?.["maxlength"]){
+                                <span class="error">El nombre no puede superar los 50 caracteres</span>
+                            }
                         }
-                        @if(loginForm.controls['email'].errors?.["maxlength"]){
-                            El nombre no puede superar los 50 caracteres
-                        }
-                    }
+                        </div>
+                    </div>
                 </div>
             </div>
     
-            <div class="row mb-3 align-items-center d-flex">
-                <div class="col-3 text-end">
-                    <label for="inputClave" class="form-label">Contraseña</label>
-                </div>
-                <div class="col">
-                    <input type="password" class="form-control custom-input" 
-                           formControlName="password" autocomplete="current-password">
-                    @if(loginForm.get('password')?.dirty || loginForm.get('password')?.touched){
-                        @if(loginForm.controls['password'].errors?.["required"]){
-                            Ingrese su nombre
-                        }
-                        @if(loginForm.controls['password'].errors?.["maxlength"]){
-                            El nombre no puede superar los 50 caracteres
-                        }
-                    }
-                </div>
-            </div>
             
-            
-    
             <div class="row mb-3">
                 <div class="col">
-                    @if(loginForm.invalid){
-                        <button type="submit" class="btn btn-dark rounded-pill w-100" disabled>Ingresar</button>
-
-                    }@else {
-                        <button type="submit" class="btn btn-dark rounded-pill w-100">Ingresar</button>
-                    }
-
+                    <button type="submit" class="btn btn-dark rounded-pill w-100" [disabled]="!loginForm.valid" >Ingresar</button>
                 </div>
             </div>
 
             @if (errorLog) {
                 <div class="row mb-3">
-                    <div class="col" style="color: red;">
+                    <div class="col error">
                         Usuario o contraseña no válidos. Por favor, intentelo de nuevo.
                     </div>
                 </div>

@@ -1,10 +1,12 @@
 import { CommonModule, formatDate } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { LoginService } from '../../../users-servicies/login.service';
 import { UserService } from '../../../users-servicies/user.service';
-import { UserModel } from '../../../users-models/users/User';
+import { UserGet } from '../../../users-models/users/UserGet';
 import { UserPut } from '../../../users-models/users/UserPut';
+import { AuthService } from '../../../users-servicies/auth.service';
+import { DateService } from '../../../users-servicies/date.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-users-profile',
@@ -15,9 +17,8 @@ import { UserPut } from '../../../users-models/users/UserPut';
 })
 export class UsersProfileComponent implements OnInit {
 
-  private readonly loginService = inject(LoginService);
+  private readonly authService = inject(AuthService);
   private readonly usersService = inject(UserService);
-  type: string = 'info';
 
   selectedIconUrl: string = '../../../../assets/icons/icono1.svg';
   isDropdownOpen = false;
@@ -34,34 +35,55 @@ export class UsersProfileComponent implements OnInit {
     {name: 'Icono 10', url:'../../../../assets/icons/icono10.svg'},
   ]
 
-  onIconSelect(event: Event) {
-    const selectElement = event.target as HTMLSelectElement;
-    this.selectedIconUrl = selectElement.value;
-  }
+  //Cambia la acción del botón
+  type: string = 'info';
 
-  selectIcon(url: string) {
-    this.selectedIconUrl = url;
-    this.isDropdownOpen = false;
-  }
+  ngOnInit(): void {
+    this.usersService.getUserById(this.authService.getUser().id).subscribe({
+        next: (user: UserGet) => {
 
-  toggleDropdown() {
-    this.isDropdownOpen = !this.isDropdownOpen;
-  }
+            this.formProfile.patchValue({
+                name: user.name,
+                lastName: user.lastname,
+                email: user.email,
+                username: user.username,
+                phoneNumber: user.phone_number,
+                dni: user.dni,
+                avatar_url: user.avatar_url,
+                roles: user.roles ,
+                telegram_id: user.telegram_id
+            });
+  
+            // Setea el icono del usuario en el input
+            this.selectedIconUrl = user.avatar_url;
+  
+            // Setea la fecha de nacimiento en el input
+            const formattedDate :Date = DateService.parseDateString(user.datebirth)!;
+            this.formProfile.patchValue({
+              datebirth: formattedDate ? DateService.formatDate(formattedDate) : ''
+            });
+        }
+    })
+  };
 
-  user: UserModel = null!;
-
-  formReactivo = new FormGroup({
-    nombre: new FormControl({value: '...', disabled: true }, [
+  //Crea y establece las validaciones del formulario
+  formProfile = new FormGroup({
+    name: new FormControl({value: '...', disabled: true }, [
         Validators.required,
         Validators.minLength(1),
         Validators.maxLength(50)
     ]),
-    apellido: new FormControl({value: '...', disabled: true }, [
+    lastName: new FormControl({value: '...', disabled: true }, [
         Validators.required,
         Validators.minLength(1),
         Validators.maxLength(50)
     ]),
-    username: new FormControl({value: '...', disabled: true }, [
+    username: new FormControl({value: "", disabled: true }, [
+      Validators.required,
+      Validators.minLength(1),
+      Validators.maxLength(30)
+    ]),
+    telegram_id: new FormControl({value: 0, disabled: true }, [
         Validators.required,
         Validators.minLength(1),
         Validators.maxLength(30)
@@ -70,7 +92,7 @@ export class UsersProfileComponent implements OnInit {
         Validators.required,
         Validators.email
     ]),
-    telefono: new FormControl({value: 0, disabled: true }, [
+    phoneNumber: new FormControl({value: 0, disabled: true }, [
         Validators.required,
         Validators.minLength(10),
         Validators.maxLength(20)
@@ -80,96 +102,65 @@ export class UsersProfileComponent implements OnInit {
         Validators.minLength(1),
         Validators.maxLength(11)
     ]),
-    active: new FormControl(true, [Validators.required]), 
     avatar_url: new FormControl({value: '...', disabled: true }),
-    fecha: new FormControl({value: '', disabled: true }, [Validators.required]),
+    datebirth: new FormControl({value: '', disabled: true }, [Validators.required]),
     roles: new FormControl<string[]>({value: [], disabled: true }) 
 });
 
-ngOnInit(): void {
-  // cuando se este logueado hay que poner esto this.loginService.getUserId()!
-  this.usersService.getUserById(2).subscribe({
-      next: (user: UserModel) => {
-          this.user = user;
-          console.log(user);
-          
-          this.formReactivo.patchValue({
-              nombre: user.name,
-              apellido: user.lastname,
-              username: user.username,
-              email: user.email,
-              telefono: user.phone_number,
-              dni: user.dni,
-              active: user.active,
-              avatar_url: user.avatar_url,
-              roles: user.roles ,
-  
-          });
+  //Setea la url del icono seleccionado
+  onIconSelect(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    this.selectedIconUrl = selectElement.value;
+  }
 
-          this.selectedIconUrl = user.avatar_url;
+  //Método para seleccionar un icono
+  selectIcon(url: string) {
+    this.selectedIconUrl = url;
+    this.isDropdownOpen = false;
+  }
 
-          const formattedDate = this.parseDateString(user.datebirth);
-          this.formReactivo.patchValue({
-            fecha: formattedDate ? this.formatDate(formattedDate) : ''
-          });
-      }
-  })
-  };
+  //Abre o cierra el dropdown para los iconos
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
 
+  //Cambiar el botón
   changeType(newType: string): void {
     this.type = newType;
     if(newType == 'edit'){
-      this.formReactivo.get('nombre')?.enable();
-      this.formReactivo.get('apellido')?.enable();
-      this.formReactivo.get('dni')?.enable();
-      this.formReactivo.get('avatar_url')?.enable();
+      this.formProfile.get('name')?.enable();
+      this.formProfile.get('lastName')?.enable();
+      this.formProfile.get('phoneNumber')?.enable();
+      this.formProfile.get('avatar_url')?.enable();
+      this.formProfile.get('telegram_id')?.enable();
     }
     if(newType == 'info'){
-      this.formReactivo.disable();
+      this.ngOnInit();
+      this.formProfile.disable();
     }
-}
-
-
-  private parseDateString(dateString: string): Date | null {
-    const [day, month, year] = dateString.split('-').map(Number);
-    if (!day || !month || !year) {
-      return null;
-    }
-    // Crea un objeto Date con formato "yyyy-MM-dd"
-    return new Date(year, month - 1, day); // Restamos 1 al mes porque en JavaScript los meses son 0-indexed
   }
-
-  private formatDate(date: Date): string {
-    return formatDate(date, 'yyyy-MM-dd', 'en-US');
-  }
-
+  
+  //Crea un UserPut
   updateUser() {
-    const user: UserPut = new UserPut();
-    user.userUpdateId = 2;
-    user.name = this.formReactivo.get('nombre')?.value || '';
-    user.lastName = this.formReactivo.get('apellido')?.value || '';
-    user.dni = this.formReactivo.get('dni')?.value?.toString() || ''; 
-    user.phoneNumber = this.formReactivo.get('telefono')?.value?.toString() || '';
-    user.email = this.formReactivo.get('email')?.value || '';
-    user.avatar_url = this.selectedIconUrl;
-    user.telegram_id = 0;
-    // Formatea la fecha correctamente (año-mes-día)
-    const date: Date = new Date(this.formReactivo.get('fecha')?.value || '');
+    const updatedUser: UserPut = {
+        userUpdateId: this.authService.getUser().id,
+        name: this.formProfile.get('name')?.value || '',
+        lastName: this.formProfile.get('lastName')?.value || '',
+        email: this.formProfile.get('email')?.value || '',
+        phoneNumber: this.formProfile.get('phoneNumber')?.value?.toString() || '',
+        dni: this.formProfile.get('dni')?.value?.toString() || '',
+        avatar_url: this.selectedIconUrl,
+        datebirth: this.formProfile.get('datebirth')?.value || '',
+        roles: this.formProfile.get('roles')?.value || [],
+        telegram_id: this.formProfile.get('telegram_id')?.value || 0,
+    };
 
-// Formatear la fecha como YYYY-MM-DD
-    const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
-
-    user.datebirth = formattedDate;
-    user.roles = this.formReactivo.get('roles')?.value || [];
-
-
-    console.log(user);
-
-    // Llama al servicio para actualizar el usuario
-    this.usersService.putUser(user, 2).subscribe({
+    this.usersService.putUser(updatedUser, this.authService.getUser().id).subscribe({
         next: (response) => {
             console.log('Usuario actualizado exitosamente:', response);
-            alert('Usuario actualizado exitosamente');
+            Swal.fire({
+            })
+            this.changeType('info');
         },
         error: (error) => {
             console.error('Error al actualizar el usuario:', error);
@@ -177,5 +168,4 @@ ngOnInit(): void {
         },
     });
   }
-
 }

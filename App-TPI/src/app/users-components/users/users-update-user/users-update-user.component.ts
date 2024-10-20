@@ -3,7 +3,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserService } from '../../../users-servicies/user.service';
 import { RolModel } from '../../../users-models/users/Rol';
-import { UserModel } from '../../../users-models/users/User';
+import { UserGet } from '../../../users-models/users/UserGet';
 import { UserPut } from '../../../users-models/users/UserPut';
 import { data } from 'jquery';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -109,7 +109,7 @@ export class UsersUpdateUserComponent implements OnInit {
     
 
     this.apiService.getUserById(parseInt(this.id)).subscribe({
-      next: (data: UserModel) => {        
+      next: (data: UserGet) => {        
         this.updateForm.get('name')?.setValue(data.name);
         this.updateForm.get('lastname')?.setValue(data.lastname);
         this.updateForm.get('dni')?.setValue(data.dni.toString());

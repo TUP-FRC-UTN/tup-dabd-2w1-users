@@ -1,7 +1,7 @@
 import { CommonModule, formatDate } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { UserModel } from '../../../users-models/users/User';
+import { UserGet } from '../../../users-models/users/UserGet';
 import { UserService } from '../../../users-servicies/user.service';
 import Swal from 'sweetalert2';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -17,7 +17,7 @@ import { DeleteUser } from '../../../users-models/owner/DeleteUser';
 })
 export class ModalInfoUserComponent implements OnInit {
 
-  @Input() userModal: UserModel = new UserModel();
+  @Input() userModal: UserGet = new UserGet();
   @Input() typeModal: string = '';
 
   //activeModal = inject(NgbActiveModal);
@@ -87,7 +87,7 @@ export class ModalInfoUserComponent implements OnInit {
     var user = new DeleteUser();
     user.id = this.userModal.id;
     user.userIdUpdate = 1; // Cambiar por el id del usuario logueado
-    this.apiService.desactivateUser(user).subscribe({
+    this.apiService.deleteUser(user).subscribe({
       next: () => {
         console.log('Usuario eliminado correctamente');
         this.activeModal.close();

@@ -1,6 +1,6 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
-import { UserModel } from '../../../users-models/users/User';
+import { UserGet } from '../../../users-models/users/UserGet';
 import { CommonModule, getLocaleMonthNames } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../users-servicies/user.service';

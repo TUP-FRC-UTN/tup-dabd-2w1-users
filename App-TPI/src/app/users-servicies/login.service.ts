@@ -1,17 +1,17 @@
 import { inject, Injectable } from '@angular/core';
 import { UserService } from './user.service';
 import { firstValueFrom } from 'rxjs';
-import { UserModel } from '../users-models/users/User';
+import { UserGet } from '../users-models/users/UserGet';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
-  private user : UserModel = new UserModel();
+  private user : UserGet = new UserGet();
 
   constructor() {}
 
-  async setUser(user: UserModel): Promise<void> {
+  async setUser(user: UserGet): Promise<void> {
     if (this.user === null) {
         this.user = user;
     } else {

@@ -3,7 +3,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RolModel } from '../../../users-models/users/Rol';
 import { UserService } from '../../../users-servicies/user.service';
-import { UserModel } from '../../../users-models/users/User';
+import { UserGet } from '../../../users-models/users/UserGet';
 import { UserPost } from '../../../users-models/users/UserPost';
 import { Router, RouterModule } from '@angular/router';
 import { UsersSelectMultipleComponent } from "../../utils/users-select-multiple/users-select-multiple.component";

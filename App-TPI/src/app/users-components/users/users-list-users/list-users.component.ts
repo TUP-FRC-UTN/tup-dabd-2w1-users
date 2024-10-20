@@ -1,6 +1,6 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
-import { UserModel } from '../../../users-models/users/User';
+import { UserGet } from '../../../users-models/users/UserGet';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ModalInfoUserComponent } from '../users-modal-info-user/modal-info-user.component';
@@ -27,7 +27,7 @@ export class ListUsersComponent implements OnInit {
 
   typeModal: string = '';
   user: number = 0; 
-  users: UserModel[] = [];
+  users: UserGet[] = [];
   private readonly apiService = inject(UserService);
   showDeactivateModal: boolean = false;
   userToDeactivate: number = 0;
@@ -38,7 +38,7 @@ export class ListUsersComponent implements OnInit {
 
   ngOnInit() {
     this.apiService.getAllUsers().subscribe({
-      next: (data: UserModel[]) => {
+      next: (data: UserGet[]) => {
         // Cambiar guiones por barras en la fecha de nacimiento
         this.users = data.map(user => ({
           ...user,
@@ -206,8 +206,8 @@ export class ListUsersComponent implements OnInit {
   }
 
   // Busca el user y se lo pasa al modal
-  userModal: UserModel = new UserModel();
-  selectUser(id: number): Promise<UserModel> {
+  userModal: UserGet = new UserGet();
+  selectUser(id: number): Promise<UserGet> {
       // Mostrar SweetAlert de tipo 'cargando'
     Swal.fire({
       title: 'Cargando usuario...',
@@ -220,7 +220,7 @@ export class ListUsersComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.user = id;
       this.apiService.getUserById(id).subscribe({
-        next: (data: UserModel) => {
+        next: (data: UserGet) => {
           this.userModal = data;
           Swal.close(); // Cerrar SweetAlert
           resolve(data); // Resuelve la promesa cuando los datos se cargan

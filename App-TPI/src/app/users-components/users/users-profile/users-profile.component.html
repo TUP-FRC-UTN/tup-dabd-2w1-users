@@ -1,6 +1,6 @@
 <section class="container p-5 border rounded border-3 border-secundary" style="min-height: 70vh;">
     <div class="d-flex justify-content-between">
-        <h3 class="mb-3">Tú Perfil</h3>
+        <h3 class="mb-3">Tu Perfil</h3>
 
         @if(type == 'edit'){
             <div style="max-width: 500px" class="col-md-6 d-flex justify-content-end">
@@ -29,21 +29,21 @@
         }
 
     </div>
-    <form [formGroup]="formReactivo" class="text-end mt-5" (ngSubmit)="updateUser()">
+    <form [formGroup]="formProfile" class="text-end mt-5" (ngSubmit)="updateUser()">
         <div class="row mb-3">
             <div class="col-md-6">
                 <div class="d-flex align-items-center">
                     <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Nombre</label>
                     <input type="text" class="form-control custom-input"
-                        [ngClass]="{'is-invalid': formReactivo.controls['nombre'].invalid && (formReactivo.get('nombre')?.dirty || formReactivo.get('nombre')?.touched), 'is-valid': formReactivo.controls['nombre'].valid }"
-                        formControlName="nombre">
+                        [ngClass]="{'is-invalid': formProfile.controls['name'].invalid && (formProfile.get('name')?.dirty || formProfile.get('name')?.touched), 'is-valid': formProfile.controls['name'].valid }"
+                        formControlName="name">
                 </div>
                 <div class="text-danger" style="margin-left: 130px;">
-                    @if(formReactivo.get('nombre')?.dirty || formReactivo.get('nombre')?.touched){
-                        @if(formReactivo.controls['nombre'].errors?.["required"]){
+                    @if(formProfile.get('name')?.dirty || formProfile.get('nombre')?.touched){
+                        @if(formProfile.controls['name'].errors?.["required"]){
                             Ingrese su nombre
                         }
-                        @if(formReactivo.controls['nombre'].errors?.["maxlength"]){
+                        @if(formProfile.controls['name'].errors?.["maxlength"]){
                             El nombre no puede superar los 50 caracteres
                         }
                     }
@@ -53,15 +53,15 @@
                 <div class="d-flex align-items-center">
                     <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Apellido</label>
                     <input type="text" class="form-control custom-input"
-                        [ngClass]="{'is-invalid': formReactivo.controls['apellido'].invalid && (formReactivo.get('apellido')?.dirty || formReactivo.get('apellido')?.touched), 'is-valid': formReactivo.controls['apellido'].valid }"
-                        formControlName="apellido">
+                        [ngClass]="{'is-invalid': formProfile.controls['lastName'].invalid && (formProfile.get('lastName')?.dirty || formProfile.get('lastName')?.touched), 'is-valid': formProfile.controls['lastName'].valid }"
+                        formControlName="lastName">
                 </div>
                 <div class="text-danger" style="margin-left: 130px;">
-                    @if(formReactivo.get('apellido')?.dirty || formReactivo.get('apellido')?.touched){
-                        @if(formReactivo.controls['apellido'].errors?.["required"]){
+                    @if(formProfile.get('apellido')?.dirty || formProfile.get('apellido')?.touched){
+                        @if(formProfile.controls['lastName'].errors?.["required"]){
                             Ingrese su apellido
                         }
-                        @if(formReactivo.controls['apellido'].errors?.["maxlength"]){
+                        @if(formProfile.controls['lastName'].errors?.["maxlength"]){
                             El apellido no puede superar los 50 caracteres
                         }
                     }
@@ -73,37 +73,13 @@
             <div class="col-md-6">
                 <div class="d-flex align-items-center">
                     <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Email</label>
-                    <input type="text" class="form-control custom-input"
-                        [ngClass]="{'is-invalid': formReactivo.controls['email'].invalid && (formReactivo.get('email')?.dirty || formReactivo.get('email')?.touched), 'is-valid': formReactivo.controls['email'].valid }"
-                        formControlName="email">
-                </div>
-                <div class="text-danger" style="margin-left: 130px;">
-                    @if(formReactivo.get('email')?.dirty || formReactivo.get('email')?.touched){
-                        @if(formReactivo.controls['email'].errors?.["required"]){
-                            Ingrese su email
-                        }
-                        @if(formReactivo.controls['email'].errors?.["email"]){
-                            Ingrese un email válido
-                        }
-                    }
+                    <input type="text" class="form-control custom-input" formControlName="email">
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="d-flex align-items-center">
                     <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">DNI</label>
-                    <input type="text" class="form-control custom-input"
-                        [ngClass]="{'is-invalid': formReactivo.controls['dni'].invalid && (formReactivo.get('dni')?.dirty || formReactivo.get('dni')?.touched), 'is-valid': formReactivo.controls['dni'].valid }"
-                        formControlName="dni" style="appearance: none;" pattern="[0-9]*">
-                </div>
-                <div class="text-danger" style="margin-left: 130px;">
-                    @if(formReactivo.get('dni')?.dirty || formReactivo.get('dni')?.touched){
-                        @if(formReactivo.controls['dni'].errors?.["required"]){
-                            Ingrese un DNI
-                        }
-                        @if(formReactivo.controls['dni'].errors?.["minlength"] || formReactivo.controls['dni'].errors?.["maxlength"]){
-                            El DNI debe tener entre 1 y 11 caracteres
-                        }
-                    }
+                    <input type="text" class="form-control custom-input" formControlName="dni" style="appearance: none;" pattern="[0-9]*">
                 </div>
             </div>
         </div>
@@ -113,15 +89,15 @@
                 <div class="d-flex align-items-center">
                     <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Teléfono</label>
                     <input type="text" class="form-control custom-input"
-                        [ngClass]="{'is-invalid': formReactivo.controls['telefono'].invalid && (formReactivo.get('telefono')?.dirty || formReactivo.get('telefono')?.touched), 'is-valid': formReactivo.controls['telefono'].valid }"
-                        formControlName="telefono" style="appearance: none;">
+                        [ngClass]="{'is-invalid': formProfile.controls['phoneNumber'].invalid && (formProfile.get('phoneNumber')?.dirty || formProfile.get('phoneNumber')?.touched), 'is-valid': formProfile.controls['phoneNumber'].valid }"
+                        formControlName="phoneNumber" style="appearance: none;">
                 </div>
                 <div class="text-danger" style="margin-left: 130px;">
-                    @if(formReactivo.get('telefono')?.dirty || formReactivo.get('telefono')?.touched){
-                        @if(formReactivo.controls['telefono'].errors?.["required"]){
+                    @if(formProfile.get('telefono')?.dirty || formProfile.get('telefono')?.touched){
+                        @if(formProfile.controls['phoneNumber'].errors?.["required"]){
                             Ingrese su teléfono
                         }
-                        @if(formReactivo.controls['telefono'].errors?.["minlength"] || formReactivo.controls['telefono'].errors?.["maxlength"]){
+                        @if(formProfile.controls['phoneNumber'].errors?.["minlength"] || formProfile.controls['phoneNumber'].errors?.["maxlength"]){
                             El teléfono debe tener entre 10 y 20 caracteres
                         }
                     }
@@ -130,16 +106,7 @@
             <div class="col-md-6">
                 <div class="d-flex align-items-center">
                     <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Fecha de nacimiento</label>
-                    <input type="date" class="form-control custom-input"
-                        [ngClass]="{'is-invalid': formReactivo.controls['fecha'].invalid && (formReactivo.get('fecha')?.dirty || formReactivo.get('fecha')?.touched), 'is-valid': formReactivo.controls['fecha'].valid }"
-                        formControlName="fecha" value="2000-01-01">
-                </div>
-                <div class="text-danger" style="margin-left: 130px;">
-                    @if(formReactivo.get('fecha')?.dirty || formReactivo.get('fecha')?.touched){
-                        @if(formReactivo.controls['fecha'].errors?.["required"]){
-                            Ingrese su fecha de nacimiento
-                        }
-                    }
+                    <input type="date" class="form-control custom-input" formControlName="datebirth" value="2000-01-01">
                 </div>
             </div>
         </div>
@@ -151,24 +118,25 @@
             </div>
             <div class="col-md-6">
                 <div class="d-flex align-items-center">
-                    <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Nombre de usuario</label>
+                    <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Telegram</label>
                     <input type="text" class="form-control custom-input"
-                        [ngClass]="{'is-invalid': formReactivo.controls['username'].invalid && (formReactivo.get('username')?.dirty || formReactivo.get('username')?.touched), 'is-valid': formReactivo.controls['username'].valid }"
-                        formControlName="username">
+                        [ngClass]="{'is-invalid': formProfile.controls['telegram_id'].invalid && (formProfile.get('telegram_id')?.dirty || formProfile.get('telegram_id')?.touched), 'is-valid': formProfile.controls['telegram_id'].valid }"
+                        formControlName="telegram_id">
                 </div>
                 <div class="text-danger" style="margin-left: 130px;">
-                    @if(formReactivo.get('username')?.dirty || formReactivo.get('username')?.touched){
-                        @if(formReactivo.controls['username'].errors?.["required"]){
-                            Ingrese su nombre de usuario
-                        }
-                        @if(formReactivo.controls['username'].errors?.["maxlength"]){
-                            El nombre de usuario no puede superar los 20 caracteres
-                        }
-                        @if(formReactivo.controls['username'].errors?.["pattern"]){
-                            El nombre de usuario solo puede contener letras, números y guiones bajos
+                    @if(formProfile.get('telegram_id')?.dirty || formProfile.get('telegram_id')?.touched){
+                        @if(formProfile.controls['telegram_id'].errors?.["required"]){
+                            Ingrese su telegram id
                         }
                     }
                 </div>
+            </div>
+        </div>     
+
+        <div class="row mb-3">
+            <div class="col-md-6 d-flex justify-content-end">
+                <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Nombre de usuario</label>
+                <input type="text" class="form-control custom-input" formControlName="username">
             </div>
         </div>     
         
@@ -177,7 +145,7 @@
             <button type="button" class="btn btn-primary mt-4" (click)="changeType('edit')">Editar</button>
         }@else {
             <button type="button" class="btn btn-secondary mt-4 mx-3" (click)="changeType('info')">Cancelar</button>
-            <button type="submit" class="btn btn-primary mt-4" >Guardar</button>
+            <button type="submit" class="btn btn-primary mt-4" [disabled]="!formProfile.valid" >Guardar</button>
         }
 
     </form>

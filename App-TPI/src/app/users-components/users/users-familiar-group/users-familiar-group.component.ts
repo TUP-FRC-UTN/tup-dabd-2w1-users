@@ -1,11 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { UserService } from '../../../users-servicies/user.service';
 import { LoginService } from '../../../users-servicies/login.service';
-import { UserModel } from '../../../users-models/users/User';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalInfoUserComponent } from '../users-modal-info-user/modal-info-user.component';
+import { UserGet } from '../../../users-models/users/UserGet';
 
 @Component({
   selector: 'app-users-familiar-group',
@@ -21,7 +21,7 @@ export class UsersFamiliarGroupComponent implements OnInit {
   private readonly apiService = inject(UserService);
   private readonly loginService = inject(LoginService);
 
-  familyGroup: UserModel[] = [];
+  familyGroup: UserGet[] = [];
 
   ngOnInit() {
     this.apiService.getUsersByPlotID(1).subscribe({
@@ -64,8 +64,8 @@ export class UsersFamiliarGroupComponent implements OnInit {
     }
   }
 
-  userModal: UserModel = new UserModel();
-  selectUser(id: number): Promise<UserModel> {
+  userModal: UserGet = new UserGet();
+  selectUser(id: number): Promise<UserGet> {
       // Mostrar SweetAlert de tipo 'cargando'
     Swal.fire({
       title: 'Cargando usuario...',
@@ -77,7 +77,7 @@ export class UsersFamiliarGroupComponent implements OnInit {
     });
     return new Promise((resolve, reject) => {
       this.apiService.getUserById(id).subscribe({
-        next: (data: UserModel) => {
+        next: (data: UserGet) => {
           this.userModal = data;
           Swal.close(); // Cerrar SweetAlert
           resolve(data); // Resuelve la promesa cuando los datos se cargan

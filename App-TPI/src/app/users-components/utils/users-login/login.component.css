@@ -10,6 +10,17 @@
     padding-left: 20px;
 }
 
+.form-control{
+    min-width: 350px;
+    max-width: 350px;   
+}
+
+.form-error{
+    min-width: 400px;
+    max-width: 400px;   
+}
+
+
 input.custom-input:focus {
     background-color: #ffffff;
 }
@@ -27,4 +38,8 @@ input.custom-input:focus {
 .custom-link:hover {
     text-decoration: underline;
     text-decoration-color: black; 
+}
+
+.error{
+    color: red;
 }
