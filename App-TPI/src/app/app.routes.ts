@@ -6,6 +6,7 @@ import { authGuard } from './guards/auth.guard';
 import { NotFoundComponent } from './errors-components/not-found/not-found.component';
 import { UnauthorizedComponent } from './errors-components/unauthorized/unauthorized.component';
 import { roleGuard } from './guards/role.guard';
+import { UsersFamiliarGroupComponent } from './users-components/users/users-familiar-group/users-familiar-group.component';
 
 // Rutas principales de la aplicación
 export const routes: Routes = [
@@ -31,6 +32,12 @@ export const routes: Routes = [
         component: UsersProfileComponent,
         canActivate: [authGuard, roleGuard],
         data: {roles: ['SuperAdmin', 'Admin', 'Owner', 'Security']}
+      },
+      {
+        path: 'family',
+        component: UsersFamiliarGroupComponent ,
+        canActivate: [authGuard, roleGuard],
+        data: {roles: ['Owner', 'User']}
       },
       {
         path: 'users',

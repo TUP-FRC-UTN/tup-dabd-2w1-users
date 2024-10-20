@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ListUsersComponent } from './users-list-users/list-users.component';
 import { NewUserComponent } from './users-new-user/new-user.component';
 import { UsersUpdateUserComponent } from './users-update-user/users-update-user.component';
+import { UsersFamiliarGroupComponent } from './users-familiar-group/users-familiar-group.component';
 
 const routes: Routes = [
   {path: 'list', component: ListUsersComponent},

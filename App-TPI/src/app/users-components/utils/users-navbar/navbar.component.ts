@@ -38,7 +38,7 @@ export class NavbarComponent implements OnInit {
          //botón grupo familiar
         icon: "bi bi-house",
         title: "Grupo Familiar",
-        route: "home/users/family",
+        route: "home/family",
         roles: ["Owner"]
       },
       {
