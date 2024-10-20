@@ -5,7 +5,6 @@ import { OwnersRoutingModule } from './owners-routing.module';
 
 
 @NgModule({
-  declarations: [],
   imports: [
     CommonModule,
     OwnersRoutingModule

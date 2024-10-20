@@ -40,6 +40,8 @@
                     }
                 </div>
             </div>
+            
+            
     
             <div class="row mb-3">
                 <div class="col">
@@ -52,6 +54,14 @@
 
                 </div>
             </div>
+
+            @if (errorLog) {
+                <div class="row mb-3">
+                    <div class="col" style="color: red;">
+                        Usuario o contraseña no válidos. Por favor, intentelo de nuevo.
+                    </div>
+                </div>
+            }
     
             <div class="row">
                 <div class="col text-center">

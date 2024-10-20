@@ -29,8 +29,10 @@ export class AuthService {
 
   //verificar si tiene cierto rol
   hasRole(role: string): boolean {
-    const userRoles = JSON.parse(localStorage.getItem('userRoles') || '[]');
-    return userRoles.includes(role); // Verifica si el rol existe en el array de roles
+    const userRoles: string[] = JSON.parse(
+      localStorage.getItem('userRoles') || '[]'
+    );
+    return userRoles.includes(role);
   }
 
   //eliminar los datos del usuario

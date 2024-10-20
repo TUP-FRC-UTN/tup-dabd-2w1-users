@@ -3,10 +3,14 @@ import { LoginComponent } from './users-components/utils/users-login/login.compo
 import { LandingPageComponent } from './users-components/utils/users-landing-page/landing-page.component';
 import { UsersProfileComponent } from './users-components/users/users-profile/users-profile.component';
 import { authGuard } from './guards/auth.guard';
+import { NotFoundComponent } from './errors-components/not-found/not-found.component';
+import { UnauthorizedComponent } from './errors-components/unauthorized/unauthorized.component';
+import { roleGuard } from './guards/role.guard';
 
 // Rutas principales de la aplicación
 export const routes: Routes = [
   {
+    //si se deja vacío por defecto redirige al login
     path: '', 
     redirectTo: '/login',
     pathMatch: 'full'
@@ -16,30 +20,46 @@ export const routes: Routes = [
     component: LoginComponent
   },
   {
+    //ruta principal
     path: 'home',
     component: LandingPageComponent,
-    canActivate: [authGuard],
+    canActivate: [authGuard, roleGuard],
+    data: {roles : ['SuperAdmin', 'Admin', 'Owner', 'Security']},
     children: [
       {
         path: 'profile',
         component: UsersProfileComponent,
-        canActivate: [authGuard]
+        canActivate: [authGuard, roleGuard],
+        data: {roles: ['SuperAdmin', 'Admin', 'Owner', 'Security']}
       },
       {
         path: 'users',
-        canActivate: [authGuard],
+        canActivate: [authGuard, roleGuard],
+        data: {roles: ['SuperAdmin', 'Admin']},
         loadChildren: () => import('./users-components/users/users.module').then(m => m.UsersModule)
       },
       {
         path: 'plots',
         canActivate: [authGuard],
+        data: {roles: ['SuperAdmin', 'Admin']},
         loadChildren: () => import('./users-components/plots/plots.module').then(m => m.PlotsModule)
       },
       {
         path: 'owner',
-        canActivate: [authGuard],
+        canActivate: [authGuard, roleGuard],
+        data: {roles: ['SuperAdmin', 'Admin']},
         loadChildren: () => import('./users-components/owners/owners.module').then(m => m.OwnersModule)
       }
     ]
+  },
+  {
+    //componente que se muestra cuando el roleGuard da false
+    path: 'unauthorized',
+    component: UnauthorizedComponent
+  },
+  {
+    //ruta no encontrada
+    path: '**',
+    component: NotFoundComponent
   }
 ];
