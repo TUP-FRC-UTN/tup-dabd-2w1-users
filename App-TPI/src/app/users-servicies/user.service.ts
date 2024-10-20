@@ -31,11 +31,11 @@ export class UserService {
   }
 
   verifyLogin(user: LoginUser): Observable<LoginUser> {
-    return this.http.post<LoginUser>("http://localhost:8080/" + "auth/login", user);
+    return this.http.post<LoginUser>("http://localhost:8080/auth/login", user);
   }   
 
   getAllRoles(): Observable<RolModel[]> {
-    return this.http.get<RolModel[]>(this.url + "roles");
+    return this.http.get<RolModel[]>("http://localhost:8080/roles");
   }
 
   getUserById(userId: number): Observable<UserGet> {

@@ -12,10 +12,6 @@ import { RolModel } from '../../../users-models/users/Rol';
   styleUrl: './users-select-multiple.component.css'
 })
 export class UsersSelectMultipleComponent implements OnInit, OnChanges {
-  //pasar los roles desde el padre
-  // @Input() roles = [];
-
-  //enviar los roles seleccionados
   @Input() rolesSelected : string[] = [];
   @Input() rolChanger: string = '';
 
@@ -31,9 +27,8 @@ export class UsersSelectMultipleComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.apiService.getAllRoles().subscribe({
       next: (data) => {
-        if(this.rolChanger == "Admin"){
+
           this.roles = data;
-        }
         if(this.rolChanger == "Owner"){
           this.roles = data.filter( r => this.listRolesForOwner.includes(r.description));
         }
@@ -42,11 +37,9 @@ export class UsersSelectMultipleComponent implements OnInit, OnChanges {
         console.error(error);
       }
     });
-    
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.rolesSelected);
     this.roles.forEach( r => {
       if(this.rolesSelected.includes(r.description)){
         $("#"+r.id).prop('checked', true);
