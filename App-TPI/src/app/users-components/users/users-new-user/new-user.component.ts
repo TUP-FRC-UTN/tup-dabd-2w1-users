@@ -1,10 +1,10 @@
 import { CommonModule, formatDate } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RolModel } from '../../../users-models/Rol';
-import { ApiServiceService } from '../../../users-servicies/api-service.service';
-import { UserModel } from '../../../users-models/User';
-import { UserPost } from '../../../users-models/UserPost';
+import { RolModel } from '../../../users-models/users/Rol';
+import { UserService } from '../../../users-servicies/user.service';
+import { UserGet } from '../../../users-models/users/UserGet';
+import { UserPost } from '../../../users-models/users/UserPost';
 import { Router, RouterModule } from '@angular/router';
 import { UsersSelectMultipleComponent } from "../../utils/users-select-multiple/users-select-multiple.component";
 
@@ -63,7 +63,7 @@ export class NewUserComponent implements OnInit {
     return formatDate(date, 'yyyy-MM-dd', 'en-US');
   }
 
-  private readonly apiService = inject(ApiServiceService);
+  private readonly apiService = inject(UserService);
 
   
   roles: RolModel[] = [];
@@ -89,26 +89,10 @@ export class NewUserComponent implements OnInit {
     });
   }
 
-  aniadirRol() {
-    console.log(this.formReactivo.errors);
-    
-    const rolSeleccionado = this.formReactivo.get('rol')?.value;
-    if (rolSeleccionado && !this.rolesInput.includes(rolSeleccionado)) {  
-      this.rolesInput.push(rolSeleccionado);  
-    }
-    this.formReactivo.get('rol')?.setValue('');
-  }
-
   redirect(path:string){
     this.router.navigate([path]);
   }
 
-  quitarRol(rol: string) {
-    const index = this.rolesInput.indexOf(rol);
-    if (index > -1) {
-      this.rolesInput.splice(index, 1);
-    }
-  }
 
   resetForm() {
     this.formReactivo.reset();
@@ -132,7 +116,9 @@ export class NewUserComponent implements OnInit {
                     new Date(fechaValue).toISOString().split('T')[0] : '',
       roles: this.rolesSelected,
       phone_number: this.formReactivo.get('telefono')?.value || '',
-      userUpdateId: 5
+      userUpdateId: 5,
+      telegram_id: 0,
+      plot_id: 0
     };
 
     console.log(userData);

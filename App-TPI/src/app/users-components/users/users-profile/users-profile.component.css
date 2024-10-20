@@ -1,0 +1,9 @@
+.form-control{
+    min-width: 500px;
+    max-width: 500px;   
+}
+
+.form-error{
+    min-width: 500px;
+    max-width: 500px;   
+}

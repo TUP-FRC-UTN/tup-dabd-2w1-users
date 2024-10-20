@@ -1,59 +1,54 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ApiServiceService } from '../../../users-servicies/api-service.service';
-import { LoginUser } from '../../../users-models/Login';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { UserService } from '../../../users-servicies/user.service';
+import { LoginUser } from '../../../users-models/users/Login';
 import { Router, RouterModule } from '@angular/router';
 import { LoginService } from '../../../users-servicies/login.service';
+import { AuthService } from '../../../users-servicies/auth.service';
+import { UserLoged } from '../../../users-models/users/UserLoged';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrl: './login.component.css',
 })
 export class LoginComponent {
-  @Output() validacion = new EventEmitter<void>();
+  private readonly router = inject(Router);
+  private readonly apiService = inject(UserService);
+  private readonly authService = inject(AuthService);
 
-  constructor(private router: Router) { }
+  //Muestra un mensaje si los datos ingresados son incorrectos
+  errorLog: boolean = false;
 
-  user: LoginUser = new LoginUser();
-  correoInput: string = "";
-  claveInput: string = "";
-
-  private readonly apiService = inject(ApiServiceService);
-  private readonly loginService = inject(LoginService);
-
+  //Establece los campos del formulario
   loginForm = new FormGroup({
-    email: new FormControl("", [Validators.required]),
-    password: new FormControl("", [Validators.required, Validators.minLength(6)]),
+    email: new FormControl('', [Validators.required]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(6),
+    ]),
   });
 
+  //Funcion para loguear, setear el token y redirigir a la pagina de inicio
   async login() {
-    if (this.loginForm.invalid) {
-      alert("no se logueo");
-    } else {
-      this.user.email = this.loginForm.value.email!;
-      this.user.password = this.loginForm.value.password!;
-
-      this.apiService.verifyLogin(this.user).subscribe({
-        next: async (data) => {
-          if (data) {
-            try {
-              await this.loginService.setUser(this.user.email);
-              this.router.navigate(['/home']); // Redirige solo cuando se haya obtenido el usuario
-            } catch (error) {
-              alert("Error obteniendo los datos del usuario.");
-            }
-          } else {
-            alert("Dni o contraseña incorrectos");
-          }
-        },
-        error: (error) => {
-          alert("Dni o contraseña incorrectos");
-        }
-      });
-    }
+    this.apiService.verifyLogin(this.loginForm.value as LoginUser).subscribe({
+      next: async (data) => {
+        await this.authService.login(data);
+        this.errorLog = false;
+        this.router.navigate(['home']);
+      },
+      error: (error) => {
+        this.errorLog = true;
+      },
+    });
   }
 }

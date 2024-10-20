@@ -6,7 +6,7 @@ export class OwnerModel {
     dateBirth: Date;
     ownerTypeId: number;
     taxStatusId: number;
-    bussinesName?: string;
+    businessName?: string;
     active: boolean;
     username: string;
     password: string;
@@ -16,6 +16,7 @@ export class OwnerModel {
     roles: string[];
     userCreateId: number;
     plotId: number;
+    telegramId: number;
 
     constructor() {
         this.name = '';        
@@ -34,5 +35,6 @@ export class OwnerModel {
         this.roles = [];
         this.userCreateId = 0;
         this.plotId = 0;
+        this.telegramId = 0;
     }
 }

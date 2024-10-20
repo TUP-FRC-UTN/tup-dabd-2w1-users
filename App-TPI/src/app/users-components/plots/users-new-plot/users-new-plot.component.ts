@@ -3,9 +3,9 @@ import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { PlotService } from '../../../users-servicies/plot.service';
-import { PlotTypeModel } from '../../../users-models/PlotType';
-import { PlotStateModel } from '../../../users-models/PlotState';
-import { PlotModel } from '../../../users-models/Plot';
+import { PlotTypeModel } from '../../../users-models/plot/PlotType';
+import { PlotStateModel } from '../../../users-models/plot/PlotState';
+import { PlotModel } from '../../../users-models/plot/Plot';
 
 @Component({
   selector: 'app-users-new-plot',

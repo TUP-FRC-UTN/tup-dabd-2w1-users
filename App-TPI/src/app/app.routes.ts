@@ -1,74 +1,72 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './users-components/utils/users-login/login.component';
 import { LandingPageComponent } from './users-components/utils/users-landing-page/landing-page.component';
-import { NewUserComponent } from './users-components/users/users-new-user/new-user.component'; 
-import { ListUsersComponent } from './users-components/users/users-list-users/list-users.component';
-import { UsersUpdateUserComponent } from './users-components/users/users-update-user/users-update-user.component';
-import { UsersNewPlotComponent } from './users-components/plots/users-new-plot/users-new-plot.component';
-import { UsersListPlotsComponent } from './users-components/plots/users-list-plots/users-list-plots.component';
-import { UsersUpdatePlotComponent } from './users-components/plots/users-update-plot/users-update-plot.component';
-import { UsuariosNewOwnerComponent } from './users-components/owners/users-new-owner/usuarios-new-owner.component';
+import { UsersProfileComponent } from './users-components/users/users-profile/users-profile.component';
+import { authGuard } from './guards/auth.guard';
+import { NotFoundComponent } from './errors-components/not-found/not-found.component';
+import { UnauthorizedComponent } from './errors-components/unauthorized/unauthorized.component';
+import { roleGuard } from './guards/role.guard';
+import { UsersFamiliarGroupComponent } from './users-components/users/users-familiar-group/users-familiar-group.component';
 
+// Rutas principales de la aplicación
 export const routes: Routes = [
-    {
-        path: '', 
-        redirectTo: '/login',
-        pathMatch: 'full'
-    },
-    {
-        path: 'login',
-        component: LoginComponent
-    },
-    {
-        path:'home',
-        component: LandingPageComponent,
-        children:[
-            {
-                path: 'users',
-                children: [
-                    {
-                        path: 'add',
-                        component: NewUserComponent
-                    },
-                    {
-                        path: 'list',
-                        component: ListUsersComponent   
-                    },
-                    {
-                        path: 'edit/:id',
-                        component: UsersUpdateUserComponent
-                
-                    }
-
-                ]
-            },
-            {
-                path: 'plots',
-                children: [
-                    {
-                        path: 'add',
-                        component: UsersNewPlotComponent
-                    },
-                    {
-                        path: 'list',
-                        component: UsersListPlotsComponent
-                    }
-                    ,
-                    {
-                        path: 'edit/:id',
-                        component: UsersUpdatePlotComponent
-                    }
-                ]
-            },
-            {
-                path: 'owner',
-                children: [
-                    {
-                        path: 'add',
-                        component: UsuariosNewOwnerComponent
-                    }
-                ]
-            }
-        ]
-    }
+  {
+    //si se deja vacío por defecto redirige al login
+    path: '', 
+    redirectTo: '/login',
+    pathMatch: 'full'
+  },
+  {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
+    //ruta principal
+    path: 'home',
+    component: LandingPageComponent,
+    canActivate: [authGuard, roleGuard],
+    data: {roles : ['SuperAdmin', 'Admin', 'Owner', 'Security']},
+    children: [
+      {
+        path: 'profile',
+        component: UsersProfileComponent,
+        canActivate: [authGuard, roleGuard],
+        data: {roles: ['SuperAdmin', 'Admin', 'Owner', 'Security']}
+      },
+      {
+        path: 'family',
+        component: UsersFamiliarGroupComponent ,
+        canActivate: [authGuard, roleGuard],
+        data: {roles: ['Owner', 'User']}
+      },
+      {
+        path: 'users',
+        canActivate: [authGuard, roleGuard],
+        data: {roles: ['SuperAdmin', 'Admin']},
+        loadChildren: () => import('./users-components/users/users.module').then(m => m.UsersModule)
+      },
+      {
+        path: 'plots',
+        canActivate: [authGuard],
+        data: {roles: ['SuperAdmin', 'Admin']},
+        loadChildren: () => import('./users-components/plots/plots.module').then(m => m.PlotsModule)
+      },
+      {
+        path: 'owner',
+        canActivate: [authGuard, roleGuard],
+        data: {roles: ['SuperAdmin', 'Admin']},
+        loadChildren: () => import('./users-components/owners/owners.module').then(m => m.OwnersModule)
+      }
+    ]
+  },
+  {
+    //componente que se muestra cuando el roleGuard da false
+    path: 'unauthorized',
+    component: UnauthorizedComponent
+  },
+  {
+    //ruta no encontrada
+    path: '**',
+    component: NotFoundComponent
+  }
 ];

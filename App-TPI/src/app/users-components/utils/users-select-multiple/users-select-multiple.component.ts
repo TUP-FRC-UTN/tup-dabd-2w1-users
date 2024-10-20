@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ApiServiceService } from '../../../users-servicies/api-service.service';
-import { RolModel } from '../../../users-models/Rol';
+import { UserService } from '../../../users-servicies/user.service';
+import { RolModel } from '../../../users-models/users/Rol';
 
 @Component({
   selector: 'app-users-select-multiple',
@@ -17,18 +17,26 @@ export class UsersSelectMultipleComponent implements OnInit, OnChanges {
 
   //enviar los roles seleccionados
   @Input() rolesSelected : string[] = [];
+  @Input() rolChanger: string = '';
+
+  listRolesForOwner: string[] = ['User'];
+
   roles: RolModel[] = [];
 
   title : string = "Seleccione un rol..."
 
 
-  private readonly apiService = inject(ApiServiceService);
+  private readonly apiService = inject(UserService);
 
   ngOnInit(): void {
     this.apiService.getAllRoles().subscribe({
       next: (data) => {
-        this.roles = data;
-        
+        if(this.rolChanger == "Admin"){
+          this.roles = data;
+        }
+        if(this.rolChanger == "Owner"){
+          this.roles = data.filter( r => this.listRolesForOwner.includes(r.description));
+        }
       },
       error: (error) => {
         console.error(error);
@@ -63,6 +71,9 @@ export class UsersSelectMultipleComponent implements OnInit, OnChanges {
     else{
         this.title = "Seleccione un rol...";
     }
+
+    console.log("Roles cuando se agrega o quita un rol:" + this.rolesSelected);
+    
   }
 
   addRole(role: string) {

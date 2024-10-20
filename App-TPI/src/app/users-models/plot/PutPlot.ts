@@ -11,6 +11,5 @@ export class PutPlot {
         this.plot_state_id = 0;
         this.plot_type_id = 0;
         this.userUpdateId = 0;
-
     }
 }

@@ -1,9 +1,9 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
-import { UserModel } from '../../../users-models/User';
+import { UserGet } from '../../../users-models/users/UserGet';
 import { CommonModule, getLocaleMonthNames } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ApiServiceService } from '../../../users-servicies/api-service.service';
+import { UserService } from '../../../users-servicies/user.service';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
@@ -13,9 +13,9 @@ import 'datatables.net-bs5';
 import { Router, RouterModule } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
-import { PlotModel } from '../../../users-models/Plot';
+import { PlotModel } from '../../../users-models/plot/Plot';
 import { PlotService } from '../../../users-servicies/plot.service';
-import { GetPlotModel } from '../../../users-models/GetPlot';
+import { GetPlotModel } from '../../../users-models/plot/GetPlot';
 import { UsersModaInfoPlotComponent } from '../users-moda-info-plot/users-moda-info-plot.component';
 
 @Component({

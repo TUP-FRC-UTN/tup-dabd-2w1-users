@@ -1,10 +1,11 @@
 import { CommonModule, formatDate } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { UserModel } from '../../../users-models/User';
-import { ApiServiceService } from '../../../users-servicies/api-service.service';
+import { UserGet } from '../../../users-models/users/UserGet';
+import { UserService } from '../../../users-servicies/user.service';
 import Swal from 'sweetalert2';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { DeleteUser } from '../../../users-models/owner/DeleteUser';
 
 
 @Component({
@@ -16,11 +17,11 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class ModalInfoUserComponent implements OnInit {
 
-  @Input() userModal: UserModel = new UserModel();
+  @Input() userModal: UserGet = new UserGet();
   @Input() typeModal: string = '';
 
   //activeModal = inject(NgbActiveModal);
-  private readonly apiService = inject(ApiServiceService);
+  private readonly apiService = inject(UserService);
   rolesInput: string[] = [];
 
   editUser: FormGroup;
@@ -82,8 +83,11 @@ export class ModalInfoUserComponent implements OnInit {
     return formatDate(date, 'yyyy-MM-dd', 'en-US');
   }
 
-  confirmDeactivate() {
-    this.apiService.desactivateUser(this.userModal.id).subscribe({
+  confirmDesactivate() {
+    var user = new DeleteUser();
+    user.id = this.userModal.id;
+    user.userIdUpdate = 1; // Cambiar por el id del usuario logueado
+    this.apiService.deleteUser(user).subscribe({
       next: () => {
         console.log('Usuario eliminado correctamente');
         this.activeModal.close();
@@ -110,7 +114,7 @@ export class ModalInfoUserComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire('Eliminado!', '', 'success');
-        this.confirmDeactivate();
+        this.confirmDesactivate();
       } else{
         Swal.fire('Operación cancelada!', '', 'info');
       }
