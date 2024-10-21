@@ -7,6 +7,7 @@ import { NotFoundComponent } from './errors-components/not-found/not-found.compo
 import { UnauthorizedComponent } from './errors-components/unauthorized/unauthorized.component';
 import { roleGuard } from './guards/role.guard';
 import { UsersFamiliarGroupComponent } from './users-components/users/users-familiar-group/users-familiar-group.component';
+import { loginBlockGuard } from './guards/login-block.guard';
 
 // Rutas principales de la aplicación
 export const routes: Routes = [
@@ -18,7 +19,8 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
+    canActivate: [loginBlockGuard]
   },
   {
     //ruta principal

@@ -2,25 +2,26 @@ import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot } fr
 import { AuthService } from '../users-servicies/auth.service';
 import { inject } from '@angular/core';
 
+//Guard para ver si el rol del usuario puede acceder al componente
 export const roleGuard: CanActivateFn = (route, state) => {
 
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  //rol que puede acceder al componente
+  //Rol que puede acceder al componente
   const requiredRoles = route.data['roles'] as string[];
   
-  //ver si el usuario tiene alguno de los roles permitidos
+  //Ver si el usuario tiene alguno de los roles permitidos
   const hasValidRole = requiredRoles.some((role) =>    
     authService.hasRole(role)
   );
 
-  //si tiene permisos
+  //Si tiene permisos
   if (hasValidRole) {
     return true;
   } 
   
-  //si no tiene permisos
+  //Si no tiene permisos
   else {
     router.navigate(['unauthorized']);
     return false;
