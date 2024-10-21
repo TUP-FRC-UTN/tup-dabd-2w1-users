@@ -62,10 +62,10 @@ export class UsersNewPlotComponent {
 
    
   formReactivo = new FormGroup({
-    plotNumber: new FormControl(0, [Validators.required]),
-    blockNumber: new FormControl(0, [Validators.required]),
-    totalArea: new FormControl(0, [Validators.required]),
-    totalBuild: new FormControl(0, [Validators.required]),
+    plotNumber: new FormControl(0, [Validators.required,Validators.min(0)]),
+    blockNumber: new FormControl(0, [Validators.required,Validators.min(0)]),
+    totalArea: new FormControl(0, [Validators.required,Validators.min(0)]),
+    totalBuild: new FormControl(0, [Validators.required,Validators.min(0)]),
     state: new FormControl(null, [Validators.required]),
     type: new FormControl(null, [Validators.required])
   })

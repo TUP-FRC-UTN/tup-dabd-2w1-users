@@ -1,11 +1,11 @@
-<section class="container p-5 border rounded border-3 border-secundary" style="min-height: 70vh;">
+<section class="container p-5 border rounded border-3 border-secondary" style="min-height: 70vh;">
     <h3>Añadir Lote</h3>
     <form [formGroup]="formReactivo" (ngSubmit)="createPlot()">
 
         <div class="row mb-3 mt-5">
             <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-end">N. de lote</label>
+                    <label class="form-label mb-0 me-3 text-end">N°. de lote</label>
                     <input type="number" class="form-control custom-input" formControlName="plotNumber" min="0"
                         [ngClass]="{'is-invalid': formReactivo.controls['plotNumber'].invalid  && (formReactivo.get('plotNumber')?.dirty|| formReactivo.get('plotNumber')?.touched),'is-valid': formReactivo.controls['plotNumber'].valid }">
                 </div>
@@ -18,7 +18,7 @@
             </div>
             <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-end">N. de manzana</label>
+                    <label class="form-label mb-0 me-3 text-end">N°. de manzana</label>
                     <input type="number" class="form-control custom-input" formControlName="blockNumber"
                         [ngClass]="{'is-invalid': formReactivo.controls['blockNumber'].invalid  && (formReactivo.get('blockNumber')?.dirty|| formReactivo.get('blockNumber')?.touched),'is-valid': formReactivo.controls['blockNumber'].valid }">
                 </div>
@@ -36,7 +36,7 @@
         <div class="row mb-3 mt-5">
             <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-end">Terreno del lote</label>
+                    <label class="form-label mb-0 me-3 text-end">Terreno del lote (m²)</label>
                     <input type="number" class="form-control custom-input" formControlName="totalArea"
                         [ngClass]="{'is-invalid': formReactivo.controls['totalArea'].invalid  && (formReactivo.get('totalArea')?.dirty|| formReactivo.get('totalArea')?.touched),'is-valid': formReactivo.controls['totalArea'].valid }">
                 </div>
@@ -49,7 +49,7 @@
             </div>
             <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-end">Área construida</label>
+                    <label class="form-label mb-0 me-3 text-end">Área construida (m²)</label>
                     <input type="number" class="form-control custom-input" formControlName="totalBuild"
                         [ngClass]="{'is-invalid': formReactivo.controls['totalBuild'].invalid  && (formReactivo.get('totalBuild')?.dirty|| formReactivo.get('totalBuild')?.touched),'is-valid': formReactivo.controls['totalBuild'].valid }">
                 </div>
