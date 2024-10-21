@@ -52,7 +52,7 @@ export const routes: Routes = [
         loadChildren: () => import('./users-components/plots/plots.module').then(m => m.PlotsModule)
       },
       {
-        path: 'owner',
+        path: 'owners',
         canActivate: [authGuard, roleGuard],
         data: {roles: ['SuperAdmin', 'Admin']},
         loadChildren: () => import('./users-components/owners/owners.module').then(m => m.OwnersModule)

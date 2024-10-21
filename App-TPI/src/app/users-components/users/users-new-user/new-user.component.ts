@@ -79,7 +79,7 @@ export class NewUserComponent implements OnInit {
         Validators.minLength(1)
     ]),
     active: new FormControl(true), 
-    datebirth: new FormControl(DateService.formatDate(new Date("2000-01-01")), [Validators.required]),
+    datebirth: new FormControl(DateService.formatDate(new Date("2000-01-02")), [Validators.required]),
     roles: new FormControl(''),
     userUpdateId: new FormControl(this.authService.getUser().id)
   });

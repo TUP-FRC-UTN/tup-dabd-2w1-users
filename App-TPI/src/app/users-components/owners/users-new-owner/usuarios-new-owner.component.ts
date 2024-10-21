@@ -11,13 +11,14 @@ import { PlotService } from '../../../users-servicies/plot.service';
 import { GetPlotDto } from '../../../users-models/plot/GetPlotDto';
 import { OwnerModel } from '../../../users-models/owner/PostOwnerDto';
 import Swal from 'sweetalert2';
+import { Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-usuarios-new-owner',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, UsersSelectMultipleComponent],
   templateUrl: './usuarios-new-owner.component.html',
-  styleUrl: './usuarios-new-owner.component.css'
+  styleUrls: ['./usuarios-new-owner.component.css'] // Asegúrate de que sea styleUrls en lugar de styleUrl
 })
 export class UsuariosNewOwnerComponent {
 
@@ -28,7 +29,10 @@ export class UsuariosNewOwnerComponent {
   types: OwnerTypeModel[] = [];
   states: OwnerStateModel[] = [];
   lotes: GetPlotDto[] = [];
-  rolesSelected : string[] = [];
+  rolesSelected: string[] = [];
+  passwordVisible: boolean = false;
+
+  constructor(private router: Router) { }
 
   formReactivo = new FormGroup({
     name: new FormControl("", [Validators.required]),
@@ -44,11 +48,10 @@ export class UsuariosNewOwnerComponent {
     rol: new FormControl(""),
     lote: new FormControl(null, [Validators.required]),
     phone: new FormControl('', [Validators.required]),
-    nombreNegocio: new FormControl('')
+    company: new FormControl('')
   });
 
   ngOnInit(): void {
-
     this.loadRoles();
 
     this.ownerService.getAllTypes().subscribe({
@@ -81,9 +84,6 @@ export class UsuariosNewOwnerComponent {
   }
 
   roles: RolModel[] = [];
-
-  rolesHtmlString: string = '';  //
-  rolesString: string = "Roles añadidos:";
   rolesInput: string[] = [];
   select: string = "";
 
@@ -98,14 +98,57 @@ export class UsuariosNewOwnerComponent {
     });
   }
 
+  formatCUIT(value: string): void {
+    const cleaned = value.replace(/\D/g, ''); // Eliminar caracteres no numéricos
+
+    if (cleaned.length < 2) {
+      this.formReactivo.get('cuit_cuil')?.setValue(cleaned);
+      return;
+    }
+
+    let formatted = cleaned;
+    if (cleaned.length >= 2) {
+      formatted = cleaned.substring(0, 2) + '-'; // Agrega guión después de los primeros 2 dígitos
+    }
+    if (cleaned.length > 2) {
+      formatted += cleaned.substring(2);
+    }
+    if (cleaned.length >= 10) {
+      formatted = formatted.substring(0, 11) + '-' + cleaned.charAt(10); // Agrega guión antes del último dígito
+    }
+
+    this.formReactivo.get('cuit_cuil')?.setValue(formatted, { emitEvent: false }); // Evita el loop de eventos
+  }
+
+  confirmExit() {
+    Swal.fire({
+      title: '¿Seguro que desea cancelar la operación?',
+      showCancelButton: true,
+      confirmButtonText: 'Cancelar',
+      cancelButtonText: 'Aceptar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.formReactivo.reset();
+        this.redirect('/home/owners/list');
+        Swal.fire('Operación cancelada', '', 'info');
+      }
+    });
+  }
+
+  redirect(path: string) {
+    this.router.navigate([path]);
+  }
+
   aniadirRol() {
-    console.log(this.formReactivo.errors);
-    
     const rolSeleccionado = this.formReactivo.get('rol')?.value;
-    if (rolSeleccionado && !this.rolesInput.includes(rolSeleccionado)) {  
-      this.rolesInput.push(rolSeleccionado);  
+    if (rolSeleccionado && !this.rolesInput.includes(rolSeleccionado)) {
+      this.rolesInput.push(rolSeleccionado);
     }
     this.formReactivo.get('rol')?.setValue('');
+  }
+
+  togglePasswordVisibility(): void {
+    this.passwordVisible = !this.passwordVisible;
   }
 
   quitarRol(rol: string) {
@@ -134,10 +177,9 @@ export class UsuariosNewOwnerComponent {
       userCreateId: 1,
       plotId: this.formReactivo.get('lote')?.value || 0,
       telegramId: 0
-    }
+    };
 
     console.log(owner);
-    
 
     this.ownerService.postOwner(owner).subscribe({
       next: (response) => {
@@ -147,8 +189,10 @@ export class UsuariosNewOwnerComponent {
           showConfirmButton: false,
           timer: 1460
         });
+        this.formReactivo.reset(); // Resetea el formulario después de guardar
       },
       error: (error) => {
+        console.error('Error al guardar el propietario:', error);
         Swal.fire({
           icon: "error",
           title: "Error al guardar los cambios",
