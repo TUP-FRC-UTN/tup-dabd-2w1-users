@@ -25,6 +25,8 @@ import Swal from 'sweetalert2';
 })
 export class ListUsersComponent implements OnInit { 
 
+  constructor(private router: Router,private modal: NgbModal) { }
+
   typeModal: string = '';
   user: number = 0; 
   users: UserGet[] = [];
@@ -32,21 +34,17 @@ export class ListUsersComponent implements OnInit {
   showDeactivateModal: boolean = false;
   userToDeactivate: number = 0;
 
-  constructor(private router: Router,private modal: NgbModal) { }
-
-  
-
   ngOnInit() {
+    //Trae todos los usuarios
     this.apiService.getAllUsers().subscribe({
       next: (data: UserGet[]) => {
-        // Cambiar guiones por barras en la fecha de nacimiento
+        //Cambiar guiones por barras en la fecha de nacimiento
         this.users = data.map(user => ({
           ...user,
-          datebirth: user.datebirth.replace(/-/g, '/') // Cambia 'dd-mm-yyyy' a 'dd/mm/yyyy'
+          datebirth: user.datebirth.replace(/-/g, '/') //Cambia 'dd-mm-yyyy' a 'dd/mm/yyyy'
         }));
         
-        
-        // Inicializar DataTables después de cargar los datos
+        //Inicializar DataTables después de cargar los datos
         setTimeout(() => {
           const table = $('#myTable').DataTable({
             paging: true,
@@ -83,11 +81,11 @@ export class ListUsersComponent implements OnInit {
               }
             ],
             data: this.users.map(user => [
-              `${user.lastname}, ${user.name}`,  // Nombre completo
-              user.roles.join(', '),              // Roles
-              1234,                                // Nro. de lote (puedes ajustar esto)
-              user.datebirth,                      // Fecha de nacimiento ya con el formato deseado
-              '<button class="btn btn-info">Ver más</button>'  // Ejemplo de acción
+              `${user.lastname}, ${user.name}`,  //Nombre completo
+              user.roles.join(', '),              //Roles
+              1234,                                //Nro. de lote (puedes ajustar esto)
+              user.datebirth,                      //Fecha de nacimiento ya con el formato deseado
+              '<button class="btn btn-info">Ver más</button>'  //Ejemplo de acción
             ]),
             language: {
               lengthMenu: "Mostrar _MENU_ registros por página",
@@ -108,62 +106,62 @@ export class ListUsersComponent implements OnInit {
             },
             createdRow: function (row, data, dataIndex) {
               if (dataIndex % 2 === 0) {
-                $(row).css('background-color', '#f9f9f9');  // Color de fondo para filas pares
+                $(row).css('background-color', '#f9f9f9');  //Color de fondo para filas pares
               } else {
-                $(row).css('background-color', '#ffffff');  // Color de fondo para filas impares
+                $(row).css('background-color', '#ffffff');  //Color de fondo para filas impares
               }
             }
           });    
 
-          // Añadir estilos adicionales al DataTable
+          //Añadir estilos adicionales al DataTable
           $('#myTable').css({
             'border-collapse': 'separate',
-            'border-spacing': '0 10px',  // Espacio entre filas
-            'width': '100%',  // Ancho completo de la tabla
+            'border-spacing': '0 10px',  //Espacio entre filas
+            'width': '100%',  //Ancho completo de la tabla
             'border': '1px solid #ddd',
-            'padding-left': '15px'  // Borde para toda la tabla
+            'padding-left': '15px'  //Borde para toda la tabla
           });
 
-          // Alinear la caja de búsqueda a la derecha
+          //Alinear la caja de búsqueda a la derecha
           const searchInputWrapper = $('#myTable_filter');
           searchInputWrapper.addClass('d-flex justify-content-start');
 
-          // Desvincular el comportamiento predeterminado de búsqueda
+          //Desvincular el comportamiento predeterminado de búsqueda
           $('#myTable_filter input').unbind(); 
-          $('#myTable_filter input').bind('input', (event) => { // Usar función de flecha aquí
-              const searchValue = (event.target as HTMLInputElement).value; // Acceder al valor correctamente
+          $('#myTable_filter input').bind('input', (event) => { //Usar función de flecha aquí
+              const searchValue = (event.target as HTMLInputElement).value; //Acceder al valor correctamente
           
-              // Comienza a buscar solo si hay 3 o más caracteres
+              //Comienza a buscar solo si hay 3 o más caracteres
               if (searchValue.length >= 3) {
                   table.search(searchValue).draw();
               } else {
-                  table.search('').draw(); // Limpia la búsqueda si hay menos de 3 caracteres
+                  table.search('').draw(); //Limpia la búsqueda si hay menos de 3 caracteres
               }
           });
 
-          // Asignar el evento click a los botones "Ver más"
-          // Asignar el evento click a los botones "Ver más"
+          //Asignar el evento click a los botones "Ver más"
+          //Asignar el evento click a los botones "Ver más"
         $('#myTable').on('click', '.view-user', (event) => {
           const id = $(event.currentTarget).data('id');
-          const userId = this.users[id].id; // Obtén el ID real del usuario
-          this.abrirModal("info", userId); // Pasa el ID del usuario al abrir el modal
+          const userId = this.users[id].id; //Obtén el ID real del usuario
+          this.openModal("info", userId); //Pasa el ID del usuario al abrir el modal
         });
 
 
           $('#myTable').on('click', '.delete-user', (event) => {
             const id = $(event.currentTarget).data('id');
-            const userId = this.users[id].id; // Obtén el ID real del usuario
-            this.abrirModal("delete", userId); // Pasa el ID del usuario al abrir el modal
+            const userId = this.users[id].id; //Obtén el ID real del usuario
+            this.openModal("delete", userId); //Pasa el ID del usuario al abrir el modal
           });
 
-          // Asignar el evento click a los botones "Editar"
+          //Asignar el evento click a los botones "Editar"
           $('#myTable').on('click', '.edit-user', (event) => {
             const userId = $(event.currentTarget).data('id');
-            this.redirectEdit(userId); // Redirigir al método de edición
+            this.redirectEdit(userId); //Redirigir al método de edición
           });
 
 
-        }, 0); // Asegurar que la tabla se inicializa en el próximo ciclo del evento
+        }, 0); //Asegurar que la tabla se inicializa en el próximo ciclo del evento
       },
       error: (error) => {
         console.error('Error al cargar los usuarios:', error);
@@ -173,18 +171,18 @@ export class ListUsersComponent implements OnInit {
 
 
 
-
-  async abrirModal(type: string, userId: number) {
+  //Método para abrir el modal
+  async openModal(type: string, userId: number) {
     console.log("Esperando a que userModal se cargue...");
   
-    // Espera a que se cargue el usuario seleccionado
+    //Espera a que se cargue el usuario seleccionado
     try {
       await this.selectUser(userId);
       console.log("userModal cargado:", this.userModal);
   
-      // Una vez cargado, abre el modal
+      //Cuando se carga se abre el modal
       const modalRef = this.modal.open(ModalInfoUserComponent, { size: 'md', keyboard: false });
-      modalRef.componentInstance.typeModal = type; // Pasar el tipo de modal al componente hijo
+      modalRef.componentInstance.typeModal = type; 
       modalRef.componentInstance.userModal = this.userModal;
 
       modalRef.result.then((result) => {        
@@ -195,26 +193,31 @@ export class ListUsersComponent implements OnInit {
     }
   }
 
+  //Cambia el tipo de modal
   changeTypeModal(type: string) {
     this.typeModal = type;
   }
-
   
+  //Redirige
   redirectEdit(id: number) {
-    console.log("Redirigiendo a la edición del usuario con ID:", id);
     this.router.navigate(['/home/users/edit', id]);  
   }
 
-  // Busca el user y se lo pasa al modal
+  //Busca el user y se lo pasa al modal
   userModal: UserGet = new UserGet();
   selectUser(id: number): Promise<UserGet> {
-      // Mostrar SweetAlert de tipo 'cargando'
+    
+      //Mostrar una alerta mientras carga
     Swal.fire({
       title: 'Cargando usuario...',
       html: 'Por favor, espera un momento',
-      allowOutsideClick: false, // No permitir cerrar la alerta haciendo clic fuera
+
+      //No deja cerrar clickeando afurea
+      allowOutsideClick: false,
       didOpen: () => {
-        Swal.showLoading(); // Mostrar indicador de carga
+
+        //Mostrar el indicador de carga
+        Swal.showLoading();
       }
     });
     return new Promise((resolve, reject) => {
@@ -222,12 +225,12 @@ export class ListUsersComponent implements OnInit {
       this.apiService.getUserById(id).subscribe({
         next: (data: UserGet) => {
           this.userModal = data;
-          Swal.close(); // Cerrar SweetAlert
-          resolve(data); // Resuelve la promesa cuando los datos se cargan
+          Swal.close(); //Cerrar SweetAlert
+          resolve(data); //Resuelve la promesa cuando los datos se cargan
         },
         error: (error) => {
           console.error('Error al cargar el usuario:', error);
-          reject(error); // Rechaza la promesa si ocurre un error
+          reject(error); //Rechaza la promesa si ocurre un error
           Swal.close();
           Swal.fire({
             icon: 'error',
@@ -239,8 +242,7 @@ export class ListUsersComponent implements OnInit {
     });
   }
   
-
-  // SE PUEDEN MODIFICAR LOS VALORES A MOSTRAR EN EL PDF
+  //Exporta a pdf la tabla, si esta filtrada solo exporta los datos filtrados
   exportPdf() {
     const doc = new jsPDF();
   
@@ -288,6 +290,7 @@ export class ListUsersComponent implements OnInit {
     doc.save('usuarios.pdf'); // Descarga el archivo PDF
   }
 
+  //Exporta por excel los registros de la tabla
   exportExcel() {
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.users.map(user => ({
       Nombre: `${user.lastname}, ${user.name}`,

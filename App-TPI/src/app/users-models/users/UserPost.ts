@@ -11,7 +11,7 @@ export class UserPost {
     datebirth: string;    
     roles: string[];  
     userUpdateId: number;
-    plot_id: number;
+    plot_id?: number;
     telegram_id: number;
 
     constructor() {

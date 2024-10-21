@@ -11,6 +11,7 @@ import { Router, RouterModule } from '@angular/router';
   styleUrl: './users-side-button.component.css'
 })
 export class UsersSideButtonComponent{
+  
   //Expandir o cerrar
   @Input() expanded : boolean = false;
 

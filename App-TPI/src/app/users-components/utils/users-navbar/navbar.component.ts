@@ -116,6 +116,7 @@ export class NavbarComponent implements OnInit {
   }
 
   redirect(path: string) {
+    this.authService.logOut();
     this.router.navigate([path]);
   }
 

@@ -1,88 +1,101 @@
 <section class="container p-5 border rounded border-3 border-secundary" style="min-height: 70vh;">
     <h3>Editar Usuario</h3>
-    <div>
-        <button type="button" (click)="changesRol('Admin')">Admin</button>
-        <button type="button" (click)="changesRol('Owner')">Owner</button>
-    </div>
     <form [formGroup]="updateForm" (ngSubmit)="updateUser()">
         <div class="row mb-3">
-            <div class="col-md-6 d-flex flex-column">
+            <div class="col-md-6 d-flex flex-column align-items-end">
                 <div class="d-flex align-items-center text-end">
                     <label class="form-label mb-0 me-3" style="width: 150px;">Nombre</label>
                     <input type="text" class="form-control"
                     [ngClass]="{'is-invalid': updateForm.controls['name'].invalid && (updateForm.get('name')?.dirty || updateForm.get('name')?.touched), 'is-valid': updateForm.controls['name'].valid }" 
                     formControlName="name">
                 </div>
-                <div *ngIf="updateForm.controls['name'].invalid && (updateForm.get('name')?.dirty || updateForm.get('name')?.touched)" class="text-danger">
-                    Ingrese su nombre
+                <div class="text-danger form-error">
+                    @if(updateForm.controls['name'].invalid && (updateForm.get('name')?.dirty || updateForm.get('name')?.touched)){
+                        Ingrese su nombre
+                    }
                 </div>
             </div>
-            <div class="col-md-6 d-flex flex-column">
+            <div class="col-md-6 d-flex flex-column align-items-end" >
                 <div class="d-flex align-items-center text-end">
                     <label class="form-label mb-0 me-3" style="width: 150px;">Apellido</label>
                     <input type="text" class="form-control"
                     [ngClass]="{'is-invalid': updateForm.controls['lastname'].invalid && (updateForm.get('lastname')?.dirty || updateForm.get('lastname')?.touched), 'is-valid': updateForm.controls['lastname'].valid }" 
                     formControlName="lastname">
                 </div>
-                <div *ngIf="updateForm.controls['lastname'].invalid && (updateForm.get('lastname')?.dirty || updateForm.get('lastname')?.touched)" class="text-danger">
-                    Ingrese su apellido
+                <div class="text-danger form-error">
+                    @if(updateForm.controls['lastname'].invalid && (updateForm.get('lastname')?.dirty || updateForm.get('lastname')?.touched)) {
+                        Ingrese su apellido
+                    }
                 </div>
             </div>
         </div>
 
         <div class="row mb-3">
-            <div class="col-md-6 d-flex flex-column">
+            <div class="col-md-6 d-flex flex-column align-items-end">
                 <div class="d-flex align-items-center text-end">
                     <label class="form-label mb-0 me-3" style="width: 150px;">DNI</label>
                     <input type="number" class="form-control"
                     [ngClass]="{'is-invalid': updateForm.controls['dni'].invalid && (updateForm.get('dni')?.dirty || updateForm.get('dni')?.touched), 'is-valid': updateForm.controls['dni'].valid }" 
                     formControlName="dni">
                 </div>
-                <div *ngIf="updateForm.controls['dni'].invalid && (updateForm.get('dni')?.dirty || updateForm.get('dni')?.touched)" class="text-danger">
-                    Ingrese su DNI
+                <div class="text-danger form-error">
+                    @if(updateForm.controls['dni'].invalid && (updateForm.get('dni')?.dirty || updateForm.get('dni')?.touched)) {
+                        Ingrese su DNI
+                    }
                 </div>
             </div>
-            <div class="col-md-6 d-flex flex-column">
+            <div class="col-md-6 d-flex flex-column align-items-end">
                 <div class="d-flex align-items-center text-end">
                     <label class="form-label mb-0 me-3" style="width: 150px;">Teléfono</label>
                     <input type="number" class="form-control"
                     [ngClass]="{'is-invalid': updateForm.controls['phoneNumber'].invalid && (updateForm.get('phoneNumber')?.dirty || updateForm.get('phoneNumber')?.touched), 'is-valid': updateForm.controls['phoneNumber'].valid }" 
                     formControlName="phoneNumber">
                 </div>
-                <div *ngIf="updateForm.controls['phoneNumber'].invalid && (updateForm.get('phoneNumber')?.dirty || updateForm.get('phoneNumber')?.touched)" class="text-danger">
-                    Ingrese su teléfono
+                <div class="text-danger form-error">
+                    @if(updateForm.controls['phoneNumber'].invalid && (updateForm.get('phoneNumber')?.dirty || updateForm.get('phoneNumber')?.touched)) {
+                        Ingrese su número de teléfono
+                    }
                 </div>
             </div>
         </div>
 
         <div class="row mb-3">
-            <div class="col-md-6 d-flex flex-column">
+            <div class="col-md-6 d-flex flex-column align-items-end">
                 <div class="d-flex align-items-center text-end">
                     <label class="form-label mb-0 me-3" style="width: 150px;">Email</label>
                     <input type="text" class="form-control"
                     [ngClass]="{'is-invalid': updateForm.controls['email'].invalid && (updateForm.get('email')?.dirty || updateForm.get('email')?.touched), 'is-valid': updateForm.controls['email'].valid }" 
                     formControlName="email">
                 </div>
-                <div *ngIf="updateForm.controls['email'].invalid && (updateForm.get('email')?.dirty || updateForm.get('email')?.touched)" class="text-danger">
-                    Ingrese su email
-                </div>
             </div>
-            <div class="col-md-6 d-flex flex-column">
+            <div class="col-md-6 d-flex flex-column align-items-end">
                 <div class="d-flex align-items-center text-end">
-                    <label class="form-label mb-0 me-3" style="width: 150px;">Fecha de Nacimiento</label>
+                    <label class="form-label mb-0 me-3">Fecha de Nacimiento</label>
                     <input type="date" class="form-control"
                     [ngClass]="{'is-invalid': updateForm.controls['datebirth'].invalid && (updateForm.get('datebirth')?.dirty || updateForm.get('datebirth')?.touched), 'is-valid': updateForm.controls['datebirth'].valid }" 
                     formControlName="datebirth">
                 </div>
-                <div *ngIf="updateForm.controls['datebirth'].invalid && (updateForm.get('datebirth')?.dirty || updateForm.get('datebirth')?.touched)" class="text-danger">
-                    Ingrese su fecha de nacimiento
+                <div class="text-danger form-error">
+                    @if(updateForm.controls['datebirth'].invalid && (updateForm.get('datebirth')?.dirty || updateForm.get('datebirth')?.touched)) {
+                        Ingrese su fecha de nacimiento
+                    }
                 </div>
             </div>
         </div>
         <div class="row mb-3">
-            <div class="col-md-6 d-flex justify-content-end">
-                <label class="form-label me-2 text-end pt-2" style="width: 150px; margin-bottom: 0;">Roles</label>
-                <app-users-select-multiple [rolesSelected]="rolesSelected" [rolChanger]="rolChanger"></app-users-select-multiple>
+            <div class="col-md-6 d-flex flex-column justify-content-end align-items-end">
+                <div class="d-flex justify-content-center">
+                    <label class="form-label me-2 text-end pt-2" style="width: 150px; margin-bottom: 0;">Roles</label>
+                    <app-users-select-multiple 
+                            (rolesEmited)="fillRolesSelected($event); verifyRole()"
+                            (click)="verifyRole()">
+                            </app-users-select-multiple>
+                </div>
+                <div class="text-danger form-error text-start">
+                    @if(!checkRole){
+                        Ingrese al menos un rol
+                    }                   
+                </div>
             </div>
         </div>
         <div class="row mb-3 justify-content-end">
@@ -90,7 +103,7 @@
                 <button type="button" class="btn btn-secondary" (click)="redirectList()">Cancelar</button>
             </div>
             <div class="col-auto">
-                <button type="submit" class="btn btn-primary">Guardar</button>
+                <button type="submit" class="btn btn-primary" [disabled]="!updateForm.valid">Guardar</button>
             </div>
         </div>
     </form>

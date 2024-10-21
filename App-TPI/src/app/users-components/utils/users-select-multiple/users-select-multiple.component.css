@@ -23,3 +23,7 @@
     min-width: 500px !important;
     max-width: 500px !important;   
 }
+
+.form-check-label:hover {
+    pointer-events: none!important;     
+}

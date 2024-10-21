@@ -9,6 +9,9 @@ import { data } from 'jquery';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UsersSelectMultipleComponent } from '../../utils/users-select-multiple/users-select-multiple.component';
 import { LoginComponent } from '../../utils/users-login/login.component';
+import { DateService } from '../../../users-servicies/date.service';
+import { AuthService } from '../../../users-servicies/auth.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-users-update-user',
@@ -19,34 +22,78 @@ import { LoginComponent } from '../../utils/users-login/login.component';
 })
 export class UsersUpdateUserComponent implements OnInit {
 
+  constructor(private router: Router, private route: ActivatedRoute){ }
   
   private readonly apiService = inject(UserService);
-  constructor(private router: Router, private route: ActivatedRoute){ }
-  rolChanger: string = 'Admin';
+  private readonly authService = inject(AuthService);
 
   rolesSelected : string[] = [];
-    
   roles: RolModel[] = [];
   rolesInput: string[] = [];
   id: string = '';
+  checkRole: boolean = false;
 
-  changesRol(rol: string) {
-    this.rolChanger = rol;
+  ngOnInit() {
+    this.id = this.route.snapshot.paramMap.get('id') || '';  //Obtiene el parámetro 'name'
+    this.apiService.getUserById(parseInt(this.id)).subscribe({
+      next: (data: UserGet) => {        
+        this.updateForm.get('name')?.setValue(data.name);
+        this.updateForm.get('lastname')?.setValue(data.lastname);
+        this.updateForm.get('dni')?.setValue(data.dni.toString());
+        this.updateForm.get('email')?.setValue(data.email);
+        this.updateForm.get('avatar_url')?.setValue(data.avatar_url);
+        this.updateForm.get('datebirth')?.setValue(data.datebirth);
+        const formattedDate = DateService.parseDateString(data.datebirth);
+        this.updateForm.patchValue({
+          datebirth: formattedDate ? DateService.formatDate(formattedDate) : ''
+        });
+        this.rolesInput = this.rolesSelected = data.roles;
+        this.updateForm.get('phoneNumber')?.setValue(data.phone_number.toString());
+        this.rolesSelected = data.roles;
+        this.updateForm.get('telegram_id')?.setValue(data.telegram_id) || 0;
+      },
+      error: (error) => {
+        console.error('Error al cargar el usuario:', error);
+      }
+    });
 
+    this.updateForm.get('dni')?.disable();
+    this.updateForm.get('email')?.disable();
+    this.updateForm.get('avatar_url')?.disable();
+    this.updateForm.get('datebirth')?.disable();
+
+    
   }
 
+  //Crea el formulario con sus controles
   updateForm = new FormGroup({
     name: new FormControl('', [Validators.required]),
     lastname: new FormControl('', [Validators.required]),
-    dni: new FormControl('', [Validators.required]),
     phoneNumber: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(20)]),
-    email: new FormControl('', [Validators.email, Validators.required]),
-    avatar_url: new FormControl('', [Validators.required]),
-    datebirth: new FormControl('', [Validators.required]),
-    roles: new FormControl('') 
+    telegram_id: new FormControl(0),
+    dni: new FormControl(''),
+    email: new FormControl(''),
+    avatar_url: new FormControl(''),
+    datebirth: new FormControl(''),
+    roles: new FormControl('')
   });
 
+  //Añade los roles seleccionados por users-select-multiple
+  fillRolesSelected(roles: any) {
+    this.rolesSelected = roles;  //Asignamos directamente los roles emitidos
+  }
 
+  //Verifica que haya algún rol chequeado
+  verifyRole() {
+    if(this.rolesSelected.length === 0){  
+      this.checkRole = false;
+    }
+    else{
+      this.checkRole = true;
+    }
+  }
+
+  //Actualiza el usuario
   updateUser() {
     const user: UserPut = new UserPut();
     user.name = this.updateForm.get('name')?.value || '';
@@ -56,29 +103,29 @@ export class UsersUpdateUserComponent implements OnInit {
     user.email = this.updateForm.get('email')?.value || '';
     user.avatar_url = this.updateForm.get('avatar_url')?.value || '';
 
-    // Formatea la fecha correctamente (año-mes-día)
+    //Formatea la fecha correctamente (año-mes-día)
     const date: Date = new Date(this.updateForm.get('datebirth')?.value || '');
 
-// Formatear la fecha como YYYY-MM-DD
+    //Formatear la fecha como YYYY-MM-DD
     const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
 
     user.datebirth = formattedDate;
     user.roles = this.rolesSelected || []; // Asegúrate de que roles sea un arreglo   
     
-    
-    console.log("aaaaaa" + this.rolesSelected);
-    
-
-    // Llama al servicio para actualizar el usuario
+    //Llama al servicio para actualizar el usuario
     this.apiService.putUser(user, parseInt(this.id)).subscribe({
         next: (response) => {
             console.log('Usuario actualizado exitosamente:', response);
-            alert('Usuario actualizado exitosamente');
-            if(this.rolChanger == 'Owner'){
+            Swal.fire({
+              icon: "success",
+              title: 'Usuario actualizado exitosamente',
+              showConfirmButton: false
+            });
+            if(this.authService.hasRole('Owner')){
               this.router.navigate(['home/users/family']);
             }
-            if(this.rolChanger == 'Admin'){
-            this.router.navigate(['home/users/list']);
+            else if(this.authService.hasRole('Admin')){
+              this.router.navigate(['home/users/list']);
             }
         },
         error: (error) => {
@@ -88,62 +135,16 @@ export class UsersUpdateUserComponent implements OnInit {
     });
   }
 
+  //Redirige a la lista
   redirectList() {
     const result = window.confirm("¿Estás seguro que quieres salir? No se guardarán los cambios realizados.");
     if (result) {
-      if(this.rolChanger == 'Owner'){
+      if(this.authService.hasRole('Owner')){
         this.router.navigate(['home/users/family']);
       }
-      if(this.rolChanger == 'Admin'){
-      this.router.navigate(['home/users/list']);
+      else if(this.authService.hasRole('Admin')){
+        this.router.navigate(['home/users/list']);
       }
     }
   }
-
-
-  
-  ngOnInit() {
-    this.id = this.route.snapshot.paramMap.get('id') || '';  // Obtiene el parámetro 'name'
-
-    console.log(this.id);
-    
-
-    this.apiService.getUserById(parseInt(this.id)).subscribe({
-      next: (data: UserGet) => {        
-        this.updateForm.get('name')?.setValue(data.name);
-        this.updateForm.get('lastname')?.setValue(data.lastname);
-        this.updateForm.get('dni')?.setValue(data.dni.toString());
-        this.updateForm.get('email')?.setValue(data.email);
-        this.updateForm.get('avatar_url')?.setValue(data.avatar_url);
-        this.updateForm.get('datebirth')?.setValue(data.datebirth);
-        const formattedDate = this.parseDateString(data.datebirth);
-        this.updateForm.patchValue({
-          datebirth: formattedDate ? this.formatDate(formattedDate) : ''
-        });
-        this.rolesInput = this.rolesSelected = data.roles;
-        this.updateForm.get('phoneNumber')?.setValue(data.phone_number.toString());
-        this.rolesSelected = data.roles;
-        console.log(this.rolesSelected);
-        console.log(data.roles);
-      },
-      error: (error) => {
-        console.error('Error al cargar el usuario:', error);
-      }
-    });
-  }
-
-  private parseDateString(dateString: string): Date | null {
-    const [day, month, year] = dateString.split('-').map(Number);
-    if (!day || !month || !year) {
-      return null;
-    }
-    // Crea un objeto Date con formato "yyyy-MM-dd"
-    return new Date(year, month - 1, day); // Restamos 1 al mes porque en JavaScript los meses son 0-indexed
-  }
-
-  // Formatea una fecha en "yyyy-MM-dd"
-  private formatDate(date: Date): string {
-    return formatDate(date, 'yyyy-MM-dd', 'en-US');
-  }
-
 }

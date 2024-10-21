@@ -7,6 +7,9 @@ import { UserGet } from '../../../users-models/users/UserGet';
 import { UserPost } from '../../../users-models/users/UserPost';
 import { Router, RouterModule } from '@angular/router';
 import { UsersSelectMultipleComponent } from "../../utils/users-select-multiple/users-select-multiple.component";
+import { DateService } from '../../../users-servicies/date.service';
+import { AuthService } from '../../../users-servicies/auth.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-new-user',
@@ -17,19 +20,34 @@ import { UsersSelectMultipleComponent } from "../../utils/users-select-multiple/
 })
 export class NewUserComponent implements OnInit {
 
-  rolesSelected : string[] = [];
-
   constructor(private router:Router){
     
   }
 
+  private readonly apiService = inject(UserService);
+  private readonly authService = inject(AuthService);
+
+  rolesSelected : string[] = [];
+  roles: RolModel[] = [];
+  rolesHtmlString: string = '';  //
+  rolesString: string = "Roles añadidos:";
+  rolesInput: string[] = [];
+  select: string = "";
+  checkRole: boolean = false;
+  
+
+  ngOnInit() {
+    this.loadRoles();
+  }
+
+
   formReactivo = new FormGroup({
-    nombre: new FormControl('', [
+    name: new FormControl('', [
         Validators.required,
         Validators.minLength(1),
         Validators.maxLength(50)
     ]),
-    apellido: new FormControl('', [
+    lastname: new FormControl('', [
         Validators.required,
         Validators.minLength(1),
         Validators.maxLength(50)
@@ -43,40 +61,30 @@ export class NewUserComponent implements OnInit {
         Validators.required,
         Validators.email
     ]),
-    telefono: new FormControl('', [
+    phone_number: new FormControl('', [
         Validators.required,
+        Validators.min(0),
         Validators.minLength(10),
         Validators.maxLength(20)
     ]),
     dni: new FormControl('', [
         Validators.required,
+        Validators.min(0),
         Validators.minLength(1),
         Validators.maxLength(11)
     ]),
-    active: new FormControl(true, [Validators.required]), 
-    avatar_url: new FormControl(''),
-    fecha: new FormControl(this.formatDate(new Date("2000-01-01")), [Validators.required]),
-    rol: new FormControl('') 
-});
-
-  private formatDate(date: Date): string {
-    return formatDate(date, 'yyyy-MM-dd', 'en-US');
-  }
-
-  private readonly apiService = inject(UserService);
-
+    telegram_id: new FormControl(0,[
+        Validators.required,
+        Validators.min(0),
+        Validators.minLength(1)
+    ]),
+    active: new FormControl(true), 
+    datebirth: new FormControl(DateService.formatDate(new Date("2000-01-01")), [Validators.required]),
+    roles: new FormControl(''),
+    userUpdateId: new FormControl(this.authService.getUser().id)
+  });
   
-  roles: RolModel[] = [];
-
-  rolesHtmlString: string = '';  //
-  rolesString: string = "Roles añadidos:";
-  rolesInput: string[] = [];
-  select: string = "";
-
-  ngOnInit() {
-    this.loadRoles();
-  }
-
+  //Carga los roles
   loadRoles() {
     this.apiService.getAllRoles().subscribe({
       next: (data: RolModel[]) => {
@@ -88,51 +96,81 @@ export class NewUserComponent implements OnInit {
       }
     });
   }
-
+  
+  //Redirige a la ruta especificada 
   redirect(path:string){
     this.router.navigate([path]);
   }
 
-
+  //Resetear formularios
   resetForm() {
     this.formReactivo.reset();
     this.rolesInput = [];
   }
 
+  //Añade los roles seleccionados por users-select-multiple
+  fillRolesSelected(roles: any) {
+    this.rolesSelected = roles;  // Asignamos directamente los roles emitidos
+  }
+
+  verifyRole() {
+    if(this.rolesSelected.length === 0){  
+      this.checkRole = false;
+    }
+    else{
+      this.checkRole = true;
+    }
+  }
+  
+
+  //Se crea el usuario
   createUser() {
     
-    const fechaValue = this.formReactivo.get('fecha')?.value;
+    const fechaValue = this.formReactivo.get('datebirth')?.value;
     
     const userData : UserPost = {
-      name: this.formReactivo.get('nombre')?.value || '',
-      lastname: this.formReactivo.get('apellido')?.value || '',
+      name: this.formReactivo.get('name')?.value || '',
+      lastname: this.formReactivo.get('lastname')?.value || '',
       username: this.formReactivo.get('username')?.value || '',
-      password: this.formReactivo.get('dni')?.value || '',
+      password: this.formReactivo.get('dni')?.value?.toString() || '',
       email: this.formReactivo.get('email')?.value || '',
-      dni: this.formReactivo.get('dni')?.value || "",
+      dni: this.formReactivo.get('dni')?.value?.toString() || "",
       active: true,
-      avatar_url: '',
-      datebirth: fechaValue ? 
-                    new Date(fechaValue).toISOString().split('T')[0] : '',
+      avatar_url: "asd",
+      datebirth: fechaValue ? new Date(fechaValue).toISOString().split('T')[0] : '',
       roles: this.rolesSelected,
-      phone_number: this.formReactivo.get('telefono')?.value || '',
-      userUpdateId: 5,
-      telegram_id: 0,
-      plot_id: 0
+      phone_number: this.formReactivo.get('phone_number')?.value?.toString() || '',
+      userUpdateId: this.formReactivo.get('userUpdateId')?.value || 0,
+      telegram_id: this.formReactivo.get('telegram_id')?.value || 0
     };
 
-    console.log(userData);
+    //Si el usuario es de tipo owner se setea el plotId
+    if(this.authService.hasRole('Owner')){
+      userData.plot_id = this.authService.getUser().plotId;
+    }    
 
     this.apiService.postUser(userData).subscribe({
       next: (response) => {
-        console.log('Usuario creado exitosamente:', response);
-        alert('Usuario creado exitosamente');
-        // Aquí podrías redirigir o actualizar la UI
+        //Mostramos que la operación fue exitosa
+        Swal.fire({
+          title: 'Usuario creado',
+          text: 'El usuario se ha creado correctamente',
+          icon: 'success',
+          confirmButtonText: 'Aceptar'
+        });
+        
+        //Reseteamos el formulario
         this.resetForm();
       },
       error: (error) => {
-        console.error('Error al crear el usuario:', error);
-        // Manejo de errores, podrías mostrar un mensaje al usuario
+        //Mostramos que hubo un error
+        Swal.fire({
+          title: 'Error',
+          text: 'El usuario no se pudo crear',
+          icon: 'error',
+          confirmButtonText: 'Aceptar'
+        });
+        
       },
     });
   }
