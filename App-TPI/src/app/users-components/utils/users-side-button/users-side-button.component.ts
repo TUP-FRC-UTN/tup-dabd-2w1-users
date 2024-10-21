@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { SideButton } from '../../../users-models/SideButton';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
@@ -21,10 +21,13 @@ export class UsersSideButtonComponent{
   //Rol del usuario logeado
   @Input() userRoles : string[] = [];
 
+  @Output() sendTitle = new EventEmitter<string>();
+
   constructor(private route : Router){
   }
 
-  redirect(path : string){
+  redirect(path : string, title : string){
+    this.sendTitle.emit(title);
     this.route.navigate([path]);
   }
 }

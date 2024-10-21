@@ -4,9 +4,10 @@ import { ListUsersComponent } from './users-list-users/list-users.component';
 import { NewUserComponent } from './users-new-user/new-user.component';
 import { UsersUpdateUserComponent } from './users-update-user/users-update-user.component';
 import { UsersFamiliarGroupComponent } from './users-familiar-group/users-familiar-group.component';
+import { roleGuard } from '../../guards/role.guard';
 
 const routes: Routes = [
-  {path: 'list', component: ListUsersComponent},
+  {path: 'list', component: ListUsersComponent, canActivate: [roleGuard], data: {roles: ['Admin', 'SuperAdmin']}},
   {path: 'add' , component: NewUserComponent},
   {path: 'edit/:id', component: UsersUpdateUserComponent}
 ];

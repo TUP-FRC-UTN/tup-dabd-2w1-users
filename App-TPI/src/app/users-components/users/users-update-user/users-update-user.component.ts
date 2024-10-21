@@ -122,7 +122,7 @@ export class UsersUpdateUserComponent implements OnInit {
               showConfirmButton: false
             });
             if(this.authService.hasRole('Owner')){
-              this.router.navigate(['home/users/family']);
+              this.router.navigate(['home/family']);
             }
             else if(this.authService.hasRole('Admin')){
               this.router.navigate(['home/users/list']);
@@ -140,7 +140,7 @@ export class UsersUpdateUserComponent implements OnInit {
     const result = window.confirm("¿Estás seguro que quieres salir? No se guardarán los cambios realizados.");
     if (result) {
       if(this.authService.hasRole('Owner')){
-        this.router.navigate(['home/users/family']);
+        this.router.navigate(['home/family']);
       }
       else if(this.authService.hasRole('Admin')){
         this.router.navigate(['home/users/list']);

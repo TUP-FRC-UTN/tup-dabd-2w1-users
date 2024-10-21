@@ -17,6 +17,31 @@ export class PlotService {
 
   constructor() { }
 
+  postPlot(plot: PlotModel): Observable<PlotModel> {
+    const formData: FormData = new FormData();
+  
+    // Agregamos los campos del plot al FormData
+    formData.append('plot_number', plot.plot_number.toString());
+    formData.append('block_number', plot.block_number.toString());
+    formData.append('total_area_in_m2', plot.total_area_in_m2.toString());
+    formData.append('built_area_in_m2', plot.built_area_in_m2.toString());
+    formData.append('plot_state_id', plot.plot_state_id.toString());
+    formData.append('plot_type_id', plot.plot_type_id.toString());
+    formData.append('userCreateId', plot.userCreateId.toString());
+  
+    // Agregamos los archivos al FormData
+    plot.files.forEach((file, index) => {
+      formData.append('files', file);  // 'files' debe coincidir con el nombre del campo en tu backend
+    });
+  
+    // Realizamos la solicitud POST
+    return this.http.post<PlotModel>(this.url + "/plots", formData, {
+      headers: {
+        // No es necesario configurar el Content-Type a multipart/form-data manualmente, Angular lo hará.
+      }
+    });
+  }
+  
   getAllTypes(): Observable<PlotTypeModel[]>{
     return this.http.get<PlotTypeModel[]>(this.url + '/plots/types');
   }
@@ -35,10 +60,6 @@ export class PlotService {
   
   getAllStates(): Observable<PlotStateModel[]>{
     return this.http.get<PlotStateModel[]>(this.url + '/plots/states');
-  }
-
-  postPlot(plot: PlotModel): Observable<PlotModel>{
-    return this.http.post<PlotModel>(this.url + "/plots", plot);
   }
 
   putPlot(id: number,  plot: PutPlot): Observable<PutPlot>{

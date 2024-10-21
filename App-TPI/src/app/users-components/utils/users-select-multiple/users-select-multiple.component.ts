@@ -54,6 +54,7 @@ export class UsersSelectMultipleComponent implements OnInit, OnChanges {
           icon: 'error',
           confirmButtonText: 'Aceptar',
         });
+        this.router.navigate(['/home']);
       },
     });
   }

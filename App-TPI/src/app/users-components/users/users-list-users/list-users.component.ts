@@ -165,6 +165,12 @@ export class ListUsersComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar los usuarios:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Hubo un problema al cargar los usuarios. Por favor, inténtalo más tarde.'
+          })
+        this.router.navigate(['/home']);
       }
     });
   }

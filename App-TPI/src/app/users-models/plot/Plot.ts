@@ -5,6 +5,8 @@ export class PlotModel {
     built_area_in_m2: number;   
     plot_state_id: number;      
     plot_type_id: number;   
+    userCreateId: number;
+    files: File[];
 
     constructor() {
         this.plot_number = 0;
@@ -12,6 +14,8 @@ export class PlotModel {
         this.total_area_in_m2 = 0;
         this.built_area_in_m2 = 0;
         this.plot_state_id = 0;
-        this.plot_type_id = 0;;
+        this.plot_type_id = 0;
+        this.userCreateId = 0;
+        this.files = [];
     }
 }

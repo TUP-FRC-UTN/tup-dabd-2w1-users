@@ -16,6 +16,7 @@ import { AuthService } from '../../../users-servicies/auth.service';
 export class NavbarComponent implements OnInit {
   //Expande el side
   expand: boolean = false;
+  pageTitle : string = "Página Principal"
 
   constructor(private router: Router) { }
   private readonly authService = inject(AuthService);
@@ -25,15 +26,18 @@ export class NavbarComponent implements OnInit {
   //Lista de botones
   buttonsList: SideButton[] = [];
 
+  setName(){
+    return this.authService.getUser().name + " " + this.authService.getUser().lastname;
+  }
 
   async ngOnInit (): Promise<void> {    
     this.buttonsList = [
-      {
-        icon: "bi-person",
-        title: "Perfil",
-        route: "home/profile",
-        roles: ["SuperAdmin", "Admin", "Security", "Owner", "Spouse", "FamilyOld", "FamilyYoung", "Tenant"] //ver
-      },
+      // {
+      //   icon: "bi-person",
+      //   title: "Perfil",
+      //   route: "home/profile",
+      //   roles: ["SuperAdmin", "Admin", "Security", "Owner", "Spouse", "FamilyOld", "FamilyYoung", "Tenant"] //ver
+      // },
       {
          //botón grupo familiar
         icon: "bi bi-house",
@@ -116,8 +120,17 @@ export class NavbarComponent implements OnInit {
   }
 
   redirect(path: string) {
-    this.authService.logOut();
-    this.router.navigate([path]);
+    if(path === '/login'){
+      this.authService.logOut();
+      this.router.navigate([path]);
+    }
+    else{
+      this.router.navigate([path]);
+    }
+  }
+
+  setTitle(title : string){
+    this.pageTitle = title;
   }
 
 }

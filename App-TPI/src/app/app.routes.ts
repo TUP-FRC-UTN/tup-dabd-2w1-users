@@ -7,7 +7,6 @@ import { NotFoundComponent } from './errors-components/not-found/not-found.compo
 import { UnauthorizedComponent } from './errors-components/unauthorized/unauthorized.component';
 import { roleGuard } from './guards/role.guard';
 import { UsersFamiliarGroupComponent } from './users-components/users/users-familiar-group/users-familiar-group.component';
-import { loginBlockGuard } from './guards/login-block.guard';
 
 // Rutas principales de la aplicación
 export const routes: Routes = [
@@ -19,8 +18,7 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    component: LoginComponent,
-    canActivate: [loginBlockGuard]
+    component: LoginComponent
   },
   {
     //ruta principal
@@ -44,7 +42,7 @@ export const routes: Routes = [
       {
         path: 'users',
         canActivate: [authGuard, roleGuard],
-        data: {roles: ['SuperAdmin', 'Admin']},
+        data: {roles: ['SuperAdmin', 'Admin', 'Owner']},
         loadChildren: () => import('./users-components/users/users.module').then(m => m.UsersModule)
       },
       {

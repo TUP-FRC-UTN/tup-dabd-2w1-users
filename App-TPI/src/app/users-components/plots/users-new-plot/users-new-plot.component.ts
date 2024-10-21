@@ -6,11 +6,15 @@ import { PlotService } from '../../../users-servicies/plot.service';
 import { PlotTypeModel } from '../../../users-models/plot/PlotType';
 import { PlotStateModel } from '../../../users-models/plot/PlotState';
 import { PlotModel } from '../../../users-models/plot/Plot';
+import { FormArray } from '@angular/forms';
+import { FileUploadComponent } from '../../utils/file-upload/file-upload.component';
+import { AuthService } from '../../../users-servicies/auth.service';
+
 
 @Component({
   selector: 'app-users-new-plot',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, FileUploadComponent],
   templateUrl: './users-new-plot.component.html',
   styleUrl: './users-new-plot.component.css'
 })
@@ -23,24 +27,11 @@ export class UsersNewPlotComponent {
   }
 
   private readonly plotService = inject(PlotService);
+  private readonly authService = inject(AuthService);
 
   types: PlotTypeModel[] = [];
   states: PlotStateModel[] = [];
-   
-  formReactivo = new FormGroup({
-    plotNumber: new FormControl(0, [Validators.required]),
-    blockNumber: new FormControl(0, [Validators.required]),
-    totalArea: new FormControl(0, [Validators.required]),
-    totalBuild: new FormControl(0, [Validators.required]),
-    state: new FormControl(null, [Validators.required]),
-    type: new FormControl(null, [Validators.required])
-  })
-
-  resetForm() {
-    this.formReactivo.reset();
-    this.states = [];
-    this.types = [];
-  }
+  files: File[] = [];
 
   ngOnInit(): void {
 
@@ -65,6 +56,26 @@ export class UsersNewPlotComponent {
     });
   }
 
+  getFiles(files: File[]) {
+    this.files = files;
+  }
+
+   
+  formReactivo = new FormGroup({
+    plotNumber: new FormControl(0, [Validators.required]),
+    blockNumber: new FormControl(0, [Validators.required]),
+    totalArea: new FormControl(0, [Validators.required]),
+    totalBuild: new FormControl(0, [Validators.required]),
+    state: new FormControl(null, [Validators.required]),
+    type: new FormControl(null, [Validators.required])
+  })
+
+  resetForm() {
+    this.formReactivo.reset();
+    this.states = [];
+    this.types = [];
+  }
+
   createPlot(){
     const plot: PlotModel = {
       plot_number: this.formReactivo.get('plotNumber')?.value || 0,
@@ -72,8 +83,14 @@ export class UsersNewPlotComponent {
       total_area_in_m2: this.formReactivo.get('totalArea')?.value || 0,
       built_area_in_m2: this.formReactivo.get('totalBuild')?.value ||0,
       plot_state_id: this.formReactivo.get('state')?.value || 0,
-      plot_type_id: this.formReactivo.get('type')?.value || 0
+      plot_type_id: this.formReactivo.get('type')?.value || 0,
+      userCreateId: this.authService.getUser().id || 0,
+      files: this.files
+
     }
+
+    console.log(plot);
+    
 
     this.plotService.postPlot(plot).subscribe({
       next: (response) => {

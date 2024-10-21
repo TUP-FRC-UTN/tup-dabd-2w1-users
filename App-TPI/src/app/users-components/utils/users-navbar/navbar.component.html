@@ -6,8 +6,9 @@
         <button class="btn text-light fs-4" (click)="changeState()">
             <i [class]="expand ? 'bi bi-x-lg' : 'bi bi-list'"></i>
         </button>
-        <h3>Página principal</h3>
-        <img src="assets/images/icono_image.png" alt="" style="width: 100px; padding-right: 16px;">
+        <h3>{{pageTitle}}</h3>
+        <!-- <img src="assets/images/icono_image.png" alt="" style="width: 100px; padding-right: 16px;"> -->
+         <button class="btn btn-dark" (click)="redirect('home/profile')">{{setName()}}<i class="bi-person" style="width: 50px; height: 50px;"></i></button>
     </nav>
     <!-- SideBar -->
         <aside class="myside text-bg-dark z-2 h-100 pt-5 fixed-top animation"
@@ -16,7 +17,7 @@
                 <ul class="nav flex-column">
                     <li class="nav-item mb-2">
                         @for (button of buttonsList; track $index) {
-                            <app-users-side-button [expanded]="expand" [info]="button" [userRoles]="userRoles"/>
+                            <app-users-side-button [expanded]="expand" [info]="button" [userRoles]="userRoles" (sendTitle)="setTitle($event)" />
                         }
                     </li>
                 </ul>

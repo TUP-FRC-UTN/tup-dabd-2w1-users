@@ -62,11 +62,6 @@
             </div>
         </div>
 
-
-
-
-
-
         <div class="row mb-3 mt-5">
             <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center justify-content-end">
@@ -107,8 +102,11 @@
                 }
             </div>
         </div>
+        <div>
+            <app-file-upload (filesChange)="getFiles($event)" />
+        </div>
 
-        <div class="row">
+        <div class="row mb-3 mt-5">
             <div class="col text-end">
                 <button class="btn btn-primary" type="submit" [disabled]="formReactivo.invalid">Guardar</button>
             </div>

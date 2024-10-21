@@ -93,6 +93,7 @@ export class NewUserComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar los roles:', error);
+        
       }
     });
   }
