@@ -57,6 +57,11 @@ export class NewUserComponent implements OnInit {
         Validators.minLength(1),
         Validators.maxLength(30)
     ]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(1),
+      Validators.maxLength(30)
+  ]),
     email: new FormControl('', [
         Validators.required,
         Validators.email
@@ -133,7 +138,7 @@ export class NewUserComponent implements OnInit {
       name: this.formReactivo.get('name')?.value || '',
       lastname: this.formReactivo.get('lastname')?.value || '',
       username: this.formReactivo.get('username')?.value || '',
-      password: this.formReactivo.get('dni')?.value?.toString() || '',
+      password: this.formReactivo.get('password')?.value?.toString() || '',
       email: this.formReactivo.get('email')?.value || '',
       dni: this.formReactivo.get('dni')?.value?.toString() || "",
       active: true,
@@ -143,6 +148,7 @@ export class NewUserComponent implements OnInit {
       phone_number: this.formReactivo.get('phone_number')?.value?.toString() || '',
       userUpdateId: this.formReactivo.get('userUpdateId')?.value || 0,
       telegram_id: this.formReactivo.get('telegram_id')?.value || 0
+    
     };
 
     //Si el usuario es de tipo owner se setea el plotId

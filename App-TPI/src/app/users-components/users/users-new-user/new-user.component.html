@@ -161,11 +161,34 @@
         </div>
 
         <div class="row mb-3">
-            <div class="d-flex align-items-center">
+            <div class="col-md-6 d-flex align-items-end flex-column">
+            <!-- <div class="d-flex align-items-center"> -->
                 <label class="form-label me-2 text-end">Telegram id</label>
                     <input type="number" class="form-control custom-input"
                         [ngClass]="{'is-invalid': formReactivo.controls['telegram_id'].invalid && (formReactivo.get('telegram_id')?.dirty || formReactivo.get('telegram_id')?.touched), 'is-valid': formReactivo.controls['telegram_id'].valid }"
                         formControlName="telegram_id">
+            </div>
+            <div class="col-md-6 d-flex align-items-end flex-column">
+                <div class="d-flex align-items-center">
+                    <label class="form-label me-2 text-end">Contraseña</label>
+                    <input type="password" class="form-control custom-input" 
+                    formControlName="password" autocomplete="current-password"
+                        [ngClass]="{'is-invalid': formReactivo.controls['password'].invalid && (formReactivo.get('password')?.dirty || formReactivo.get('password')?.touched), 'is-valid': formReactivo.controls['password'].valid }"
+                        formControlName="password">
+                </div>
+                <div class="text-danger form-error text-start">
+                    @if(formReactivo.get('password')?.dirty || formReactivo.get('password')?.touched){
+                        @if(formReactivo.controls['password'].errors?.["required"]){
+                            Ingrese su contraseña
+                        }
+                        @if(formReactivo.controls['password'].errors?.["maxlength"]){
+                            La contraseña no puede superar los 20 caracteres
+                        }
+                        @if(formReactivo.controls['password'].errors?.["pattern"]){
+                            La contraseña solo puede contener letras, números y guiones bajos
+                        }
+                    }
+                </div>
             </div>
 
         </div>
