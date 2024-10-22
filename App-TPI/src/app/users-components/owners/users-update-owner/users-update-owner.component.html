@@ -2,27 +2,28 @@
     <h3>Editar Propietario</h3>
     <form [formGroup]="editOwner" (ngSubmit)="updateOwner(editOwner)">
         <div class="row mb-4">
-            <div class="col-6 d-flex flex-column align-item-end">
+            <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center">
                     <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Nombre</label>
                     <input type="text" class="form-control custom-input" formControlName="name" 
                     [ngClass]="{'is-invalid': editOwner.controls['name'].invalid  && (editOwner.get('name')?.dirty|| editOwner.get('name')?.touched),'is-valid': editOwner.controls['name'].valid }" >
-                </div>   
+                </div> 
                 @if(editOwner.controls['name'].invalid && (editOwner.controls['name'].dirty || editOwner.controls['name'].touched)){
                     
-                    <div class="text-danger align-self-end" style="width: 500px;">
+                    <div class="text-danger text-center form-error">
                         Ingrese su nombre
                     </div>
                 }
             </div>
-            <div class="col-6 d-flex flex-column align-item-end">
+            
+            <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center">
                     <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Apellido</label>
                     <input type="text" class="form-control custom-input" formControlName="lastname"
                     [ngClass]="{'is-invalid': editOwner.controls['lastname'].invalid  && (editOwner.get('lastname')?.dirty|| editOwner.get('lastname')?.touched),'is-valid': editOwner.controls['lastname'].valid }">
                 </div>   
                 @if(editOwner.controls['lastname'].invalid && (editOwner.controls['lastname'].dirty || editOwner.controls['lastname'].touched)){
-                    <div class="text-danger align-self-end" style="width: 500px;">
+                    <div class="text-danger text-center form-error">
                         Ingrese su apellido
                     </div>
                 }
@@ -30,46 +31,67 @@
         </div>
 
         <div class="row mb-4">
-            <div class="col-6 d-flex flex-column align-item-end">
+            <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center">
                     <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">DNI</label>
                     <input type="text" class="form-control custom-input" formControlName="dni"
                     [ngClass]="{'is-invalid': editOwner.controls['dni'].invalid  && (editOwner.get('dni')?.dirty|| editOwner.get('dni')?.touched),'is-valid': editOwner.controls['dni'].valid }">
                 </div>   
-                @if(editOwner.controls['dni'].invalid && (editOwner.controls['dni'].dirty || editOwner.controls['dni'].touched)){
-                    <div class="text-danger align-self-end" style="width: 500px;">
-                        Ingrese su DNI
-                    </div>
+                @if(editOwner.controls['dni']; as dniControl) {
+                    @if(dniControl.invalid && (dniControl.dirty || dniControl.touched)) {
+                
+                        @if(dniControl.errors?.['required']) {
+                            <div class="text-danger text-center form-error">
+                                Ingrese su DNI
+                            </div>
+                        }
+                        @if(dniControl.errors?.['pattern']) {
+                            <div class="text-danger text-center form-error">
+                                Ingrese un DNI válido
+                            </div>
+                        }
+                    }
                 }
+                
             </div>
-            <div class="col-6 d-flex flex-column align-item-end">
+            <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center">
                     <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">CUIT - CUIL</label>
                     <input type="text" class="form-control custom-input" formControlName="cuitCuil"
                     [ngClass]="{'is-invalid': editOwner.controls['cuitCuil'].invalid  && (editOwner.get('cuitCuil')?.dirty|| editOwner.get('cuitCuil')?.touched),'is-valid': editOwner.controls['cuitCuil'].valid }">
                 </div>   
-                @if(editOwner.controls['cuitCuil'].invalid && (editOwner.controls['cuitCuil'].dirty || editOwner.controls['cuitCuil'].touched)){
-                    <div class="text-danger align-self-end" style="width: 500px;">
-                        Ingrese su CUIT - CUIL
-                    </div>
+                @if(editOwner.controls['cuitCuil']; as cuitCuitControl) {
+                    @if(cuitCuitControl.invalid && (cuitCuitControl.dirty || cuitCuitControl.touched)) {
+                
+                        @if(cuitCuitControl.errors?.['required']) {
+                            <div class="text-danger text-center form-error">
+                                Ingrese su CUIL - CUIT                                                                          
+                            </div>
+                        }
+                        @if(cuitCuitControl.errors?.['pattern']) {
+                            <div class="text-danger text-center form-error">
+                                Ingrese un CUIT/CUIL válido
+                            </div>
+                        }
+                    }
                 }
             </div>
         </div>
 
         <div class="row mb-4">
-            <div class="col d-flex flex-column align-item-end">
+            <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center">
                     <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Fecha de nacimiento</label>
                     <input type="date" class="form-control custom-input" formControlName="birthdate"
                     [ngClass]="{'is-invalid': editOwner.controls['birthdate'].invalid  && (editOwner.get('birthdate')?.dirty|| editOwner.get('birthdate')?.touched),'is-valid': editOwner.controls['birthdate'].valid }">
                 </div>   
                 @if(editOwner.controls['birthdate'].invalid && (editOwner.controls['birthdate'].dirty || editOwner.controls['birthdate'].touched)){
-                    <div class="text-danger align-self-end" style="width: 500px;">
+                    <div class="text-danger text-center form-error">
                         Ingrese su fecha de nacimiento
                     </div>
                 }
             </div>
-            <div class="col d-flex flex-column align-item-end">
+            <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center">
                     <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Empresa</label>
                     <input type="text" class="form-control custom-input" formControlName="bussinesName">
@@ -78,54 +100,74 @@
         </div>
 
         <div class="row mb-4">
-            <div class="col d-flex flex-column align-item-end">
+            <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center">
                     <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Estado fiscal</label>
                     <input type="text" class="form-control custom-input" formControlName="taxStatus"
                     [ngClass]="{'is-invalid': editOwner.controls['taxStatus'].invalid  && (editOwner.get('taxStatus')?.dirty|| editOwner.get('taxStatus')?.touched),'is-valid': editOwner.controls['taxStatus'].valid }">
                 </div>   
                 @if(editOwner.controls['taxStatus'].invalid && (editOwner.controls['taxStatus'].dirty || editOwner.controls['taxStatus'].touched)){
-                    <div class="text-danger align-self-end" style="width: 500px;">
+                    <div class="text-danger text-center form-error">
                         Ingrese el estado
                     </div>
                 }
             </div>
-            <div class="col d-flex flex-column align-item-end">
+            <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center">
                     <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Tipo de propietario</label>
                     <input type="text" class="form-control custom-input" formControlName="ownerType"
                     [ngClass]="{'is-invalid': editOwner.controls['ownerType'].valid  && (editOwner.get('ownerType')?.dirty|| editOwner.get('ownerType')?.touched),'is-valid': editOwner.controls['ownerType'].valid }">
                 </div>   
                 @if(editOwner.controls['ownerType'].invalid && (editOwner.controls['ownerType'].dirty || editOwner.controls['ownerType'].touched)){
-                    <div class="text-danger align-self-end" style="width: 500px;">
+                    <div class="text-danger text-center form-error">
                         Ingrese el tipo de propietario
                     </div>
                 }
             </div>
         </div>
         <div class="row mb-4">
-            <div class="col d-flex flex-column align-item-end">
+            <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center">
                     <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Teléfono</label>
                     <input type="text" class="form-control custom-input" formControlName="phoneNumber"
                     [ngClass]="{'is-invalid': editOwner.controls['taxStatus'].invalid  && (editOwner.get('phoneNumber')?.dirty|| editOwner.get('phoneNumber')?.touched),'is-valid': editOwner.controls['phoneNumber'].valid }">
-                </div>   
-                @if(editOwner.controls['phoneNumber'].invalid && (editOwner.controls['phoneNumber'].dirty || editOwner.controls['phoneNumber'].touched)){
-                    <div class="text-danger align-self-end" style="width: 500px;">
-                        Ingrese su teléfono
-                    </div>
+                </div>
+                @if(editOwner.controls['phoneNumber']; as phoneControl) {
+                    @if(phoneControl.invalid && (phoneControl.dirty || phoneControl.touched)) {
+                
+                        @if(phoneControl.errors?.['required']) {
+                            <div class="text-danger text-center form-error">
+                                Ingrese su teléfono
+                            </div>
+                        }
+                        @if(phoneControl.errors?.['pattern']) {
+                            <div class="text-danger text-center form-error">
+                                Ingrese un teléfono válido
+                            </div>
+                        }
+                    }
                 }
             </div>
-            <div class="col d-flex flex-column align-item-end">
+            <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center">
                     <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Email</label>
                     <input type="text" class="form-control custom-input" formControlName="email"
                     [ngClass]="{'is-invalid': editOwner.controls['email'].invalid  && (editOwner.get('email')?.dirty|| editOwner.get('email')?.touched),'is-valid': editOwner.controls['email'].valid }">
                 </div>   
                 @if(editOwner.controls['email'].invalid && (editOwner.controls['email'].dirty || editOwner.controls['email'].touched)){
-                    <div class="text-danger align-self-end" style="width: 500px;">
+                    
+                    @if(editOwner.controls['email'].errors?.['required']){
+                        <div class="text-danger text-center form-error">
                         Ingrese su email
-                    </div>
+                        </div>
+                    }
+
+                    @if(editOwner.controls['email'].errors?.['email']){
+                        <div class="text-danger text-center form-error">
+                        Ingrese un email válido
+                        </div>
+                    }
+                    
                 }
             </div>
         </div>

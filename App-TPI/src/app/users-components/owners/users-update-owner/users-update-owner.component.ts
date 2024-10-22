@@ -62,13 +62,13 @@ export class UsersUpdateOwnerComponent implements OnInit {
   editOwner = new FormGroup({
     name: new FormControl("", [Validators.required]),
     lastname: new FormControl("", [Validators.required]),
-    dni: new FormControl("", [Validators.required]),
-    cuitCuil: new FormControl("", [Validators.required]),
+    dni: new FormControl("", [Validators.required, Validators.pattern("^[0-9]{6,9}$")]),
+    cuitCuil: new FormControl("", [Validators.required, Validators.pattern("^[0-9]{11}$")]),
     ownerType: new FormControl("", [Validators.required]),
     taxStatus: new FormControl("", [Validators.required]),
     bussinesName: new FormControl(""),
     birthdate: new FormControl("", [Validators.required]),
-    phoneNumber: new FormControl("", [Validators.required]),
+    phoneNumber: new FormControl("", [Validators.required, Validators.pattern("^[0-9]*$")]),
     email: new FormControl("", [Validators.required, Validators.email])
   });
 
