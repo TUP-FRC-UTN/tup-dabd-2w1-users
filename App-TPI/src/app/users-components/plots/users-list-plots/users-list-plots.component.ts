@@ -164,6 +164,74 @@ export class UsersListPlotsComponent {
     });
   }
 
+   //Exporta a pdf la tabla, si esta filtrada solo exporta los datos filtrados
+   exportPdf() {
+    const doc = new jsPDF();
+  
+    // Agregar título centrado
+    const title = 'Lista de Lotes';
+    const pageWidth = doc.internal.pageSize.getWidth();
+    doc.setFontSize(16);
+    const textWidth = doc.getTextWidth(title);
+    doc.text(title, (pageWidth - textWidth) / 2, 20);
+  
+    // Obtener columnas de la tabla (añadido 'Email')
+    const columns = ['Lote', 'Manzana', 'M2', 'M2 Construidos','Tipo','Estado'];
+  
+    // Filtrar datos visibles en la tabla
+    const table = $('#myTable').DataTable(); // Inicializa DataTable una vez
+  
+    // Cambia la forma de obtener las filas visibles usando 'search' en lugar de 'filter'
+    const visibleRows = table.rows({ search: 'applied' }).data().toArray(); // Usar 'search: applied'
+  
+    // Mapear los datos filtrados a un formato adecuado para jsPDF
+    const rows = visibleRows.map((row: any) => [
+      `${row[0]}`,       // Nombre
+      `${row[1]}`,       // Rol
+      `${row[2]}`,       // Lote
+      `${row[3]}`,
+      `${row[4]}`,
+      `${row[5]}`,
+    ]);
+  
+    // Generar la tabla en el PDF usando autoTable
+    autoTable(doc, {
+      head: [columns],
+      body: rows,
+      startY: 30, // Ajusta la posición de inicio de la tabla
+      theme: 'striped', // Tema de tabla con filas alternadas
+      headStyles: { fillColor: [0, 0, 0] }, // Color de fondo del encabezado
+      styles: { halign: 'center', valign: 'middle' }, // Alineación del contenido
+      columnStyles: { 
+        0: { cellWidth: 30 }, 
+        1: { cellWidth: 30 }, 
+        2: { cellWidth: 30 }, 
+        3: { cellWidth: 30 }, 
+        4: { cellWidth: 40 },
+        5: { cellWidth: 40 }
+      }, // Ajusta el ancho de las columnas
+    });
+  
+    doc.save('lotes.pdf'); // Descarga el archivo PDF
+  }
+
+  //Exporta por excel los registros de la tabla
+  exportExcel() {
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.plots.map(plot => ({
+      Lote: plot.plot_number,
+      Manzana: plot.block_number,
+      M2: plot.total_area_in_m2,
+      M2_Construidos: plot.built_area_in_m2,
+      Tipo: plot.plot_type,
+      Estado: plot.plot_state 
+    })));
+  
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Lotes');
+  
+    XLSX.writeFile(wb, 'lotes.xlsx'); // Descarga el archivo Excel
+  }
+
   async abrirModal(plotId: number) {
     console.log("Esperando a que userModal se cargue...");
   

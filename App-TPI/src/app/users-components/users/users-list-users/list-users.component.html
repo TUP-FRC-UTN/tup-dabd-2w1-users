@@ -2,8 +2,14 @@
   <div class="d-flex justify-content-between align-items-center mb-2">
     <h3>Listado de Usuarios</h3>
     <div>
-      <button class="btn btn-primary me-2" (click)="exportPdf()">Generar PDF</button>
-      <button class="btn btn-success" (click)="exportExcel()">Generar Excel</button>
+      <button class="btn btn-primary me-2" (click)="exportPdf()">
+        Generar PDF
+        <i class="bi bi-filetype-pdf"></i>
+      </button>
+      <button class="btn btn-success" (click)="exportExcel()">
+        Generar Excel
+        <i class="bi bi-file-earmark-spreadsheet"></i>
+      </button>
     </div>
   </div>
 

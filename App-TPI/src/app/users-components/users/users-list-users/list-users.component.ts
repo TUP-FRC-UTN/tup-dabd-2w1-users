@@ -1,6 +1,7 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { UserGet } from '../../../users-models/users/UserGet';
+import { PlotService } from '../../../users-servicies/plot.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ModalInfoUserComponent } from '../users-modal-info-user/modal-info-user.component';
@@ -9,6 +10,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import $ from 'jquery';
+import { GetPlotDto } from '../../../users-models/plot/GetPlotDto';
 import 'datatables.net';
 import 'datatables.net-bs5';
 import { Router, RouterModule } from '@angular/router';
@@ -25,11 +27,13 @@ import Swal from 'sweetalert2';
 })
 export class ListUsersComponent implements OnInit { 
 
-  constructor(private router: Router,private modal: NgbModal) { }
+
+  constructor(private router: Router,private modal: NgbModal, private plotService:PlotService) { }
 
   typeModal: string = '';
   user: number = 0; 
   users: UserGet[] = [];
+  plots: GetPlotDto[] = [];
   private readonly apiService = inject(UserService);
   showDeactivateModal: boolean = false;
   userToDeactivate: number = 0;
@@ -41,9 +45,9 @@ export class ListUsersComponent implements OnInit {
         //Cambiar guiones por barras en la fecha de nacimiento
         this.users = data.map(user => ({
           ...user,
-          datebirth: user.datebirth.replace(/-/g, '/') //Cambia 'dd-mm-yyyy' a 'dd/mm/yyyy'
+          datebirth: user.datebirth.replace(/-/g, '/'),
         }));
-        
+
         //Inicializar DataTables después de cargar los datos
         setTimeout(() => {
           const table = $('#myTable').DataTable({
@@ -57,7 +61,7 @@ export class ListUsersComponent implements OnInit {
               { title: 'Nombre', width: '30%' },
               { title: 'Rol', width: '20%' },
               { title: 'Nro. de lote', className: 'text-start', width: '15%' },
-              { title: 'Fecha de creación', width: '20%' },
+              { title: 'Fecha de nacimiento', width: '20%' },
               {
                 title: 'Acciones',
                 orderable: false,
