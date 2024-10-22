@@ -233,4 +233,68 @@ export class UsersListOwnersComponent {
        });
      });
   }
+
+  exportPdf() {
+    const doc = new jsPDF();
+  
+    // Agregar título centrado
+    const title = 'Lista de Propietarios';
+    const pageWidth = doc.internal.pageSize.getWidth();
+    doc.setFontSize(16);
+    const textWidth = doc.getTextWidth(title);
+    doc.text(title, (pageWidth - textWidth) / 2, 20);
+  
+    // Definir columnas para el PDF
+    const columns = ['Nombre', 'DNI', 'Fecha de Nacimiento', 'CUIT/CUIL', 'Tipo'];
+  
+    // Filtrar datos visibles en la tabla
+    const table = $('#myTable').DataTable();
+  
+    // Obtener las filas visibles de la tabla
+    const visibleRows = table.rows({ search: 'applied' }).data().toArray();
+  
+    // Mapear los datos visibles a un formato adecuado para jsPDF
+    const rows = visibleRows.map((row: any) => [
+      `${row[0]}`,        // Nombre
+      `${row[1]}`,        // DNI
+      `${row[2].replace(/-/g, '/')}`, // Fecha de nacimiento
+      `${row[3]}`,        // CUIT/CUIL
+      `${row[4]}`         // Tipo
+    ]);
+  
+    // Generar la tabla en el PDF usando autoTable
+    autoTable(doc, {
+      head: [columns],
+      body: rows,
+      startY: 30,
+      theme: 'striped',
+      headStyles: { fillColor: [0, 0, 0] },
+      styles: { halign: 'center', valign: 'middle' },
+      columnStyles: { 
+        0: { cellWidth: 50 }, 
+        1: { cellWidth: 30 }, 
+        2: { cellWidth: 30 }, 
+        3: { cellWidth: 50 }, 
+        4: { cellWidth: 30 } 
+      },
+    });
+  
+    doc.save('propietarios.pdf'); // Descargar el archivo PDF
+  }
+  
+  exportExcel() {
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.owners.map(owner => ({
+      Nombre: `${owner.lastname}, ${owner.name}`,
+      DNI: owner.dni,
+      FechaNacimiento: owner.dateBirth.replace(/-/g, '/'), // Formato de la fecha
+      CUIT_CUIL: owner.cuitCuil,
+      Tipo: owner.ownerType
+    })));
+  
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Propietarios');
+  
+    XLSX.writeFile(wb, 'propietarios.xlsx'); // Descargar el archivo Excel
+  }
+  
 }
