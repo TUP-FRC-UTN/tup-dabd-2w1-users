@@ -7,12 +7,11 @@
             <i [class]="expand ? 'bi bi-x-lg' : 'bi bi-list'"></i>
         </button>
         <h3>{{pageTitle}}</h3>
-        <!-- <img src="assets/images/icono_image.png" alt="" style="width: 100px; padding-right: 16px;"> -->
          <button class="btn btn-dark" (click)="redirect('home/profile')">{{setName()}}<i class="bi-person" style="width: 50px; height: 50px;"></i></button>
     </nav>
     <!-- SideBar -->
         <aside class="myside text-bg-dark z-2 h-100 pt-5 fixed-top animation"
-            [class]="expand ? 'side-expand' : 'side-compressed'">
+            [class]="expand ? 'side-expanded' : 'side-compressed'">
             <div class="pt-3 fs-5 d-flex flex-column h-100">
                 <ul class="nav flex-column">
                     <li class="nav-item mb-2">
