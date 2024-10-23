@@ -22,12 +22,14 @@ export class AppComponent {
   showLandingPage : boolean = false;
   showAddUserPage : boolean = false;
   showListUsersPage : boolean = false;
+  showRecoveryPage : boolean = false;
 
   redirect(page : any){
     this.showLandingPage = false;
     this.showLoginPage = false;
     this.showAddUserPage = false;
     this.showListUsersPage = false;
+    this.showRecoveryPage = false;
 
     if(page == "Login"){
       this.showLoginPage = !this.showLoginPage;
@@ -40,6 +42,10 @@ export class AppComponent {
     }
     if(page == "AddUser"){
       this.showAddUserPage = !this.showAddUserPage;
+    }
+
+    if (page == "recovery") {
+      this.showRecoveryPage = !this.showRecoveryPage;
     }
   }
 }

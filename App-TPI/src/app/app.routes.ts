@@ -7,6 +7,7 @@ import { NotFoundComponent } from './errors-components/not-found/not-found.compo
 import { UnauthorizedComponent } from './errors-components/unauthorized/unauthorized.component';
 import { roleGuard } from './guards/role.guard';
 import { UsersFamiliarGroupComponent } from './users-components/users/users-familiar-group/users-familiar-group.component';
+import { UsersRecoveryPasswordComponent } from './users-components/utils/users-recovery-password/users-recovery-password.component';
 
 // Rutas principales de la aplicación
 export const routes: Routes = [
@@ -58,6 +59,10 @@ export const routes: Routes = [
         loadChildren: () => import('./users-components/owners/owners.module').then(m => m.OwnersModule)
       }
     ]
+  },
+  {
+    path: 'recovery',
+    component: UsersRecoveryPasswordComponent
   },
   {
     //componente que se muestra cuando el roleGuard da false

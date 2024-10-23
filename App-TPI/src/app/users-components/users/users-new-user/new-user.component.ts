@@ -59,7 +59,7 @@ export class NewUserComponent implements OnInit {
     ]),
     password: new FormControl('', [
       Validators.required,
-      Validators.minLength(1),
+      Validators.minLength(6),
       Validators.maxLength(30)
   ]),
     email: new FormControl('', [
