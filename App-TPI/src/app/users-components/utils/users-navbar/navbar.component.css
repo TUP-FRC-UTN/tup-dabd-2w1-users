@@ -4,15 +4,15 @@
 
 .side-compressed{
     width: 55px;
-    padding: 0;
 }
 
-.side-expand{
+.side-expanded{
     width: 220px;
 }
 
 .animation{
     transition: all 0.3s ease-in-out;
+    overflow: hidden;
 }
 
 .overlay-on {
@@ -22,6 +22,7 @@
     height: 100%;
     background-color: rgb(0, 0, 0);
     opacity: 0;
+    z-index: 2;
   }
 
 .overlay-off{
