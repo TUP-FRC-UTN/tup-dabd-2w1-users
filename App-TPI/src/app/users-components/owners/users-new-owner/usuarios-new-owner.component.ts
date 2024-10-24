@@ -13,11 +13,12 @@ import { OwnerModel } from '../../../users-models/owner/PostOwnerDto';
 import Swal from 'sweetalert2';
 import { Route, Router } from '@angular/router';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { FileUploadComponent } from '../../utils/file-upload/file-upload.component';
 
 @Component({
   selector: 'app-usuarios-new-owner',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, UsersSelectMultipleComponent],
+  imports: [ReactiveFormsModule, CommonModule, UsersSelectMultipleComponent, FileUploadComponent],
   templateUrl: './usuarios-new-owner.component.html',
   styleUrls: ['./usuarios-new-owner.component.css'] // Asegúrate de que sea styleUrls en lugar de styleUrl
 })
@@ -33,7 +34,9 @@ export class UsuariosNewOwnerComponent {
   states: OwnerStateModel[] = [];
   lotes: GetPlotDto[] = [];
   rolesSelected: string[] = [];
+
   passwordVisible: boolean = false;
+  files: File[] = [];
 
   constructor(private router: Router) { }
 
@@ -73,13 +76,16 @@ export class UsuariosNewOwnerComponent {
       Validators.minLength(6),
       Validators.maxLength(30)]),
     rol: new FormControl(""),
-    lote: new FormControl(null, [
-      Validators.required]),
+    //lote: new FormControl(null, [
+      //Validators.required]),
     phone: new FormControl('', [
       Validators.required,
       Validators.minLength(10),
       Validators.maxLength(20),
       Validators.pattern(/^\d+$/)]),
+
+    lote: new FormControl(null),//////por ahora le borro el required para que ande
+    //phone: new FormControl('', [Validators.required]),
     company: new FormControl('')
   });
 
@@ -199,6 +205,10 @@ export class UsuariosNewOwnerComponent {
     }
   }
 
+  getFiles(files: File[]) {
+    this.files = files;
+  }
+
   createOwner() {
     const owner: OwnerModel = {
       name: this.formReactivo.get('name')?.value || '',
@@ -214,10 +224,14 @@ export class UsuariosNewOwnerComponent {
       email: this.formReactivo.get('email')?.value || '',
       phoneNumber: this.formReactivo.get('phone')?.value || '',
       avatarUrl: 'nada',
-      roles: this.rolesSelected,
+     
+     /* estos estan hardcodeado para que ande*/
+      roles: ["Admin"],//this.rolesSelected,
       userCreateId: 1,
-      plotId: this.formReactivo.get('lote')?.value || 0,
-      telegramId: 0
+      //plotId: this.formReactivo.get('lote')?.value || 0,
+      plotId: 1,
+      telegramId: 1,
+      files: this.files
     };
 
     console.log(owner);

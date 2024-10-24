@@ -64,7 +64,7 @@
         <div class="row">
           <label class="col-2 text-end form-label">Fecha de nacimiento</label>
           <div class="col-8">
-            <input type="date" class="form-control" formControlName="birthdate " value="2000-01-01"
+            <input type="date" class="form-control" formControlName="birthdate" value="2000-01-01"
               [ngClass]="{'is-invalid': formReactivo.controls['birthdate'].invalid && (formReactivo.get('birthdate')?.dirty || formReactivo.get('birthdate')?.touched),
                         'is-valid': formReactivo.controls['birthdate'].valid}">
             @if(formReactivo.controls['birthdate'].invalid && (formReactivo.controls['birthdate'].dirty || formReactivo.controls['birthdate'].touched)){
@@ -184,12 +184,17 @@
         </div>
       </div>
     </div>
+
+    <div class="col-6">
+      <app-file-upload (filesChange)="getFiles($event)" />
+    </div>
+
     <div class="row mb-3 justify-content-end sticky-right">
       <div class="col-auto">
           <button type="button" class="btn btn-secondary" (click)="confirmExit()">Cancelar</button>
       </div>
       <div class="col-auto">
-          <button type="submit" class="btn btn-primary" [disabled]="!formReactivo.valid">Guardar</button>
+          <button type="submit" class="btn btn-primary" (click)="createOwner()" [disabled]="!formReactivo.valid">Guardar</button>
       </div>
   </div>
   </form>
