@@ -49,7 +49,11 @@ export class OwnerService {
     formData.append('email', owner.email);
     formData.append('phoneNumber', owner.phoneNumber);
     formData.append('avatarUrl', owner.avatarUrl);
-    formData.append('roles', JSON.stringify(owner.roles));
+
+    owner.roles.forEach((role, index) => {
+      formData.append(`roles[${index}]`, role);
+    });
+
     formData.append('userCreateId', owner.userCreateId.toString());
     formData.append('plotId', owner.plotId.toString());
     formData.append('telegramId', owner.telegramId.toString());

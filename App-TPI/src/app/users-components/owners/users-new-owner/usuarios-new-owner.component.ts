@@ -226,7 +226,7 @@ export class UsuariosNewOwnerComponent {
       avatarUrl: 'nada',
      
      /* estos estan hardcodeado para que ande*/
-      roles: ["Admin"],//this.rolesSelected,
+      roles: ["Owner"],//this.rolesSelected,
       userCreateId: 1,
       //plotId: this.formReactivo.get('lote')?.value || 0,
       plotId: 1,
