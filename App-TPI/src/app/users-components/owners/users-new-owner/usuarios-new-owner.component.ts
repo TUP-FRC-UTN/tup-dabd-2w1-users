@@ -12,6 +12,7 @@ import { GetPlotDto } from '../../../users-models/plot/GetPlotDto';
 import { OwnerModel } from '../../../users-models/owner/PostOwnerDto';
 import Swal from 'sweetalert2';
 import { Route, Router } from '@angular/router';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 @Component({
   selector: 'app-usuarios-new-owner',
@@ -20,6 +21,8 @@ import { Route, Router } from '@angular/router';
   templateUrl: './usuarios-new-owner.component.html',
   styleUrls: ['./usuarios-new-owner.component.css'] // Asegúrate de que sea styleUrls en lugar de styleUrl
 })
+
+
 export class UsuariosNewOwnerComponent {
 
   private readonly ownerService = inject(OwnerService);
@@ -35,19 +38,48 @@ export class UsuariosNewOwnerComponent {
   constructor(private router: Router) { }
 
   formReactivo = new FormGroup({
-    name: new FormControl("", [Validators.required]),
-    lastname: new FormControl("", [Validators.required]),
-    dni: new FormControl("", [Validators.required]),
-    cuit_cuil: new FormControl("", [Validators.required]),
-    birthdate: new FormControl(null, [Validators.required]),
-    email: new FormControl("", [Validators.required]),
-    state: new FormControl(null, [Validators.required]),
-    type: new FormControl(null, [Validators.required]),
-    username: new FormControl("", [Validators.required]),
-    password: new FormControl("", [Validators.required]),
+    name: new FormControl("", [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(50)]),
+    lastname: new FormControl("", [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(50)]),
+    dni: new FormControl("", [
+      Validators.required,
+      Validators.minLength(8),
+      Validators.pattern(/^\d+$/)]), //Esto valida que sea numerico el string
+    cuit_cuil: new FormControl("", [
+      Validators.required,
+      Validators.minLength(11),
+      Validators.maxLength(20)]),
+    birthdate: new FormControl(null, [
+      Validators.required,
+      this.dateLessThanTodayValidator()]),
+    email: new FormControl("", [
+      Validators.required,
+      Validators.email]),
+    state: new FormControl(null, [
+      Validators.required]),
+    type: new FormControl(null, [
+      Validators.required]),
+    username: new FormControl("", [
+      Validators.required,
+      Validators.minLength(1),
+      Validators.maxLength(30)]),
+    password: new FormControl("", [
+      Validators.required,
+      Validators.minLength(6),
+      Validators.maxLength(30)]),
     rol: new FormControl(""),
-    lote: new FormControl(null, [Validators.required]),
-    phone: new FormControl('', [Validators.required]),
+    lote: new FormControl(null, [
+      Validators.required]),
+    phone: new FormControl('', [
+      Validators.required,
+      Validators.minLength(10),
+      Validators.maxLength(20),
+      Validators.pattern(/^\d+$/)]),
     company: new FormControl('')
   });
 
@@ -96,6 +128,15 @@ export class UsuariosNewOwnerComponent {
         console.error('Error al cargar los roles:', error);
       }
     });
+  }
+
+  dateLessThanTodayValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const inputDate = new Date(control.value);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return inputDate >= today ? { dateTooHigh: true } : null;
+    }
   }
 
   formatCUIT(value: string): void {

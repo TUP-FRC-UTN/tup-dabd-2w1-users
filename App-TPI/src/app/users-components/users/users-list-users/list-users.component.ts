@@ -33,12 +33,23 @@ export class ListUsersComponent implements OnInit {
   typeModal: string = '';
   user: number = 0; 
   users: UserGet[] = [];
-  plots: GetPlotDto[] = [];
   private readonly apiService = inject(UserService);
   showDeactivateModal: boolean = false;
   userToDeactivate: number = 0;
+  plots : GetPlotDto[] = [];
 
   ngOnInit() {
+
+    this.plotService.getAllPlots().subscribe({
+      next: (data: GetPlotDto[]) => {
+        this.plots = data;
+        console.log(this.plots);
+        
+      }
+    }
+
+    )
+
     //Trae todos los usuarios
     this.apiService.getAllUsers().subscribe({
       next: (data: UserGet[]) => {
@@ -60,7 +71,18 @@ export class ListUsersComponent implements OnInit {
             columns: [
               { title: 'Nombre', width: '30%' },
               { title: 'Rol', width: '20%' },
-              { title: 'Nro. de lote', className: 'text-start', width: '15%' },
+              { title: 'Nro. de lote', className: 'text-start', width: '15%' , render: (data) => {
+       
+                const plotNumber: GetPlotDto = this.plots.find(plot => plot.id === data) || new GetPlotDto
+                console.log(data)
+                
+                if (plotNumber != null) { 
+                    return plotNumber.plot_number ? `${plotNumber.plot_number}` : 'Sin lote';
+                } else {
+                    return "Sin lote"; 
+                }
+            } 
+            },
               { title: 'Fecha de nacimiento', width: '20%' },
               {
                 title: 'Acciones',
@@ -87,7 +109,7 @@ export class ListUsersComponent implements OnInit {
             data: this.users.map(user => [
               `${user.lastname}, ${user.name}`,  //Nombre completo
               user.roles.join(', '),              //Roles
-              1234,                                //Nro. de lote (puedes ajustar esto)
+              user.plot_id,                                //Nro. de lote (puedes ajustar esto)
               user.datebirth,                      //Fecha de nacimiento ya con el formato deseado
               '<button class="btn btn-info">Ver más</button>'  //Ejemplo de acción
             ]),

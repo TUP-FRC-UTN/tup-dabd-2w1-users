@@ -276,7 +276,7 @@ export class UsersListPlotsComponent {
        }
      });
      return new Promise((resolve, reject) => {
-       this.apiService.gePlotById(id).subscribe({
+       this.apiService.getPlotById(id).subscribe({
          next: (data: GetPlotModel) => {
            this.plotModel = data;        
            Swal.close(); // Cerrar SweetAlert

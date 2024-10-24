@@ -54,7 +54,7 @@ export class PlotService {
     return this.http.get<GetPlotModel[]>(this.url + '/plots/availables');
   }
 
-  gePlotById(plotId: number): Observable<GetPlotModel>{
+  getPlotById(plotId: number): Observable<GetPlotModel>{
     return this.http.get<GetPlotModel>(this.url + '/plots/' + plotId);
   }
   

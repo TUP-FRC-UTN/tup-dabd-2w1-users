@@ -10,7 +10,7 @@
               [ngClass]="{'is-invalid': formReactivo.controls['name'].invalid && (formReactivo.get('name')?.dirty || formReactivo.get('name')?.touched), 
                         'is-valid': formReactivo.controls['name'].valid}">
             @if(formReactivo.controls['name'].invalid && (formReactivo.controls['name'].dirty || formReactivo.controls['name'].touched)){
-              <div class="text-danger">Ingrese su nombre</div>
+              <div class="error d-block mt-1 text-start">Ingrese su nombre</div>
             }
           </div>
         </div>
@@ -23,7 +23,7 @@
               [ngClass]="{'is-invalid': formReactivo.controls['lastname'].invalid && (formReactivo.get('lastname')?.dirty || formReactivo.get('lastname')?.touched),
                         'is-valid': formReactivo.controls['lastname'].valid}">
             @if(formReactivo.controls['lastname'].invalid && (formReactivo.controls['lastname'].dirty || formReactivo.controls['lastname'].touched)){
-              <div class="text-danger">Ingrese su apellido</div>
+              <div class="error d-block mt-1 text-start">Ingrese su apellido</div>
             }
           </div>
         </div>
@@ -39,7 +39,7 @@
               [ngClass]="{'is-invalid': formReactivo.controls['dni'].invalid && (formReactivo.get('dni')?.dirty || formReactivo.get('dni')?.touched),
                         'is-valid': formReactivo.controls['dni'].valid}">
             @if(formReactivo.controls['dni'].invalid && (formReactivo.controls['dni'].dirty || formReactivo.controls['dni'].touched)){
-              <div class="text-danger">Ingrese su DNI</div>
+              <div class="error d-block mt-1 text-start">Ingrese su DNI</div>
             }
           </div>
         </div>
@@ -48,11 +48,11 @@
         <div class="row">
           <label class="col-2 text-end form-label">CUIT-CUIL</label>
           <div class="col-8">
-            <input type="text" class="form-control" formControlName="cuit_cuil"
+            <input type="number" class="form-control" formControlName="cuit_cuil"
               [ngClass]="{'is-invalid': formReactivo.controls['cuit_cuil'].invalid && (formReactivo.get('cuit_cuil')?.dirty || formReactivo.get('cuit_cuil')?.touched),
                           'is-valid': formReactivo.controls['cuit_cuil'].valid}" >
             @if(formReactivo.controls['cuit_cuil'].invalid && (formReactivo.controls['cuit_cuil'].dirty || formReactivo.controls['cuit_cuil'].touched)){
-              <div class="text-danger">Ingrese su CUIT - CUIL</div>
+              <div class="error d-block mt-1 text-start">Ingrese su CUIT - CUIL</div>
             }
           </div>
         </div>
@@ -68,7 +68,7 @@
               [ngClass]="{'is-invalid': formReactivo.controls['birthdate'].invalid && (formReactivo.get('birthdate')?.dirty || formReactivo.get('birthdate')?.touched),
                         'is-valid': formReactivo.controls['birthdate'].valid}">
             @if(formReactivo.controls['birthdate'].invalid && (formReactivo.controls['birthdate'].dirty || formReactivo.controls['birthdate'].touched)){
-              <div class="text-danger">Ingrese su Fecha de nacimiento</div>
+              <div class="error d-block mt-1 text-start">Ingrese su Fecha de nacimiento</div>
             }
           </div>
         </div>
@@ -81,7 +81,7 @@
               [ngClass]="{'is-invalid': formReactivo.controls['email'].invalid && (formReactivo.get('email')?.dirty || formReactivo.get('email')?.touched),
                         'is-valid': formReactivo.controls['email'].valid}">
             @if(formReactivo.controls['email'].invalid && (formReactivo.controls['email'].dirty || formReactivo.controls['email'].touched)){
-              <div class="text-danger">Ingrese su Email</div>
+              <div class="error d-block mt-1 text-start">Ingrese su Email</div>
             }
           </div>
         </div>
@@ -101,7 +101,7 @@
               }
             </select>
             @if(formReactivo.controls['state'].invalid && (formReactivo.get('state')?.dirty || formReactivo.get('state')?.touched)){
-              <div class="text-danger">Seleccione un estado fiscal</div>
+              <div class="error d-block mt-1 text-start">Seleccione un estado fiscal</div>
             }
           </div>
         </div>
@@ -119,7 +119,7 @@
               }
             </select>
             @if(formReactivo.controls['type'].invalid && (formReactivo.get('type')?.dirty || formReactivo.get('type')?.touched)){
-              <div class="text-danger">Seleccione un tipo propietario</div>
+              <div class="error d-block mt-1 text-start">Seleccione un tipo propietario</div>
             }
           </div>
         </div>
@@ -135,7 +135,7 @@
               [ngClass]="{'is-invalid': formReactivo.controls['username'].invalid && (formReactivo.get('username')?.dirty || formReactivo.get('username')?.touched),
                         'is-valid': formReactivo.controls['username'].valid}">
             @if(formReactivo.controls['username'].invalid && (formReactivo.controls['username'].dirty || formReactivo.controls['username'].touched)){
-              <div class="text-danger">Ingrese su nombre de usuario</div>
+              <div class="error d-block mt-1 text-start">Ingrese su nombre de usuario</div>
             }
           </div>
         </div>
@@ -155,7 +155,7 @@
                (click)="togglePasswordVisibility()" 
                style="cursor: pointer; position: absolute; right: -20px; top: 20px; transform: translateY(-50%);"></i>
             @if(formReactivo.controls['password'].invalid && (formReactivo.controls['password'].dirty || formReactivo.get('password')?.touched)){
-              <div class="text-danger">Ingrese su contraseña</div>
+              <div class="error d-block mt-1 text-start">Ingrese su contraseña</div>
             }
           </div>
         </div>
@@ -170,7 +170,7 @@
               [ngClass]="{'is-invalid': formReactivo.controls['phone'].invalid && (formReactivo.get('phone')?.dirty || formReactivo.get('phone')?.touched),
                         'is-valid': formReactivo.controls['phone'].valid}">
             @if(formReactivo.controls['phone'].invalid && (formReactivo.controls['phone'].dirty || formReactivo.controls['phone'].touched)){
-              <div class="text-danger">Ingrese su teléfono</div>
+              <div class="error d-block mt-1 text-start">Ingrese su teléfono</div>
             }
           </div>
         </div>

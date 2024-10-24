@@ -25,6 +25,7 @@ export class LoginComponent {
   private readonly router = inject(Router);
   private readonly apiService = inject(UserService);
   private readonly authService = inject(AuthService);
+  passwordVisible: boolean = false;
 
   //Muestra un mensaje si los datos ingresados son incorrectos
   errorLog: boolean = false;
@@ -37,6 +38,11 @@ export class LoginComponent {
       Validators.minLength(6),
     ]),
   });
+
+  //Funcion para cambiar la visibilidad de la contraseña
+  togglePasswordVisibility(): void {
+    this.passwordVisible = !this.passwordVisible;
+  }
 
   //Funcion para loguear, setear el token y redirigir a la pagina de inicio
   async login() {

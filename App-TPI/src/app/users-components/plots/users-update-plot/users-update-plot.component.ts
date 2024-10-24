@@ -43,7 +43,7 @@ export class UsersUpdatePlotComponent implements OnInit {
     this.formReactivo.get('blockNumber')?.disable();
   
     // Obtener el lote por su ID
-    this.plotService.gePlotById(id).subscribe({
+    this.plotService.getPlotById(id).subscribe({
       next: (response) => {
         console.log(response);
   

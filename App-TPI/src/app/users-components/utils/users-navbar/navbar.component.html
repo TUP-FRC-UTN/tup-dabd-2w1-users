@@ -1,6 +1,6 @@
 <div class="mb-5">
     <!-- Background opacity  -->
-    <div class="overlay-off" [class]="!expand ? 'overlay-off' : 'overlay-on'"></div>
+    <div class="overlay-off" (click)="changeState()" [class]="!expand ? 'overlay-off' : 'overlay-on'"></div>
     <!-- NavBar -->
     <nav class="navbar mynav d-flex justify-content-between shadow z-3 fixed-top text-bg-dark">
         <button class="btn text-light fs-4" (click)="changeState()">
