@@ -7,3 +7,6 @@
     min-width: 500px;
     max-width: 500px;   
 }
+section{
+    box-shadow: 5px 0px 15px rgba(0, 0, 0, 0.2)
+}
