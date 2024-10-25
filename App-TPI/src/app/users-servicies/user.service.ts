@@ -14,7 +14,7 @@ import { DeleteUser } from '../users-models/owner/DeleteUser';
 })
 export class UserService {
   private readonly http: HttpClient = inject(HttpClient);
-  private readonly url = 'http://localhost:8080/users/';
+  private readonly url = 'http://localhost:9060/users/';
 
   constructor() { }
 
@@ -31,11 +31,11 @@ export class UserService {
   }
 
   verifyLogin(user: LoginUser): Observable<LoginUser> {
-    return this.http.post<LoginUser>("http://localhost:8080/auth/login", user);
+    return this.http.post<LoginUser>("http://localhost:9060/auth/login", user);
   }   
 
   getAllRoles(): Observable<RolModel[]> {
-    return this.http.get<RolModel[]>("http://localhost:8080/roles");
+    return this.http.get<RolModel[]>("http://localhost:9060/roles");
   }
 
   getUserById(userId: number): Observable<UserGet> {
@@ -51,6 +51,6 @@ export class UserService {
   }
 
   deleteUser( user: DeleteUser): Observable<any> {
-    return this.http.delete(this.url + '/delete/' + user.id + '/' + user.userIdUpdate); 
+    return this.http.delete(this.url + 'delete/' + user.id + '/' + user.userIdUpdate); 
   }
 }
