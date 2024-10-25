@@ -63,15 +63,15 @@ export class UsersListPlotsComponent {
                 width: '15%',
                 className: 'text-left',  
                 render: (data, type, row, meta) => {
-                  const userId = this.plots[meta.row].id;
+                  const plotId = this.plots[meta.row].id;
                   return `
                     <div class="dropdown-center d-flex align-items-center">
                       <button class="btn btn-light border border-1 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-three-dots-vertical"></i>
                       </button>
                       <ul class="dropdown-menu">
-
-                        <li><a class="dropdown-item edit-plot" data-id="${userId}">Editar</a></li>
+                        <li><a class="dropdown-item view-plot" data-id="${plotId}">Ver más</a></li>
+                        <li><a class="dropdown-item edit-plot" data-id="${plotId}">Editar</a></li>
                       </ul>
                     </div>
                   `; // si queremos el ver mas de nuevo <li><a class="dropdown-item view-plot" data-id="${meta.row}">Ver más</a></li>

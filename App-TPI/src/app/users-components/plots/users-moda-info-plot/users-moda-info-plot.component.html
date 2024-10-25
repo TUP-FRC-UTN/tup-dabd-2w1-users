@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Información del Usuario</h4>
+    <h4 class="modal-title" id="modal-basic-title">Información del Lote</h4>
     <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
   </div>
   <div class="modal-body">
@@ -36,6 +36,13 @@
               <input type="date" class="form-control custom-input" formControlName="state">
           </div>
       </div>
+
+      <div *ngFor="let e of filesPlots; let i = index">
+        <span>{{ e.name }}</span>
+        <button (click)="downloadFile(e.uuid)" class="btn btn-primary">
+          Descargar
+        </button>
+    </div>
   </form>
   </div>
     <div class="modal-footer">

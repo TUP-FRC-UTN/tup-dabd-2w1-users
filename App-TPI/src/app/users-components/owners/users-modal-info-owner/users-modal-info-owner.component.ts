@@ -1,18 +1,24 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Owner } from '../../../users-models/owner/Owner';
+import { FileService } from '../../../users-servicies/file.service';
+import { FileDto } from '../../../users-models/owner/FileDto';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-users-modal-info-owner',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './users-modal-info-owner.component.html',
   styleUrl: './users-modal-info-owner.component.css'
 })
 export class UsersModalInfoOwnerComponent implements OnInit{
   @Input() ownerModel: Owner = new Owner();
   infoOwner : FormGroup;
+  filesOwner: FileDto[];
+
+  private readonly fileService = inject(FileService);
 
   ngOnInit(): void {
     this.infoOwner.patchValue({
@@ -24,10 +30,10 @@ export class UsersModalInfoOwnerComponent implements OnInit{
       ownerType: this.ownerModel.ownerType,
       taxStatus: this.ownerModel.taxStatus,
       businessName: this.ownerModel.bussinesName
-
     });
+    this.filesOwner =  this.ownerModel.files;
     this.infoOwner.disable();
-    
+  
   }
 
   constructor(public activeModal: NgbActiveModal, private fb: FormBuilder) {
@@ -43,9 +49,16 @@ export class UsersModalInfoOwnerComponent implements OnInit{
       businessName: [''],
       active: [''] //no se muestra en el form xq se deberían traer por defecto los activos
     });
+
+    this.filesOwner = [];
   }
 
   closeModal(){
     this.activeModal.close();
   }
+
+  downloadFile(fileId: string) {
+    this.fileService.downloadFile(fileId);
+  }
 }
+

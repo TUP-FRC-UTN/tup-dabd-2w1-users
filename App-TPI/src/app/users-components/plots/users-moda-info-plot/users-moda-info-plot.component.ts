@@ -6,6 +6,7 @@ import { UserService } from '../../../users-servicies/user.service';
 import Swal from 'sweetalert2';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { GetPlotModel } from '../../../users-models/plot/GetPlot';
+import { FileDto } from '../../../users-models/owner/FileDto';
 
 @Component({
   selector: 'app-users-moda-info-plot',
@@ -19,6 +20,7 @@ export class UsersModaInfoPlotComponent implements OnInit {
   @Input() plotModel: GetPlotModel = new GetPlotModel();
 
   plotForm: FormGroup;
+  filesPlot: FileDto[];
 
   constructor(public activeModal: NgbActiveModal, private fb: FormBuilder) {
     this.plotForm = this.fb.group({
@@ -29,6 +31,7 @@ export class UsersModaInfoPlotComponent implements OnInit {
       state: [''],
       type: ['']
     });
+    this.filesPlot = [];
   }
 
   // Método para detectar cambios en el @Input
@@ -42,7 +45,7 @@ export class UsersModaInfoPlotComponent implements OnInit {
         state: this.plotModel.plot_state,
         type: this.plotModel.plot_type
       });
-      this.plotForm.disable();
+      this.plotForm.disable();;
   }
 
   closeModal(){
