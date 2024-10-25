@@ -171,6 +171,14 @@
                 }
             </div>
         </div>
+
+        <div *ngFor="let e of existingFiles; let i = index">
+            <span>{{ e.name }}</span>
+            <button (click)="downloadFile(e.uuid)" class="btn btn-primary">
+              Descargar
+            </button>
+        </div> 
+
         <div class="row mb-3 justify-content-end sticky-right">
             <div class="col-auto">
                 <button type="button" class="btn btn-secondary me-3">Cancelar</button>

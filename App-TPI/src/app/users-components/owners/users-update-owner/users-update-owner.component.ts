@@ -7,6 +7,8 @@ import { OwnerService } from '../../../users-servicies/owner.service';
 import { Owner } from '../../../users-models/owner/Owner';
 import Swal from 'sweetalert2';
 import { PutOwnerDto } from '../../../users-models/owner/PutOwnerDto';
+import { FileService } from '../../../users-servicies/file.service';
+import { FileDto } from '../../../users-models/owner/FileDto';
 
 @Component({
   selector: 'app-users-update-owner',
@@ -17,9 +19,11 @@ import { PutOwnerDto } from '../../../users-models/owner/PutOwnerDto';
 })
 export class UsersUpdateOwnerComponent implements OnInit {
   owner: Owner = new Owner();
+  existingFiles: FileDto[] = [];
   id: string = "";
 
   private readonly ownerService = inject(OwnerService)
+  private readonly fileService = inject(FileService);
   constructor(private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -47,6 +51,10 @@ export class UsersUpdateOwnerComponent implements OnInit {
           phoneNumber : "",
           email: ""
         });
+
+        if(this.owner.files.length > 0){
+          this.existingFiles = this.owner.files;
+        }
         const formattedDate = this.parseDateString(this.owner.dateBirth);
         this.editOwner.patchValue({
           birthdate: formattedDate ? this.formatDate(formattedDate) : ''
@@ -144,4 +152,26 @@ export class UsersUpdateOwnerComponent implements OnInit {
   private formatDate(date: Date): string {
     return formatDate(date, 'yyyy-MM-dd', 'en-US');
   }
+
+
+  downloadFile(fileId: string) {
+    this.fileService.getFile(fileId).subscribe(({ blob, filename }) => {
+      // Crear una URL desde el Blob
+      const url = window.URL.createObjectURL(blob);
+  
+      // Crear un enlace de descarga dinámico
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;  // Nombre del archivo obtenido desde el encabezado
+      document.body.appendChild(a);
+      a.click();  // Simular el clic para descargar el archivo
+  
+      // Limpiar el DOM y liberar el Blob después de la descarga
+      window.URL.revokeObjectURL(url);
+      a.remove();
+    }, error => {
+      console.error('Error al descargar el archivo', error);
+    });
+  }
+  
 }

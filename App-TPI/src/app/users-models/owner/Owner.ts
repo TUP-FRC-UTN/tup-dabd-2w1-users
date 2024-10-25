@@ -1,3 +1,5 @@
+import { FileDto } from "./FileDto";
+
 export class Owner{
 
     id: number;
@@ -10,7 +12,7 @@ export class Owner{
     taxStatus: string;
     active: boolean;
     ownerType: string;
-
+    files: FileDto[];
     // files: string[]
 
     constructor(){
@@ -24,6 +26,6 @@ export class Owner{
         this.taxStatus = "";
         this.active = true;
         this.ownerType = "";
-        // this.files = []
+        this.files = []
     }
 }
