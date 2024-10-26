@@ -9,17 +9,24 @@ import Swal from 'sweetalert2';
 import { PutOwnerDto } from '../../../users-models/owner/PutOwnerDto';
 import { FileService } from '../../../users-servicies/file.service';
 import { FileDto } from '../../../users-models/owner/FileDto';
+import { FileUploadComponent } from '../../utils/file-upload/file-upload.component';
+import { UserService } from '../../../users-servicies/user.service';
+import { OwnerPlotUserDto } from '../../../users-models/owner/OwnerPlotUserDto';
+import { UserGet } from '../../../users-models/users/UserGet';
+import { DateService } from '../../../users-servicies/date.service';
 
 @Component({
   selector: 'app-users-update-owner',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, FileUploadComponent],
   templateUrl: './users-update-owner.component.html',
   styleUrl: './users-update-owner.component.css'
 })
 export class UsersUpdateOwnerComponent implements OnInit {
   owner: Owner = new Owner();
-  existingFiles: FileDto[] = [];
+  existingFiles: File[] = [];
+  newFiles: File[] = [];
+  existingFilesDownload: FileDto[] = [];
   id: string = "";
 
   private readonly ownerService = inject(OwnerService)
@@ -31,53 +38,122 @@ export class UsersUpdateOwnerComponent implements OnInit {
     //conseguir el id
     this.id = this.route.snapshot.paramMap.get('id') || '';
     console.log(this.id);
-    
+
+    // this.ownerService.getById(Number(this.id)).subscribe({
+    //   next: (data : Owner) => {
+    //     this.owner = data;
+    //     console.log("Data: ", JSON.stringify(data, null, 2));
+    //     console.log("Owner: " + this.owner);
+    //     //llenar los inputs
+    //     this.editOwner.patchValue({
+    //       name: this.owner.name,
+    //       lastname: this.owner.lastname,
+    //       dni: this.owner.dni,
+    //       cuitCuil: this.owner.cuitCuil,
+
+    //       ownerType: this.owner.ownerType,
+    //       taxStatus: this.owner.taxStatus,
+    //       bussinesName: this.owner.bussinesName,
+    //       phoneNumber : "",
+    //       email: ""
+    //     });
 
 
-    this.ownerService.getById(Number(this.id)).subscribe({
-      next: (data: Owner) => {
-        this.owner = data;
-        console.log("Data: ", JSON.stringify(data, null, 2));
-        console.log("Owner: " + this.owner);
+
+    //      if(this.owner.files.length > 0){
+    //        this.existingFilesDownload = this.owner.files;
+    //      }
+
+    //     if (this.owner.files && this.owner.files.length > 0) {
+    //       for (const fileDto of this.owner.files) {
+
+    //         console.log("FileDto: ", fileDto.uuid);
+
+    //         this.fileService.getFile(fileDto.uuid).subscribe(({ blob, filename }) => {
+    //           // Crear un nuevo objeto File a partir del Blob
+    //           const newFile = new File([blob], filename, { type: blob.type });
+
+    //           console.log("New File: ", newFile);
+    //           this.existingFiles.push(newFile);
+    //         }, error => {
+    //           console.error(`Error al descargar el archivo ${fileDto.uuid}, error`);
+    //         });
+    //         console.log("Files list after loading: ", this.existingFiles);
+    //       }
+    //     }
+
+    //     const formattedDate = this.parseDateString(this.owner.dateBirth);
+    //     this.editOwner.patchValue({
+    //       birthdate: formattedDate ? this.formatDate(formattedDate) : ''
+    //     });
+    //   },
+    //   error: (error) => {
+    //     console.log(error)
+    //   }
+    // })
+
+    this.ownerService.getByIdWithUser(Number(this.id)).subscribe({
+      next: (data: OwnerPlotUserDto) => {
+        this.owner = data.owner;
+        console.log(data);
+
         //llenar los inputs
         this.editOwner.patchValue({
           name: this.owner.name,
           lastname: this.owner.lastname,
           dni: this.owner.dni,
           cuitCuil: this.owner.cuitCuil,
-          
           ownerType: this.owner.ownerType,
           taxStatus: this.owner.taxStatus,
           bussinesName: this.owner.bussinesName,
-          phoneNumber : "",
-          email: ""
+          phoneNumber : data.user.phone_number,
+          email: data.user.email,
         });
 
-        if(this.owner.files.length > 0){
-          this.existingFiles = this.owner.files;
-        }
         const formattedDate = this.parseDateString(this.owner.dateBirth);
+
         this.editOwner.patchValue({
           birthdate: formattedDate ? this.formatDate(formattedDate) : ''
         });
+
+
+
+         if(this.owner.files.length > 0){
+           this.existingFilesDownload = this.owner.files;
+         }
+
+        if (this.owner.files && this.owner.files.length > 0) {
+          for (const fileDto of this.owner.files) {
+
+            this.fileService.getFile(fileDto.uuid).subscribe(({ blob, filename }) => {
+              // Crear un nuevo objeto File a partir del Blob
+              const newFile = new File([blob], filename, { type: blob.type });
+              this.existingFiles.push(newFile);
+            }, error => {
+              console.error(`Error al descargar el archivo ${fileDto.uuid}, error`);
+            });
+            console.log("Files list after loading: ", this.existingFiles);
+          }
+        }
       },
       error: (error) => {
         console.log(error)
       }
     })
+
   }
 
   //formulario base
   editOwner = new FormGroup({
-    name: new FormControl("", [Validators.required]),
-    lastname: new FormControl("", [Validators.required]),
+    name: new FormControl("", [Validators.required, Validators.maxLength(50)]),
+    lastname: new FormControl("", [Validators.required, Validators.maxLength(50)]),
     dni: new FormControl("", [Validators.required, Validators.pattern("^[0-9]{6,9}$")]),
     cuitCuil: new FormControl("", [Validators.required, Validators.pattern("^[0-9]{11}$")]),
     ownerType: new FormControl("", [Validators.required]),
     taxStatus: new FormControl("", [Validators.required]),
     bussinesName: new FormControl(""),
     birthdate: new FormControl("", [Validators.required]),
-    phoneNumber: new FormControl("", [Validators.required, Validators.pattern("^[0-9]*$")]),
+    phoneNumber: new FormControl("", [Validators.required, Validators.pattern("^[0-9]{9,20}$")]),
     email: new FormControl("", [Validators.required, Validators.email])
   });
 
@@ -96,8 +172,15 @@ export class UsersUpdateOwnerComponent implements OnInit {
       taxStatusId: 1,//form.get('taxStatus')?.value,
       businessName: form.get('bussinesName')?.value,
       phoneNumber: form.get('phoneNumber')?.value,
-      email: form.get('email')?.value
+      email: form.get('email')?.value,
+      files: this.newFiles,
+      userUpdateId: 1,
+      active: true
     } as PutOwnerDto
+  }
+
+  getFiles(files: File[]) {
+    this.newFiles = files;
   }
 
   updateOwner(form: any) {
@@ -106,7 +189,7 @@ export class UsersUpdateOwnerComponent implements OnInit {
       //se crea el objeto
       let ownerPut = this.createObject(form);
       console.log(ownerPut);
-      
+
 
       //llama al service
       this.ownerService.putOwner(ownerPut, Number(this.id)).subscribe({
@@ -126,7 +209,7 @@ export class UsersUpdateOwnerComponent implements OnInit {
         },
         error: (error) => {
           console.log(error);
-          
+
           //mostrar alerta de error
           Swal.fire({
             position: "top-end",
@@ -159,14 +242,14 @@ export class UsersUpdateOwnerComponent implements OnInit {
     this.fileService.getFile(fileId).subscribe(({ blob, filename }) => {
       // Crear una URL desde el Blob
       const url = window.URL.createObjectURL(blob);
-  
+
       // Crear un enlace de descarga dinámico
       const a = document.createElement('a');
       a.href = url;
       a.download = filename;  // Nombre del archivo obtenido desde el encabezado
       document.body.appendChild(a);
       a.click();  // Simular el clic para descargar el archivo
-  
+
       // Limpiar el DOM y liberar el Blob después de la descarga
       window.URL.revokeObjectURL(url);
       a.remove();
@@ -174,5 +257,5 @@ export class UsersUpdateOwnerComponent implements OnInit {
       console.error('Error al descargar el archivo', error);
     });
   }
-  
+
 }

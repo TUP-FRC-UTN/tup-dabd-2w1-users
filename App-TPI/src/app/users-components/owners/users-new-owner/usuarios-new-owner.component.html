@@ -2,7 +2,7 @@
   <h3>Añadir Propietario</h3>
   <form [formGroup]="formReactivo" (ngSubmit)="createOwner()">
     <div class="row mb-4">
-      <div class="col-6">
+      <div class="col">
         <div class="row">
           <label class="col-2 text-start form-label pe-0" style="margin: 0;">Nombre</label>
           <div class="col-8">
@@ -31,7 +31,7 @@
     </div>
 
     <div class="row mb-4">
-      <div class="col-6">
+      <div class="col">
         <div class="row">
           <label class="col-2 text-start form-label">DNI</label>
           <div class="col-8">
@@ -44,7 +44,7 @@
           </div>
         </div>
       </div>
-      <div class="col-6">
+      <div class="col">
         <div class="row">
           <label class="col-2 text-start form-label">CUIT-CUIL</label>
           <div class="col-8">
@@ -60,7 +60,7 @@
     </div>
 
     <div class="row mb-4">
-      <div class="col-6">
+      <div class="col">
         <div class="row">
           <label class="col-2 text-start form-label">Fecha de nacimiento</label>
           <div class="col-8">
@@ -73,7 +73,7 @@
           </div>
         </div>
       </div>
-      <div class="col-6">
+      <div class="col">
         <div class="row">
           <label class="col-2 text-start form-label">Email</label>
           <div class="col-8">
@@ -88,7 +88,7 @@
       </div>
     </div>
     <div class="row mb-4">
-      <div class="col-6">
+      <div class="col">
         <div class="row">
           <label class="col-2 text-start form-label">Estado fiscal</label>
           <div class="col-8">
@@ -106,7 +106,7 @@
           </div>
         </div>
       </div>
-      <div class="col-6">
+      <div class="col">
         <div class="row">
           <label class="col-2 text-start form-label">Tipo</label>
           <div class="col-8">
@@ -127,7 +127,7 @@
     </div>
 
     <div class="row mb-4">
-      <div class="col-6">
+      <div class="col">
         <div class="row">
           <label class="col-2 text-start form-label">Nombre de usuario</label>
           <div class="col-8">
@@ -140,7 +140,7 @@
           </div>
         </div>
       </div>
-      <div class="col-6">
+      <div class="col">
         <div class="row">
           <label class="col-2 text-start form-label">Contraseña</label>
           <div class="col-8 position-relative">
@@ -162,7 +162,7 @@
       </div>
     </div>
     <div class="row mb-4">
-      <div class="col-6">
+      <div class="col">
         <div class="row">
           <label class="col-2 text-start form-label">Teléfono</label>
           <div class="col-8">
@@ -175,7 +175,7 @@
           </div>
         </div>
       </div>
-      <div class="col-6">
+      <div class="col">
         <div class="row">
           <label class="col-2 text-start form-label">Razón social</label>
           <div class="col-8">
@@ -185,7 +185,7 @@
       </div>
     </div>
 
-    <div class="col-6">
+    <div class="col">
       <app-file-upload (filesChange)="getFiles($event)" />
     </div>
 

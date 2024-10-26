@@ -1,4 +1,4 @@
-<section class="container p-5 border rounded border-3 border-secundary" style="min-height: 70vh;">
+<section class="container p-5 border rounded border-3 border-secundary" style="min-height: 70vh; min-width: 70vw;">
     <h3>Editar Propietario</h3>
     <form [formGroup]="editOwner" (ngSubmit)="updateOwner(editOwner)">
         <div class="row mb-4">
@@ -8,10 +8,14 @@
                     <input type="text" class="form-control custom-input" formControlName="name" 
                     [ngClass]="{'is-invalid': editOwner.controls['name'].invalid  && (editOwner.get('name')?.dirty|| editOwner.get('name')?.touched),'is-valid': editOwner.controls['name'].valid }" >
                 </div> 
-                @if(editOwner.controls['name'].invalid && (editOwner.controls['name'].dirty || editOwner.controls['name'].touched)){
-                    
+                @if(editOwner.invalid && (editOwner.controls['name'].dirty || editOwner.controls['name'].touched)){
                     <div class="text-danger text-center form-error">
-                        Ingrese su nombre
+                        @if(editOwner.controls['name'].errors?.['required']){
+                            Ingrese su nombre
+                        }
+                        @if(editOwner.controls['name'].errors?.['maxLength']){
+                            Máximo 50 caracteres
+                        }
                     </div>
                 }
             </div>
@@ -22,9 +26,14 @@
                     <input type="text" class="form-control custom-input" formControlName="lastname"
                     [ngClass]="{'is-invalid': editOwner.controls['lastname'].invalid  && (editOwner.get('lastname')?.dirty|| editOwner.get('lastname')?.touched),'is-valid': editOwner.controls['lastname'].valid }">
                 </div>   
-                @if(editOwner.controls['lastname'].invalid && (editOwner.controls['lastname'].dirty || editOwner.controls['lastname'].touched)){
+                @if(editOwner.invalid && (editOwner.controls['lastname'].dirty || editOwner.controls['lastname'].touched)){
                     <div class="text-danger text-center form-error">
-                        Ingrese su apellido
+                        @if(editOwner.controls['lastname'].errors?.['required']){
+                            Ingrese su apellido
+                        }
+                        @if(editOwner.controls['lastname'].errors?.['maxLength']){
+                            Máximo 50 caracteres
+                        }
                     </div>
                 }
             </div>
@@ -79,14 +88,14 @@
         </div>
 
         <div class="row mb-4">
-            <div class="col d-flex flex-column">
+            <div class="col d-flex flex-column align-items-end">
                 <div class="d-flex align-items-center">
                     <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Fecha de nacimiento</label>
                     <input type="date" class="form-control custom-input" formControlName="birthdate"
                     [ngClass]="{'is-invalid': editOwner.controls['birthdate'].invalid  && (editOwner.get('birthdate')?.dirty|| editOwner.get('birthdate')?.touched),'is-valid': editOwner.controls['birthdate'].valid }">
                 </div>   
                 @if(editOwner.controls['birthdate'].invalid && (editOwner.controls['birthdate'].dirty || editOwner.controls['birthdate'].touched)){
-                    <div class="text-danger text-center form-error">
+                    <div class="text-danger text-end form-error">
                         Ingrese su fecha de nacimiento
                     </div>
                 }
@@ -172,12 +181,15 @@
             </div>
         </div>
 
-        <div *ngFor="let e of existingFiles; let i = index">
+        <div class="col-6">
+            <app-file-upload (filesChange)="getFiles($event)" [filesLoaded]="existingFiles"/>
+          </div>
+        <!-- <div *ngFor="let e of existingFilesDownload; let i = index">
             <span>{{ e.name }}</span>
             <button (click)="downloadFile(e.uuid)" class="btn btn-primary">
               Descargar
             </button>
-        </div> 
+        </div>  -->
 
         <div class="row mb-3 justify-content-end sticky-right">
             <div class="col-auto">

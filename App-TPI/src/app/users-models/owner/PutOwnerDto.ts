@@ -11,6 +11,7 @@ export class PutOwnerDto {
     email: string;
     userUpdateId : number;
     active: boolean;
+    files: File[] = [];
 
     constructor() {
         this.name = '';        
