@@ -164,7 +164,7 @@
                 <label class="col-2 text-start form-label">Tipo de propietario</label>
                 <div class="col-8">
                     <input type="text" class="form-control custom-input" formControlName="ownerType"
-                    [ngClass]="{'is-invalid': editOwner.controls['ownerType'].valid  && (editOwner.get('ownerType')?.dirty|| editOwner.get('ownerType')?.touched),'is-valid': editOwner.controls['ownerType'].valid }">
+                    [ngClass]="{'is-invalid': editOwner.controls['ownerType'].invalid  && (editOwner.get('ownerType')?.dirty|| editOwner.get('ownerType')?.touched),'is-valid': editOwner.controls['ownerType'].valid }">
                     @if(editOwner.controls['ownerType'].invalid && (editOwner.controls['ownerType'].dirty || editOwner.controls['ownerType'].touched)){
                         <div class="error d-block mt-1 text-start">
                             Ingrese el tipo de propietario
@@ -183,7 +183,7 @@
                     <label class="col-2 text-start form-label pe-0" style="margin: 0;">Teléfono</label>
                     <div class="col-8">
                         <input type="text" class="form-control custom-input" formControlName="phoneNumber"
-                        [ngClass]="{'is-invalid': editOwner.controls['taxStatus'].invalid  && (editOwner.get('phoneNumber')?.dirty|| editOwner.get('phoneNumber')?.touched),'is-valid': editOwner.controls['phoneNumber'].valid }">
+                        [ngClass]="{'is-invalid': editOwner.controls['phoneNumber'].invalid  && (editOwner.get('phoneNumber')?.dirty|| editOwner.get('phoneNumber')?.touched),'is-valid': editOwner.controls['phoneNumber'].valid }">
                         
                         @if(editOwner.controls['phoneNumber']; as phoneControl) {
                             @if(phoneControl.invalid && (phoneControl.dirty || phoneControl.touched)) {
