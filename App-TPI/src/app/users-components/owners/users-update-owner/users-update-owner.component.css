@@ -1,14 +1,16 @@
 .form-control{
     min-width: 450px;
-    max-width: 450px;
+    max-width: 450px;   
 }
 
-.form-error{
-    min-width: 380px;
-    max-width: 380px;
+.form-select{
+    min-width: 450px;
+    max-width: 450px;   
+}
+
+.error{
+    color: red;
 }
 section{
-    box-shadow: 5px 0px 15px rgba(0, 0, 0, 0.2);
-    min-width: 450px;
-    max-width: 450px;
+    box-shadow: 5px 0px 15px rgba(0, 0, 0, 0.2)
 }
