@@ -31,6 +31,7 @@ export class UsersUpdateOwnerComponent implements OnInit {
     //conseguir el id
     this.id = this.route.snapshot.paramMap.get('id') || '';
     console.log(this.id);
+    
 
 
     this.ownerService.getById(Number(this.id)).subscribe({

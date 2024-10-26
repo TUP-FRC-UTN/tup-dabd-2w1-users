@@ -4,7 +4,7 @@
     <div class="row mb-4">
       <div class="col-6">
         <div class="row">
-          <label class="col-2 text-end form-label pe-0" style="margin: 0;">Nombre</label>
+          <label class="col-2 text-start form-label pe-0" style="margin: 0;">Nombre</label>
           <div class="col-8">
             <input type="text" class="form-control" formControlName="name" style="margin: 0;" 
               [ngClass]="{'is-invalid': formReactivo.controls['name'].invalid && (formReactivo.get('name')?.dirty || formReactivo.get('name')?.touched), 
@@ -17,7 +17,7 @@
       </div>
       <div class="col-6">
         <div class="row">
-          <label class="col-2 text-end form-label">Apellido</label>
+          <label class="col-2 text-start form-label">Apellido</label>
           <div class="col-8">
             <input type="text" class="form-control" formControlName="lastname"
               [ngClass]="{'is-invalid': formReactivo.controls['lastname'].invalid && (formReactivo.get('lastname')?.dirty || formReactivo.get('lastname')?.touched),
@@ -33,7 +33,7 @@
     <div class="row mb-4">
       <div class="col-6">
         <div class="row">
-          <label class="col-2 text-end form-label">DNI</label>
+          <label class="col-2 text-start form-label">DNI</label>
           <div class="col-8">
             <input type="text" class="form-control custom-input" formControlName="dni"
               [ngClass]="{'is-invalid': formReactivo.controls['dni'].invalid && (formReactivo.get('dni')?.dirty || formReactivo.get('dni')?.touched),
@@ -46,7 +46,7 @@
       </div>
       <div class="col-6">
         <div class="row">
-          <label class="col-2 text-end form-label">CUIT-CUIL</label>
+          <label class="col-2 text-start form-label">CUIT-CUIL</label>
           <div class="col-8">
             <input type="number" class="form-control" formControlName="cuit_cuil"
               [ngClass]="{'is-invalid': formReactivo.controls['cuit_cuil'].invalid && (formReactivo.get('cuit_cuil')?.dirty || formReactivo.get('cuit_cuil')?.touched),
@@ -62,7 +62,7 @@
     <div class="row mb-4">
       <div class="col-6">
         <div class="row">
-          <label class="col-2 text-end form-label">Fecha de nacimiento</label>
+          <label class="col-2 text-start form-label">Fecha de nacimiento</label>
           <div class="col-8">
             <input type="date" class="form-control" formControlName="birthdate" value="2000-01-01"
               [ngClass]="{'is-invalid': formReactivo.controls['birthdate'].invalid && (formReactivo.get('birthdate')?.dirty || formReactivo.get('birthdate')?.touched),
@@ -75,7 +75,7 @@
       </div>
       <div class="col-6">
         <div class="row">
-          <label class="col-2 text-end form-label">Email</label>
+          <label class="col-2 text-start form-label">Email</label>
           <div class="col-8">
             <input type="text" class="form-control" formControlName="email"
               [ngClass]="{'is-invalid': formReactivo.controls['email'].invalid && (formReactivo.get('email')?.dirty || formReactivo.get('email')?.touched),
@@ -90,7 +90,7 @@
     <div class="row mb-4">
       <div class="col-6">
         <div class="row">
-          <label class="col-2 text-end form-label">Estado fiscal</label>
+          <label class="col-2 text-start form-label">Estado fiscal</label>
           <div class="col-8">
             <select class="form-select" formControlName="state"
               [ngClass]="{'is-invalid': formReactivo.controls['state'].invalid && (formReactivo.get('state')?.dirty || formReactivo.get('state')?.touched),
@@ -108,7 +108,7 @@
       </div>
       <div class="col-6">
         <div class="row">
-          <label class="col-2 text-end form-label">Tipo</label>
+          <label class="col-2 text-start form-label">Tipo</label>
           <div class="col-8">
             <select class="form-select" formControlName="type"
               [ngClass]="{'is-invalid': formReactivo.controls['type'].invalid && (formReactivo.get('type')?.dirty || formReactivo.get('type')?.touched),
@@ -129,7 +129,7 @@
     <div class="row mb-4">
       <div class="col-6">
         <div class="row">
-          <label class="col-2 text-end form-label">Nombre de usuario</label>
+          <label class="col-2 text-start form-label">Nombre de usuario</label>
           <div class="col-8">
             <input type="text" class="form-control" formControlName="username"
               [ngClass]="{'is-invalid': formReactivo.controls['username'].invalid && (formReactivo.get('username')?.dirty || formReactivo.get('username')?.touched),
@@ -142,7 +142,7 @@
       </div>
       <div class="col-6">
         <div class="row">
-          <label class="col-2 text-end form-label">Contraseña</label>
+          <label class="col-2 text-start form-label">Contraseña</label>
           <div class="col-8 position-relative">
             <input 
               [type]="passwordVisible ? 'text' : 'password'" 
@@ -164,7 +164,7 @@
     <div class="row mb-4">
       <div class="col-6">
         <div class="row">
-          <label class="col-2 text-end form-label">Teléfono</label>
+          <label class="col-2 text-start form-label">Teléfono</label>
           <div class="col-8">
             <input type="text" class="form-control custom-input" formControlName="phone"
               [ngClass]="{'is-invalid': formReactivo.controls['phone'].invalid && (formReactivo.get('phone')?.dirty || formReactivo.get('phone')?.touched),
@@ -177,7 +177,7 @@
       </div>
       <div class="col-6">
         <div class="row">
-          <label class="col-2 text-end form-label">Empresa</label>
+          <label class="col-2 text-start form-label">Razón social</label>
           <div class="col-8">
             <input type="text" class="form-control" formControlName="company">
           </div>
@@ -189,7 +189,7 @@
       <app-file-upload (filesChange)="getFiles($event)" />
     </div>
 
-    <div class="row mb-3 justify-content-end sticky-right">
+    <div class="row mb-3 justify-content-end">
       <div class="col-auto">
           <button type="button" class="btn btn-secondary" (click)="confirmExit()">Cancelar</button>
       </div>
