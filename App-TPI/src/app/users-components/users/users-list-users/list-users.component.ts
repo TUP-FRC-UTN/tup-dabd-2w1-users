@@ -47,7 +47,6 @@ export class ListUsersComponent implements OnInit {
         
       }
     }
-
     )
 
     //Trae todos los usuarios
@@ -66,6 +65,7 @@ export class ListUsersComponent implements OnInit {
             searching: true,
             ordering: true,
             lengthChange: true,
+            lengthMenu: [10, 25, 50],
             order: [[0, 'asc']],
             pageLength: 10,
             columns: [
@@ -106,6 +106,9 @@ export class ListUsersComponent implements OnInit {
                 }
               }
             ],
+            dom:
+            '<"mb-3"t>' +                           
+            '<"d-flex justify-content-between"lp>',
             data: this.users.map(user => [
               `${user.lastname}, ${user.name}`,  //Nombre completo
               user.roles.join(', '),              //Roles
@@ -114,39 +117,23 @@ export class ListUsersComponent implements OnInit {
               '<button class="btn btn-info">Ver más</button>'  //Ejemplo de acción
             ]),
             language: {
-              lengthMenu: "Mostrar _MENU_ registros por página",
+              lengthMenu: "_MENU_",
               zeroRecords: "No se encontraron resultados",
               info: "Mostrando página _PAGE_ de _PAGES_",
               infoEmpty: "No hay registros disponibles",
               infoFiltered: "(filtrado de _MAX_ registros totales)",
               search: "Buscar:",
               paginate: {
-                first: "Primera",
-                last: "Última",
-                next: "Siguiente",
-                previous: "Anterior"
+                first: "<<",
+                last: ">>",
+                next: ">",
+                previous: "<"
               },
               loadingRecords: "Cargando...",
               processing: "Procesando...",
               emptyTable: "No hay datos disponibles en la tabla"
             },
-            createdRow: function (row, data, dataIndex) {
-              if (dataIndex % 2 === 0) {
-                $(row).css('background-color', '#f9f9f9');  //Color de fondo para filas pares
-              } else {
-                $(row).css('background-color', '#ffffff');  //Color de fondo para filas impares
-              }
-            }
           });    
-
-          //Añadir estilos adicionales al DataTable
-          $('#myTable').css({
-            'border-collapse': 'separate',
-            'border-spacing': '0 10px',  //Espacio entre filas
-            'width': '100%',  //Ancho completo de la tabla
-            'border': '1px solid #ddd',
-            'padding-left': '15px'  //Borde para toda la tabla
-          });
 
           //Alinear la caja de búsqueda a la derecha
           const searchInputWrapper = $('#myTable_filter');

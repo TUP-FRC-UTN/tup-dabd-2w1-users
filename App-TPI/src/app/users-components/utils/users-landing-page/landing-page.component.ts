@@ -41,11 +41,6 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     return `${user.name} ${user.lastname}`;
   }
 
-  getCurrentTime(): string {
-    const date = new Date();
-    return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
-  }
-
   currentTime(): string {
     const date = new Date();
     const hh = date.getHours().toString().padStart(2, '0');

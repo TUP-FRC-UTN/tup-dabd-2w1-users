@@ -1,6 +1,10 @@
 <section class="container pt-5">
   <div class="d-flex justify-content-between align-items-center mb-2">
-    <h3>Listado de Usuarios</h3>
+    <div class="d-flex align-items-center">
+      <div id="myTable_filter" class="dataTables_filter" style="text-align: left;">
+        <input class="form-control" placeholder="Buscar" style="width: 300px;" aria-controls="myTable">
+      </div>
+    </div>
     <div>
       <button class="btn btn-success me-2" (click)="exportExcel()">
         <i class="bi bi-file-earmark-excel"></i>
@@ -11,12 +15,8 @@
     </div>
   </div>
 
-  <div class="mb-3"></div> 
-
-  <table id="myTable" class="display"></table>
-
-  <div style="background-color: #362e2e">
-    <div class="container"></div>
+  <div class="mb-3">
+    <table id="myTable" class="table table-striped border border-3 rounded"></table>
   </div>
 </section>
-<!-- <app-modal-info-user [userModal]="userModal" [typeModal]="typeModal"></app-modal-info-user> -->
+
