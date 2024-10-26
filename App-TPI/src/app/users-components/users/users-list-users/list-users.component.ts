@@ -56,8 +56,13 @@ export class ListUsersComponent implements OnInit {
         this.users = data.map(user => ({
           ...user,
           datebirth: user.datebirth.replace(/-/g, '/'),
+          create_date: user.create_date.replace(/-/g, '/'),
         }));
 
+
+        this.users.sort((a, b) => { return a.create_date > b.create_date ? 1 : -1; }); //Ordenar por fecha de creación
+
+      
         //Inicializar DataTables después de cargar los datos
         setTimeout(() => {
           const table = $('#myTable').DataTable({
@@ -69,6 +74,7 @@ export class ListUsersComponent implements OnInit {
             order: [[0, 'asc']],
             pageLength: 10,
             columns: [
+              { title: 'Fecha de creación', width: '20%' },
               { title: 'Nombre', width: '30%' },
               { title: 'Rol', width: '20%' },
               { title: 'Nro. de lote', className: 'text-start', width: '15%' , render: (data) => {
@@ -83,7 +89,6 @@ export class ListUsersComponent implements OnInit {
                 }
             } 
             },
-              { title: 'Fecha de nacimiento', width: '20%' },
               {
                 title: 'Acciones',
                 orderable: false,
@@ -110,10 +115,10 @@ export class ListUsersComponent implements OnInit {
             '<"mb-3"t>' +                           
             '<"d-flex justify-content-between"lp>',
             data: this.users.map(user => [
+              user.create_date,   
               `${user.lastname}, ${user.name}`,  //Nombre completo
               user.roles.join(', '),              //Roles
-              user.plot_id,                                //Nro. de lote (puedes ajustar esto)
-              user.datebirth,                      //Fecha de nacimiento ya con el formato deseado
+              user.plot_id,                                //Nro. de lote (puedes ajustar esto)                 
               '<button class="btn btn-info">Ver más</button>'  //Ejemplo de acción
             ]),
             language: {

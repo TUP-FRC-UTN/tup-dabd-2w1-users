@@ -13,6 +13,7 @@ export class UserGet {
     roles: string[];      
     plot_id: number;
     telegram_id: number;
+    create_date: string;
 
     constructor() {
         this.id = 0;
@@ -29,5 +30,6 @@ export class UserGet {
         this.phone_number = 0;
         this.plot_id = 0;
         this.telegram_id = 0;
+        this.create_date = '';
     }
 }
