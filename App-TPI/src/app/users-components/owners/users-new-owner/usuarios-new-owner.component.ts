@@ -86,6 +86,7 @@ export class UsuariosNewOwnerComponent {
       Validators.pattern(/^\d+$/)]),
     //phone: new FormControl('', [Validators.required]),
     company: new FormControl({ value: "", disabled: true })
+    
   });
 
   ngOnInit(): void {
@@ -167,8 +168,6 @@ export class UsuariosNewOwnerComponent {
       this.formReactivo.get('cuit_cuil')?.setValue(cleaned);
       return;
     }
-
-    
 
     let formatted = cleaned;
     if (cleaned.length >= 2) {

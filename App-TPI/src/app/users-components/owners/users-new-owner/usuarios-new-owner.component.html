@@ -1,5 +1,4 @@
 <section class="container p-5 border rounded border-3 border-secundary" style="min-height: 70vh;">
-  <h3>Añadir Propietario</h3>
   <form [formGroup]="formReactivo" (ngSubmit)="createOwner()">
     <div class="row mb-4">
       <div class="col">
@@ -66,7 +65,7 @@
           <div class="col-8">
             <input type="date" class="form-control" formControlName="birthdate" value="2000-01-01"
               [ngClass]="{'is-invalid': formReactivo.controls['birthdate'].invalid && (formReactivo.get('birthdate')?.dirty || formReactivo.get('birthdate')?.touched),
-                        'is-valid': formReactivo.controls['birthdate'].valid}">
+                        'is-valid': formReactivo.controls['birthdate'].valid} ">
             @if(formReactivo.controls['birthdate'].invalid && (formReactivo.controls['birthdate'].dirty || formReactivo.controls['birthdate'].touched)){
               <div class="error d-block mt-1 text-start">Ingrese su Fecha de nacimiento</div>
             }
@@ -90,7 +89,7 @@
     <div class="row mb-4">
       <div class="col">
         <div class="row">
-          <label class="col-2 text-start form-label">Estado fiscal</label>
+          <label class="col-2 text-start form-label" style="white-space: nowrap;">Estado fiscal</label>
           <div class="col-8">
             <select class="form-select" formControlName="state"
               [ngClass]="{'is-invalid': formReactivo.controls['state'].invalid && (formReactivo.get('state')?.dirty || formReactivo.get('state')?.touched),
@@ -153,7 +152,7 @@
             <i class="bi" 
                [ngClass]="passwordVisible ? 'bi-eye-slash' : 'bi-eye'" 
                (click)="togglePasswordVisibility()" 
-               style="cursor: pointer; position: absolute; right: -20px; top: 20px; transform: translateY(-50%);"></i>
+               style="cursor: pointer; position: absolute; right: -35px; top: 20px; transform: translateY(-50%);"></i>
             @if(formReactivo.controls['password'].invalid && (formReactivo.controls['password'].dirty || formReactivo.get('password')?.touched)){
               <div class="error d-block mt-1 text-start">Ingrese su contraseña</div>
             }
@@ -177,7 +176,7 @@
       </div>
       <div class="col">
         <div class="row">
-          <label class="col-2 text-start form-label">Razón social</label>
+          <label class="col-2 text-start form-label" style="white-space: nowrap;">Razón social</label>
           <div class="col-8">
             <input type="text" class="form-control" formControlName="company">
           </div>
@@ -185,10 +184,11 @@
       </div>
     </div>
 
-    <!-- LOTES-->
-    <div class="row mt-3">
-      <label class="col-2 text-end form-label">Lote</label>
-      <div class="col-8">
+    <div class="row mb-4">
+      <div class="col">
+        <div class="row">
+          <label class="col-2 text-start form-label">Lote</label>
+          <div class="col-8">
         <select class="form-select" id="stateId" formControlName="lote"
           [ngClass]="{'is-invalid': formReactivo.controls['lote'].invalid && (formReactivo.get('lote')?.dirty || formReactivo.get('lote')?.touched), 
                       'is-valid': formReactivo.controls['lote'].valid}">
@@ -200,6 +200,16 @@
         @if(formReactivo.controls['lote'].invalid && (formReactivo.controls['lote'].dirty || formReactivo.controls['lote'].touched)){
           <div class="error d-block mt-1 text-start">Seleccione un lote</div>
         }
+      </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="row">
+          <label class="col-2 text-start form-label" style="white-space: nowrap;">Telegram id</label>
+          <div class="col-8">
+            <input type="text" class="form-control" formControlName="telegram_id">
+          </div>
+        </div>
       </div>
     </div>
 
