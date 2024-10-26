@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { GetPlotModel } from '../../../users-models/plot/GetPlot';
 import { FileDto } from '../../../users-models/owner/FileDto';
+import { FileService } from '../../../users-servicies/file.service';
 
 @Component({
   selector: 'app-users-moda-info-plot',
@@ -21,6 +22,8 @@ export class UsersModaInfoPlotComponent implements OnInit {
 
   plotForm: FormGroup;
   filesPlot: FileDto[];
+
+  private readonly fileService = inject(FileService);
 
   constructor(public activeModal: NgbActiveModal, private fb: FormBuilder) {
     this.plotForm = this.fb.group({
@@ -45,12 +48,15 @@ export class UsersModaInfoPlotComponent implements OnInit {
         state: this.plotModel.plot_state,
         type: this.plotModel.plot_type
       });
-      this.plotForm.disable();;
+      this.plotForm.disable();
+      this.filesPlot = this.plotModel.files;
   }
 
   closeModal(){
     this.activeModal.close();
   }
 
-  
+  downloadFile(fileId: string) {
+    this.fileService.downloadFile(fileId);
+  }
 }

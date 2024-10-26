@@ -37,11 +37,12 @@
           </div>
       </div>
 
-      <div *ngFor="let e of filesPlots; let i = index">
+      <div *ngFor="let e of filesPlot; let i = index">
         <span>{{ e.name }}</span>
         <button (click)="downloadFile(e.uuid)" class="btn btn-primary">
           Descargar
         </button>
+        
     </div>
   </form>
   </div>
