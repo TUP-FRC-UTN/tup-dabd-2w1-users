@@ -29,7 +29,6 @@ export class UsuariosNewOwnerComponent {
   private readonly ownerService = inject(OwnerService);
   private readonly apiService = inject(UserService);
   private readonly plotService = inject(PlotService);
-  JURIDICA_ID = 2;
 
   types: OwnerTypeModel[] = [];
   states: OwnerStateModel[] = [];
@@ -39,9 +38,7 @@ export class UsuariosNewOwnerComponent {
   passwordVisible: boolean = false;
   files: File[] = [];
 
-  constructor(private router: Router) {
-    
-   }
+  constructor(private router: Router) { }
 
   formReactivo = new FormGroup({
     name: new FormControl("", [
@@ -79,37 +76,26 @@ export class UsuariosNewOwnerComponent {
       Validators.minLength(6),
       Validators.maxLength(30)]),
     rol: new FormControl(""),
-    //lote: new FormControl(null, [
-      //Validators.required]),
+    lote: new FormControl(null, [
+      Validators.required]),
     phone: new FormControl('', [
       Validators.required,
       Validators.minLength(10),
       Validators.maxLength(20),
       Validators.pattern(/^\d+$/)]),
-
-    lote: new FormControl(null),//////por ahora le borro el required para que ande
     //phone: new FormControl('', [Validators.required]),
-    company: new FormControl({ value: "", disabled: true })
+    company: new FormControl('')
   });
 
   ngOnInit(): void {
     this.loadRoles();
 
-    const typeControl = this.formReactivo.get('type');
-
-    if (typeControl) {
-      typeControl.valueChanges.subscribe(value => {
-        this.toggleCompanyField(value ?? '');
-      });
-    }
-  
     this.ownerService.getAllTypes().subscribe({
       next: (data: OwnerTypeModel[]) => {
         this.types = data;
-        console.log('Tipos de propietario cargados:', this.types); // Verifica si los tipos se cargan correctamente
       },
       error: (err) => {
-        console.error('Error al cargar los tipos de propietario:', err);
+        console.error('Error al cargar los tipos de lote:', err);
       }
     });
 
@@ -154,15 +140,6 @@ export class UsuariosNewOwnerComponent {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       return inputDate >= today ? { dateTooHigh: true } : null;
-    }
-  }
-
-  private toggleCompanyField(ownerType: string) {
-    if (ownerType === this.JURIDICA_ID.toString()) {
-      this.formReactivo.get('company')?.enable();
-    } else {
-      this.formReactivo.get('company')?.disable();
-      this.formReactivo.get('company')?.setValue(""); // Limpiar el campo si se deshabilita
     }
   }
 
@@ -249,8 +226,7 @@ export class UsuariosNewOwnerComponent {
      /* estos estan hardcodeado para que ande*/
       roles: ["Owner"],//this.rolesSelected,
       userCreateId: 1,
-      //plotId: this.formReactivo.get('lote')?.value || 0,
-      plotId: 1,
+      plotId: this.formReactivo.get('lote')?.value || 0,
       telegramId: 1,
       files: this.files
     };
