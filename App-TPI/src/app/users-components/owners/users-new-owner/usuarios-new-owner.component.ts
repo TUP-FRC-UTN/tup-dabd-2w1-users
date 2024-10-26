@@ -29,6 +29,7 @@ export class UsuariosNewOwnerComponent {
   private readonly ownerService = inject(OwnerService);
   private readonly apiService = inject(UserService);
   private readonly plotService = inject(PlotService);
+  JURIDICA_ID = 2;
 
   types: OwnerTypeModel[] = [];
   states: OwnerStateModel[] = [];
@@ -84,11 +85,18 @@ export class UsuariosNewOwnerComponent {
       Validators.maxLength(20),
       Validators.pattern(/^\d+$/)]),
     //phone: new FormControl('', [Validators.required]),
-    company: new FormControl('')
+    company: new FormControl({ value: "", disabled: true })
   });
 
   ngOnInit(): void {
     this.loadRoles();
+
+    const typeControl = this.formReactivo.get('type');
+    if (typeControl) {
+      typeControl.valueChanges.subscribe(value => {
+        this.toggleCompanyField(value ?? '');
+      });
+    }
 
     this.ownerService.getAllTypes().subscribe({
       next: (data: OwnerTypeModel[]) => {
@@ -143,6 +151,15 @@ export class UsuariosNewOwnerComponent {
     }
   }
 
+  private toggleCompanyField(ownerType: string) {
+    if (ownerType === this.JURIDICA_ID.toString()) {
+      this.formReactivo.get('company')?.enable();
+    } else {
+      this.formReactivo.get('company')?.disable();
+      this.formReactivo.get('company')?.setValue(""); // Limpiar el campo si se deshabilita
+    }
+  }
+
   formatCUIT(value: string): void {
     const cleaned = value.replace(/\D/g, ''); // Eliminar caracteres no numéricos
 
@@ -150,6 +167,8 @@ export class UsuariosNewOwnerComponent {
       this.formReactivo.get('cuit_cuil')?.setValue(cleaned);
       return;
     }
+
+    
 
     let formatted = cleaned;
     if (cleaned.length >= 2) {
