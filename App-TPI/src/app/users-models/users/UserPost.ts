@@ -4,7 +4,8 @@ export class UserPost {
     username: string;     
     password: string;
     email: string;       
-    phone_number: string; 
+    phone_number: string;
+    dniType : number;
     dni: string;         
     active: boolean;      
     avatar_url: string;   
@@ -19,6 +20,7 @@ export class UserPost {
         this.lastname = '';
         this.username = '';
         this.email = '';
+        this.dniType = 0;
         this.dni = "";
         this.active = true;
         this.avatar_url = '';

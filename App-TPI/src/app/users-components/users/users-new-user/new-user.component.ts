@@ -72,6 +72,10 @@ export class NewUserComponent implements OnInit {
         Validators.minLength(10),
         Validators.maxLength(20)
     ]),
+    dniType: new FormControl('', [
+      Validators.required
+      
+    ]),
     dni: new FormControl('', [
         Validators.required,
         Validators.min(0),
@@ -140,6 +144,7 @@ export class NewUserComponent implements OnInit {
       username: this.formReactivo.get('username')?.value || '',
       password: this.formReactivo.get('password')?.value?.toString() || '',
       email: this.formReactivo.get('email')?.value || '',
+      dniType: Number(this.formReactivo.get('dniType')?.value) || 0,
       dni: this.formReactivo.get('dni')?.value?.toString() || "",
       active: true,
       avatar_url: "asd",
