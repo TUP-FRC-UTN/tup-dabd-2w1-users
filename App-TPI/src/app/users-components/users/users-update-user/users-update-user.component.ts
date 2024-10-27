@@ -139,10 +139,10 @@ export class UsersUpdateUserComponent implements OnInit {
   redirectList() {
     const result = window.confirm("¿Estás seguro que quieres salir? No se guardarán los cambios realizados.");
     if (result) {
-      if(this.authService.hasRole('Owner')){
+      if(this.authService.getActualRole() === 'Owner'){
         this.router.navigate(['home/family']);
       }
-      else if(this.authService.hasRole('Admin')){
+      else if(this.authService.getActualRole() == 'Admin'){
         this.router.navigate(['home/users/list']);
       }
     }

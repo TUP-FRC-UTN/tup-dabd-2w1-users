@@ -51,6 +51,7 @@ export class LoginComponent {
         await this.authService.login(data);
         this.errorLog = false;
         this.router.navigate(['home']);
+      
       },
       error: (error) => {
         this.errorLog = true;

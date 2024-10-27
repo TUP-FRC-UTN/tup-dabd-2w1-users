@@ -9,20 +9,28 @@ import { PlotModel } from '../../../users-models/plot/Plot';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GetPlotModel } from '../../../users-models/plot/GetPlot';
 import { PutPlot } from '../../../users-models/plot/PutPlot';
+import { FileDto } from '../../../users-models/owner/FileDto';
+import { FileUploadComponent } from "../../utils/file-upload/file-upload.component";
+import { FileService } from '../../../users-servicies/file.service';
 
 @Component({
   selector: 'app-users-update-plot',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, FileUploadComponent],
   templateUrl: './users-update-plot.component.html',
   styleUrl: './users-update-plot.component.css'
 })
 export class UsersUpdatePlotComponent implements OnInit {
 
   private readonly plotService = inject(PlotService);
+  private readonly fileService = inject(FileService);
 
   types: PlotTypeModel[] = [];
   states: PlotStateModel[] = [];
+  existingFiles: File[] = [];
+  newFiles: File[] = [];
+  existingFilesDownload: FileDto[] = [];
+
 
   constructor(private router: Router, private route: ActivatedRoute){ }
 
@@ -56,6 +64,24 @@ export class UsersUpdatePlotComponent implements OnInit {
         // Guardar el valor del nombre del estado y tipo para luego asignar el ID
         const plotStateName = response.plot_state;
         const plotTypeName = response.plot_type;
+
+        if(response.files.length > 0){
+          this.existingFilesDownload = response.files;
+        }
+
+       if (response.files && response.files.length > 0) {
+         for (const fileDto of response.files) {
+
+           this.fileService.getFile(fileDto.uuid).subscribe(({ blob, filename }) => {
+             // Crear un nuevo objeto File a partir del Blob
+             const newFile = new File([blob], filename, { type: blob.type });
+             this.existingFiles.push(newFile);
+           }, error => {
+             console.error(`Error al descargar el archivo ${fileDto.uuid}, error`);
+           });
+           console.log("Files list after loading: ", this.existingFiles);
+         }
+       }
   
         // Después de cargar los tipos y estados, encontrar el ID correcto
         this.plotService.getAllTypes().subscribe({
@@ -95,6 +121,9 @@ export class UsersUpdatePlotComponent implements OnInit {
     });
   }
   
+  getFiles(files: File[]) {
+    this.newFiles = files;
+  }
   
 
   updatePlot(){
@@ -124,6 +153,25 @@ export class UsersUpdatePlotComponent implements OnInit {
         console.error('Error al actualizar el lote:', error);
         alert("Error al actualizar el lote!");
       }
+    });
+  }
+  downloadFile(fileId: string) {
+    this.fileService.getFile(fileId).subscribe(({ blob, filename }) => {
+      // Crear una URL desde el Blob
+      const url = window.URL.createObjectURL(blob);
+
+      // Crear un enlace de descarga dinámico
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;  // Nombre del archivo obtenido desde el encabezado
+      document.body.appendChild(a);
+      a.click();  // Simular el clic para descargar el archivo
+
+      // Limpiar el DOM y liberar el Blob después de la descarga
+      window.URL.revokeObjectURL(url);
+      a.remove();
+    }, error => {
+      console.error('Error al descargar el archivo', error);
     });
   }
 

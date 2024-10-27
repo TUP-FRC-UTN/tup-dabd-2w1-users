@@ -86,6 +86,11 @@
                 }
             </div>
         </div>
+        
+        <div class="col-6">
+            <app-file-upload (filesChange)="getFiles($event)" [filesLoaded]="existingFiles"/>
+        </div>
+       
 
         <div class="row">
             <div class="col text-end">

@@ -2,7 +2,7 @@
     <!-- Background opacity  -->
     <div class="overlay-off" (click)="changeState()" [class]="!expand ? 'overlay-off' : 'overlay-on'"></div>
     <!-- NavBar -->
-    <nav class="navbar mynav d-flex justify-content-between shadow z-3 fixed-top text-bg-dark">
+    <nav class="navbar mynav d-flex justify-content-between shadow fixed-top text-bg-dark" style="z-index: 10;" >
         <div>
             <button class="btn text-light fs-4" (click)="changeState()">
                 <i [class]="expand ? 'bi bi-x-lg' : 'bi bi-list'"></i>
@@ -24,7 +24,7 @@
          <button class="btn btn-dark" (click)="redirect('home/profile')">{{setName()}}<i class="bi-person" style="width: 50px; height: 50px;"></i></button>
     </nav>
     <!-- SideBar -->
-        <aside class="myside text-bg-dark z-2 h-100 pt-5 fixed-top animation"
+        <aside class="myside text-bg-dark h-100 pt-5 fixed-top animation" style="z-index: 9;"
             [class]="expand ? 'side-expanded' : 'side-compressed'">
             <div class="pt-3 fs-5 d-flex flex-column h-100">
                 <ul class="nav flex-column">
