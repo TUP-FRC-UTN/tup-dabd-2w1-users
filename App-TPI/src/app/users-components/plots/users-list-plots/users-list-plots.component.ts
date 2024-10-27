@@ -130,9 +130,12 @@ export class UsersListPlotsComponent {
           // Asignar el evento click a los botones "Ver más"
           // Asignar el evento click a los botones "Ver más"
         $('#myTable').on('click', '.view-plot', (event) => {
-          const id = $(event.currentTarget).data('id');
-          const userId = this.plots[id].id; // Obtén el ID real del usuario
-          this.abrirModal( userId); // Abre el modal en modo "ver"
+          
+          //Comente estas lineas porque daba error
+          //const id = $(event.currentTarget).data('id');
+          //const userId = this.plots[id].id; // Obtén el ID real del usuario
+          const plotId = $(event.currentTarget).data('id');
+          this.abrirModal( plotId); // Abre el modal en modo "ver"
         });
 
           // Asignar el evento click a los botones "Editar"

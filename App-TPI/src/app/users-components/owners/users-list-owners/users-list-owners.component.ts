@@ -134,8 +134,11 @@ export class UsersListOwnersComponent {
           // Asignar el evento click a los botones "Ver más"
           // Asignar el evento click a los botones "Ver más"
         $('#myTable').on('click', '.view-owner', (event) => {
-          const id = $(event.currentTarget).data('id');
-          const ownerId = this.owners[id].id; // Obtén el ID real del usuario
+          
+          //Esto daba error por eso lo comente
+          //const id = $(event.currentTarget).data('id');
+          //const ownerId = this.owners[id].id; 
+          const ownerId = $(event.currentTarget).data('id'); // Obtén el ID real del usuario
           this.abrirModal( ownerId); // Abre el modal en modo "ver"
         });
 
