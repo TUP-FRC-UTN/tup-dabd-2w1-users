@@ -1,3 +1,12 @@
 section{
     box-shadow: 5px 0px 15px rgba(0, 0, 0, 0.2)
 }
+
+.btn-rounded {
+    width: 60px; /* Cambia el tamaño según tus necesidades */
+    height: 60px; /* Asegúrate que el ancho y alto sean iguales */
+    display: flex;
+    align-items: center; /* Centra verticalmente el ícono */
+    justify-content: center; /* Centra horizontalmente el ícono */
+    border-radius: 50%; /* Hace que el botón sea redondo */
+}

@@ -54,7 +54,7 @@ export class AuthService {
   }
 
   // Método para crear el JWT y guardarlo en el localStorage
-  createAndStoreToken(rolSelected: string): void {
+  saveActualRole(rolSelected: string): void {
     const header = { alg: 'HS256', typ: 'JWT' }; // Cabecera
     const payload = {
       selectedRol: rolSelected,
@@ -70,8 +70,12 @@ export class AuthService {
     localStorage.setItem('jwtRole', token);
   }
 
+  hasActualRole(): boolean {
+    return localStorage.getItem('jwtRole') == null;
+  }
+
   // Método para obtener el rolSelected desde el JWT en el localStorage
-  getRolSelected(): string | null {
+  getActualRole(): string | null {
     const token = localStorage.getItem('jwtRole');
     if (!token) {
       return null; // Retorna null si no hay token

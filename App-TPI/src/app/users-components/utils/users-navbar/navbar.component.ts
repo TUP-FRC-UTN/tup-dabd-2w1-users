@@ -38,8 +38,12 @@ export class NavbarComponent implements OnInit {
     this.userRoles = this.authService.getUser().roles!;
     
      //Suscribirse al Observable para detectar cambios en el rol
-     this.actualRole = this.authService.getUser().roles[0];
-     this.authService.createAndStoreToken(this.actualRole);
+     if(this.authService.hasActualRole()){
+      this.actualRole = this.authService.getUser().roles[0];
+      this.authService.saveActualRole(this.actualRole);
+     }else{
+      this.actualRole = this.authService.getActualRole()!;
+     }
 
     this.buttonsList = [
       {
@@ -141,8 +145,8 @@ export class NavbarComponent implements OnInit {
 
   //Cambia el rol principal
   selectRole(role : string){
-    this.authService.createAndStoreToken(role);
+    this.authService.saveActualRole(role);
 
-    this.actualRole = this.authService.getRolSelected()!;
+    this.actualRole = this.authService.getActualRole()!;
   }
 }

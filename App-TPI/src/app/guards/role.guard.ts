@@ -13,7 +13,7 @@ export const roleGuard: CanActivateFn = (route, state) => {
   
   //Ver si el usuario tiene alguno de los roles permitidos
   const hasValidRole = requiredRoles.some((role) =>    
-    authService.getRolSelected() == role
+    authService.getActualRole() == role
   );
 
   //Si tiene permisos
