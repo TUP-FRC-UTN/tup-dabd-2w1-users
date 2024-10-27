@@ -26,7 +26,7 @@ export class FileUploadComponent implements OnInit {
       this.files = this.filesLoaded;
       console.log(this.filesLoaded);
       console.log(this.files);
-      
+      this.emitFiles(); //agregue esto
     }
   }
 

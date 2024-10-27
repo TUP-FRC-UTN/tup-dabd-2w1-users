@@ -205,7 +205,7 @@ export class UsersUpdateOwnerComponent implements OnInit {
           });
 
           //redirigir a la lista
-          this.redirect('home/owner/list');
+          this.redirect('home/owners/list');
         },
         error: (error) => {
           console.log(error);
@@ -221,6 +221,21 @@ export class UsersUpdateOwnerComponent implements OnInit {
         }
       })
     }
+  }
+
+  confirmExit() {
+    Swal.fire({
+      title: '¿Seguro que desea cancelar la operación?',
+      showCancelButton: true,
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.editOwner.reset();
+        this.redirect('/home/owners/list');
+        Swal.fire('Operación cancelada', '', 'info');
+      }
+    });
   }
 
   private parseDateString(dateString: string): Date | null {

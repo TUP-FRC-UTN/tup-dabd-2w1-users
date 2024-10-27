@@ -187,8 +187,8 @@ export class UsuariosNewOwnerComponent {
     Swal.fire({
       title: '¿Seguro que desea cancelar la operación?',
       showCancelButton: true,
-      confirmButtonText: 'Cancelar',
-      cancelButtonText: 'Aceptar',
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
         this.formReactivo.reset();
