@@ -146,7 +146,7 @@ export class NavbarComponent implements OnInit {
   //Cambia el rol principal
   selectRole(role : string){
     this.authService.saveActualRole(role);
-
     this.actualRole = this.authService.getActualRole()!;
+    this.router.navigate(["home"]);
   }
 }

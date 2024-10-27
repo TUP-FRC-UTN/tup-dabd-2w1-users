@@ -95,6 +95,10 @@ export class UsersSelectMultipleComponent implements OnInit, OnChanges {
     for(let i = 0; i < roles.length; i++){
       this.addRole(roles[i]);
     }
+    if(roles.length === 0){
+      this.rolesSelected = [];
+      this.setTitle();
+    }
   }
 
   isChecked(roleDescription: string): boolean {

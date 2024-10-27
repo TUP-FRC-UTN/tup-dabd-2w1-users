@@ -1,5 +1,5 @@
 import { CommonModule, formatDate } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RolModel } from '../../../users-models/users/Rol';
 import { UserService } from '../../../users-servicies/user.service';
@@ -29,6 +29,7 @@ export class NewUserComponent implements OnInit {
   private readonly apiService = inject(UserService);
   private readonly authService = inject(AuthService);
   private readonly plotService = inject(PlotService);
+  @ViewChild(UsersSelectMultipleComponent) rolesComponent!: UsersSelectMultipleComponent;
 
   rolesSelected : string[] = [];
   roles: RolModel[] = [];
@@ -194,17 +195,20 @@ export class NewUserComponent implements OnInit {
     this.apiService.postUser(userData).subscribe({
       next: (response) => {
         //Mostramos que la operación fue exitosa
-        Swal.fire({
+        (window as any).Swal.fire({
+          position: "top-end",
           title: 'Usuario creado',
           text: 'El usuario se ha creado correctamente',
           icon: 'success',
-          confirmButtonText: 'Aceptar'
+          timer: 1000,
+          showConfirmButton: false
         });
         if(this.authService.getActualRole() == "Owner"){
           this.router.navigate(['/home/family']);
         }
         //Reseteamos el formulario
-        this.resetForm();
+        this.formReactivo.reset();
+        this.rolesComponent.updateRoles([]);
       },
       error: (error) => {
         //Mostramos que hubo un error

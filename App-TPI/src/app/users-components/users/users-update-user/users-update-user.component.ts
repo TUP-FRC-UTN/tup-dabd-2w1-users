@@ -130,10 +130,10 @@ export class UsersUpdateUserComponent implements OnInit {
               title: 'Usuario actualizado exitosamente',
               showConfirmButton: false
             });
-            if(this.authService.hasRole('Owner')){
+            if(this.authService.getActualRole() === 'Owner'){
               this.router.navigate(['home/family']);
             }
-            else if(this.authService.hasRole('Admin')){
+            else if(this.authService.getActualRole() == 'Admin'){
               this.router.navigate(['home/users/list']);
             }
         },

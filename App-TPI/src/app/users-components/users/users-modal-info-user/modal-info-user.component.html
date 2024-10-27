@@ -18,6 +18,7 @@
                 <p><strong>Fecha de alta:</strong> {{ editUser?.get('create_date')?.value | date: 'dd-MM-yyyy' || 'N/A' }}</p>
             </div>
         </div>
+        <hr>
 
         <!-- Información de Contacto -->
         <h5>Información de Contacto</h5>
@@ -30,6 +31,7 @@
                 <p><strong>Email:</strong> {{ editUser?.get('email')?.value || 'N/A' }}</p>
             </div>
         </div>
+        <hr>
 
         <h5>Información de Lote</h5>
         <div class="row mb-3">
@@ -40,6 +42,7 @@
                 <p><strong>Nro. de manzana:</strong> {{ editUser?.get('block_number')?.value || 'N/A' }}</p>
             </div>
         </div>
+        <hr>
 
         <!-- Roles -->
         <h5>Roles</h5>
@@ -57,5 +60,10 @@
 
 <!-- Footer -->
 <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeModal()">Cerrar</button>
+    @if(typeModal == "info"){
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeModal()">Cerrar</button>
+    }@else {
+        <button type="button" class="btn btn-danger" (click)="confirmDelete()">Eliminar</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeModal()">Cerrar</button>
+    }
 </div>

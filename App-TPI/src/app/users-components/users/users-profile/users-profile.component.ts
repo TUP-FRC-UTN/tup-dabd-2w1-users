@@ -7,11 +7,12 @@ import { UserPut } from '../../../users-models/users/UserPut';
 import { AuthService } from '../../../users-servicies/auth.service';
 import { DateService } from '../../../users-servicies/date.service';
 import Swal from 'sweetalert2';
+import { ImageUploadComponent } from "../../utils/image-upload/image-upload.component";
 
 @Component({
   selector: 'app-users-profile',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, FormsModule],
+  imports: [ReactiveFormsModule, CommonModule, FormsModule, ImageUploadComponent],
   templateUrl: './users-profile.component.html',
   styleUrl: './users-profile.component.css'
 })

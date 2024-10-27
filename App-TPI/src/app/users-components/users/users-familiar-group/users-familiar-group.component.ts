@@ -6,6 +6,9 @@ import Swal from 'sweetalert2';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalInfoUserComponent } from '../users-modal-info-user/modal-info-user.component';
 import { UserGet } from '../../../users-models/users/UserGet';
+import { GetPlotDto } from '../../../users-models/plot/GetPlotDto';
+import { PlotService } from '../../../users-servicies/plot.service';
+import { AuthService } from '../../../users-servicies/auth.service';
 
 @Component({
   selector: 'app-users-familiar-group',
@@ -19,14 +22,18 @@ export class UsersFamiliarGroupComponent implements OnInit {
   constructor(private router: Router,private modal: NgbModal) { }
 
   private readonly apiService = inject(UserService);
-  private readonly loginService = inject(LoginService);
+  private readonly plotService = inject(PlotService);
+  private readonly authService = inject(AuthService);
 
   familyGroup: UserGet[] = [];
+  plot : GetPlotDto = new GetPlotDto();
 
   ngOnInit() {
     this.apiService.getUsersByPlotID(1).subscribe({
       next: users => {
         // traer a todos menos al que tenga un rol owner
+        console.log(users);
+        
         this.familyGroup = users.filter(user => !user.roles.includes('Owner'));        
         
       },
@@ -34,6 +41,34 @@ export class UsersFamiliarGroupComponent implements OnInit {
         console.error(error);
       }
     })
+
+    this.plotService.getPlotById(this.authService.getUser().plotId).subscribe({
+      next: plot => {
+        // traer a todos menos al que tenga un rol owner
+        this.plot = plot;    
+      },
+      error: error => {
+        console.error(error);
+      }
+    })
+
+
+  }
+
+  showName(name: String){
+    return name.substring(0, 17) + "...";
+  }
+
+  showRoles(name: String[]){
+    if(name.length == 1){
+      return name[0];
+    }
+    return name[0] + "...." ;
+  }
+
+
+  showEmail(name: String){
+    return name.substring(0, 15) + "...";
   }
 
   redirectEdit(id: number) {
@@ -54,9 +89,10 @@ export class UsersFamiliarGroupComponent implements OnInit {
       console.log("userModal cargado:", this.userModal);
   
       // Una vez cargado, abre el modal
-      const modalRef = this.modal.open(ModalInfoUserComponent, { size: 'md', keyboard: false });
+      const modalRef = this.modal.open(ModalInfoUserComponent, { size: 'lg', keyboard: false });
       modalRef.componentInstance.typeModal = type; // Pasar el tipo de modal al componente hijo
       modalRef.componentInstance.userModal = this.userModal;
+      modalRef.componentInstance.plotModal = this.plot;
 
       modalRef.result.then((result) => {        
         this.ngOnInit();
