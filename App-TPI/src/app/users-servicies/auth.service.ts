@@ -12,7 +12,7 @@ export class AuthService {
   
   async login(data: any): Promise<void> {
     this.saveToken(data.token);
-    this.getUser();
+    this.saveActualRole(this.getUser().roles[0]);
   }
 
   //Obtiene el token y genera un UserLoged
@@ -24,7 +24,7 @@ export class AuthService {
       user.name = decodedToken.payloadObj.name;
       user.lastname = decodedToken.payloadObj.lastname;
       user.plotId = decodedToken.payloadObj.plot_id;
-    
+
       return user;
   }
 

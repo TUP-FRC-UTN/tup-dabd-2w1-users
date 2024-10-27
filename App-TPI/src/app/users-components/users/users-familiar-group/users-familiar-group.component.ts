@@ -42,6 +42,11 @@ export class UsersFamiliarGroupComponent implements OnInit {
     this.router.navigate(['/home/users/edit', id]); 
   }
 
+  
+  redirectAdd() {
+    this.router.navigate(['/home/users/add']); 
+  }
+
   async abrirModal(type: string, userId: number) {
     console.log("Esperando a que userModal se cargue...");
   
@@ -63,6 +68,7 @@ export class UsersFamiliarGroupComponent implements OnInit {
       console.error('Error al abrir el modal:', error);
     }
   }
+  
 
   userModal: UserGet = new UserGet();
   selectUser(id: number): Promise<UserGet> {
