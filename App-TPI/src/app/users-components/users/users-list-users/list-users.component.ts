@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { ModalInfoUserComponent } from '../users-modal-info-user/modal-info-user.component';
 import { UserService } from '../../../users-servicies/user.service';
 import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import autoTable, { Row } from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import $ from 'jquery';
 import { GetPlotDto } from '../../../users-models/plot/GetPlotDto';
@@ -203,11 +203,14 @@ export class ListUsersComponent implements OnInit {
     try {
       await this.selectUser(userId);
       console.log("userModal cargado:", this.userModal);
-  
+      
+      const userPlot = this.plots.find(plot => plot.id === this.userModal.plot_id);
+
       //Cuando se carga se abre el modal
-      const modalRef = this.modal.open(ModalInfoUserComponent, { size: 'md', keyboard: false });
+      const modalRef = this.modal.open(ModalInfoUserComponent, { size: 'lg', keyboard: false });
       modalRef.componentInstance.typeModal = type; 
       modalRef.componentInstance.userModal = this.userModal;
+      modalRef.componentInstance.plotModal = userPlot;
 
       modalRef.result.then((result) => {        
       });
@@ -317,10 +320,11 @@ export class ListUsersComponent implements OnInit {
   //Exporta por excel los registros de la tabla
   exportExcel() {
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.users.map(user => ({
+      FechaNacimiento: user.create_date.replace(/-/g, '/'),
       Nombre: `${user.lastname}, ${user.name}`,
       Rol: user.roles.join(', '),
-      Lote: 1234,
-      FechaNacimiento: user.datebirth.replace(/-/g, '/'), // Cambia el formato de la fecha aquí
+      Lote: 12,
+       // Cambia el formato de la fecha aquí
     })));
   
     const wb: XLSX.WorkBook = XLSX.utils.book_new();

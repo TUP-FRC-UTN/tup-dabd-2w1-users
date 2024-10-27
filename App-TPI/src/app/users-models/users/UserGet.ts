@@ -31,6 +31,7 @@ export class UserGet {
         this.phone_number = 0;
         this.plot_id = 0;
         this.telegram_id = 0;
+        this.dni_type = "";
         this.create_date = '';
         this.dni_type = '';
     }

@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { DeleteUser } from '../../../users-models/owner/DeleteUser';
 import { DateService } from '../../../users-servicies/date.service';
+import { GetPlotDto } from '../../../users-models/plot/GetPlotDto';
 
 
 @Component({
@@ -20,16 +21,22 @@ export class ModalInfoUserComponent implements OnInit {
 
   constructor(public activeModal: NgbActiveModal, private fb: FormBuilder) {
     this.editUser = this.fb.group({
-      name: [''],
-      lastName: [''],
+      fullname: [''],
       email: [''],
       dni: [''],
       phoneNumber: [''],
-      birthdate: ['']
+      birthdate: [''],
+      telegram_id : [''],
+      username: [''],
+      plot_number:[''],
+      block_number:[''],
+      dni_type: [''],
+      create_date: ['']
     });
   }
 
   @Input() userModal: UserGet = new UserGet();
+  @Input() plotModal: GetPlotDto = new GetPlotDto();
   @Input() typeModal: string = '';
 
   //activeModal = inject(NgbActiveModal);
@@ -39,24 +46,32 @@ export class ModalInfoUserComponent implements OnInit {
   editUser: FormGroup;
 
   // Método para detectar cambios en el @Input
-  ngOnInit() {        
+  ngOnInit() {
+      console.log('userModal:', this.userModal);
+      console.log('plotModal:', this.plotModal);
       // Actualiza los valores del formulario cuando cambian los datos del usuario
       if (this.userModal.datebirth) {
         const formattedDate = DateService.parseDateString(this.userModal.datebirth);
+        const formattedCreatedDate = DateService.parseDateString(this.userModal.create_date)
         this.editUser.patchValue({
-          name: this.userModal.name,
-          lastName: this.userModal.lastname,
+          fullname: this.userModal.lastname + ', ' + this.userModal.name,
           email: this.userModal.email,
           dni: this.userModal.dni,
+          dni_type: this.userModal.dni_type+': ',
           phoneNumber: this.userModal.phone_number,
           roles: this.rolesInput,
-          birthdate: formattedDate ? DateService.formatDate(formattedDate) : ''
+          plot_number : this.plotModal?.plot_number || 'N/A'  ,
+          block_number: this.plotModal?.block_number || 'N/A',
+          username: this.userModal.username,
+          telegram_id: this.userModal?.telegram_id || 'N/A',
+          birthdate: formattedDate ? DateService.formatDate(formattedDate) : 'N/A',
+          create_date: formattedCreatedDate ? DateService.formatDate(formattedCreatedDate) : 'N/A'
         });
       }
 
       this.editUser.disable();
-    
   }
+  
 
   confirmDesactivate() {
     var user = new DeleteUser();
