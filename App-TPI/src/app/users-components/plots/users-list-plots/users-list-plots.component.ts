@@ -98,12 +98,6 @@ export class UsersListPlotsComponent {
               infoEmpty: "No hay registros disponibles",
               infoFiltered: "(filtrado de _MAX_ registros totales)",
               search: "Buscar:",
-              paginate: {
-                first: "<<",
-                last: ">>",
-                next: ">",
-                previous: "<"
-              },
               loadingRecords: "Cargando...",
               processing: "Procesando...",
               emptyTable: "No hay datos disponibles en la tabla"

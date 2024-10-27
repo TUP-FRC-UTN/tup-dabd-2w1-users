@@ -90,6 +90,20 @@ export class UsersUpdateUserComponent implements OnInit {
     this.rolesSelected = roles;  //Asignamos directamente los roles emitidos
   }
 
+  confirmExit() {
+    Swal.fire({
+      title: '¿Seguro que desea cancelar la operación?',
+      showCancelButton: true,
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.router.navigate(['home/users/list']);
+        Swal.fire('Operación cancelada', '', 'info');
+      }
+    });
+  }
+
   //Verifica que haya algún rol chequeado
   verifyRole() {
     if(this.rolesSelected.length === 0){  

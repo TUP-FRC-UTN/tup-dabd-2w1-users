@@ -127,6 +127,20 @@ export class UsersUpdatePlotComponent implements OnInit {
   getFiles(files: File[]) {
     this.newFiles = files;
   }
+
+  confirmExit() {
+    Swal.fire({
+      title: '¿Seguro que desea cancelar la operación?',
+      showCancelButton: true,
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.redirect('/home/plots/list');
+        Swal.fire('Operación cancelada', '', 'info');
+      }
+    });
+  }
   
 
   updatePlot(){

@@ -3,7 +3,7 @@ import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core'
 import { UserGet } from '../../../users-models/users/UserGet';
 import { PlotService } from '../../../users-servicies/plot.service';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ModalInfoUserComponent } from '../users-modal-info-user/modal-info-user.component';
 import { UserService } from '../../../users-servicies/user.service';
 import jsPDF from 'jspdf';
@@ -17,12 +17,13 @@ import { Router, RouterModule } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 import { RolModel } from '../../../users-models/users/Rol';
+import { GetPlotModel } from '../../../users-models/plot/GetPlot';
 
 
 @Component({
   selector: 'app-list-users',
   standalone: true,
-  imports: [HttpClientModule, CommonModule, FormsModule, ModalInfoUserComponent, RouterModule],
+  imports: [HttpClientModule, CommonModule, FormsModule, ModalInfoUserComponent, RouterModule, ReactiveFormsModule],
   templateUrl: './list-users.component.html',
   styleUrls: ['./list-users.component.css']
 })
@@ -40,6 +41,15 @@ export class ListUsersComponent implements OnInit {
   userToDeactivate: number = 0;
   plots : GetPlotDto[] = [];
   selectedRole: string = '';
+
+  getPlotByUser(plotId : number){
+    this.plotService.getPlotById(plotId).subscribe({
+      next: (data: GetPlotModel) =>{
+        console.log(data.plot_number)
+        return data.plot_number;
+      }
+    })
+  }
   
   ngOnInit() {
 
@@ -80,19 +90,20 @@ export class ListUsersComponent implements OnInit {
             pageLength: 10,
             columns: [
               { title: 'Fecha de creación', width: '20%' },
-              { title: 'Nombre', width: '30%' },
-              { title: 'Rol', width: '20%' },
-              { title: 'Nro. de lote', className: 'text-start', width: '15%' , render: (data) => {
-       
-                const plotNumber: GetPlotDto = this.plots.find(plot => plot.id === data) || new GetPlotDto
-                console.log(data)
+              { title: 'Nombre', width: '20%' },
+              { title: 'Rol', width: '30%' },
+              { title: 'Nro. de lote', className: 'text-start', width: '15%' ,
+                 render: (data) => { 
                 
-                if (plotNumber != null) { 
-                    return plotNumber.plot_number ? `${plotNumber.plot_number}` : 'Sin lote';
-                } else {
-                    return "Sin lote"; 
-                }
-            } 
+                  const plotNumber: GetPlotDto = this.plots.find(plot => plot.id === data) || new GetPlotDto
+                    console.log(data)
+                    
+                    if (plotNumber != null) { 
+                        return plotNumber.plot_number ? `${plotNumber.plot_number}` : 'Sin lote';
+                  } else {
+                        return "Sin lote"; 
+                    }
+                } 
             },
               {
                 title: 'Acciones',
@@ -122,8 +133,8 @@ export class ListUsersComponent implements OnInit {
             data: this.users.map(user => [
               user.create_date,   
               `${user.lastname}, ${user.name}`,  //Nombre completo
-              user.roles.join(', '),              //Roles
-              user.plot_id,                                //Nro. de lote (puedes ajustar esto)                 
+              this.showRole(user.roles),              //Roles
+              this.getPlotByUser(user.plot_id),                                //Nro. de lote (puedes ajustar esto)                 
               '<button class="btn btn-info">Ver más</button>'  //Ejemplo de acción
             ]),
             language: {
@@ -133,12 +144,6 @@ export class ListUsersComponent implements OnInit {
               infoEmpty: "No hay registros disponibles",
               infoFiltered: "(filtrado de _MAX_ registros totales)",
               search: "Buscar:",
-              paginate: {
-                first: "<<",
-                last: ">>",
-                next: ">",
-                previous: "<"
-              },
               loadingRecords: "Cargando...",
               processing: "Procesando...",
               emptyTable: "No hay datos disponibles en la tabla"
@@ -197,6 +202,71 @@ export class ListUsersComponent implements OnInit {
       }
     });
   }
+
+  selectRol : FormControl = new FormControl();
+
+  resetFilters() {
+    // Reiniciar el valor del control de rol
+    this.selectRol.setValue('');
+
+    // Limpiar el campo de búsqueda
+    const searchInput = document.getElementById("myTable_search") as HTMLInputElement;
+    if (searchInput) {
+        searchInput.value = ''; // Limpiar el valor del input
+    }
+
+    // Obtener la instancia de DataTable
+    const table = $('#myTable').DataTable();
+
+    table.search('').draw();
+
+    table.column(2).search('').draw();
+}
+
+  updateFilterRol() {
+    console.log(this.selectRol.value);
+    console.log("A");
+    
+    const table = $('#myTable').DataTable();
+    table.column(2).search(this.selectRol.value).draw();
+  }
+
+  showRole(roles : string[]) : string {
+    let rolesA : string = ""
+    
+    roles.forEach(r =>{
+      let color : string = "";
+      switch (r) {
+        case "Admin":
+          color = "danger";
+          break;
+        case "Owner":
+          color = "primary";
+          break;
+        case "Family Member":
+          color = "secondary";
+          break;
+          case "Minor Member":
+          color = "secondary";
+          break;
+      }
+
+      rolesA = rolesA + (`<button class='btn btn-${color} rounded-pill m-1'>${r}</button>`);
+    })
+    return rolesA
+  }
+
+  
+  // showRoleForPdf(role : string) : string {
+  //   // Definimos el HTML del botón como una cadena
+  //   const buttonHTML: string = role
+
+  //   // Expresión regular para capturar el texto entre `>` y `<`
+  //   const match = buttonHTML.match(/>([^<]+)</);
+
+  //   // Verificamos si se encontró un resultado y lo extraemos
+  // return buttonValue: string = match ? match[1] : '';
+  // }
 
 
 
@@ -300,7 +370,7 @@ export class ListUsersComponent implements OnInit {
     doc.text(title, (pageWidth - textWidth) / 2, 20);
   
     // Obtener columnas de la tabla (añadido 'Email')
-    const columns = ['Nombre', 'Rol', 'Nro. de lote', 'Fecha de nacimiento'];
+    const columns = ['Fecha de creación', 'Nombre', 'Rol', 'Nro. de lote'];
   
     // Filtrar datos visibles en la tabla
     const table = $('#myTable').DataTable(); // Inicializa DataTable una vez
@@ -310,10 +380,10 @@ export class ListUsersComponent implements OnInit {
   
     // Mapear los datos filtrados a un formato adecuado para jsPDF
     const rows = visibleRows.map((row: any) => [
-      `${row[0]}`,       // Nombre
-      `${row[1]}`,       // Rol
-      `${row[2]}`,       // Lote
-      row[3].replace(/-/g, '/'), // Fecha nacimiento
+      row[0].replace(/-/g, '/'), // Fecha de creación
+      `${row[1]}`,       // Nombre
+      `${row[2]}`,       // Rol
+      `${row[3]}`      // Lote
     ]);
   
     // Generar la tabla en el PDF usando autoTable
@@ -342,7 +412,7 @@ export class ListUsersComponent implements OnInit {
       FechaNacimiento: user.create_date.replace(/-/g, '/'),
       Nombre: `${user.lastname}, ${user.name}`,
       Rol: user.roles.join(', '),
-      Lote: 12,
+      Lote: this.getPlotByUser(user.plot_id),
        // Cambia el formato de la fecha aquí
     })));
   

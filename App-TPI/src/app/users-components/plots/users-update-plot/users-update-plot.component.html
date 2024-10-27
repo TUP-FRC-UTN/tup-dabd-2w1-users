@@ -21,7 +21,7 @@
         <div class="row mb-3 mt-5">
             <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-end">Terreno del lote</label>
+                    <label class="form-label mb-0 me-3 text-end">Terreno del lote (m²)</label>
                     <input type="number" class="form-control custom-input" formControlName="totalArea"
                         [ngClass]="{'is-invalid': formReactivo.controls['totalArea'].invalid  && (formReactivo.get('totalArea')?.dirty|| formReactivo.get('totalArea')?.touched),'is-valid': formReactivo.controls['totalArea'].valid }">
                 </div>
@@ -34,7 +34,7 @@
             </div>
             <div class="col d-flex flex-column">
                 <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-end">Área construida</label>
+                    <label class="form-label mb-0 me-3 text-end">Área construida (m²)</label>
                     <input type="number" class="form-control custom-input" formControlName="totalBuild"
                         [ngClass]="{'is-invalid': formReactivo.controls['totalBuild'].invalid  && (formReactivo.get('totalBuild')?.dirty|| formReactivo.get('totalBuild')?.touched),'is-valid': formReactivo.controls['totalBuild'].valid }">
                 </div>
@@ -51,7 +51,7 @@
                 <div class="d-flex align-items-center justify-content-end">
                     <label class="form-label mb-0 me-3 text-end">Estado</label>
                      <!-- <div class="d-flex" style="flex: 1;"> -->
-                        <select class="form-select form-control me-2" id="stateId" formControlName="state" style="width: 418px;"
+                        <select class="form-select form-control" id="stateId" formControlName="state" style="width: 418px;"
                             [ngClass]="{'is-invalid': formReactivo.controls['state'].invalid  && (formReactivo.get('state')?.dirty|| formReactivo.get('state')?.touched),'is-valid': formReactivo.controls['state'].valid }">
                             @for (s of states; track $index) {
                             <option value="{{s.id}}">{{s.name}}</option>
@@ -70,7 +70,7 @@
                 <div class="d-flex align-items-center justify-content-end">
                     <label class="form-label mb-0 me-3 text-end">Tipo</label>
                      <!-- <div class="d-flex" style="flex: 1;"> -->
-                        <select class="form-select  form-control me-2" id="stateId" formControlName="type" style="width: 418px;" placeholder="Seleccione un tipo"
+                        <select class="form-select  form-control" id="stateId" formControlName="type" style="width: 418px;" placeholder="Seleccione un tipo"
                             [ngClass]="{'is-invalid': formReactivo.controls['type'].invalid  && (formReactivo.get('type')?.dirty|| formReactivo.get('type')?.touched),'is-valid': formReactivo.controls['type'].valid }">
                             @for (t of types; track $index) {
                             <option value="{{t.id}}">{{t.name}}</option>
@@ -94,6 +94,7 @@
 
         <div class="row">
             <div class="col text-end">
+                <button class="btn btn-secondary me-3" type="button" (click)="confirmExit()">Cancelar</button>
                 <button class="btn btn-primary" type="submit" [disabled]="formReactivo.invalid">Guardar</button>
             </div>
         </div>

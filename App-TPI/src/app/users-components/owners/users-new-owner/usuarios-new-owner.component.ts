@@ -77,7 +77,7 @@ export class UsuariosNewOwnerComponent {
       Validators.minLength(6),
       Validators.maxLength(30)]),
     rol: new FormControl(""),
-    lote: new FormControl(null, [
+    plot: new FormControl(null, [
       Validators.required]),
     phone: new FormControl('', [
       Validators.required,
@@ -85,7 +85,8 @@ export class UsuariosNewOwnerComponent {
       Validators.maxLength(20),
       Validators.pattern(/^\d+$/)]),
     //phone: new FormControl('', [Validators.required]),
-    company: new FormControl({ value: "", disabled: true })
+    company: new FormControl({ value: "", disabled: true }),
+    telegram_id: new FormControl('')
     
   });
 
@@ -202,7 +203,7 @@ export class UsuariosNewOwnerComponent {
     this.router.navigate([path]);
   }
 
-  aniadirRol() {
+  addRole() {
     const rolSeleccionado = this.formReactivo.get('rol')?.value;
     if (rolSeleccionado && !this.rolesInput.includes(rolSeleccionado)) {
       this.rolesInput.push(rolSeleccionado);
@@ -214,11 +215,43 @@ export class UsuariosNewOwnerComponent {
     this.passwordVisible = !this.passwordVisible;
   }
 
-  quitarRol(rol: string) {
+  quitRole(rol: string) {
     const index = this.rolesInput.indexOf(rol);
     if (index > -1) {
       this.rolesInput.splice(index, 1);
     }
+  }
+
+  onValidate(controlName: string) {
+    const control = this.formReactivo.get(controlName);
+    return {
+      'is-invalid': control?.invalid && (control?.dirty || control?.touched),
+      'is-valid': control?.valid
+    }
+  }
+
+  showError(controlName: string): string {
+    const control = this.formReactivo.get(controlName);
+  
+    if (!control || !control.errors) return '';
+  
+    const errorKey = Object.keys(control.errors)[0]; 
+    const errorMessages: { [key: string]: string } = {
+      required: 'Este campo no puede estar vacío.',
+      email: 'Formato de correo electrónico inválido.',
+      minlength: `El valor ingresado es demasiado corto. Mínimo ${control.errors['minlength']?.requiredLength} caracteres.`,
+      maxlength: `El valor ingresado es demasiado largo. Máximo ${control.errors['maxlength']?.requiredLength} caracteres.`,
+      pattern: 'El formato ingresado no es válido.',
+      min: `El valor es menor que el mínimo permitido (${control.errors['min']?.min}).`,
+      max: `El valor es mayor que el máximo permitido (${control.errors['max']?.max}).`,
+      requiredTrue: 'Debe aceptar el campo requerido para continuar.',
+      dateLessThanToday: 'La fecha ingresada debe ser anterior al día de hoy.',
+      url: 'El formato de URL ingresado no es válido.',
+      number: 'Este campo solo acepta números.',
+      customError: 'Error personalizado: verifique el dato ingresado.',
+    };
+  
+    return errorMessages[errorKey] || 'Error no identificado en el campo.';
   }
 
   getFiles(files: File[]) {
@@ -245,12 +278,10 @@ export class UsuariosNewOwnerComponent {
      /* estos estan hardcodeado para que ande*/
       roles: ["Owner"],//this.rolesSelected,
       userCreateId: 1,
-      plotId: this.formReactivo.get('lote')?.value || 0,
+      plotId: this.formReactivo.get('plot')?.value || 0,
       telegramId: 1,
       files: this.files
     };
-
-    console.log(owner);
 
     this.ownerService.postOwner(owner).subscribe({
       next: (response) => {

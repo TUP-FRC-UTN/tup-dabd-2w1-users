@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { PlotService } from '../../../users-servicies/plot.service';
@@ -28,6 +28,7 @@ export class UsersNewPlotComponent {
 
   private readonly plotService = inject(PlotService);
   private readonly authService = inject(AuthService);
+  @ViewChild(FileUploadComponent) fileUploadComponent!: FileUploadComponent;
 
   types: PlotTypeModel[] = [];
   states: PlotStateModel[] = [];
@@ -74,6 +75,8 @@ export class UsersNewPlotComponent {
     this.formReactivo.reset();
     this.states = [];
     this.types = [];
+    this.fileUploadComponent.files = [];
+    
   }
 
   createPlot(){
