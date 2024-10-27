@@ -23,10 +23,10 @@ export class UsersSelectMultipleComponent implements OnInit, OnChanges {
   constructor(private router : Router){}
 
   //Guarda los roles que selecciona el usuario
-  rolesSelected: string[] = [];
+  @Input() rolesSelected: string[] = []!;
 
   //Listado de roles que puede seleccionar un propietario
-  listRolesForOwner: string[] = ['Owner', 'User'];
+  listRolesForOwner: string[] = ['Family Member', "Minor Member"];
   roles: RolModel[] = [];
 
   //Muestra el título del select
@@ -35,14 +35,14 @@ export class UsersSelectMultipleComponent implements OnInit, OnChanges {
   //Carga los roles de la API
   ngOnInit(): void {
     this.apiService.getAllRoles().subscribe({
-      next: (data) => {
-        if (this.authService.hasRole('Owner')) {
+      next: (data) => {        
+        if (this.authService.getActualRole() === 'Owner') {
           this.roles = data.filter((r) =>
             this.listRolesForOwner.includes(r.description)
           );
         } else {
           this.roles = data.filter(
-            (r) => !this.listRolesForOwner.includes(r.description)
+            (r) => !this.listRolesForOwner.includes(r.description) && r.description !== 'Owner'
           );
         }
       },
@@ -60,13 +60,12 @@ export class UsersSelectMultipleComponent implements OnInit, OnChanges {
   }
 
   //Cuando hay cambios, se actualiza el label del dropdown
-  ngOnChanges(): void {
+  ngOnChanges(changes : any): void {
     this.roles.forEach((r) => {
       if (this.rolesSelected.includes(r.description)) {
         $('#' + r.id).prop('checked', true);
       }
     });
-    this.setTitle();
   }
 
   //Setea el titulo del dropdown
@@ -90,6 +89,16 @@ export class UsersSelectMultipleComponent implements OnInit, OnChanges {
 
       this.rolesEmited.emit(this.rolesSelected);
     }
+  }
+
+  updateRoles(roles: string[]) {
+    for(let i = 0; i < roles.length; i++){
+      this.addRole(roles[i]);
+    }
+  }
+
+  isChecked(roleDescription: string): boolean {
+    return this.rolesSelected.includes(roleDescription);
   }
 
   //Quita un rol de la lista de roles

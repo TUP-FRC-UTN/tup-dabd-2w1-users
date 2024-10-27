@@ -88,7 +88,8 @@
                     <label class="form-label me-2 text-end pt-2" style="width: 150px; margin-bottom: 0;">Roles</label>
                     <app-users-select-multiple 
                             (rolesEmited)="fillRolesSelected($event); verifyRole()"
-                            (click)="verifyRole()">
+                            (click)="verifyRole()"
+                            (rolesSelected)="rolesSelected">
                             </app-users-select-multiple>
                 </div>
                 <div class="text-danger form-error text-start">

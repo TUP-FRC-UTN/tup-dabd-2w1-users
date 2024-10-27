@@ -1,5 +1,5 @@
 import { CommonModule, formatDate } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, inject, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserService } from '../../../users-servicies/user.service';
 import { RolModel } from '../../../users-models/users/Rol';
@@ -12,6 +12,7 @@ import { LoginComponent } from '../../utils/users-login/login.component';
 import { DateService } from '../../../users-servicies/date.service';
 import { AuthService } from '../../../users-servicies/auth.service';
 import Swal from 'sweetalert2';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-users-update-user',
@@ -23,46 +24,52 @@ import Swal from 'sweetalert2';
 export class UsersUpdateUserComponent implements OnInit {
 
   constructor(private router: Router, private route: ActivatedRoute){ }
+  @ViewChild(UsersSelectMultipleComponent) rolesComponent!: UsersSelectMultipleComponent;
   
   private readonly apiService = inject(UserService);
   private readonly authService = inject(AuthService);
-
-  rolesSelected : string[] = [];
   roles: RolModel[] = [];
+
   rolesInput: string[] = [];
   id: string = '';
   checkRole: boolean = false;
 
-  ngOnInit() {
-    this.id = this.route.snapshot.paramMap.get('id') || '';  //Obtiene el parámetro 'name'
+
+  
+  rolesSelected : string[] = [];
+  async ngOnInit() {
+    this.id = this.route.snapshot.paramMap.get('id') || ''; // Obtiene el parámetro 'id'
+  
     this.apiService.getUserById(parseInt(this.id)).subscribe({
-      next: (data: UserGet) => {        
+      next: (data: UserGet) => {
         this.updateForm.get('name')?.setValue(data.name);
         this.updateForm.get('lastname')?.setValue(data.lastname);
         this.updateForm.get('dni')?.setValue(data.dni.toString());
         this.updateForm.get('email')?.setValue(data.email);
         this.updateForm.get('avatar_url')?.setValue(data.avatar_url);
-        this.updateForm.get('datebirth')?.setValue(data.datebirth);
         const formattedDate = DateService.parseDateString(data.datebirth);
         this.updateForm.patchValue({
           datebirth: formattedDate ? DateService.formatDate(formattedDate) : ''
         });
-        this.rolesInput = this.rolesSelected = data.roles;
         this.updateForm.get('phoneNumber')?.setValue(data.phone_number.toString());
-        this.rolesSelected = data.roles;
         this.updateForm.get('telegram_id')?.setValue(data.telegram_id) || 0;
+  
+        // Asigna `rolesSelected` después de obtener `data.roles`
+        this.rolesSelected = data.roles || [];
+        console.log('Roles:', this.rolesSelected);
+        this.rolesComponent.updateRoles(this.rolesSelected);
+        
       },
       error: (error) => {
         console.error('Error al cargar el usuario:', error);
       }
     });
-
+  
+    // Desactiva campos específicos del formulario
     this.updateForm.get('dni')?.disable();
     this.updateForm.get('email')?.disable();
     this.updateForm.get('avatar_url')?.disable();
     this.updateForm.get('datebirth')?.disable();
-
-    
   }
 
   //Crea el formulario con sus controles
@@ -93,6 +100,7 @@ export class UsersUpdateUserComponent implements OnInit {
     }
   }
 
+
   //Actualiza el usuario
   updateUser() {
     const user: UserPut = new UserPut();
@@ -102,7 +110,7 @@ export class UsersUpdateUserComponent implements OnInit {
     user.phoneNumber = this.updateForm.get('phoneNumber')?.value?.toString() || '';
     user.email = this.updateForm.get('email')?.value || '';
     user.avatar_url = this.updateForm.get('avatar_url')?.value || '';
-
+    
     //Formatea la fecha correctamente (año-mes-día)
     const date: Date = new Date(this.updateForm.get('datebirth')?.value || '');
 
@@ -111,11 +119,12 @@ export class UsersUpdateUserComponent implements OnInit {
 
     user.datebirth = formattedDate;
     user.roles = this.rolesSelected || []; // Asegúrate de que roles sea un arreglo   
+    user.userUpdateId = this.authService.getUser().id;
+    user.dni_type_id = 1;
     
     //Llama al servicio para actualizar el usuario
     this.apiService.putUser(user, parseInt(this.id)).subscribe({
         next: (response) => {
-            console.log('Usuario actualizado exitosamente:', response);
             Swal.fire({
               icon: "success",
               title: 'Usuario actualizado exitosamente',
@@ -137,14 +146,12 @@ export class UsersUpdateUserComponent implements OnInit {
 
   //Redirige a la lista
   redirectList() {
-    const result = window.confirm("¿Estás seguro que quieres salir? No se guardarán los cambios realizados.");
-    if (result) {
-      if(this.authService.getActualRole() === 'Owner'){
-        this.router.navigate(['home/family']);
-      }
-      else if(this.authService.getActualRole() == 'Admin'){
-        this.router.navigate(['home/users/list']);
-      }
+    if(this.authService.getActualRole() === 'Owner'){
+      this.router.navigate(['home/family']);
+    }
+    else if(this.authService.getActualRole() == 'Admin'){
+      this.router.navigate(['home/users/list']);
     }
   }
 }
+

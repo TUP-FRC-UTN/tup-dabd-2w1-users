@@ -19,6 +19,7 @@ export class UsersProfileComponent implements OnInit {
 
   private readonly authService = inject(AuthService);
   private readonly usersService = inject(UserService);
+  dniType: number = 0;
 
   selectedIconUrl: string = '../../../../assets/icons/icono1.svg';
   isDropdownOpen = false;
@@ -53,6 +54,13 @@ export class UsersProfileComponent implements OnInit {
                 roles: user.roles ,
                 telegram_id: user.telegram_id
             });
+
+            if(user.dni_type == 'DNI') {
+              this.dniType = 1;
+            }
+            if(user.dni_type == 'PASAPORTE') {
+              this.dniType = 2;
+            }
   
             // Setea el icono del usuario en el input
             this.selectedIconUrl = user.avatar_url;
@@ -153,6 +161,7 @@ export class UsersProfileComponent implements OnInit {
         datebirth: this.formProfile.get('datebirth')?.value || '',
         roles: this.formProfile.get('roles')?.value || [],
         telegram_id: this.formProfile.get('telegram_id')?.value || 0,
+        dni_type_id: this.dniType
     };
 
     this.usersService.putUser(updatedUser, this.authService.getUser().id).subscribe({

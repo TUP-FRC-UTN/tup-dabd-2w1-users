@@ -27,9 +27,7 @@ export class UsersFamiliarGroupComponent implements OnInit {
     this.apiService.getUsersByPlotID(1).subscribe({
       next: users => {
         // traer a todos menos al que tenga un rol owner
-        this.familyGroup = users.filter(user => !user.roles.includes('Owner'));
-        console.log(this.familyGroup);
-        
+        this.familyGroup = users.filter(user => !user.roles.includes('Owner'));        
         
       },
       error: error => {
@@ -61,7 +59,7 @@ export class UsersFamiliarGroupComponent implements OnInit {
       modalRef.componentInstance.userModal = this.userModal;
 
       modalRef.result.then((result) => {        
-        $('#myTable').DataTable().ajax.reload();
+        this.ngOnInit();
       });
 
     } catch (error) {

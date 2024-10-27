@@ -46,7 +46,16 @@ export class NewUserComponent implements OnInit {
      //SOLO MUESTRA LOS LOTES DISPONIBLES
      this.plotService.getAllPlotsAvailables().subscribe({
       next: (data: GetPlotDto[]) => {
-        this.lotes = data;
+        console.log(data);
+        
+          if(this.authService.getActualRole() == "Owner"){
+              this.lotes = data.filter(lote => lote.id == this.authService.getUser().plotId);
+              this.formReactivo.get('plot')?.setValue(this.authService.getUser().plotId.toString());
+              this.formReactivo.get('plot')?.disable();
+
+          }else{
+            this.lotes = data;
+          }
       },
       error: (err) => {
         console.error('Error al cargar los tipos de lote:', err);
@@ -104,6 +113,7 @@ export class NewUserComponent implements OnInit {
     active: new FormControl(true), 
     datebirth: new FormControl(DateService.formatDate(new Date("2000-01-02")), [Validators.required]),
     roles: new FormControl(''),
+    plot: new FormControl(''),
     userUpdateId: new FormControl(this.authService.getUser().id)
   });
   
@@ -177,6 +187,10 @@ export class NewUserComponent implements OnInit {
       userData.plot_id = 0;
     }
 
+
+    console.log(userData);
+    
+
     this.apiService.postUser(userData).subscribe({
       next: (response) => {
         //Mostramos que la operación fue exitosa
@@ -186,7 +200,9 @@ export class NewUserComponent implements OnInit {
           icon: 'success',
           confirmButtonText: 'Aceptar'
         });
-        
+        if(this.authService.getActualRole() == "Owner"){
+          this.router.navigate(['/home/family']);
+        }
         //Reseteamos el formulario
         this.resetForm();
       },

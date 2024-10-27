@@ -1,11 +1,11 @@
 .form-control{
-    min-width: 500px;
-    max-width: 500px;   
+    min-width: 450px;
+    max-width: 450px;   
 }
 
 .form-error{
-    min-width: 500px;
-    max-width: 500px;   
+    min-width: 450px;
+    max-width: 450px;   
 }
 section{
     box-shadow: 5px 0px 15px rgba(0, 0, 0, 0.2)

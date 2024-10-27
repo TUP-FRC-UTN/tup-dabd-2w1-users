@@ -14,6 +14,7 @@ export class UserGet {
     plot_id: number;
     telegram_id: number;
     create_date: string;
+    dni_type: string;
 
     constructor() {
         this.id = 0;
@@ -31,5 +32,6 @@ export class UserGet {
         this.plot_id = 0;
         this.telegram_id = 0;
         this.create_date = '';
+        this.dni_type = '';
     }
 }

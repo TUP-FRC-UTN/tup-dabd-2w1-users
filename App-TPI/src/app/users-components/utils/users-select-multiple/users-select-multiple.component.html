@@ -8,7 +8,7 @@
         @for (item of roles; track $index) {
             <div class="hover">
                 <div class="cbx form-check">
-                    <input class="form-check-input" type="checkbox" value="{{item.description}}" (change)="onCheckboxChange($event)" id="{{item.id}}" style="padding-left: 10px;"
+                    <input class="form-check-input" type="checkbox" value="{{item.description}}" (change)="onCheckboxChange($event)" [checked]="isChecked(item.description)"  id="{{item.id}}" style="padding-left: 10px;"
 >
                     <label class="form-check-label w-100" for="{{item.id}}">
                       {{item.description}}
