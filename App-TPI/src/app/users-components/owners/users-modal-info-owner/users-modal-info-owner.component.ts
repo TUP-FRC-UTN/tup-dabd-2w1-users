@@ -18,6 +18,8 @@ export class UsersModalInfoOwnerComponent implements OnInit{
   infoOwner : FormGroup;
   filesOwner: FileDto[];
 
+  fullName : string = "";
+
   private readonly fileService = inject(FileService);
 
   ngOnInit(): void {
@@ -33,7 +35,7 @@ export class UsersModalInfoOwnerComponent implements OnInit{
     });
     this.filesOwner =  this.ownerModel.files;
     this.infoOwner.disable();
-  
+    this.fullName = this.ownerModel.name + " " + this.ownerModel.lastname;
   }
 
   constructor(public activeModal: NgbActiveModal, private fb: FormBuilder) {

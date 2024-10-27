@@ -1,72 +1,37 @@
 <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title">Añadir Propietario</h4>
+        <h4 class="modal-title" id="modal-basic-title">Información del Usuario</h4>
         <button type="button" class="btn-close" aria-label="Close"
             (click)="activeModal.dismiss('Cross click')"></button>
     </div>
+
     <div class="modal-body">
         <form [formGroup]="infoOwner">
+            
+            <h5>Información Personal</h5>
             <div class="row mb-3">
-                <div class="col d-flex flex-column">
-                    <div class="d-flex align-items-center justify-content-end">
-                        <label class="form-label mb-0 me-3 text-end">Nombre</label>
-                        <input type="text" class="form-control custom-input" formControlName="name">
-                    </div>
-                </div>
-                <div class="col d-flex flex-column">
-                    <div class="d-flex align-items-center justify-content-end">
-                        <label class="form-label mb-0 me-3 text-end">Apellido</label>
-                        <input type="text" class="form-control custom-input" formControlName="lastname">
-                    </div>
+                <div class="col-md-6">
+                    <p><strong>Nombre Completo:</strong> {{ fullName }}</p>
+                    <p><strong>DNI:</strong> {{ infoOwner.get('dni')?.value || 'N/A' }}</p>
+                </div>    
+                <div class="col-md-6">
+                    <p><strong>Fecha de nacimiento:</strong> {{ infoOwner.get('birthdate')?.value || 'N/A' }}</p>
+                    <p><strong>CUIT - CUIL:</strong> {{ infoOwner.get('cuitCuil')?.value || 'N/A' }}</p>
                 </div>
             </div>
 
+            <h5>Información Comercial</h5>
             <div class="row mb-3">
-                <div class="col d-flex flex-column">
-                    <div class="d-flex align-items-center justify-content-end">
-                        <label class="form-label mb-0 me-3 text-end">DNI</label>
-                        <input type="text" class="form-control custom-input" formControlName="dni">
-                    </div>
+                <div class="col-md-6">
+                    <p><strong>Tipo de propietario:</strong> {{ infoOwner.get('ownerType')?.value || 'N/A' }}</p>
+                    <p><strong>Nombre de la empresa:</strong> {{ infoOwner.get('businessName')?.value || 'N/A' }}</p>
                 </div>
-                <div class="col d-flex flex-column">
-                    <div class="d-flex align-items-center justify-content-end">
-                        <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">CUIT - CUIL</label>
-                        <input type="text" class="form-control custom-input" formControlName="cuitCuil">
-                    </div>
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col d-flex flex-column">
-                    <div class="d-flex align-items-center justify-content-end">
-                        <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Fecha de nacimiento</label>
-                        <input type="date" class="form-control custom-input" formControlName="birthdate">
-                    </div>
-                </div>
-                <div class="col d-flex flex-column">
-                    <div class="d-flex align-items-center justify-content-end">
-                        <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Tipo de propietario</label>
-                        <input type="text" class="form-control custom-input" formControlName="ownerType">
-                    </div>
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col d-flex flex-column">
-                    <div class="d-flex align-items-center justify-content-end">
-                        <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Estado fiscal</label>
-                        <input type="text" class="form-control custom-input" formControlName="taxStatus">
-                    </div>
-                </div>
-                <div class="col d-flex flex-column">
-                    <div class="d-flex align-items-center justify-content-end">
-                        <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Nombre de la empresa</label>
-                        <input type="text" class="form-control custom-input" formControlName="businessName">
-                    </div>
+                <div class="col-md-6">
+                    <p><strong>Estado fiscal:</strong> {{ infoOwner.get('taxStatus')?.value || 'N/A' }}</p>
                 </div>
             </div>
 
             <div class="mt-4">
-                <h6 class="mb-3">Archivos adjuntos</h6>
+                <h5 class="mb-3">Archivos adjuntos</h5>
                 <div class="list-group">
                     @for (e of filesOwner; track $index) {
                         <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
