@@ -54,14 +54,14 @@ export class UsersListOwnersComponent {
             ordering: true,
             lengthChange: true,
             lengthMenu: [10, 25, 50],
-            order: [[0, 'asc']],
+            order: [[0, 'desc']],
             pageLength: 10,
             columns: [
-              { title: 'Nombre', width: '10%', className: 'text-start' },
+              { title: 'Fecha de creación', width: '15%', className: 'text-start' },
+              { title: 'Nombre', width: '15%', className: 'text-start' },
               { title: 'Dni', width: '10%', className: 'text-start'},
-              { title: 'Fecha de nacimiento', width: '15%', className: 'text-start' },
               { title: 'Cuit/Cuil', width: '15%', className: 'text-start' },
-              { title: 'Tipo', width: '15%', className: 'text-start' },
+              { title: 'Tipo', width: '10%', className: 'text-start' },
               {
                 title: 'Acciones',
                 orderable: false,
@@ -76,18 +76,19 @@ export class UsersListOwnersComponent {
                       </button>
                       <ul class="dropdown-menu">
                         <li><a class="dropdown-item view-owner" data-id="${ownerId}">Ver más</a></li>
+                        <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item edit-owner" data-id="${ownerId}">Editar</a></li>
                       </ul>
                     </div>
-                  `; // si queremos el ver mas de nuevo <li><a class="dropdown-item view-plot" data-id="${meta.row}">Ver más</a></li>
+                  `; 
                 }
               }
             ],
             data: this.owners.map(owner => [
                //rellenar por columna
+               owner.create_date,
               `${owner.name + ", " + owner.lastname}`,
               owner.dni,
-              owner.dateBirth,
               owner.cuitCuil,
               owner.ownerType
               
@@ -200,10 +201,8 @@ export class UsersListOwnersComponent {
      return new Promise((resolve, reject) => {
        this.apiService.getById(id).subscribe({
          next: (data: Owner) => {
-          console.log("daskfsdkf");
           
-           this.ownerModel = data;
-           console.log("aaaaaa")        
+           this.ownerModel = data;    
            Swal.close(); // Cerrar SweetAlert
            resolve(data); // Resuelve la promesa cuando los datos se cargan
          },
@@ -232,7 +231,7 @@ export class UsersListOwnersComponent {
     doc.text(title, (pageWidth - textWidth) / 2, 20);
   
     // Definir columnas para el PDF
-    const columns = ['Nombre', 'DNI', 'Fecha de Nacimiento', 'CUIT/CUIL', 'Tipo'];
+    const columns = ['Fecha de Creación','Nombre', 'DNI', 'CUIT/CUIL', 'Tipo'];
   
     // Filtrar datos visibles en la tabla
     const table = $('#myTable').DataTable();
@@ -271,9 +270,9 @@ export class UsersListOwnersComponent {
   
   exportExcel() {
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.owners.map(owner => ({
+      FechaCreacion: owner.create_date.replace(/-/g, '/'),
       Nombre: `${owner.lastname}, ${owner.name}`,
       DNI: owner.dni,
-      FechaNacimiento: owner.dateBirth.replace(/-/g, '/'), // Formato de la fecha
       CUIT_CUIL: owner.cuitCuil,
       Tipo: owner.ownerType
     })));

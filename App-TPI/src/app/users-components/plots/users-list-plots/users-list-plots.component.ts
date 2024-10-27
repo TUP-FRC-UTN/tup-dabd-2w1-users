@@ -72,6 +72,7 @@ export class UsersListPlotsComponent {
                       </button>
                       <ul class="dropdown-menu">
                         <li><a class="dropdown-item view-plot" data-id="${plotId}">Ver más</a></li>
+                        <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item edit-plot" data-id="${plotId}">Editar</a></li>
                       </ul>
                     </div>

@@ -119,7 +119,9 @@ export class ListUsersComponent implements OnInit {
                       </button>
                       <ul class="dropdown-menu">
                         <li><a class="dropdown-item view-user" data-id="${meta.row}">Ver más</a></li>
+                        <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item edit-user" data-id="${userId}">Editar</a></li>
+                        <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item delete-user" data-id="${meta.row}">Eliminar</a></li>
                       </ul>
                     </div>

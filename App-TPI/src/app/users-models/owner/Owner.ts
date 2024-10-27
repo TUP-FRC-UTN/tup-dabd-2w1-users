@@ -13,6 +13,7 @@ export class Owner{
     active: boolean;
     ownerType: string;
     files: FileDto[];
+    create_date: string;
     // files: string[]
 
     constructor(){
@@ -27,5 +28,6 @@ export class Owner{
         this.active = true;
         this.ownerType = "";
         this.files = []
+        this.create_date = "";
     }
 }
