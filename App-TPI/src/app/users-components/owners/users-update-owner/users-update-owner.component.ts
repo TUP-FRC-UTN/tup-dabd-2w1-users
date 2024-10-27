@@ -1,6 +1,6 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { CommonModule, formatDate } from '@angular/common';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { OwnerModel } from '../../../users-models/owner/PostOwnerDto';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OwnerService } from '../../../users-servicies/owner.service';
@@ -145,15 +145,15 @@ export class UsersUpdateOwnerComponent implements OnInit {
 
   //formulario base
   editOwner = new FormGroup({
-    name: new FormControl("", [Validators.required, Validators.maxLength(50)]),
-    lastname: new FormControl("", [Validators.required, Validators.maxLength(50)]),
-    dni: new FormControl("", [Validators.required, Validators.pattern("^[0-9]{6,9}$")]),
-    cuitCuil: new FormControl("", [Validators.required, Validators.pattern("^[0-9]{11}$")]),
+    name: new FormControl("", [Validators.required, Validators.minLength(3) , Validators.maxLength(50)]),
+    lastname: new FormControl("", [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
+    dni: new FormControl("", [Validators.required, Validators.minLength(8), Validators.pattern(/^\d+$/)]),
+    cuitCuil: new FormControl("", [Validators.required, Validators.minLength(11), Validators.maxLength(20),  Validators.pattern(/^\d+$/)]),
     ownerType: new FormControl("", [Validators.required]),
     taxStatus: new FormControl("", [Validators.required]),
     bussinesName: new FormControl(""),
-    birthdate: new FormControl("", [Validators.required]),
-    phoneNumber: new FormControl("", [Validators.required, Validators.pattern("^[0-9]{9,20}$")]),
+    birthdate: new FormControl("", [Validators.required, this.dateLessThanTodayValidator()]),
+    phoneNumber: new FormControl("", [Validators.required, Validators.minLength(10), Validators.maxLength(20) ,Validators.pattern(/^\d+$/)]),
     email: new FormControl("", [Validators.required, Validators.email])
   });
 
@@ -273,4 +273,44 @@ export class UsersUpdateOwnerComponent implements OnInit {
     });
   }
 
+  dateLessThanTodayValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const inputDate = new Date(control.value);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return inputDate >= today ? { dateTooHigh: true } : null;
+    }
+  }
+
+  onValidate(controlName: string) {
+    const control = this.editOwner.get(controlName);
+    return {
+      'is-invalid': control?.invalid && (control?.dirty || control?.touched),
+      'is-valid': control?.valid
+    }
+  }
+
+  showError(controlName: string): string {
+    const control = this.editOwner.get(controlName);
+  
+    if (!control || !control.errors) return '';
+  
+    const errorKey = Object.keys(control.errors)[0]; 
+    const errorMessages: { [key: string]: string } = {
+      required: 'Este campo no puede estar vacío.',
+      email: 'Formato de correo electrónico inválido.',
+      minlength: `El valor ingresado es demasiado corto. Mínimo ${control.errors['minlength']?.requiredLength} caracteres.`,
+      maxlength: `El valor ingresado es demasiado largo. Máximo ${control.errors['maxlength']?.requiredLength} caracteres.`,
+      pattern: 'El formato ingresado no es válido.',
+      min: `El valor es menor que el mínimo permitido (${control.errors['min']?.min}).`,
+      max: `El valor es mayor que el máximo permitido (${control.errors['max']?.max}).`,
+      requiredTrue: 'Debe aceptar el campo requerido para continuar.',
+      dateTooHigh: 'La fecha ingresada debe ser anterior al día de hoy.',
+      url: 'El formato de URL ingresado no es válido.',
+      number: 'Este campo solo acepta números.',
+      customError: 'Error personalizado: verifique el dato ingresado.',
+    };
+  
+    return errorMessages[errorKey] || 'Error no identificado en el campo.';
+  }
 }
