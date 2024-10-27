@@ -29,7 +29,7 @@ export class UsersModalInfoOwnerComponent implements OnInit{
       birthdate: this.ownerModel.dateBirth,
       ownerType: this.ownerModel.ownerType,
       taxStatus: this.ownerModel.taxStatus,
-      businessName: this.ownerModel.bussinesName
+      businessName: this.ownerModel.businessName
     });
     this.filesOwner =  this.ownerModel.files;
     this.infoOwner.disable();

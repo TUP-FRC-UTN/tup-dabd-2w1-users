@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PlotTypeModel } from '../users-models/plot/PlotType';
@@ -63,6 +63,24 @@ export class PlotService {
   }
 
   putPlot(id: number,  plot: PutPlot): Observable<PutPlot>{
-    return this.http.put<PutPlot>(`${this.url}/plots?plotId=${id}`, plot);
+
+    const formData: FormData = new FormData();
+  
+    formData.append('total_area_in_m2', plot.total_area_in_m2.toString());
+    formData.append('built_area_in_m2', plot.built_area_in_m2.toString());
+    formData.append('plot_state_id', plot.plot_state_id.toString());
+    formData.append('plot_type_id', plot.plot_type_id.toString());
+    formData.append('userUpdateId', plot.userUpdateId.toString());
+  
+    // Agregamos los archivos al FormData
+    plot.files.forEach((file, index) => {
+      formData.append('files', file);  // 'files' debe coincidir con el nombre del campo en tu backend
+    });
+
+    return this.http.put<PutPlot>(`${this.url}/plots?plotId=${id}`, formData, {
+      headers: {
+        
+      }
+    });
   }
 }

@@ -31,6 +31,9 @@ export class UsersUpdatePlotComponent implements OnInit {
   newFiles: File[] = [];
   existingFilesDownload: FileDto[] = [];
 
+  redirect(url: string) {
+    this.router.navigate([url]);
+  }
 
   constructor(private router: Router, private route: ActivatedRoute){ }
 
@@ -133,7 +136,8 @@ export class UsersUpdatePlotComponent implements OnInit {
       built_area_in_m2: this.formReactivo.get('totalBuild')?.value || 0,
       plot_state_id: Number(this.formReactivo.get('state')?.value) || 0,
       plot_type_id: Number(this.formReactivo.get('type')?.value) || 0,
-      userUpdateId: 1
+      userUpdateId: 1,
+      files: this.newFiles
     }
 
     console.log(plot);
@@ -143,15 +147,23 @@ export class UsersUpdatePlotComponent implements OnInit {
       next: (response) => {
         Swal.fire({
           icon: "success",
-          title: "Lote actualizado!",
+          title: "Se han guardado los cambios",
           showConfirmButton: false,
           timer: 1500
         });
-        this.ngOnInit();
+        
+        this.redirect('home/plots/list');
       },
       error: (error) => {
-        console.error('Error al actualizar el lote:', error);
-        alert("Error al actualizar el lote!");
+        console.log("Error al actualizar el lote" + error);
+
+          Swal.fire({
+            position: "top-end",
+            icon: "error",
+            title: "Ha ocurrido un error",
+            showConfirmButton: false,
+            timer: 1500
+          });
       }
     });
   }

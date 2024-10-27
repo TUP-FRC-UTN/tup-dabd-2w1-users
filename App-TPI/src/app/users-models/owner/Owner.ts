@@ -8,7 +8,7 @@ export class Owner{
     dni: string;
     cuitCuil: string;
     dateBirth: string;
-    bussinesName: string;
+    businessName: string;
     taxStatus: string;
     active: boolean;
     ownerType: string;
@@ -22,7 +22,7 @@ export class Owner{
         this.dni = "";
         this.cuitCuil = "";
         this.dateBirth = "";
-        this.bussinesName = "";
+        this.businessName = "";
         this.taxStatus = "";
         this.active = true;
         this.ownerType = "";

@@ -105,7 +105,7 @@ export class UsersUpdateOwnerComponent implements OnInit {
           cuitCuil: this.owner.cuitCuil,
           ownerType: this.owner.ownerType,
           taxStatus: this.owner.taxStatus,
-          bussinesName: this.owner.bussinesName,
+          bussinesName: this.owner.businessName,
           phoneNumber : data.user.phone_number,
           email: data.user.email,
         });

@@ -240,6 +240,7 @@ export class UsuariosNewOwnerComponent {
       email: this.formReactivo.get('email')?.value || '',
       phoneNumber: this.formReactivo.get('phone')?.value || '',
       avatarUrl: 'nada',
+      businessName: this.formReactivo.get('company')?.value || '',
      
      /* estos estan hardcodeado para que ande*/
       roles: ["Owner"],//this.rolesSelected,
