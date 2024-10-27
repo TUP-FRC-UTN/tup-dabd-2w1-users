@@ -21,23 +21,27 @@ export class NavbarComponent implements OnInit {
   constructor(private router: Router) { }
   private readonly authService = inject(AuthService);
 
-  userRoles: string[] =  this.authService.getUser().roles!; 
+  userRoles: string[] =  [];
+  
+  //Muestra la vista del rol seleccionado
+  actualRole : string = "";
 
   //Lista de botones
   buttonsList: SideButton[] = [];
 
+  //Recupera el nombre completo del usuario
   setName(){
     return this.authService.getUser().name + " " + this.authService.getUser().lastname;
   }
 
   async ngOnInit (): Promise<void> {    
+    this.userRoles = this.authService.getUser().roles!;
+    
+     //Suscribirse al Observable para detectar cambios en el rol
+     this.actualRole = this.authService.getUser().roles[0];
+     this.authService.createAndStoreToken(this.actualRole);
+
     this.buttonsList = [
-      // {
-      //   icon: "bi-person",
-      //   title: "Perfil",
-      //   route: "home/profile",
-      //   roles: ["SuperAdmin", "Admin", "Security", "Owner", "Spouse", "FamilyOld", "FamilyYoung", "Tenant"] //ver
-      // },
       {
          //botón grupo familiar
         icon: "bi bi-house",
@@ -119,6 +123,7 @@ export class NavbarComponent implements OnInit {
     this.expand = !this.expand;
   }
 
+  //Redirecciona
   redirect(path: string) {
     if(path === '/login'){
       this.authService.logOut();
@@ -129,8 +134,15 @@ export class NavbarComponent implements OnInit {
     }
   }
 
+  //Cambia el titulo del navbar
   setTitle(title : string){
     this.pageTitle = title;
   }
 
+  //Cambia el rol principal
+  selectRole(role : string){
+    this.authService.createAndStoreToken(role);
+
+    this.actualRole = this.authService.getRolSelected()!;
+  }
 }
