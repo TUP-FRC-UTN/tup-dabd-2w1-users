@@ -80,20 +80,36 @@ export class ModalInfoUserComponent implements OnInit {
   }
 
   confirmDelete() {
-    Swal .fire({
+    Swal.fire({
       title: '¿Seguro que desea eliminar el usuario?',
       showDenyButton: true,
       showCancelButton: false,
-      confirmButtonText: 'Eliminar',
-      denyButtonText: `Cancelar`,
+      confirmButtonText: 'Aceptar',
+      denyButtonText: 'Cancelar',
+      confirmButtonColor: "#dc3545",
+      denyButtonColor: "#6c757d",
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire('Eliminado!', '', 'success');
+        (window as any).Swal.fire({
+          position: "top-end",
+          title: '¡Usuario borrado!',
+          text: 'El usuario se ha borrado correctamente.',
+          icon: 'success',
+          timer: 1000,
+          showConfirmButton: false
+        });
         this.confirmDesactivate();
-      } else{
-        Swal.fire('Operación cancelada!', '', 'info');
+      } else {
+        (window as any).Swal.fire({
+          position: "top-end",
+          title: '¡Usuario no se ha borrado!',
+          text: 'La operación se ha cancelado exitosamente.',
+          icon: 'info',
+          timer: 1000,
+          showConfirmButton: false
+        });
       }
     });
-  }  
+  } 
   
 }

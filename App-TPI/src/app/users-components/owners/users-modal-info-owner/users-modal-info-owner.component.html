@@ -68,16 +68,18 @@
             <div class="mt-4">
                 <h6 class="mb-3">Archivos adjuntos</h6>
                 <div class="list-group">
-                    <div *ngFor="let e of filesOwner; let i = index" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center">
-                            <i class="bi bi-file-earmark-text me-3 text-primary fs-5"></i>
-                            <span>{{ e.name }}</span>
+                    @for (e of filesOwner; track $index) {
+                        <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-file-earmark-text me-3 text-primary fs-5"></i>
+                                <span>{{ e.name }}</span>
+                            </div>
+                            <button (click)="downloadFile(e.uuid)" class="btn btn-success btn-sm">
+                                <i class="bi bi-download me-2"></i>
+                                Descargar
+                            </button>
                         </div>
-                        <button (click)="downloadFile(e.uuid)" class="btn btn-success btn-sm">
-                            <i class="bi bi-download me-2"></i>
-                            Descargar
-                        </button>
-                    </div>
+                    }
                 </div>
             </div>
     

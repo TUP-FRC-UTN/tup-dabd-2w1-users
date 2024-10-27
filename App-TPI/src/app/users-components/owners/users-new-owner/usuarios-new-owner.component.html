@@ -194,7 +194,7 @@
                       'is-valid': formReactivo.controls['lote'].valid}">
           <option value="" disabled selected>Seleccione un lote</option>
           @for (s of lotes; track $index) {
-            <option value="{{s.id}}">{{s.block_number}}</option>
+            <option value="{{s.id}}">Numero de lote: {{s.plot_number}}, Manzana: {{s.block_number}}</option>
           }
         </select>
         @if(formReactivo.controls['lote'].invalid && (formReactivo.controls['lote'].dirty || formReactivo.controls['lote'].touched)){

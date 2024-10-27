@@ -20,8 +20,8 @@
 }
 
 .form-control{
-    min-width: 500px !important;
-    max-width: 500px !important;   
+    min-width: 450px !important;
+    max-width: 450px !important;   
 }
 
 .form-check-label:hover {

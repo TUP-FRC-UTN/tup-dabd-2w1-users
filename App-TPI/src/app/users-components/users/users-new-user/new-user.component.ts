@@ -10,6 +10,8 @@ import { UsersSelectMultipleComponent } from "../../utils/users-select-multiple/
 import { DateService } from '../../../users-servicies/date.service';
 import { AuthService } from '../../../users-servicies/auth.service';
 import Swal from 'sweetalert2';
+import { PlotService } from '../../../users-servicies/plot.service';
+import { GetPlotDto } from '../../../users-models/plot/GetPlotDto';
 
 @Component({
   selector: 'app-new-user',
@@ -26,6 +28,7 @@ export class NewUserComponent implements OnInit {
 
   private readonly apiService = inject(UserService);
   private readonly authService = inject(AuthService);
+  private readonly plotService = inject(PlotService);
 
   rolesSelected : string[] = [];
   roles: RolModel[] = [];
@@ -34,10 +37,21 @@ export class NewUserComponent implements OnInit {
   rolesInput: string[] = [];
   select: string = "";
   checkRole: boolean = false;
+  lotes: GetPlotDto[] = [];
   
 
   ngOnInit() {
     this.loadRoles();
+
+     //SOLO MUESTRA LOS LOTES DISPONIBLES
+     this.plotService.getAllPlotsAvailables().subscribe({
+      next: (data: GetPlotDto[]) => {
+        this.lotes = data;
+      },
+      error: (err) => {
+        console.error('Error al cargar los tipos de lote:', err);
+      }
+    });
   }
 
 
@@ -144,7 +158,7 @@ export class NewUserComponent implements OnInit {
       username: this.formReactivo.get('username')?.value || '',
       password: this.formReactivo.get('password')?.value?.toString() || '',
       email: this.formReactivo.get('email')?.value || '',
-      dniType: Number(this.formReactivo.get('dniType')?.value) || 0,
+      dni_type_id: Number(this.formReactivo.get('dniType')?.value) || 0,
       dni: this.formReactivo.get('dni')?.value?.toString() || "",
       active: true,
       avatar_url: "asd",
@@ -159,7 +173,9 @@ export class NewUserComponent implements OnInit {
     //Si el usuario es de tipo owner se setea el plotId
     if(this.authService.hasRole('Owner')){
       userData.plot_id = this.authService.getUser().plotId;
-    }    
+    }else{
+      userData.plot_id = 0;
+    }
 
     this.apiService.postUser(userData).subscribe({
       next: (response) => {
