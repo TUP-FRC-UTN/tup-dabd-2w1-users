@@ -5,6 +5,7 @@ import { SideButton } from '../../../users-models/SideButton';
 import { UsersSideButtonComponent } from "../users-side-button/users-side-button.component";
 import { LoginService } from '../../../users-servicies/login.service';
 import { AuthService } from '../../../users-servicies/auth.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-navbar',
@@ -125,6 +126,23 @@ export class NavbarComponent implements OnInit {
   //Expandir y contraer el sidebar
   changeState() {
     this.expand = !this.expand;
+  }
+
+  confirmExit() {
+    Swal.fire({
+        title: 'Cerrar sesión',
+        text: '¿Estás seguro que deseas cerrar la sesión?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Salir',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            this.redirect('login'); 
+        }
+    });
   }
 
   //Redirecciona

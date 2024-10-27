@@ -16,6 +16,7 @@ import 'datatables.net-bs5';
 import { Router, RouterModule } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
+import { RolModel } from '../../../users-models/users/Rol';
 
 
 @Component({
@@ -33,12 +34,16 @@ export class ListUsersComponent implements OnInit {
   typeModal: string = '';
   user: number = 0; 
   users: UserGet[] = [];
+  roles: RolModel[] = [];
   private readonly apiService = inject(UserService);
   showDeactivateModal: boolean = false;
   userToDeactivate: number = 0;
   plots : GetPlotDto[] = [];
-
+  selectedRole: string = '';
+  
   ngOnInit() {
+
+    this.loadRoles();
 
     this.plotService.getAllPlots().subscribe({
       next: (data: GetPlotDto[]) => {
@@ -71,7 +76,7 @@ export class ListUsersComponent implements OnInit {
             ordering: true,
             lengthChange: true,
             lengthMenu: [10, 25, 50],
-            order: [[0, 'asc']],
+            order: [[0, 'desc']],
             pageLength: 10,
             columns: [
               { title: 'Fecha de creación', width: '20%' },
@@ -223,6 +228,20 @@ export class ListUsersComponent implements OnInit {
   //Cambia el tipo de modal
   changeTypeModal(type: string) {
     this.typeModal = type;
+  }
+
+
+  loadRoles() {
+    this.apiService.getAllRoles().subscribe({
+      next: (data: RolModel[]) => {
+
+        this.roles = data;
+      },
+      error: (error) => {
+        console.error('Error al cargar los roles:', error);
+        
+      }
+    });
   }
   
   //Redirige
