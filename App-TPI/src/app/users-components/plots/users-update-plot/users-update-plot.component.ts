@@ -28,7 +28,7 @@ export class UsersUpdatePlotComponent implements OnInit {
   types: PlotTypeModel[] = [];
   states: PlotStateModel[] = [];
   existingFiles: File[] = [];
-  newFiles: File[] = [];
+  files: File[] = [];
   existingFilesDownload: FileDto[] = [];
 
   redirect(url: string) {
@@ -125,7 +125,7 @@ export class UsersUpdatePlotComponent implements OnInit {
   }
   
   getFiles(files: File[]) {
-    this.newFiles = files;
+    this.files = files;
   }
 
   confirmExit() {
@@ -151,7 +151,7 @@ export class UsersUpdatePlotComponent implements OnInit {
       plot_state_id: Number(this.formReactivo.get('state')?.value) || 0,
       plot_type_id: Number(this.formReactivo.get('type')?.value) || 0,
       userUpdateId: 1,
-      files: this.newFiles
+      files: this.files
     }
 
     console.log(plot);
@@ -241,6 +241,11 @@ export class UsersUpdatePlotComponent implements OnInit {
     
     //Si no hay errores
     return '';
+  }
+
+  //Evento para actualizar el listado de files a los seleccionados actualmente
+  onFileChange(event: any) {
+    this.files = Array.from(FileList = event.target.files); //Convertir FileList a Array
   }
 
 }
