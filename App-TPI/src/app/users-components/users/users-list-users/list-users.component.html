@@ -6,14 +6,14 @@
       </div>
       <div id="myTable_filter" class="dataTables_filter" style="text-align: left;" >
       <select class="form-select m-3" aria-controls="myTable" style="width: 300px;" aria-controls="myTable" (change)="updateFilterRol()" [formControl]="selectRol">
-        <option value="" disabled selected>Seleccionar rol</option> 
+        <option value="" disabled>Seleccionar rol</option> 
         @for (role of roles; track $index) {
           <option [value]="role.description">{{ role.description }}</option>
         }
       </select>
     </div>
   <div>
-    <button class="btn btn-light ms-2" (click)="resetFilters()">
+    <button class="btn btn-light" (click)="resetFilters()">
       <i class="bi bi-trash"></i>
     </button>
   </div>

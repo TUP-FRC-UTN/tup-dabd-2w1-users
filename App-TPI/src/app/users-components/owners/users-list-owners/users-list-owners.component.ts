@@ -18,11 +18,13 @@ import { GetPlotModel } from '../../../users-models/plot/GetPlot';
 import { OwnerService } from '../../../users-servicies/owner.service';
 import { Owner } from '../../../users-models/owner/Owner';
 import { UsersModalInfoOwnerComponent } from '../users-modal-info-owner/users-modal-info-owner.component';
+import { OwnerTypeModel } from '../../../users-models/owner/OwnerType';
+import { FormControl, ReactiveFormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-users-list-owners',
   standalone: true,
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './users-list-owners.component.html',
   styleUrl: './users-list-owners.component.css'
 })
@@ -32,6 +34,9 @@ export class UsersListOwnersComponent {
   private readonly apiService = inject(OwnerService);
   showDeactivateModal: boolean = false;
   userToDeactivate: number = 0;
+  types: OwnerTypeModel[] = [];
+  selectType: FormControl = new FormControl('');
+
 
 
   constructor(private router: Router,private modal: NgbModal) { }
@@ -43,8 +48,7 @@ export class UsersListOwnersComponent {
       next: (data: Owner[]) => {
         // Cambiar guiones por barras en la fecha de nacimiento
         this.owners = data;
-        console.log(data);
-                 
+        this.loadTypes();   
         
         // Inicializar DataTables después de cargar los datos
         setTimeout(() => {
@@ -181,8 +185,43 @@ export class UsersListOwnersComponent {
 
   
   redirectEdit(id: number) {
-    console.log("b");
     this.router.navigate(['/home/owners/edit', id])
+  }
+
+  loadTypes() {
+    this.apiService.getAllTypes().subscribe({
+      next: (data: OwnerTypeModel[]) => {
+
+        this.types = data;
+      },
+      error: (error) => {
+        console.error('Error al cargar los roles:', error);
+        
+      }
+    });
+  }
+
+  resetFilters() {
+    // Reiniciar el valor del control de rol
+    this.selectType.setValue('');
+
+    // Limpiar el campo de búsqueda general y el filtro de la columna de tipo
+    const searchInput = document.querySelector('#myTable_filter input') as HTMLInputElement;
+    if (searchInput) {
+        searchInput.value = ''; // Limpiar el valor del input de búsqueda general
+    }
+
+    // Obtener la instancia de DataTable
+    const table = $('#myTable').DataTable();
+
+    // Limpiar búsqueda y filtros
+    table.search('').draw(); // Limpiar búsqueda general
+    table.column(4).search('').draw(); // Limpiar filtro de tipo
+}
+
+  updateFilterType() {
+    const table = $('#myTable').DataTable();
+    table.column(4).search(this.selectType.value).draw();
   }
 
 
@@ -241,11 +280,11 @@ export class UsersListOwnersComponent {
   
     // Mapear los datos visibles a un formato adecuado para jsPDF
     const rows = visibleRows.map((row: any) => [
-      `${row[0]}`,        // Nombre
-      `${row[1]}`,        // DNI
-      `${row[2].replace(/-/g, '/')}`, // Fecha de nacimiento
-      `${row[3]}`,        // CUIT/CUIL
-      `${row[4]}`         // Tipo
+      `${row[0].replace(/-/g, '/')}`,        
+      `${row[1]}`,        
+      `${row[2]}`, 
+      `${row[3]}`,     
+      `${row[4]}`         
     ]);
   
     // Generar la tabla en el PDF usando autoTable

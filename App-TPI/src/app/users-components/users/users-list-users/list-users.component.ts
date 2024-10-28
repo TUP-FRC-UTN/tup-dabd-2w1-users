@@ -29,7 +29,6 @@ import { GetPlotModel } from '../../../users-models/plot/GetPlot';
 })
 export class ListUsersComponent implements OnInit { 
 
-
   constructor(private router: Router,private modal: NgbModal, private plotService:PlotService) { }
 
   typeModal: string = '';
@@ -40,12 +39,12 @@ export class ListUsersComponent implements OnInit {
   showDeactivateModal: boolean = false;
   userToDeactivate: number = 0;
   plots : GetPlotDto[] = [];
+  selectRol: FormControl = new FormControl('');
   selectedRole: string = '';
 
   getPlotByUser(plotId : number){
     this.plotService.getPlotById(plotId).subscribe({
       next: (data: GetPlotModel) =>{
-        console.log(data.plot_number)
         return data.plot_number;
       }
     })
@@ -53,12 +52,12 @@ export class ListUsersComponent implements OnInit {
   
   ngOnInit() {
 
+    
     this.loadRoles();
 
     this.plotService.getAllPlots().subscribe({
       next: (data: GetPlotDto[]) => {
         this.plots = data;
-        console.log(this.plots);
         
       }
     }
@@ -73,10 +72,6 @@ export class ListUsersComponent implements OnInit {
           datebirth: user.datebirth.replace(/-/g, '/'),
           create_date: user.create_date.replace(/-/g, '/'),
         }));
-
-
-        this.users.sort((a, b) => { return a.create_date > b.create_date ? 1 : -1; }); //Ordenar por fecha de creación
-
       
         //Inicializar DataTables después de cargar los datos
         setTimeout(() => {
@@ -203,9 +198,8 @@ export class ListUsersComponent implements OnInit {
         this.router.navigate(['/home']);
       }
     });
-  }
 
-  selectRol : FormControl = new FormControl();
+  }
 
   resetFilters() {
     // Reiniciar el valor del control de rol
@@ -226,12 +220,11 @@ export class ListUsersComponent implements OnInit {
 }
 
   updateFilterRol() {
-    console.log(this.selectRol.value);
-    console.log("A");
-    
     const table = $('#myTable').DataTable();
     table.column(2).search(this.selectRol.value).draw();
   }
+
+  
 
   showRole(roles : string[]) : string {
     let rolesA : string = ""
@@ -301,7 +294,6 @@ export class ListUsersComponent implements OnInit {
   changeTypeModal(type: string) {
     this.typeModal = type;
   }
-
 
   loadRoles() {
     this.apiService.getAllRoles().subscribe({

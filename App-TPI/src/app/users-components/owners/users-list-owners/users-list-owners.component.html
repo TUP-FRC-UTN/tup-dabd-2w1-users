@@ -5,10 +5,17 @@
         <input class="form-control" placeholder="Buscar" style="width: 300px;" aria-controls="myTable">
       </div>
       <div id="myTable_filter" class="dataTables_filter" style="text-align: left;" >
-        <select class="form-select m-3" aria-controls="myTable" style="width: 300px;" aria-controls="myTable">
+        <select class="form-select m-3" aria-controls="myTable" style="width: 300px;" aria-controls="myTable" (change)="updateFilterType()" [formControl]="selectType">
           <option value="" disabled selected>Seleccionar tipo</option> 
-          <option *ngFor="let type of types" [value]="type.description">{{ type.description }}</option>
+          @for (type of types; track $index) {
+            <option [value]="type.description">{{ type.description }}</option>
+          }
       </select>
+    </div>
+    <div>
+      <button class="btn btn-light" (click)="resetFilters()">
+        <i class="bi bi-trash"></i>
+      </button>
     </div>
     </div>
     <div>

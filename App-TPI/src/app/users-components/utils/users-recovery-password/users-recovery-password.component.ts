@@ -24,4 +24,8 @@ export class UsersRecoveryPasswordComponent {
     this.router.navigate(['login']);
   }
 
+  backLogin(){
+    this.router.navigate(['login'])
+  }
+
 }
