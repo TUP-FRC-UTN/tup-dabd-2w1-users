@@ -14,6 +14,8 @@ import { UserService } from '../../../users-servicies/user.service';
 import { OwnerPlotUserDto } from '../../../users-models/owner/OwnerPlotUserDto';
 import { UserGet } from '../../../users-models/users/UserGet';
 import { DateService } from '../../../users-servicies/date.service';
+import { OwnerStateModel } from '../../../users-models/owner/OwnerState';
+import { OwnerTypeModel } from '../../../users-models/owner/OwnerType';
 
 @Component({
   selector: 'app-users-update-owner',
@@ -28,6 +30,8 @@ export class UsersUpdateOwnerComponent implements OnInit {
   newFiles: File[] = [];
   existingFilesDownload: FileDto[] = [];
   id: string = "";
+  types: OwnerTypeModel[] = [];
+  states: OwnerStateModel[] = [];
 
   private readonly ownerService = inject(OwnerService)
   private readonly fileService = inject(FileService);
@@ -91,6 +95,24 @@ export class UsersUpdateOwnerComponent implements OnInit {
     //     console.log(error)
     //   }
     // })
+
+    this.ownerService.getAllTypes().subscribe({
+      next: (data: OwnerTypeModel[]) => {
+        this.types = data;
+      },
+      error: (err) => {
+        console.error('Error al cargar los tipos de lote:', err);
+      }
+    });
+
+    this.ownerService.getAllStates().subscribe({
+      next: (data: OwnerStateModel[]) => {
+        this.states = data;
+      },
+      error: (err) => {
+        console.error('Error al cargar los estados de lote:', err);
+      }
+    });
 
     this.ownerService.getByIdWithUser(Number(this.id)).subscribe({
       next: (data: OwnerPlotUserDto) => {
