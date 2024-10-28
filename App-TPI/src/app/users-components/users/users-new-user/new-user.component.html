@@ -153,15 +153,17 @@
           </div>
         </div>
 
-        <div class="row">
-          <button type="button" class="btn btn-secondary" (click)="redirect()">Cancelar</button>
-        </div>
-        <div class="col-auto">
-          <button type="submit" class="btn btn-primary" [disabled]="!reactiveForm.valid || rolesSelected.length === 0">
-            Guardar
-          </button>
-        </div>
 
+        <div class="row mb-3 justify-content-end">
+          <div class="col-auto">
+            <button type="button" class="btn btn-secondary" (click)="redirect()">Cancelar</button>
+          </div>
+          <div class="col-auto">
+            <button type="submit" class="btn btn-primary" [disabled]="!reactiveForm.valid || rolesSelected.length === 0">
+              Guardar
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </form>

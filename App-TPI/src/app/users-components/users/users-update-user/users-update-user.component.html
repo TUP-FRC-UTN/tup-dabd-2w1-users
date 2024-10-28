@@ -91,12 +91,14 @@
                 </div>
             </div>
 
-
-            <div class="row">
-                <button type="button" class="btn btn-secondary" (click)="confirmExit()">Cancelar</button>
-                <button type="submit" class="btn btn-primary" [disabled]="!updateForm.valid">Guardar</button>
-            </div>
-
+            <div class="row mb-3 justify-content-end">
+                <div class="col-auto">
+                    <button type="button" class="btn btn-secondary" (click)="confirmExit()">Cancelar</button>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary" [disabled]="!updateForm.valid">Guardar</button>
+                </div>
+              </div>
         </div>
     </form>
 </section>

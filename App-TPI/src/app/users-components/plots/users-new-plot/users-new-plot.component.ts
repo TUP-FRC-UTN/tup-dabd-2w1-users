@@ -9,6 +9,7 @@ import { PlotModel } from '../../../users-models/plot/Plot';
 import { FormArray } from '@angular/forms';
 import { FileUploadComponent } from '../../utils/file-upload/file-upload.component';
 import { AuthService } from '../../../users-servicies/auth.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -28,6 +29,8 @@ export class UsersNewPlotComponent {
 
   private readonly plotService = inject(PlotService);
   private readonly authService = inject(AuthService);
+  private readonly router : Router = inject(Router);
+
   @ViewChild(FileUploadComponent) fileUploadComponent!: FileUploadComponent;
 
   types: PlotTypeModel[] = [];
@@ -110,6 +113,10 @@ export class UsersNewPlotComponent {
     });
   }
 
+  redirect(url : string){
+    this.router.navigate([url]);
+  }
+
   onValidate(controlName: string) {
     const control = this.formReactivo.get(controlName);
     return {
@@ -154,7 +161,10 @@ export class UsersNewPlotComponent {
       default:
         return 'Error no identificado en el campo.';
     }
-  }
-  
-  
+  }  
+
+      //Evento para actualizar el listado de files a los seleccionados actualmente
+      onFileChange(event: any) {
+        this.files = Array.from(FileList = event.target.files); //Convertir FileList a Array
+      }
 }
