@@ -39,7 +39,6 @@ export class UsersModaInfoPlotComponent implements OnInit {
 
   // Método para detectar cambios en el @Input
   ngOnInit() {        
-      console.log("aaa");
       this.plotForm.patchValue({
         plot: this.plotModel.plot_number  ,
         block: this.plotModel.block_number,

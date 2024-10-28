@@ -26,9 +26,11 @@
                   Acciones
                 </button>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item view-user" (click)="abrirModal('info', familiar.id)">Ver más</a></li>
-                  <li><a class="dropdown-item edit-user" (click)="redirectEdit(familiar.id)">Editar</a></li>
-                  <li><a class="dropdown-item delete-user" (click)="abrirModal('delete', familiar.id)">Eliminar</a></li>
+                  <li><a class="dropdown-item view-user hover" (click)="abrirModal('info', familiar.id)">Ver más</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item edit-user hover" (click)="redirectEdit(familiar.id)">Editar</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item delete-user hover" (click)="abrirModal('delete', familiar.id)">Eliminar</a></li>
                 </ul>
               </div>
             </div>

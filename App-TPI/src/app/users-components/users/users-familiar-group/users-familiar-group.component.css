@@ -7,3 +7,7 @@ section{
     color: rgb(83, 83, 83);
     
 }
+
+.hover:hover{
+    cursor: pointer;
+}

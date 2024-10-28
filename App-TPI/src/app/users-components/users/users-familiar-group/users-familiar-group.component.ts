@@ -105,36 +105,27 @@ export class UsersFamiliarGroupComponent implements OnInit {
   
 
   userModal: UserGet = new UserGet();
-  selectUser(id: number): Promise<UserGet> {
-      // Mostrar SweetAlert de tipo 'cargando'
-    Swal.fire({
-      title: 'Cargando usuario...',
-      html: 'Por favor, espera un momento',
-      allowOutsideClick: false, // No permitir cerrar la alerta haciendo clic fuera
-      didOpen: () => {
-        Swal.showLoading(); // Mostrar indicador de carga
-      }
-    });
-    return new Promise((resolve, reject) => {
-      this.apiService.getUserById(id).subscribe({
-        next: (data: UserGet) => {
-          this.userModal = data;
-          Swal.close(); // Cerrar SweetAlert
-          resolve(data); // Resuelve la promesa cuando los datos se cargan
-        },
-        error: (error) => {
-          console.error('Error al cargar el usuario:', error);
-          reject(error); // Rechaza la promesa si ocurre un error
-          Swal.close();
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Hubo un problema al cargar el usuario. Por favor, inténtalo de nuevo.'
-          });
-        }
-      });
-    });
-  }
 
+  selectUser(id: number): Promise<UserGet> {
+      return new Promise((resolve, reject) => {
+          this.apiService.getUserById(id).subscribe({
+              next: (data: UserGet) => {
+                  this.userModal = data;
+                  Swal.close(); 
+                  resolve(data); 
+              },
+              error: (error) => {
+                  console.error('Error al cargar el usuario:', error);
+                  reject(error); 
+                  Swal.close();
+                  Swal.fire({
+                      icon: 'error',
+                      title: 'Error',
+                      text: 'Hubo un problema al cargar el usuario. Por favor, inténtalo de nuevo.'
+                  });
+              }
+          });
+      });
+  }
 
 }

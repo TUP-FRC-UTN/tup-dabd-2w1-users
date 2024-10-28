@@ -197,11 +197,11 @@ export class UsersUpdateOwnerComponent implements OnInit {
 
           //mostrar alerta
           Swal.fire({
-            position: "top-end",
             icon: "success",
             title: "Se han guardado los cambios",
             showConfirmButton: false,
-            timer: 1500
+            position: 'top-right',
+            timer: 1000
           });
 
           //redirigir a la lista
@@ -212,11 +212,11 @@ export class UsersUpdateOwnerComponent implements OnInit {
 
           //mostrar alerta de error
           Swal.fire({
-            position: "top-end",
+            position: "top-right",
             icon: "error",
             title: "Ha ocurrido un error",
             showConfirmButton: false,
-            timer: 1500
+            timer: 1000
           });
         }
       })
@@ -225,19 +225,27 @@ export class UsersUpdateOwnerComponent implements OnInit {
 
   confirmExit() {
     Swal.fire({
-      title: '¿Seguro que desea cancelar la operación?',
-      showCancelButton: true,
-      confirmButtonText: 'Aceptar',
-      cancelButtonText: 'Cancelar',
+        title: '¿Seguro que desea cancelar la operación?',
+        showCancelButton: true,
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#dc3545',
+        cancelButtonText: 'Cancelar',
     }).then((result) => {
-      if (result.isConfirmed) {
-        this.editOwner.reset();
-        this.redirect('/home/owners/list');
-        Swal.fire('Operación cancelada', '', 'info');
-      }
-    });
-  }
+        if (result.isConfirmed) {
+            this.editOwner.reset(); 
+            this.redirect('/home/owners/list'); 
 
+            Swal.fire({
+                title: 'Operación cancelada',
+                icon: 'info',
+                position: 'top-right', 
+                showConfirmButton: false, 
+                timer: 1000 
+            });
+        }
+    });
+}
+  
   private parseDateString(dateString: string): Date | null {
     const [day, month, year] = dateString.split('-').map(Number);
     if (!day || !month || !year) {

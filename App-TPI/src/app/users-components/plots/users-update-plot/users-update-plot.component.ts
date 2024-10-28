@@ -12,6 +12,7 @@ import { PutPlot } from '../../../users-models/plot/PutPlot';
 import { FileDto } from '../../../users-models/owner/FileDto';
 import { FileUploadComponent } from "../../utils/file-upload/file-upload.component";
 import { FileService } from '../../../users-servicies/file.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-users-update-plot',
@@ -130,17 +131,25 @@ export class UsersUpdatePlotComponent implements OnInit {
 
   confirmExit() {
     Swal.fire({
-      title: '¿Seguro que desea cancelar la operación?',
-      showCancelButton: true,
-      confirmButtonText: 'Aceptar',
-      cancelButtonText: 'Cancelar',
+        title: '¿Seguro que desea cancelar la operación?',
+        showCancelButton: true,
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#dc3545',
+        cancelButtonText: 'Cancelar',
     }).then((result) => {
-      if (result.isConfirmed) {
-        this.redirect('/home/plots/list');
-        Swal.fire('Operación cancelada', '', 'info');
-      }
+        if (result.isConfirmed) {
+            this.redirect('/home/plots/list');
+            Swal.fire({
+                title: 'Operación cancelada',
+                icon: 'info',
+                position: 'top-right', 
+                showConfirmButton: false, 
+                timer: 1000 
+            });
+        }
     });
-  }
+}
+
   
 
   updatePlot(){
@@ -176,7 +185,7 @@ export class UsersUpdatePlotComponent implements OnInit {
             icon: "error",
             title: "Ha ocurrido un error",
             showConfirmButton: false,
-            timer: 1500
+            timer: 1000
           });
       }
     });

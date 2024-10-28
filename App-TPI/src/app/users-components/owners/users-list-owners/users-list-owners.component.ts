@@ -228,15 +228,6 @@ export class UsersListOwnersComponent {
   // Busca el user y se lo pasa al modal
   ownerModel: Owner = new Owner();
    selectOwner(id: number): Promise<Owner> {
-       // Mostrar SweetAlert de tipo 'cargando'
-     Swal.fire({
-       title: 'Cargando lote...',
-       html: 'Por favor, espera un momento',
-       allowOutsideClick: false, // No permitir cerrar la alerta haciendo clic fuera
-       didOpen: () => {
-         Swal.showLoading(); // Mostrar indicador de carga
-       }
-     });
      return new Promise((resolve, reject) => {
        this.apiService.getById(id).subscribe({
          next: (data: Owner) => {

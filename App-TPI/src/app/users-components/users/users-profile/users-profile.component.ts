@@ -171,6 +171,7 @@ export class UsersProfileComponent implements OnInit {
                 title: 'Perfil actualizado',
                 text: 'El perfil se actualizó correctamente',
                 icon: 'success',
+                showConfirmButton: false
             })
             this.changeType('info');
         },

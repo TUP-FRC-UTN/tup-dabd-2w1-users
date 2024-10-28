@@ -261,14 +261,6 @@ export class UsersListPlotsComponent {
   plotModel: GetPlotModel = new GetPlotModel();
    selectUser(id: number): Promise<GetPlotModel> {
        // Mostrar SweetAlert de tipo 'cargando'
-     Swal.fire({
-       title: 'Cargando lote...',
-       html: 'Por favor, espera un momento',
-       allowOutsideClick: false, // No permitir cerrar la alerta haciendo clic fuera
-       didOpen: () => {
-         Swal.showLoading(); // Mostrar indicador de carga
-       }
-     });
      return new Promise((resolve, reject) => {
        this.apiService.getPlotById(id).subscribe({
          next: (data: GetPlotModel) => {

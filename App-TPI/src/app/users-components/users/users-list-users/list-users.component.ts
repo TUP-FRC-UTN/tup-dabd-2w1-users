@@ -113,7 +113,7 @@ export class ListUsersComponent implements OnInit {
                         <i class="bi bi-three-dots-vertical"></i>
                       </button>
                       <ul class="dropdown-menu">
-                        <li><a class="dropdown-item view-user" data-id="${meta.row}">Ver más</a></li>
+                        <li><a class="dropdown-item view-user hover" data-id="${meta.row}">Ver más</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item edit-user" data-id="${userId}">Editar</a></li>
                         <li><hr class="dropdown-divider"></li>
@@ -356,7 +356,7 @@ export class ListUsersComponent implements OnInit {
     const matches = [...input.matchAll(/>(.*?)</g)];
     return matches.map(match => match[1]).filter(content => content !== "");
   }
-  
+
   getPlotById(plotId: number): number {
     const plot = this.plots.find(plot => plot.id === plotId);
     return plot?.plot_number || 0;
