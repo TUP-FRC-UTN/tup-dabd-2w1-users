@@ -35,7 +35,7 @@
         <div class="row">
           <label class="col-2 col-form-label">Cuit-Cuil</label>
           <div class="col-10">
-            <input type="number" class="form-control" formControlName="cuit_cuil" [ngClass]="onValidate('cuit_cuil')" />
+            <input type="text" class="form-control" formControlName="cuit_cuil" [ngClass]="onValidate('cuit_cuil')" />
             <div class="invalid-feedback">{{ showError("cuit_cuil") }}</div>
           </div>
         </div>

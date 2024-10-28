@@ -12,7 +12,7 @@
                         <div class="invalid-feedback">{{showError('name')}}</div>
                     </div>
                 </div>
-
+            </div>
 
 
                 <div class="col-lg-6 mb-3">
@@ -43,7 +43,7 @@
                     <div class="row">
                         <label class="col-2 col-form-label">Teléfono</label>
                         <div class="col-10">
-                            <input type="number" class="form-control" formControlName="phoneNumber"
+                            <input type="text" class="form-control" formControlName="phoneNumber"
                                 [ngClass]="onValidate('phoneNumber')">
                             <div class="invalid-feedback">{{showError('phoneNumber')}}</div>
                         </div>
@@ -79,9 +79,13 @@
 
                 <div class="col-lg-6 mb-3">
                     <div class="row">
-                        <app-users-select-multiple (rolesEmited)="fillRolesSelected($event); verifyRole()"
+                        <label class="col-2 col-form-label">Roles</label>  
+                        <div class="col-10">
+                            <app-users-select-multiple (rolesEmited)="fillRolesSelected($event); verifyRole()"
                             (click)="verifyRole()" (rolesSelected)="rolesSelected">
-                        </app-users-select-multiple>
+                              </app-users-select-multiple>
+                        </div> 
+                        
                     </div>
                     <div class="text-danger form-error text-start">
                         @if(!checkRole){
@@ -99,6 +103,5 @@
                     <button type="submit" class="btn btn-primary" [disabled]="!updateForm.valid">Guardar</button>
                 </div>
               </div>
-        </div>
     </form>
 </section>

@@ -76,7 +76,7 @@ export class UsersUpdateUserComponent implements OnInit {
   updateForm = new FormGroup({
     name: new FormControl('', [Validators.required]),
     lastname: new FormControl('', [Validators.required]),
-    phoneNumber: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(20)]),
+    phoneNumber: new FormControl('', [Validators.required, Validators.pattern(/^\d+$/),Validators.minLength(10), Validators.maxLength(20)]),
     telegram_id: new FormControl(0),
     dni: new FormControl(''),
     email: new FormControl(''),

@@ -92,7 +92,7 @@ export class NewUserComponent implements OnInit {
     ]),
     phone_number: new FormControl('', [
         Validators.required,
-        Validators.min(0),
+        Validators.pattern(/^\d+$/),
         Validators.minLength(10),
         Validators.maxLength(20)
     ]),
@@ -102,9 +102,8 @@ export class NewUserComponent implements OnInit {
     ]),
     dni: new FormControl('', [
         Validators.required,
-        Validators.min(0),
-        Validators.minLength(1),
-        Validators.maxLength(11)
+        Validators.pattern(/^\d+$/),
+        Validators.minLength(8)
     ]),
     telegram_id: new FormControl(0,[
         Validators.required,
@@ -114,7 +113,7 @@ export class NewUserComponent implements OnInit {
     active: new FormControl(true), 
     datebirth: new FormControl(DateService.formatDate(new Date("2000-01-02")), [Validators.required]),
     roles: new FormControl(''),
-    plot: new FormControl(''),
+    plot: new FormControl('', [Validators.required]),
     userUpdateId: new FormControl(this.authService.getUser().id)
   });
   

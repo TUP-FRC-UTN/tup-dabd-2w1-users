@@ -1,4 +1,4 @@
-<section class="container p-5 border rounded border-3 border-secundary" style="min-height: 80vh">
+<section class="container p-5 border rounded border-3 border-secundary">
   <h3 class="mb-3">Añadir Usuario</h3>
 
   <form (ngSubmit)="createUser()" [formGroup]="reactiveForm">
@@ -13,6 +13,7 @@
             <div class="invalid-feedback">{{showError('name')}}</div>
           </div>
         </div>
+      </div>
 
 
         <div class="col-lg-6 mb-3">
@@ -45,7 +46,7 @@
           <div class="row">
             <label class="col-2 col-form-label">DNI</label>
             <div class="col-10">
-              <input type="number" class="form-control" formControlName="dni" [ngClass]="onValidate('dni')">
+              <input type="text" class="form-control" formControlName="dni" [ngClass]="onValidate('dni')">
               <div class="invalid-feedback">{{showError('dni')}}</div>
             </div>
           </div>
@@ -83,7 +84,7 @@
           <div class="row">
             <label class="col-2 col-form-label">Teléfono</label>
             <div class="col-10">
-              <input type="number" class="form-control" formControlName="phone_number"
+              <input type="text" class="form-control" formControlName="phone_number"
                 [ngClass]="onValidate('phone_number')">
               <div class="invalid-feedback">{{showError('phone_number')}}</div>
             </div>
@@ -146,7 +147,7 @@
           <div class="row">
             <label class="col-2 col-form-label">Contraseña</label>
             <div class="col-10">
-              <input type="text" class="form-control" formControlName="password" autocomplete="current-password"
+              <input type="password" class="form-control" formControlName="password" autocomplete="current-password"
                 [ngClass]="onValidate('password')">
               <div class="invalid-feedback">{{showError('password')}}</div>
             </div>
@@ -165,6 +166,5 @@
           </div>
         </div>
       </div>
-    </div>
   </form>
 </section>
