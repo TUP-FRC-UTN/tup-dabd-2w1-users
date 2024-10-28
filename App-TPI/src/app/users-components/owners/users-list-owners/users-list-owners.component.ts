@@ -308,7 +308,16 @@ export class UsersListOwnersComponent {
   }
   
   exportExcel() {
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.owners.map(owner => ({
+    const table = $('#myTable').DataTable(); // Inicializa DataTable una vez
+  
+    // Cambia la forma de obtener las filas visibles usando 'search' en lugar de 'filter'
+    const visibleRows = table.rows({ search: 'applied' }).data().toArray(); // Usar 'search: applied'
+
+    // Filtrar a los propietarios x aquellos que aparzcan en la tabla visibleRows
+    let owners = this.owners.filter(owner => visibleRows.some(row => row[1].includes(owner.name) && row[1].includes(owner.lastname)));
+
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(owners.map(owner => ({
       FechaCreacion: owner.create_date.replace(/-/g, '/'),
       Nombre: `${owner.lastname}, ${owner.name}`,
       DNI: owner.dni,

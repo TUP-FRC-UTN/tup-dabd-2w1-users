@@ -186,7 +186,7 @@ export class NewUserComponent implements OnInit {
     };
 
     //Si el usuario es de tipo owner se setea el plotId
-    if(this.authService.hasRole('Owner')){
+    if(this.authService.hasRole('Propietario')){
       userData.plot_id = this.authService.getUser().plotId;
     }else{
       userData.plot_id = 0;

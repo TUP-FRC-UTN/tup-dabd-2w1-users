@@ -131,7 +131,7 @@ export class ListUsersComponent implements OnInit {
               user.create_date,   
               `${user.lastname}, ${user.name}`,  //Nombre completo
               this.showRole(user.roles),              //Roles
-              this.getPlotByUser(user.plot_id),                                //Nro. de lote (puedes ajustar esto)                 
+              user.plot_id,                                //Nro. de lote (puedes ajustar esto)                 
               '<button class="btn btn-info">Ver más</button>'  //Ejemplo de acción
             ]),
             language: {
@@ -351,6 +351,17 @@ export class ListUsersComponent implements OnInit {
       });
     });
   }
+
+  getContentBetweenArrows(input: string): string[] {
+    const matches = [...input.matchAll(/>(.*?)</g)];
+    return matches.map(match => match[1]);
+  }
+
+  getPlotById(plotId: number): number {
+    const plot = this.plots.find(plot => plot.id === plotId);
+    return plot?.plot_number || 0;
+  }
+
   
   //Exporta a pdf la tabla, si esta filtrada solo exporta los datos filtrados
   exportPdf() {
@@ -376,8 +387,8 @@ export class ListUsersComponent implements OnInit {
     const rows = visibleRows.map((row: any) => [
       row[0].replace(/-/g, '/'), // Fecha de creación
       `${row[1]}`,       // Nombre
-      `${row[2]}`,       // Rol
-      `${row[3]}`      // Lote
+      `${this.getContentBetweenArrows(row[2])}`,     // Rol
+      `${this.getPlotById(row[3])}`      // Lote
     ]);
   
     // Generar la tabla en el PDF usando autoTable
@@ -402,14 +413,22 @@ export class ListUsersComponent implements OnInit {
 
   //Exporta por excel los registros de la tabla
   exportExcel() {
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.users.map(user => ({
+    const table = $('#myTable').DataTable(); // Inicializa DataTable una vez
+  
+    // Cambia la forma de obtener las filas visibles usando 'search' en lugar de 'filter'
+    const visibleRows = table.rows({ search: 'applied' }).data().toArray(); // Usar 'search: applied'
+
+    // Filtrar a los usuarios x aquellos que aparzcan en la tabla visibleRows
+    let users = this.users.filter(user => visibleRows.some(row => (row[1]).includes(user.name+', '+user.lastname)));
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(users.map(user => ({
       FechaNacimiento: user.create_date.replace(/-/g, '/'),
       Nombre: `${user.lastname}, ${user.name}`,
       Rol: user.roles.join(', '),
-      Lote: this.getPlotByUser(user.plot_id),
+      Lote: this.getPlotById(user.plot_id),
        // Cambia el formato de la fecha aquí
     })));
-  
+    
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Usuarios');
   

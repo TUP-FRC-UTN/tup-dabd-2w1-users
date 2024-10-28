@@ -203,7 +203,16 @@ export class UsersListPlotsComponent {
 
   //Exporta por excel los registros de la tabla
   exportExcel() {
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.plots.map(plot => ({
+
+    const table = $('#myTable').DataTable(); // Inicializa DataTable una vez
+  
+    // Cambia la forma de obtener las filas visibles usando 'search' en lugar de 'filter'
+    const visibleRows = table.rows({ search: 'applied' }).data().toArray(); // Usar 'search: applied'
+
+    // Filtrar a los lotes x aquellos que aparzcan en la tabla visibleRows
+    let plots = this.plots.filter(plot => visibleRows.some(row => row[0] === plot.plot_number));
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(plots.map(plot => ({
       Lote: plot.plot_number,
       Manzana: plot.block_number,
       M2: plot.total_area_in_m2,
