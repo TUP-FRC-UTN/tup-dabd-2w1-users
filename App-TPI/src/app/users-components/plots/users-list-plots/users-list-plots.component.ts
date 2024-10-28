@@ -115,7 +115,7 @@ export class UsersListPlotsComponent {
               const searchValue = (event.target as HTMLInputElement).value; // Acceder al valor correctamente
           
               // Comienza a buscar solo si hay 3 o más caracteres
-              if (searchValue.length >= 3) {
+              if (searchValue.length >= 2) {
                   table.search(searchValue).draw();
               } else {
                   table.search('').draw(); // Limpia la búsqueda si hay menos de 3 caracteres
@@ -254,7 +254,6 @@ export class UsersListPlotsComponent {
 
   
   redirectEdit(id: number) {
-    console.log("b");
     this.router.navigate(['/home/plots/edit', id])
   }
 

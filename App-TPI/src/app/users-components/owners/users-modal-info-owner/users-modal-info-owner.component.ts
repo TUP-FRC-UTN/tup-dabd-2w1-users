@@ -49,7 +49,7 @@ export class UsersModalInfoOwnerComponent implements OnInit{
       ownerType: [''],
       taxStatus: [''],
       businessName: [''],
-      active: [''] //no se muestra en el form xq se deberían traer por defecto los activos
+      active: [''] 
     });
 
     this.filesOwner = [];

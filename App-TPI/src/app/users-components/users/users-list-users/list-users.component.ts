@@ -354,9 +354,9 @@ export class ListUsersComponent implements OnInit {
 
   getContentBetweenArrows(input: string): string[] {
     const matches = [...input.matchAll(/>(.*?)</g)];
-    return matches.map(match => match[1]);
+    return matches.map(match => match[1]).filter(content => content !== "");
   }
-
+  
   getPlotById(plotId: number): number {
     const plot = this.plots.find(plot => plot.id === plotId);
     return plot?.plot_number || 0;
