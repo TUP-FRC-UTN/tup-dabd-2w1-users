@@ -28,8 +28,9 @@ export class UsersUpdatePlotComponent implements OnInit {
   types: PlotTypeModel[] = [];
   states: PlotStateModel[] = [];
   existingFiles: File[] = [];
-  files: File[] = [];
   existingFilesDownload: FileDto[] = [];
+  files: File[] = this.existingFiles;
+  
 
   redirect(url: string) {
     this.router.navigate([url]);
