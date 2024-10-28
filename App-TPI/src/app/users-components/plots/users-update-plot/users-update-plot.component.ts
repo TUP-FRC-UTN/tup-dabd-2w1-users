@@ -38,10 +38,10 @@ export class UsersUpdatePlotComponent implements OnInit {
   constructor(private router: Router, private route: ActivatedRoute){ }
 
   formReactivo = new FormGroup({
-    plotNumber: new FormControl(0, [Validators.required]),
-    blockNumber: new FormControl(0, [Validators.required]),
-    totalArea: new FormControl(0, [Validators.required]),
-    totalBuild: new FormControl(0, [Validators.required]),
+    plotNumber: new FormControl(0, [Validators.required, Validators.min(1)]),
+    blockNumber: new FormControl(0, [Validators.required, Validators.min(1)]),
+    totalArea: new FormControl(0, [Validators.required, Validators.min(1)]),
+    totalBuild: new FormControl(0, [Validators.required, Validators.min(0)]),
     state: new FormControl("", [Validators.required]),
     type: new FormControl("", [Validators.required])
   })
@@ -199,6 +199,48 @@ export class UsersUpdatePlotComponent implements OnInit {
     }, error => {
       console.error('Error al descargar el archivo', error);
     });
+  }
+
+
+  //Retorna una clase para poner el input en verde o rojo dependiendo si esta validado
+  onValidate(controlName: string) {
+    const control = this.formReactivo.get(controlName);
+    return {
+      'is-invalid': control?.invalid && (control?.dirty || control?.touched),
+      'is-valid': control?.valid
+    }
+  }
+
+
+  showError(controlName: string): string {
+    const control = this.formReactivo.get(controlName);
+    
+    //Ver si el control existe y si tiene errores
+    if (control && control.errors) {
+      const [errorKey] = Object.keys(control.errors);
+  
+      switch (errorKey) {
+        case 'required':
+          return 'Este campo no puede estar vacío.';
+        case 'min':
+          return `El valor debe ser mayor o igual a ${control.errors['min'].min}.`;
+        case 'email':
+          return 'Formato de correo electrónico inválido.';
+        case 'minlength':
+          return `El valor ingresado es demasiado corto. Mínimo ${control.errors['minlength'].requiredLength} caracteres.`;
+        case 'maxlength':
+          return `El valor ingresado es demasiado largo. Máximo ${control.errors['maxlength'].requiredLength} caracteres.`;
+        case 'pattern':
+          return 'El formato ingresado no es válido.';
+        case 'requiredTrue':
+          return 'Debe aceptar el campo requerido para continuar.';
+        default:
+          return 'Error no identificado en el campo.';
+      }
+    }
+    
+    //Si no hay errores
+    return '';
   }
 
 }
