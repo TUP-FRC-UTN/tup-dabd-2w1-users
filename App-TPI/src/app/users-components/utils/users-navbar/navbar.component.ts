@@ -52,19 +52,19 @@ export class NavbarComponent implements OnInit {
         icon: "bi bi-house",
         title: "Grupo Familiar",
         route: "home/family",
-        roles: ["Owner"]
+        roles: ["Propietario"]
       },
       {
         icon: "bi-people",
         title: "Usuarios",
-        roles: ["SuperAdmin", "Admin"],
+        roles: ["SuperAdmin", "Gerente"],
         childButtons: [{
 
           //botón agregar usuario
           icon: "bi-person-plus-fill",
           title: "Añadir",
           route: "home/users/add",
-          roles: ["SuperAdmin", "Admin"]
+          roles: ["SuperAdmin", "Gerente"]
         },
         {
 
@@ -72,50 +72,50 @@ export class NavbarComponent implements OnInit {
           icon: "bi-person-lines-fill",
           title: "Listado",
           route: "home/users/list",
-          roles: ["SuperAdmin", "Admin"]
+          roles: ["SuperAdmin", "Gerente"]
         }
         ]
       },
       {
         icon: "bi-houses",
         title: "Lotes",
-        roles: ["SuperAdmin", "Admin"],
+        roles: ["SuperAdmin", "Gerente"],
         childButtons: [{
           icon: "bi-house-add",
           title: "Añadir",
           route: "home/plots/add",
-          roles: ["SuperAdmin", "Admin"]
+          roles: ["SuperAdmin", "Gerente"]
         },
         {
           icon: "bi-house-gear-fill",
           title: "Listado",
           route: "home/plots/list",
-          roles: ["SuperAdmin", "Admin"]
+          roles: ["SuperAdmin", "Gerente"]
         }],
 
       },
       {
         icon: "bi-key-fill",
         title: "Propietario",
-        roles: ["SuperAdmin", "Admin"],
+        roles: ["SuperAdmin", "Gerente"],
         childButtons: [
           {
             icon: "bi-key-fill",
             title: "Añadir",
             route: "home/owners/add",
-            roles: ["SuperAdmin", "Admin"]
+            roles: ["SuperAdmin", "Gerente"]
           },
           {
             icon: "bi-key-fill",
             title: "Lista",
             route: "home/owners/list",
-            roles: ["SuperAdmin", "Admin"]
+            roles: ["SuperAdmin", "Gerente"]
           },
           {
             icon: "bi-key-fill",
             title: "Editar",
             route: "home/owners/edit/:id",
-            roles: ["SuperAdmin", "Admin"]
+            roles: ["SuperAdmin", "Gerente"]
           }
         ]
       }

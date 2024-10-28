@@ -49,7 +49,7 @@ export class NewUserComponent implements OnInit {
       next: (data: GetPlotDto[]) => {
         console.log(data);
         
-          if(this.authService.getActualRole() == "Owner"){
+          if(this.authService.getActualRole() == "Propietario"){
               this.lotes = data.filter(lote => lote.id == this.authService.getUser().plotId);
               this.formReactivo.get('plot')?.setValue(this.authService.getUser().plotId.toString());
               this.formReactivo.get('plot')?.disable();
@@ -133,8 +133,12 @@ export class NewUserComponent implements OnInit {
   }
   
   //Redirige a la ruta especificada 
-  redirect(path:string){
-    this.router.navigate([path]);
+  redirect(){
+    if(this.authService.getActualRole() == "Propietario"){
+      this.router.navigate(['/home/family']);
+    }else{
+      this.router.navigate(['/home/users/list']);
+    }
   }
 
   //Resetear formularios
@@ -203,12 +207,13 @@ export class NewUserComponent implements OnInit {
           timer: 1000,
           showConfirmButton: false
         });
-        if(this.authService.getActualRole() == "Owner"){
+        if(this.authService.getActualRole() == "Propietario"){
           this.router.navigate(['/home/family']);
         }
         //Reseteamos el formulario
         this.formReactivo.reset();
         this.rolesComponent.updateRoles([]);
+        
       },
       error: (error) => {
         //Mostramos que hubo un error
@@ -218,7 +223,6 @@ export class NewUserComponent implements OnInit {
           icon: 'error',
           confirmButtonText: 'Aceptar'
         });
-        
       },
     });
   }

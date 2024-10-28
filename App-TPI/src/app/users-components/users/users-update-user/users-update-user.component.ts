@@ -98,8 +98,14 @@ export class UsersUpdateUserComponent implements OnInit {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.router.navigate(['home/users/list']);
         Swal.fire('Operación cancelada', '', 'info');
+        if(this.authService.getActualRole() == 'Propietario'){
+          
+          this.router.navigate(['home/family']);
+        }
+        else if(this.authService.getActualRole() == 'Gerente'){
+          this.router.navigate(['home/users/list']);
+        }
       }
     });
   }
@@ -144,12 +150,7 @@ export class UsersUpdateUserComponent implements OnInit {
               title: 'Usuario actualizado exitosamente',
               showConfirmButton: false
             });
-            if(this.authService.getActualRole() === 'Owner'){
-              this.router.navigate(['home/family']);
-            }
-            else if(this.authService.getActualRole() == 'Admin'){
-              this.router.navigate(['home/users/list']);
-            }
+            this.redirectList();
         },
         error: (error) => {
             console.error('Error al actualizar el usuario:', error);
@@ -160,10 +161,10 @@ export class UsersUpdateUserComponent implements OnInit {
 
   //Redirige a la lista
   redirectList() {
-    if(this.authService.getActualRole() === 'Owner'){
+    if(this.authService.getActualRole() == 'Propietario'){  
       this.router.navigate(['home/family']);
     }
-    else if(this.authService.getActualRole() == 'Admin'){
+    else if(this.authService.getActualRole() == 'Gerente'){
       this.router.navigate(['home/users/list']);
     }
   }

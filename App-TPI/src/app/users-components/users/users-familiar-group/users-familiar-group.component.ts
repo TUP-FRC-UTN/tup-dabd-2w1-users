@@ -34,7 +34,7 @@ export class UsersFamiliarGroupComponent implements OnInit {
         // traer a todos menos al que tenga un rol owner
         console.log(users);
         
-        this.familyGroup = users.filter(user => !user.roles.includes('Owner'));        
+        this.familyGroup = users.filter(user => !user.roles.includes('Propietario'));        
         
       },
       error: error => {

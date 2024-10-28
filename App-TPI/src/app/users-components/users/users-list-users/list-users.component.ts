@@ -239,16 +239,16 @@ export class ListUsersComponent implements OnInit {
     roles.forEach(r =>{
       let color : string = "";
       switch (r) {
-        case "Admin":
+        case "Gerente":
           color = "danger";
           break;
-        case "Owner":
+        case "Propietario":
           color = "primary";
           break;
-        case "Family Member":
+        case "Familiar mayor":
           color = "secondary";
           break;
-          case "Minor Member":
+          case "Familiar menor":
           color = "secondary";
           break;
       }

@@ -276,7 +276,7 @@ export class UsuariosNewOwnerComponent {
       businessName: this.formReactivo.get('company')?.value || '',
      
      /* estos estan hardcodeado para que ande*/
-      roles: ["Owner"],//this.rolesSelected,
+      roles: ["Propietario"],//this.rolesSelected,
       userCreateId: 1,
       plotId: this.formReactivo.get('plot')?.value || 0,
       telegramId: 1,

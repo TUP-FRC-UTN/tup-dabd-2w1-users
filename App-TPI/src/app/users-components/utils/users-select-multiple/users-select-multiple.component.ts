@@ -26,7 +26,7 @@ export class UsersSelectMultipleComponent implements OnInit, OnChanges {
   @Input() rolesSelected: string[] = []!;
 
   //Listado de roles que puede seleccionar un propietario
-  listRolesForOwner: string[] = ['Family Member', "Minor Member"];
+  listRolesForOwner: string[] = ['Familiar mayor', "Familiar menor"];
   roles: RolModel[] = [];
 
   //Muestra el título del select
@@ -36,13 +36,13 @@ export class UsersSelectMultipleComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.apiService.getAllRoles().subscribe({
       next: (data) => {        
-        if (this.authService.getActualRole() === 'Owner') {
+        if (this.authService.getActualRole() === 'Propietario') {
           this.roles = data.filter((r) =>
             this.listRolesForOwner.includes(r.description)
           );
         } else {
           this.roles = data.filter(
-            (r) => !this.listRolesForOwner.includes(r.description) && r.description !== 'Owner'
+            (r) => !this.listRolesForOwner.includes(r.description) && r.description !== 'Propietario' && r.description !== 'SuperAdmin'
           );
         }
       },

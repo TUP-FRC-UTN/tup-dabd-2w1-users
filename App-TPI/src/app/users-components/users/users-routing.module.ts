@@ -7,7 +7,7 @@ import { UsersFamiliarGroupComponent } from './users-familiar-group/users-famili
 import { roleGuard } from '../../guards/role.guard';
 
 const routes: Routes = [
-  {path: 'list', component: ListUsersComponent, canActivate: [roleGuard], data: {roles: ['Admin', 'SuperAdmin']}},
+  {path: 'list', component: ListUsersComponent, canActivate: [roleGuard], data: {roles: ['Gerente', 'SuperAdmin']}},
   {path: 'add' , component: NewUserComponent},
   {path: 'edit/:id', component: UsersUpdateUserComponent}
 ];

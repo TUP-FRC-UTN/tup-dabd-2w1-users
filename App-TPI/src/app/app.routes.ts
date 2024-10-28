@@ -26,36 +26,36 @@ export const routes: Routes = [
     path: 'home',
     component: LandingPageComponent,
     canActivate: [authGuard, roleGuard],
-    data: {roles : ['SuperAdmin', 'Admin', 'Owner', 'Security']},
+    data: {roles : ['SuperAdmin', 'Gerente', 'Propietario']},
     children: [
       {
         path: 'profile',
         component: UsersProfileComponent,
         canActivate: [authGuard, roleGuard],
-        data: {roles: ['SuperAdmin', 'Admin', 'Owner', 'Security']}
+        data: {roles: ['SuperAdmin', 'Gerente', 'Propietario']}
       },
       {
         path: 'family',
         component: UsersFamiliarGroupComponent ,
         canActivate: [authGuard, roleGuard],
-        data: {roles: ['Owner', 'User']}
+        data: {roles: ['Propietario', 'Familiar mayor']}
       },
       {
         path: 'users',
         canActivate: [authGuard, roleGuard],
-        data: {roles: ['SuperAdmin', 'Admin', 'Owner']},
+        data: {roles: ['SuperAdmin', 'Gerente', 'Propietario']},
         loadChildren: () => import('./users-components/users/users.module').then(m => m.UsersModule)
       },
       {
         path: 'plots',
         canActivate: [authGuard],
-        data: {roles: ['SuperAdmin', 'Admin']},
+        data: {roles: ['SuperAdmin', 'Gerente']},
         loadChildren: () => import('./users-components/plots/plots.module').then(m => m.PlotsModule)
       },
       {
         path: 'owners',
         canActivate: [authGuard, roleGuard],
-        data: {roles: ['SuperAdmin', 'Admin']},
+        data: {roles: ['SuperAdmin', 'Gerente']},
         loadChildren: () => import('./users-components/owners/owners.module').then(m => m.OwnersModule)
       }
     ]
