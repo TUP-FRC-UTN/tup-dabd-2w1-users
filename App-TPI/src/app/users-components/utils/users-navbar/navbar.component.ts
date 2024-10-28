@@ -110,12 +110,6 @@ export class NavbarComponent implements OnInit {
             title: "Lista",
             route: "home/owners/list",
             roles: ["SuperAdmin", "Gerente"]
-          },
-          {
-            icon: "bi-key-fill",
-            title: "Editar",
-            route: "home/owners/edit/:id",
-            roles: ["SuperAdmin", "Gerente"]
           }
         ]
       }

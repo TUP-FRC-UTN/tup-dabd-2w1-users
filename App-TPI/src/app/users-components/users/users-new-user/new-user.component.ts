@@ -62,6 +62,10 @@ export class NewUserComponent implements OnInit {
         console.error('Error al cargar los tipos de lote:', err);
       }
     });
+
+    if(this.authService.getActualRole() == "Propietario"){
+      this.formReactivo.controls['plot'].disable();
+    }
   }
 
 
