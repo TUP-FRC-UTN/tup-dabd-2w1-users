@@ -304,4 +304,9 @@ export class UsuariosNewOwnerComponent {
       }
     });
   }
+
+    //Evento para actualizar el listado de files a los seleccionados actualmente
+    onFileChange(event: any) {
+      this.files = Array.from(FileList = event.target.files); //Convertir FileList a Array
+    }
 }

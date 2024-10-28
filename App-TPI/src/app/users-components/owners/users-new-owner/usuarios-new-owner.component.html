@@ -243,8 +243,29 @@
         </div>
       </div>
 
-      <div class="col-lg-6 mb-3">
-        <app-file-upload (filesChange)="getFiles($event)" />
+      
+        <div class="col-lg-6 mb-3">
+          <div class="row">
+              <label class="col-2 col-form-label">File</label>
+              <div class="col-10">
+                  <input type="file" class="form-control" multiple formControlName="file"
+                      [ngClass]="onValidate('file')" (change)="onFileChange($event)">
+                  <div class="invalid-feedback">{{showError('file')}}</div>
+                  <!-- Listado de archivos -->
+                  <div class="list-group mt-3">
+                      @for (file of files; track $index) {
+                      <div class="list-group-item d-flex justify-content-between align-items-center">
+                          <div class="d-flex align-items-center">
+                              <i class="bi-file-earmark-text me-3 text-primary fs-5"></i>
+                              <span>{{file.name.length > 40 ? file.name.slice(0, 40)+'...' :
+                                  file.name}}</span>
+                          </div>
+                          <span>{{ (file.size / (1024 * 1024)).toFixed(2) }} MB</span>
+                      </div>
+                      }
+                  </div>
+              </div>
+          </div>
       </div>
 
       <div class="row mb-3 justify-content-end">

@@ -51,8 +51,8 @@ export class NewUserComponent implements OnInit {
         
           if(this.authService.getActualRole() == "Propietario"){
               this.lotes = data.filter(lote => lote.id == this.authService.getUser().plotId);
-              this.formReactivo.get('plot')?.setValue(this.authService.getUser().plotId.toString());
-              this.formReactivo.get('plot')?.disable();
+              this.reactiveForm.get('plot')?.setValue(this.authService.getUser().plotId.toString());
+              this.reactiveForm.get('plot')?.disable();
 
           }else{
             this.lotes = data;
@@ -65,7 +65,7 @@ export class NewUserComponent implements OnInit {
   }
 
 
-  formReactivo = new FormGroup({
+  reactiveForm = new FormGroup({
     name: new FormControl('', [
         Validators.required,
         Validators.minLength(1),
@@ -143,7 +143,7 @@ export class NewUserComponent implements OnInit {
 
   //Resetear formularios
   resetForm() {
-    this.formReactivo.reset();
+    this.reactiveForm.reset();
     this.rolesInput = [];
   }
 
@@ -165,23 +165,23 @@ export class NewUserComponent implements OnInit {
   //Se crea el usuario
   createUser() {
     
-    const fechaValue = this.formReactivo.get('datebirth')?.value;
+    const fechaValue = this.reactiveForm.get('datebirth')?.value;
     
     const userData : UserPost = {
-      name: this.formReactivo.get('name')?.value || '',
-      lastname: this.formReactivo.get('lastname')?.value || '',
-      username: this.formReactivo.get('username')?.value || '',
-      password: this.formReactivo.get('password')?.value?.toString() || '',
-      email: this.formReactivo.get('email')?.value || '',
-      dni_type_id: Number(this.formReactivo.get('dniType')?.value) || 0,
-      dni: this.formReactivo.get('dni')?.value?.toString() || "",
+      name: this.reactiveForm.get('name')?.value || '',
+      lastname: this.reactiveForm.get('lastname')?.value || '',
+      username: this.reactiveForm.get('username')?.value || '',
+      password: this.reactiveForm.get('password')?.value?.toString() || '',
+      email: this.reactiveForm.get('email')?.value || '',
+      dni_type_id: Number(this.reactiveForm.get('dniType')?.value) || 0,
+      dni: this.reactiveForm.get('dni')?.value?.toString() || "",
       active: true,
       avatar_url: "asd",
       datebirth: fechaValue ? new Date(fechaValue).toISOString().split('T')[0] : '',
       roles: this.rolesSelected,
-      phone_number: this.formReactivo.get('phone_number')?.value?.toString() || '',
-      userUpdateId: this.formReactivo.get('userUpdateId')?.value || 0,
-      telegram_id: this.formReactivo.get('telegram_id')?.value || 0
+      phone_number: this.reactiveForm.get('phone_number')?.value?.toString() || '',
+      userUpdateId: this.reactiveForm.get('userUpdateId')?.value || 0,
+      telegram_id: this.reactiveForm.get('telegram_id')?.value || 0
     
     };
 
@@ -191,9 +191,6 @@ export class NewUserComponent implements OnInit {
     }else{
       userData.plot_id = 0;
     }
-
-
-    console.log(userData);
     
 
     this.apiService.postUser(userData).subscribe({
@@ -211,7 +208,7 @@ export class NewUserComponent implements OnInit {
           this.router.navigate(['/home/family']);
         }
         //Reseteamos el formulario
-        this.formReactivo.reset();
+        this.reactiveForm.reset();
         this.rolesComponent.updateRoles([]);
         
       },
@@ -226,4 +223,47 @@ export class NewUserComponent implements OnInit {
       },
     });
   }
+
+  //Retorna una clase para poner el input en verde o rojo dependiendo si esta validado
+  onValidate(controlName: string) {
+    const control = this.reactiveForm.get(controlName);
+    return {
+      'is-invalid': control?.invalid && (control?.dirty || control?.touched),
+      'is-valid': control?.valid
+    }
+  }
+
+
+  showError(controlName: string): string {
+    const control = this.reactiveForm.get(controlName);
+  
+    if (control && control.errors) {
+      const [errorKey] = Object.keys(control.errors);
+  
+      switch (errorKey) {
+        case 'required':
+          return 'Este campo no puede estar vacío.';
+        case 'email':
+          return 'Formato de correo electrónico inválido.';
+        case 'minlength':
+          return `El valor ingresado es demasiado corto. Mínimo ${control.errors['minlength'].requiredLength} caracteres.`;
+        case 'maxlength':
+          return `El valor ingresado es demasiado largo. Máximo ${control.errors['maxlength'].requiredLength} caracteres.`;
+        case 'min':
+          return `El valor es menor que el mínimo permitido (${control.errors['min'].min}).`;
+        case 'pattern':
+          return 'El formato ingresado no es válido.';
+        case 'requiredTrue':
+          return 'Debe aceptar el campo requerido para continuar.';
+        case 'date':
+          return 'La fecha ingresada es inválida.';
+        default:
+          return 'Error no identificado en el campo.';
+      }
+    }
+  
+    // Retorna cadena vacía si no hay errores.
+    return '';
+  }
+  
 }
