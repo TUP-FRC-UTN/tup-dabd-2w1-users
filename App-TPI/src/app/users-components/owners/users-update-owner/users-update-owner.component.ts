@@ -14,6 +14,9 @@ import { UserService } from '../../../users-servicies/user.service';
 import { OwnerPlotUserDto } from '../../../users-models/owner/OwnerPlotUserDto';
 import { UserGet } from '../../../users-models/users/UserGet';
 import { DateService } from '../../../users-servicies/date.service';
+import { OwnerTypeModel } from '../../../users-models/owner/OwnerType';
+import { OwnerStateModel } from '../../../users-models/owner/OwnerState';
+import { lastValueFrom, timeout } from 'rxjs';
 
 @Component({
   selector: 'app-users-update-owner',
@@ -28,120 +31,106 @@ export class UsersUpdateOwnerComponent implements OnInit {
   newFiles: File[] = [];
   existingFilesDownload: FileDto[] = [];
   id: string = "";
+  types: OwnerTypeModel[] = [];
+  states: OwnerStateModel[] = [];
 
   private readonly ownerService = inject(OwnerService)
   private readonly fileService = inject(FileService);
   constructor(private router: Router, private route: ActivatedRoute) { }
 
-  ngOnInit(): void {
-
-    //conseguir el id
+  async ngOnInit(): Promise<void> {
+    // Obtener el ID del propietario
     this.id = this.route.snapshot.paramMap.get('id') || '';
-    console.log(this.id);
 
-    // this.ownerService.getById(Number(this.id)).subscribe({
-    //   next: (data : Owner) => {
-    //     this.owner = data;
-    //     console.log("Data: ", JSON.stringify(data, null, 2));
-    //     console.log("Owner: " + this.owner);
-    //     //llenar los inputs
-    //     this.editOwner.patchValue({
-    //       name: this.owner.name,
-    //       lastname: this.owner.lastname,
-    //       dni: this.owner.dni,
-    //       cuitCuil: this.owner.cuitCuil,
+    try {
+      // Esperar a que se cargue el propietario
+      const data: OwnerPlotUserDto = await lastValueFrom(this.ownerService.getByIdWithUser(Number(this.id)));
+      this.owner = data.owner;
 
-    //       ownerType: this.owner.ownerType,
-    //       taxStatus: this.owner.taxStatus,
-    //       bussinesName: this.owner.bussinesName,
-    //       phoneNumber : "",
-    //       email: ""
-    //     });
-
-
-
-    //      if(this.owner.files.length > 0){
-    //        this.existingFilesDownload = this.owner.files;
-    //      }
-
-    //     if (this.owner.files && this.owner.files.length > 0) {
-    //       for (const fileDto of this.owner.files) {
-
-    //         console.log("FileDto: ", fileDto.uuid);
-
-    //         this.fileService.getFile(fileDto.uuid).subscribe(({ blob, filename }) => {
-    //           // Crear un nuevo objeto File a partir del Blob
-    //           const newFile = new File([blob], filename, { type: blob.type });
-
-    //           console.log("New File: ", newFile);
-    //           this.existingFiles.push(newFile);
-    //         }, error => {
-    //           console.error(`Error al descargar el archivo ${fileDto.uuid}, error`);
-    //         });
-    //         console.log("Files list after loading: ", this.existingFiles);
-    //       }
-    //     }
-
-    //     const formattedDate = this.parseDateString(this.owner.dateBirth);
-    //     this.editOwner.patchValue({
-    //       birthdate: formattedDate ? this.formatDate(formattedDate) : ''
-    //     });
-    //   },
-    //   error: (error) => {
-    //     console.log(error)
-    //   }
-    // })
-
-    this.ownerService.getByIdWithUser(Number(this.id)).subscribe({
-      next: (data: OwnerPlotUserDto) => {
-        this.owner = data.owner;
-        console.log(data);
-
-        //llenar los inputs
-        this.editOwner.patchValue({
+      // Rellenar los campos del formulario con los datos del propietario
+      this.editOwner.patchValue({
           name: this.owner.name,
           lastname: this.owner.lastname,
           dni: this.owner.dni,
           cuitCuil: this.owner.cuitCuil,
-          ownerType: this.owner.ownerType,
-          taxStatus: this.owner.taxStatus,
+          ownerType: this.owner.ownerType, // Valor inicial para ownerType
+          taxStatus: this.owner.taxStatus, // Valor inicial para taxStatus
           bussinesName: this.owner.businessName,
-          phoneNumber : data.user.phone_number,
+          phoneNumber: data.user.phone_number,
           email: data.user.email,
-        });
+      });
 
-        const formattedDate = this.parseDateString(this.owner.dateBirth);
-
-        this.editOwner.patchValue({
-          birthdate: formattedDate ? this.formatDate(formattedDate) : ''
-        });
-
-
-
-         if(this.owner.files.length > 0){
-           this.existingFilesDownload = this.owner.files;
-         }
-
-        if (this.owner.files && this.owner.files.length > 0) {
-          for (const fileDto of this.owner.files) {
-
-            this.fileService.getFile(fileDto.uuid).subscribe(({ blob, filename }) => {
-              // Crear un nuevo objeto File a partir del Blob
-              const newFile = new File([blob], filename, { type: blob.type });
-              this.existingFiles.push(newFile);
-            }, error => {
-              console.error(`Error al descargar el archivo ${fileDto.uuid}, error`);
-            });
-            console.log("Files list after loading: ", this.existingFiles);
-          }
-        }
-      },
-      error: (error) => {
-        console.log(error)
+      // Manejo de archivos, si existen
+      if (this.owner.files?.length) {
+          this.owner.files.forEach((fileDto) => {
+              this.fileService.getFile(fileDto.uuid).subscribe(
+                  ({ blob, filename }) => {
+                      const newFile = new File([blob], filename, { type: blob.type });
+                      this.existingFiles.push(newFile);
+                  },
+                  (error) => {
+                      console.error(`Error al descargar el archivo ${fileDto.uuid}`, error);
+                  }
+              );
+          });
       }
-    })
 
+      // Formateo de la fecha de nacimiento
+      const formattedDate = this.parseDateString(this.owner.dateBirth);
+      this.editOwner.patchValue({
+          birthdate: formattedDate ? this.formatDate(formattedDate) : ''
+      });
+
+  } catch (error) {
+      console.error('Error al cargar el propietario:', error);
   }
+
+    // Cargar las opciones para los selectores
+    await this.ownerService.getAllTypes().subscribe({
+      next: (data: OwnerTypeModel[]) => {
+        this.types = data;
+        console.log(this.types);
+        console.log(this.owner);
+        
+        
+        this.types.forEach((type) => {
+          if(type.description === this.owner.ownerType
+          ) {
+            console.log(type.id);
+            
+            this.editOwner.patchValue({
+              ownerType: type.id.toString(),
+            });
+          }
+        });
+      },
+      error: (err) => {
+        console.error('Error al cargar los tipos de propietario:', err);
+      },
+    });
+  
+    this.ownerService.getAllStates().subscribe({
+      next: (data: OwnerStateModel[]) => {
+        this.states = data;
+        this.states.forEach((state) => {
+          if(state.description === this.owner.taxStatus) {
+            this.editOwner.patchValue({
+              taxStatus: state.id.toString(),
+            });
+          }
+        });
+      },
+      error: (err) => {
+        console.error('Error al cargar los estados fiscales:', err);
+      },
+    });
+
+    console.log(this.owner.taxStatus);
+    console.log(this.editOwner.get('taxStatus')?.value);
+    
+    
+  }
+  
 
   //formulario base
   editOwner = new FormGroup({
