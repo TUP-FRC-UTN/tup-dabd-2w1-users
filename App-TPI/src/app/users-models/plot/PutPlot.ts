@@ -4,6 +4,7 @@ export class PutPlot {
     plot_state_id: number;
     plot_type_id: number;
     userUpdateId: number;
+    files: File[] = [];
 
     constructor() {
         this.total_area_in_m2 = 0;

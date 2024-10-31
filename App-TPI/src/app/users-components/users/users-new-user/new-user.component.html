@@ -1,159 +1,189 @@
-<section class="container p-5 border rounded border-3 border-secundary" style="min-height: 70vh;">
-    <h3 class="mb-3">Añadir Usuario</h3>
+<section class="container p-5 border rounded border-3 border-secundary">
+  <h3 class="mb-3">Añadir Usuario</h3>
 
-    <form (ngSubmit)="createUser()" [formGroup]="formReactivo">
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <div class="d-flex align-items-center">
-                    <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Nombre</label>
-                    <input type="text" class="form-control custom-input"
-                        [ngClass]="{'is-invalid': formReactivo.controls['nombre'].invalid && (formReactivo.get('nombre')?.dirty || formReactivo.get('nombre')?.touched), 'is-valid': formReactivo.controls['nombre'].valid }"
-                        formControlName="nombre">
-                </div>
-                <div class="text-danger" style="margin-left: 130px;">
-                    @if(formReactivo.get('nombre')?.dirty || formReactivo.get('nombre')?.touched){
-                        @if(formReactivo.controls['nombre'].errors?.["required"]){
-                            Ingrese su nombre
-                        }
-                        @if(formReactivo.controls['nombre'].errors?.["maxlength"]){
-                            El nombre no puede superar los 50 caracteres
-                        }
-                    }
-                </div>
+  <form (ngSubmit)="createUser()" [formGroup]="reactiveForm">
+    <div class="row">
+      <div class="col-lg-6 mb-3">
+        <div class="row">
+          <label class="col-2 col-form-label">Nombre</label>
+          <div class="col-10">
+            <input type="text" class="form-control" formControlName="name" [ngClass]="onValidate('name')">
+            <div class="invalid-feedback">{{showError('name')}}</div>
+          </div> 
+        </div>
+      </div>
+
+
+        <div class="col-lg-6 mb-3">
+          <div class="row">
+            <label class="col-2 col-form-label">Apellido</label>
+            <div class="col-10">
+              <input type="text" class="form-control" formControlName="lastname" [ngClass]="onValidate('lastname')">
+              <div class="invalid-feedback">{{showError('lastname')}}</div>
             </div>
-            <div class="col-md-6">
-                <div class="d-flex align-items-center">
-                    <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Apellido</label>
-                    <input type="text" class="form-control custom-input"
-                        [ngClass]="{'is-invalid': formReactivo.controls['apellido'].invalid && (formReactivo.get('apellido')?.dirty || formReactivo.get('apellido')?.touched), 'is-valid': formReactivo.controls['apellido'].valid }"
-                        formControlName="apellido">
-                </div>
-                <div class="text-danger" style="margin-left: 130px;">
-                    @if(formReactivo.get('apellido')?.dirty || formReactivo.get('apellido')?.touched){
-                        @if(formReactivo.controls['apellido'].errors?.["required"]){
-                            Ingrese su apellido
-                        }
-                        @if(formReactivo.controls['apellido'].errors?.["maxlength"]){
-                            El apellido no puede superar los 50 caracteres
-                        }
-                    }
-                </div>
-            </div>
+          </div>
         </div>
 
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <div class="d-flex align-items-center">
-                    <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Email</label>
-                    <input type="text" class="form-control custom-input"
-                        [ngClass]="{'is-invalid': formReactivo.controls['email'].invalid && (formReactivo.get('email')?.dirty || formReactivo.get('email')?.touched), 'is-valid': formReactivo.controls['email'].valid }"
-                        formControlName="email">
-                </div>
-                <div class="text-danger" style="margin-left: 130px;">
-                    @if(formReactivo.get('email')?.dirty || formReactivo.get('email')?.touched){
-                        @if(formReactivo.controls['email'].errors?.["required"]){
-                            Ingrese su email
-                        }
-                        @if(formReactivo.controls['email'].errors?.["email"]){
-                            Ingrese un email válido
-                        }
-                    }
-                </div>
+
+        <div class="col-lg-6 mb-3">
+          <div class="row">
+            <label class="col-2 col-form-label">Tipo de documento</label>
+            <div class="col-10">
+              <select id="selectOption" class="form-select" formControlName="dniType" [ngClass]="onValidate('dniType')">
+                <option value="" disabled selected>Seleccione una opción</option>
+                <option value="1">DNI</option>
+                <option value="2">Pasaporte</option>
+              </select>
+              <div class="invalid-feedback">{{showError('dniType')}}</div>
             </div>
-            <div class="col-md-6">
-                <div class="d-flex align-items-center">
-                    <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">DNI</label>
-                    <input type="text" class="form-control custom-input"
-                        [ngClass]="{'is-invalid': formReactivo.controls['dni'].invalid && (formReactivo.get('dni')?.dirty || formReactivo.get('dni')?.touched), 'is-valid': formReactivo.controls['dni'].valid }"
-                        formControlName="dni" style="appearance: none;" pattern="[0-9]*">
-                </div>
-                <div class="text-danger" style="margin-left: 130px;">
-                    @if(formReactivo.get('dni')?.dirty || formReactivo.get('dni')?.touched){
-                        @if(formReactivo.controls['dni'].errors?.["required"]){
-                            Ingrese un DNI
-                        }
-                        @if(formReactivo.controls['dni'].errors?.["minlength"] || formReactivo.controls['dni'].errors?.["maxlength"]){
-                            El DNI debe tener entre 1 y 11 caracteres
-                        }
-                    }
-                </div>
-            </div>
+          </div>
         </div>
 
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <div class="d-flex align-items-center">
-                    <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Teléfono</label>
-                    <input type="text" class="form-control custom-input"
-                        [ngClass]="{'is-invalid': formReactivo.controls['telefono'].invalid && (formReactivo.get('telefono')?.dirty || formReactivo.get('telefono')?.touched), 'is-valid': formReactivo.controls['telefono'].valid }"
-                        formControlName="telefono" style="appearance: none;">
-                </div>
-                <div class="text-danger" style="margin-left: 130px;">
-                    @if(formReactivo.get('telefono')?.dirty || formReactivo.get('telefono')?.touched){
-                        @if(formReactivo.controls['telefono'].errors?.["required"]){
-                            Ingrese su teléfono
-                        }
-                        @if(formReactivo.controls['telefono'].errors?.["minlength"] || formReactivo.controls['telefono'].errors?.["maxlength"]){
-                            El teléfono debe tener entre 10 y 20 caracteres
-                        }
-                    }
-                </div>
+
+        <div class="col-lg-6 mb-3">
+          <div class="row">
+            <label class="col-2 col-form-label">Documento</label>
+            <div class="col-10">
+              <input type="text" class="form-control" formControlName="dni" [ngClass]="onValidate('dni')">
+              <div class="invalid-feedback">{{showError('dni')}}</div>
             </div>
-            <div class="col-md-6">
-                <div class="d-flex align-items-center">
-                    <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Fecha de nacimiento</label>
-                    <input type="date" class="form-control custom-input"
-                        [ngClass]="{'is-invalid': formReactivo.controls['fecha'].invalid && (formReactivo.get('fecha')?.dirty || formReactivo.get('fecha')?.touched), 'is-valid': formReactivo.controls['fecha'].valid }"
-                        formControlName="fecha" value="2000-01-01">
-                </div>
-                <div class="text-danger" style="margin-left: 130px;">
-                    @if(formReactivo.get('fecha')?.dirty || formReactivo.get('fecha')?.touched){
-                        @if(formReactivo.controls['fecha'].errors?.["required"]){
-                            Ingrese su fecha de nacimiento
-                        }
-                    }
-                </div>
-            </div>
+          </div>
         </div>
 
-        <div class="row mb-3">
-            <div class="col-md-6 d-flex justify-content-end">
-                <label class="form-label me-2 text-end pt-2" style="width: 150px; margin-bottom: 0;">Roles</label>
-                <app-users-select-multiple [rolesSelected]="rolesSelected"></app-users-select-multiple>
+
+        <div class="col-lg-6 mb-3">
+          <div class="row">
+            <label class="col-2 col-form-label">Email</label>
+            <div class="col-10">
+              <input type="email" class="form-control" formControlName="email" [ngClass]="onValidate('email')">
+              <div class="invalid-feedback">{{showError('email')}}</div>
             </div>
-            <div class="col-md-6">
-                <div class="d-flex align-items-center">
-                    <label class="form-label me-2 text-end" style="width: 150px; margin-bottom: 0;">Nombre de usuario</label>
-                    <input type="text" class="form-control custom-input"
-                        [ngClass]="{'is-invalid': formReactivo.controls['username'].invalid && (formReactivo.get('username')?.dirty || formReactivo.get('username')?.touched), 'is-valid': formReactivo.controls['username'].valid }"
-                        formControlName="username">
-                </div>
-                <div class="text-danger" style="margin-left: 130px;">
-                    @if(formReactivo.get('username')?.dirty || formReactivo.get('username')?.touched){
-                        @if(formReactivo.controls['username'].errors?.["required"]){
-                            Ingrese su nombre de usuario
-                        }
-                        @if(formReactivo.controls['username'].errors?.["maxlength"]){
-                            El nombre de usuario no puede superar los 20 caracteres
-                        }
-                        @if(formReactivo.controls['username'].errors?.["pattern"]){
-                            El nombre de usuario solo puede contener letras, números y guiones bajos
-                        }
-                    }
-                </div>
-            </div>
+          </div>
         </div>
-        <div class="row mb-3 justify-content-end sticky-right">
-            <div class="col-auto">
-                <button type="button" class="btn btn-secondary">Cancelar</button>
-            </div>
-            <div class="col-auto">
-                @if(formReactivo.invalid){
-                    <button type="submit" class="btn btn-primary" disabled>Guardar</button>
-                }@else {
-                    <button type="submit" class="btn btn-primary">Guardar</button>
+
+
+        <div class="col-lg-6 mb-3">
+          <div class="row">
+            <label class="col-2 col-form-label">Lote</label>
+            <div class="col-10">
+              <select id="selectOption" class="form-select" formControlName="plot" [ngClass]="onValidate('plot')">
+                <option value="" disabled selected>Seleccione una opción</option>
+                @for (s of lotes; track $index) {
+                <option value="{{s.id}}">Numero de lote: {{s.plot_number}}, Manzana: {{s.block_number}}</option>
                 }
+              </select>
+              <div class="invalid-feedback">{{showError('plot')}}</div>
             </div>
+          </div>
         </div>
-    </form>
+
+
+        <div class="col-lg-6 mb-3">
+          <div class="row">
+            <label class="col-2 col-form-label">Teléfono</label>
+            <div class="col-10">
+              <input type="text" class="form-control" formControlName="phone_number"
+                [ngClass]="onValidate('phone_number')">
+              <div class="invalid-feedback">{{showError('phone_number')}}</div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-lg-6 mb-3">
+          <div class="row">
+            <label class="col-2 col-form-label">Fecha de nacimiento</label>
+            <div class="col-10">
+              <input type="date" class="form-control" formControlName="datebirth" value="2000-01-01"
+                [ngClass]="onValidate('datebirth')">
+              <div class="invalid-feedback">{{showError('datebirth')}}</div>
+            </div>
+          </div>
+        </div>
+
+
+
+        <div class="col-lg-6 mb-3">
+          <div class="row">
+            <label class="col-2 col-form-label">Roles</label>
+            <div class="col-10">
+              <app-users-select-multiple (rolesEmited)="fillRolesSelected($event); verifyRole()"
+                (click)="verifyRole()" />
+              <div class="text-danger form-error">
+                @if(!checkRole){ Ingrese al menos un rol }
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-lg-6 mb-3">
+          <div class="row">
+            <label class="col-2 col-form-label">Nombre de usuario</label>
+            <div class="col-10">
+              <input type="text" class="form-control" formControlName="username" [ngClass]="onValidate('username')">
+              <div class="invalid-feedback">{{showError('username')}}</div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-lg-6 mb-3">
+          <div class="row">
+            <label class="col-2 col-form-label">Telegram id</label>
+            <div class="col-10">
+              <input type="text" class="form-control" formControlName="telegram_id"
+                [ngClass]="onValidate('telegram_id')">
+              <div class="invalid-feedback">{{showError('telegram_id')}}</div>
+            </div>
+          </div>
+        </div>
+
+
+
+        <div class="col-lg-6 mb-3">
+          <div class="row">
+            <label class="col-2 col-form-label">Contraseña</label>
+            <div class="col-10">
+              <input type="password" class="form-control" formControlName="password" autocomplete="current-password"
+                [ngClass]="onValidate('password')">
+              <div class="invalid-feedback">{{showError('password')}}</div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="row mb-3 justify-content-end">
+          <div class="col-auto">
+            <button type="button" class="btn btn-secondary" (click)="redirect()">Cancelar</button>
+          </div>
+          <div class="col-auto">
+            <button type="submit" class="btn btn-primary" [disabled]="!reactiveForm.valid || rolesSelected.length === 0">
+              Guardar
+            </button>
+          </div>
+        </div>
+      </div>
+  </form>
+
+<!-- Modal de info -->
+<div class="modal fade" id="infoModal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Información de alta</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <!-- body con tus inputs -->
+        Esta página es utilizada para dar de alta a un usuario , todos los campos son obligatorios excepto
+        el telegram id que se refiere al identificador de la cuenta personal de telegram del usuario a cargar,
+        este campo es utilzado para contactar a usuario por medio de la aplicación "Telegram".
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
 </section>

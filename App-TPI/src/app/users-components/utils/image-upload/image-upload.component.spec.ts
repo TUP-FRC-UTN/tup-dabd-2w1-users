@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UsersSideButtonComponent } from './users-side-button.component';
+import { ImageUploadComponent } from './image-upload.component';
 
-describe('UsersSideButtonComponent', () => {
-  let component: UsersSideButtonComponent;
-  let fixture: ComponentFixture<UsersSideButtonComponent>;
+describe('ImageUploadComponent', () => {
+  let component: ImageUploadComponent;
+  let fixture: ComponentFixture<ImageUploadComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UsersSideButtonComponent]
+      imports: [ImageUploadComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(UsersSideButtonComponent);
+    fixture = TestBed.createComponent(ImageUploadComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

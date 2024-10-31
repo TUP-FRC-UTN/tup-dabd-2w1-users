@@ -6,6 +6,8 @@ import { UserService } from '../../../users-servicies/user.service';
 import Swal from 'sweetalert2';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { DeleteUser } from '../../../users-models/owner/DeleteUser';
+import { DateService } from '../../../users-servicies/date.service';
+import { GetPlotDto } from '../../../users-models/plot/GetPlotDto';
 
 
 @Component({
@@ -17,71 +19,59 @@ import { DeleteUser } from '../../../users-models/owner/DeleteUser';
 })
 export class ModalInfoUserComponent implements OnInit {
 
+  constructor(public activeModal: NgbActiveModal, private fb: FormBuilder) {
+    this.editUser = this.fb.group({
+      fullname: [''],
+      email: [''],
+      dni: [''],
+      phoneNumber: [''],
+      birthdate: [''],
+      telegram_id : [''],
+      username: [''],
+      plot_number:[''],
+      block_number:[''],
+      dni_type: [''],
+      create_date: ['']
+    });
+  }
+
   @Input() userModal: UserGet = new UserGet();
+  @Input() plotModal: GetPlotDto = new GetPlotDto();
   @Input() typeModal: string = '';
 
   //activeModal = inject(NgbActiveModal);
   private readonly apiService = inject(UserService);
+  
   rolesInput: string[] = [];
-
   editUser: FormGroup;
 
-  constructor(public activeModal: NgbActiveModal, private fb: FormBuilder) {
-    this.editUser = this.fb.group({
-      name: [''],
-      lastName: [''],
-      email: [''],
-      dni: [''],
-      phoneNumber: [''],
-      birthdate: ['']
-    });
-  }
-
-  // Inicializa el formulario
-  // editUser = new FormGroup({
-  //   name: new FormControl({ value: this.userModal.name, disabled: true }),
-  //   lastName: new FormControl({ value: this.userModal.lastname, disabled: true }),
-  //   email: new FormControl({ value: this.userModal.email, disabled: true }),
-  //   dni: new FormControl({ value: this.userModal.dni, disabled: true }),
-  //   phoneNumber: new FormControl({ value: this.userModal.phone_number, disabled: true }),
-  //   birthdate: new FormControl({ value: this.userModal.datebirth, disabled: true }),
-  //   roles: new FormControl({ value: this.rolesInput, disabled: true })
-  // });
-
   // Método para detectar cambios en el @Input
-  ngOnInit() {        
+  ngOnInit() {
+      console.log('userModal:', this.userModal);
+      console.log('plotModal:', this.plotModal);
       // Actualiza los valores del formulario cuando cambian los datos del usuario
       if (this.userModal.datebirth) {
-        const formattedDate = this.parseDateString(this.userModal.datebirth);
+        const formattedDate = DateService.parseDateString(this.userModal.datebirth);
+        const formattedCreatedDate = DateService.parseDateString(this.userModal.create_date)
         this.editUser.patchValue({
-          name: this.userModal.name,
-          lastName: this.userModal.lastname,
+          fullname: this.userModal.lastname + ', ' + this.userModal.name,
           email: this.userModal.email,
           dni: this.userModal.dni,
+          dni_type: this.userModal.dni_type+': ',
           phoneNumber: this.userModal.phone_number,
           roles: this.rolesInput,
-          birthdate: formattedDate ? this.formatDate(formattedDate) : ''
+          plot_number : this.plotModal?.plot_number || 'N/A'  ,
+          block_number: this.plotModal?.block_number || 'N/A',
+          username: this.userModal.username,
+          telegram_id: this.userModal?.telegram_id || 'N/A',
+          birthdate: formattedDate ? DateService.formatDate(formattedDate) : 'N/A',
+          create_date: formattedCreatedDate ? DateService.formatDate(formattedCreatedDate) : 'N/A'
         });
       }
 
       this.editUser.disable();
-    
   }
-
-  // Convierte la cadena de fecha "dd-MM-yyyy" a un objeto Date
-  private parseDateString(dateString: string): Date | null {
-    const [day, month, year] = dateString.split('-').map(Number);
-    if (!day || !month || !year) {
-      return null;
-    }
-    // Crea un objeto Date con formato "yyyy-MM-dd"
-    return new Date(year, month - 1, day); // Restamos 1 al mes porque en JavaScript los meses son 0-indexed
-  }
-
-  // Formatea una fecha en "yyyy-MM-dd"
-  private formatDate(date: Date): string {
-    return formatDate(date, 'yyyy-MM-dd', 'en-US');
-  }
+  
 
   confirmDesactivate() {
     var user = new DeleteUser();
@@ -105,20 +95,36 @@ export class ModalInfoUserComponent implements OnInit {
   }
 
   confirmDelete() {
-    Swal .fire({
+    Swal.fire({
       title: '¿Seguro que desea eliminar el usuario?',
       showDenyButton: true,
       showCancelButton: false,
-      confirmButtonText: 'Eliminar',
-      denyButtonText: `Cancelar`,
+      confirmButtonText: 'Aceptar',
+      denyButtonText: 'Cancelar',
+      confirmButtonColor: "#dc3545",
+      denyButtonColor: "#6c757d",
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire('Eliminado!', '', 'success');
+        (window as any).Swal.fire({
+          position: "center-center",
+          title: '¡Usuario borrado!',
+          text: 'El usuario se ha borrado correctamente.',
+          icon: 'success',
+          timer: 1000,
+          showConfirmButton: false
+        });
         this.confirmDesactivate();
-      } else{
-        Swal.fire('Operación cancelada!', '', 'info');
+      } else {
+        (window as any).Swal.fire({
+          position: "center-center",
+          title: '¡Usuario no se ha borrado!',
+          text: 'La operación se ha cancelado exitosamente.',
+          icon: 'info',
+          timer: 1000,
+          showConfirmButton: false
+        });
       }
     });
-  }  
+  } 
   
 }

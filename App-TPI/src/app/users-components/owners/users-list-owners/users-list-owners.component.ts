@@ -18,11 +18,13 @@ import { GetPlotModel } from '../../../users-models/plot/GetPlot';
 import { OwnerService } from '../../../users-servicies/owner.service';
 import { Owner } from '../../../users-models/owner/Owner';
 import { UsersModalInfoOwnerComponent } from '../users-modal-info-owner/users-modal-info-owner.component';
+import { OwnerTypeModel } from '../../../users-models/owner/OwnerType';
+import { FormControl, ReactiveFormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-users-list-owners',
   standalone: true,
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './users-list-owners.component.html',
   styleUrl: './users-list-owners.component.css'
 })
@@ -32,6 +34,10 @@ export class UsersListOwnersComponent {
   private readonly apiService = inject(OwnerService);
   showDeactivateModal: boolean = false;
   userToDeactivate: number = 0;
+  types: OwnerTypeModel[] = [];
+  selectType: FormControl = new FormControl('');
+
+
 
   constructor(private router: Router,private modal: NgbModal) { }
 
@@ -41,9 +47,13 @@ export class UsersListOwnersComponent {
     this.apiService.getAll().subscribe({
       next: (data: Owner[]) => {
         // Cambiar guiones por barras en la fecha de nacimiento
-        this.owners = data;
-        console.log(data);
-                 
+        this.owners = data.map(owner => ({
+          ...owner,
+          create_date: owner.create_date.replace(/-/g, '/'),
+        }));
+        
+      
+        this.loadTypes();   
         
         // Inicializar DataTables después de cargar los datos
         setTimeout(() => {
@@ -52,14 +62,15 @@ export class UsersListOwnersComponent {
             searching: true,
             ordering: true,
             lengthChange: true,
-            order: [[0, 'asc']],
+            lengthMenu: [10, 25, 50],
+            order: [[0, 'desc']],
             pageLength: 10,
             columns: [
-              { title: 'Nombre', width: '10%', className: 'text-start' },
+              { title: 'Fecha de creación', width: '15%', className: 'text-start' },
+              { title: 'Nombre', width: '15%', className: 'text-start' },
               { title: 'Dni', width: '10%', className: 'text-start'},
-              { title: 'Fecha de nacimiento', width: '15%', className: 'text-start' },
               { title: 'Cuit/Cuil', width: '15%', className: 'text-start' },
-              { title: 'Tipo', width: '15%', className: 'text-start' },
+              { title: 'Tipo', width: '10%', className: 'text-start' },
               {
                 title: 'Acciones',
                 orderable: false,
@@ -74,56 +85,38 @@ export class UsersListOwnersComponent {
                       </button>
                       <ul class="dropdown-menu">
                         <li><a class="dropdown-item view-owner" data-id="${ownerId}">Ver más</a></li>
+                        <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item edit-owner" data-id="${ownerId}">Editar</a></li>
                       </ul>
                     </div>
-                  `; // si queremos el ver mas de nuevo <li><a class="dropdown-item view-plot" data-id="${meta.row}">Ver más</a></li>
+                  `; 
                 }
               }
             ],
             data: this.owners.map(owner => [
                //rellenar por columna
+               owner.create_date,
               `${owner.name + ", " + owner.lastname}`,
-              owner.dni,
-              owner.dateBirth,
-              owner.cuitCuil,
-              owner.ownerType
+                owner.dni,
+                owner.cuitCuil,
+                owner.ownerType
               
-            ]),
+            ]), dom:
+            '<"mb-3"t>' +                           
+            '<"d-flex justify-content-between"lp>',
+
             language: {
-              lengthMenu: "Mostrar _MENU_ registros por página",
+              lengthMenu: "_MENU_",
               zeroRecords: "No se encontraron resultados",
               info: "Mostrando página _PAGE_ de _PAGES_",
               infoEmpty: "No hay registros disponibles",
               infoFiltered: "(filtrado de _MAX_ registros totales)",
               search: "Buscar:",
-              paginate: {
-                first: "Primera",
-                last: "Última",
-                next: "Siguiente",
-                previous: "Anterior"
-              },
               loadingRecords: "Cargando...",
               processing: "Procesando...",
               emptyTable: "No hay datos disponibles en la tabla"
             },
-            createdRow: function (row, data, dataIndex) {
-              if (dataIndex % 2 === 0) {
-                $(row).css('background-color', '#f9f9f9');  // Color de fondo para filas pares
-              } else {
-                $(row).css('background-color', '#ffffff');  // Color de fondo para filas impares
-              }
-            }
           });    
-
-          // Añadir estilos adicionales al DataTable
-          $('#myTable').css({
-            'border-collapse': 'separate',
-            'border-spacing': '0 10px',  // Espacio entre filas
-            'width': '100%',  // Ancho completo de la tabla
-            'border': '1px solid #ddd',
-            'padding-left': '15px'  // Borde para toda la tabla
-          });
 
           // Alinear la caja de búsqueda a la derecha
           const searchInputWrapper = $('#myTable_filter');
@@ -145,8 +138,11 @@ export class UsersListOwnersComponent {
           // Asignar el evento click a los botones "Ver más"
           // Asignar el evento click a los botones "Ver más"
         $('#myTable').on('click', '.view-owner', (event) => {
-          const id = $(event.currentTarget).data('id');
-          const ownerId = this.owners[id].id; // Obtén el ID real del usuario
+          
+          //Esto daba error por eso lo comente
+          //const id = $(event.currentTarget).data('id');
+          //const ownerId = this.owners[id].id; 
+          const ownerId = $(event.currentTarget).data('id'); // Obtén el ID real del usuario
           this.abrirModal( ownerId); // Abre el modal en modo "ver"
         });
 
@@ -194,29 +190,54 @@ export class UsersListOwnersComponent {
 
   
   redirectEdit(id: number) {
-    console.log("b");
-    this.router.navigate(['/home/owner/edit', id])
+    this.router.navigate(['/home/owners/edit', id])
   }
+
+  loadTypes() {
+    this.apiService.getAllTypes().subscribe({
+      next: (data: OwnerTypeModel[]) => {
+
+        this.types = data;
+      },
+      error: (error) => {
+        console.error('Error al cargar los roles:', error);
+        
+      }
+    });
+  }
+
+  resetFilters() {
+    // Reiniciar el valor del control de rol
+    this.selectType.setValue('');
+
+    // Limpiar el campo de búsqueda general y el filtro de la columna de tipo
+    const searchInput = document.querySelector('#myTable_filter input') as HTMLInputElement;
+    if (searchInput) {
+        searchInput.value = ''; // Limpiar el valor del input de búsqueda general
+    }
+
+    // Obtener la instancia de DataTable
+    const table = $('#myTable').DataTable();
+
+    // Limpiar búsqueda y filtros
+    table.search('').draw(); // Limpiar búsqueda general
+    table.column(4).search('').draw(); // Limpiar filtro de tipo
+}
+
+  updateFilterType() {
+    const table = $('#myTable').DataTable();
+    table.column(4).search(this.selectType.value).draw();
+  }
+
 
   // Busca el user y se lo pasa al modal
   ownerModel: Owner = new Owner();
    selectOwner(id: number): Promise<Owner> {
-       // Mostrar SweetAlert de tipo 'cargando'
-     Swal.fire({
-       title: 'Cargando lote...',
-       html: 'Por favor, espera un momento',
-       allowOutsideClick: false, // No permitir cerrar la alerta haciendo clic fuera
-       didOpen: () => {
-         Swal.showLoading(); // Mostrar indicador de carga
-       }
-     });
      return new Promise((resolve, reject) => {
        this.apiService.getById(id).subscribe({
          next: (data: Owner) => {
-          console.log("daskfsdkf");
           
-           this.ownerModel = data;
-           console.log("aaaaaa")        
+           this.ownerModel = data;    
            Swal.close(); // Cerrar SweetAlert
            resolve(data); // Resuelve la promesa cuando los datos se cargan
          },
@@ -233,4 +254,77 @@ export class UsersListOwnersComponent {
        });
      });
   }
+
+  exportPdf() {
+    const doc = new jsPDF();
+  
+    // Agregar título centrado
+    const title = 'Lista de Propietarios';
+    const pageWidth = doc.internal.pageSize.getWidth();
+    doc.setFontSize(16);
+    const textWidth = doc.getTextWidth(title);
+    doc.text(title, (pageWidth - textWidth) / 2, 20);
+  
+    // Definir columnas para el PDF
+    const columns = ['Fecha de Creación','Nombre', 'DNI', 'CUIT/CUIL', 'Tipo'];
+  
+    // Filtrar datos visibles en la tabla
+    const table = $('#myTable').DataTable();
+  
+    // Obtener las filas visibles de la tabla
+    const visibleRows = table.rows({ search: 'applied' }).data().toArray();
+  
+    // Mapear los datos visibles a un formato adecuado para jsPDF
+    const rows = visibleRows.map((row: any) => [
+      `${row[0].replace(/-/g, '/')}`,        
+      `${row[1]}`,        
+      `${row[2]}`, 
+      `${row[3]}`,     
+      `${row[4]}`         
+    ]);
+  
+    // Generar la tabla en el PDF usando autoTable
+    autoTable(doc, {
+      head: [columns],
+      body: rows,
+      startY: 30,
+      theme: 'striped',
+      headStyles: { fillColor: [0, 0, 0] },
+      styles: { halign: 'center', valign: 'middle' },
+      columnStyles: { 
+        0: { cellWidth: 50 }, 
+        1: { cellWidth: 30 }, 
+        2: { cellWidth: 30 }, 
+        3: { cellWidth: 50 }, 
+        4: { cellWidth: 30 } 
+      },
+    });
+  
+    doc.save('propietarios.pdf'); // Descargar el archivo PDF
+  }
+  
+  exportExcel() {
+    const table = $('#myTable').DataTable(); // Inicializa DataTable una vez
+  
+    // Cambia la forma de obtener las filas visibles usando 'search' en lugar de 'filter'
+    const visibleRows = table.rows({ search: 'applied' }).data().toArray(); // Usar 'search: applied'
+
+    // Filtrar a los propietarios x aquellos que aparzcan en la tabla visibleRows
+    let owners = this.owners.filter(owner => visibleRows.some(row => row[1].includes(owner.name) && row[1].includes(owner.lastname)));
+
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(owners.map(owner => ({
+      FechaCreacion: owner.create_date.replace(/-/g, '/'),
+      Nombre: `${owner.lastname}, ${owner.name}`,
+      DNI: owner.dni,
+      CUIT_CUIL: owner.cuitCuil,
+      Tipo: owner.ownerType
+    })));
+  
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Propietarios');
+  
+    XLSX.writeFile(wb, 'propietarios.xlsx'); // Descargar el archivo Excel
+  }
+  
 }

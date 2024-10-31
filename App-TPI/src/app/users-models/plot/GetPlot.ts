@@ -1,3 +1,5 @@
+import { FileDto } from "../owner/FileDto";
+
 export class GetPlotModel {
     id: number;
     plot_number: number;      
@@ -5,7 +7,8 @@ export class GetPlotModel {
     total_area_in_m2: number;        
     built_area_in_m2: number;   
     plot_state: string;      
-    plot_type: string;   
+    plot_type: string; 
+    files: FileDto[]; 
 
     constructor() {
         this.id = 0;
@@ -14,6 +17,7 @@ export class GetPlotModel {
         this.total_area_in_m2 = 0;
         this.built_area_in_m2 = 0;
         this.plot_state = "";
-        this.plot_type= "";;
+        this.plot_type= "";
+        this.files = [];
     }
 }

@@ -12,7 +12,7 @@ export class AuthService {
   
   async login(data: any): Promise<void> {
     this.saveToken(data.token);
-    this.getUser();
+    this.saveActualRole(this.getUser().roles[0]);
   }
 
   //Obtiene el token y genera un UserLoged
@@ -24,8 +24,8 @@ export class AuthService {
       user.name = decodedToken.payloadObj.name;
       user.lastname = decodedToken.payloadObj.lastname;
       user.plotId = decodedToken.payloadObj.plot_id;
-    
-    return user;
+
+      return user;
   }
 
   //Guarda el token en LocalStorage
@@ -52,4 +52,48 @@ export class AuthService {
   hasRole(role: string): boolean {
     return this.getUser().roles.includes(role); 
   }
+
+  // Método para crear el JWT y guardarlo en el localStorage
+  saveActualRole(rolSelected: string): void {
+    const header = { alg: 'HS256', typ: 'JWT' }; // Cabecera
+    const payload = {
+      selectedRol: rolSelected,
+      exp: Math.floor(Date.now() / 1000) + (60 * 60) // Expira en 1 hora
+    };
+    
+    const secret = 'your-256-bit-secret'; // Clave secreta (debe ser segura y no expuesta en código)
+    
+    // Crear el JWT
+    const token = KJUR.jws.JWS.sign('HS256', JSON.stringify(header), JSON.stringify(payload), secret);
+    
+    // Guardar el token en localStorage
+    localStorage.setItem('jwtRole', token);
+  }
+
+  hasActualRole(): boolean {
+    return localStorage.getItem('jwtRole') == null;
+  }
+
+  // Método para obtener el rolSelected desde el JWT en el localStorage
+  getActualRole(): string | null {
+    const token = localStorage.getItem('jwtRole');
+    if (!token) {
+      return null; // Retorna null si no hay token
+    }
+
+    const secret = 'your-256-bit-secret'; // Debe ser la misma clave secreta utilizada para firmar el token
+
+    // Decodificar el JWT
+    const decodedToken: any = KJUR.jws.JWS.parse(token);
+    // Verifica la firma
+    const isValid = KJUR.jws.JWS.verify(token, secret, ['HS256']);
+    
+    if (isValid) {
+      return decodedToken.payloadObj.selectedRol || null; // Retorna el rolSelected
+    } else {
+      console.error('Token no es válido.');
+      return null;
+    }
+  }
+
 }

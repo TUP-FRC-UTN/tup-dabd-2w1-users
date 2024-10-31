@@ -99,6 +99,7 @@ export class UsersListPlotsComponent {
             searching: true,
             ordering: true,
             lengthChange: true,
+            lengthMenu: [10, 25, 50],
             order: [[0, 'asc']],
             pageLength: 10,
             columns: [
@@ -114,15 +115,16 @@ export class UsersListPlotsComponent {
                 width: '15%',
                 className: 'text-left',  
                 render: (data, type, row, meta) => {
-                  const userId = this.plots[meta.row].id;
+                  const plotId = this.plots[meta.row].id;
                   return `
                     <div class="dropdown-center d-flex align-items-center">
                       <button class="btn btn-light border border-1 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-three-dots-vertical"></i>
                       </button>
                       <ul class="dropdown-menu">
-
-                        <li><a class="dropdown-item edit-plot" data-id="${userId}">Editar</a></li>
+                        <li><a class="dropdown-item view-plot" data-id="${plotId}">Ver más</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item edit-plot" data-id="${plotId}">Editar</a></li>
                       </ul>
                     </div>
                   `; // si queremos el ver mas de nuevo <li><a class="dropdown-item view-plot" data-id="${meta.row}">Ver más</a></li>
@@ -138,40 +140,21 @@ export class UsersListPlotsComponent {
               plot.plot_type,
               plot.plot_state
             ]),
+            dom:
+            '<"mb-3"t>' +                           
+            '<"d-flex justify-content-between"lp>',
             language: {
-              lengthMenu: "Mostrar _MENU_ registros por página",
+              lengthMenu: "_MENU_",
               zeroRecords: "No se encontraron resultados",
               info: "Mostrando página _PAGE_ de _PAGES_",
               infoEmpty: "No hay registros disponibles",
               infoFiltered: "(filtrado de _MAX_ registros totales)",
               search: "Buscar:",
-              paginate: {
-                first: "Primera",
-                last: "Última",
-                next: "Siguiente",
-                previous: "Anterior"
-              },
               loadingRecords: "Cargando...",
               processing: "Procesando...",
               emptyTable: "No hay datos disponibles en la tabla"
             },
-            createdRow: function (row, data, dataIndex) {
-              if (dataIndex % 2 === 0) {
-                $(row).css('background-color', '#f9f9f9');  // Color de fondo para filas pares
-              } else {
-                $(row).css('background-color', '#ffffff');  // Color de fondo para filas impares
-              }
-            }
           });    
-
-          // Añadir estilos adicionales al DataTable
-          $('#myTable').css({
-            'border-collapse': 'separate',
-            'border-spacing': '0 10px',  // Espacio entre filas
-            'width': '100%',  // Ancho completo de la tabla
-            'border': '1px solid #ddd',
-            'padding-left': '15px'  // Borde para toda la tabla
-          });
 
           // Alinear la caja de búsqueda a la derecha
           const searchInputWrapper = $('#myTable_filter');
@@ -183,7 +166,7 @@ export class UsersListPlotsComponent {
               const searchValue = (event.target as HTMLInputElement).value; // Acceder al valor correctamente
           
               // Comienza a buscar solo si hay 3 o más caracteres
-              if (searchValue.length >= 3) {
+              if (searchValue.length >= 2) {
                   table.search(searchValue).draw();
               } else {
                   table.search('').draw(); // Limpia la búsqueda si hay menos de 3 caracteres
@@ -193,9 +176,12 @@ export class UsersListPlotsComponent {
           // Asignar el evento click a los botones "Ver más"
           // Asignar el evento click a los botones "Ver más"
         $('#myTable').on('click', '.view-plot', (event) => {
-          const id = $(event.currentTarget).data('id');
-          const userId = this.plots[id].id; // Obtén el ID real del usuario
-          this.abrirModal( userId); // Abre el modal en modo "ver"
+          
+          //Comente estas lineas porque daba error
+          //const id = $(event.currentTarget).data('id');
+          //const userId = this.plots[id].id; // Obtén el ID real del usuario
+          const plotId = $(event.currentTarget).data('id');
+          this.abrirModal( plotId); // Abre el modal en modo "ver"
         });
 
           // Asignar el evento click a los botones "Editar"
@@ -213,6 +199,83 @@ export class UsersListPlotsComponent {
         console.error('Error al cargar los lotes:', error);
       }
     });
+  }
+
+   //Exporta a pdf la tabla, si esta filtrada solo exporta los datos filtrados
+   exportPdf() {
+    const doc = new jsPDF();
+  
+    // Agregar título centrado
+    const title = 'Lista de Lotes';
+    const pageWidth = doc.internal.pageSize.getWidth();
+    doc.setFontSize(16);
+    const textWidth = doc.getTextWidth(title);
+    doc.text(title, (pageWidth - textWidth) / 2, 20);
+  
+    // Obtener columnas de la tabla (añadido 'Email')
+    const columns = ['Lote', 'Manzana', 'M2', 'M2 Construidos','Tipo','Estado'];
+  
+    // Filtrar datos visibles en la tabla
+    const table = $('#myTable').DataTable(); // Inicializa DataTable una vez
+  
+    // Cambia la forma de obtener las filas visibles usando 'search' en lugar de 'filter'
+    const visibleRows = table.rows({ search: 'applied' }).data().toArray(); // Usar 'search: applied'
+  
+    // Mapear los datos filtrados a un formato adecuado para jsPDF
+    const rows = visibleRows.map((row: any) => [
+      `${row[0]}`,       // Nombre
+      `${row[1]}`,       // Rol
+      `${row[2]}`,       // Lote
+      `${row[3]}`,
+      `${row[4]}`,
+      `${row[5]}`,
+    ]);
+  
+    // Generar la tabla en el PDF usando autoTable
+    autoTable(doc, {
+      head: [columns],
+      body: rows,
+      startY: 30, // Ajusta la posición de inicio de la tabla
+      theme: 'striped', // Tema de tabla con filas alternadas
+      headStyles: { fillColor: [0, 0, 0] }, // Color de fondo del encabezado
+      styles: { halign: 'center', valign: 'middle' }, // Alineación del contenido
+      columnStyles: { 
+        0: { cellWidth: 30 }, 
+        1: { cellWidth: 30 }, 
+        2: { cellWidth: 30 }, 
+        3: { cellWidth: 30 }, 
+        4: { cellWidth: 40 },
+        5: { cellWidth: 40 }
+      }, // Ajusta el ancho de las columnas
+    });
+  
+    doc.save('lotes.pdf'); // Descarga el archivo PDF
+  }
+
+  //Exporta por excel los registros de la tabla
+  exportExcel() {
+
+    const table = $('#myTable').DataTable(); // Inicializa DataTable una vez
+  
+    // Cambia la forma de obtener las filas visibles usando 'search' en lugar de 'filter'
+    const visibleRows = table.rows({ search: 'applied' }).data().toArray(); // Usar 'search: applied'
+
+    // Filtrar a los lotes x aquellos que aparzcan en la tabla visibleRows
+    let plots = this.plots.filter(plot => visibleRows.some(row => row[0] === plot.plot_number));
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(plots.map(plot => ({
+      Lote: plot.plot_number,
+      Manzana: plot.block_number,
+      M2: plot.total_area_in_m2,
+      M2_Construidos: plot.built_area_in_m2,
+      Tipo: plot.plot_type,
+      Estado: plot.plot_state 
+    })));
+  
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Lotes');
+  
+    XLSX.writeFile(wb, 'lotes.xlsx'); // Descarga el archivo Excel
   }
 
   async abrirModal(plotId: number) {
@@ -242,7 +305,6 @@ export class UsersListPlotsComponent {
 
   
   redirectEdit(id: number) {
-    console.log("b");
     this.router.navigate(['/home/plots/edit', id])
   }
 
@@ -250,16 +312,8 @@ export class UsersListPlotsComponent {
   plotModel: GetPlotModel = new GetPlotModel();
    selectUser(id: number): Promise<GetPlotModel> {
        // Mostrar SweetAlert de tipo 'cargando'
-     Swal.fire({
-       title: 'Cargando lote...',
-       html: 'Por favor, espera un momento',
-       allowOutsideClick: false, // No permitir cerrar la alerta haciendo clic fuera
-       didOpen: () => {
-         Swal.showLoading(); // Mostrar indicador de carga
-       }
-     });
      return new Promise((resolve, reject) => {
-       this.apiService.gePlotById(id).subscribe({
+       this.apiService.getPlotById(id).subscribe({
          next: (data: GetPlotModel) => {
            this.plotModel = data;        
            Swal.close(); // Cerrar SweetAlert

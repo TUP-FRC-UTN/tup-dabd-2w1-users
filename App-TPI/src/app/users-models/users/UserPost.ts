@@ -4,14 +4,15 @@ export class UserPost {
     username: string;     
     password: string;
     email: string;       
-    phone_number: string; 
+    phone_number: string;
+    dni_type_id : number;
     dni: string;         
     active: boolean;      
     avatar_url: string;   
     datebirth: string;    
     roles: string[];  
     userUpdateId: number;
-    plot_id: number;
+    plot_id?: number;
     telegram_id: number;
 
     constructor() {
@@ -19,6 +20,7 @@ export class UserPost {
         this.lastname = '';
         this.username = '';
         this.email = '';
+        this.dni_type_id = 0;
         this.dni = "";
         this.active = true;
         this.avatar_url = '';

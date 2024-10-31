@@ -17,6 +17,7 @@ export class OwnerModel {
     userCreateId: number;
     plotId: number;
     telegramId: number;
+    files: File[];
 
     constructor() {
         this.name = '';        
@@ -36,5 +37,6 @@ export class OwnerModel {
         this.userCreateId = 0;
         this.plotId = 0;
         this.telegramId = 0;
+        this.files = [];
     }
 }

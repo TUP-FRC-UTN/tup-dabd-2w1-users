@@ -1,18 +1,26 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Owner } from '../../../users-models/owner/Owner';
+import { FileService } from '../../../users-servicies/file.service';
+import { FileDto } from '../../../users-models/owner/FileDto';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-users-modal-info-owner',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './users-modal-info-owner.component.html',
   styleUrl: './users-modal-info-owner.component.css'
 })
 export class UsersModalInfoOwnerComponent implements OnInit{
   @Input() ownerModel: Owner = new Owner();
   infoOwner : FormGroup;
+  filesOwner: FileDto[];
+
+  fullName : string = "";
+
+  private readonly fileService = inject(FileService);
 
   ngOnInit(): void {
     this.infoOwner.patchValue({
@@ -23,11 +31,11 @@ export class UsersModalInfoOwnerComponent implements OnInit{
       birthdate: this.ownerModel.dateBirth,
       ownerType: this.ownerModel.ownerType,
       taxStatus: this.ownerModel.taxStatus,
-      businessName: this.ownerModel.bussinesName
-
+      businessName: this.ownerModel.businessName
     });
+    this.filesOwner =  this.ownerModel.files;
     this.infoOwner.disable();
-    
+    this.fullName = this.ownerModel.name + " " + this.ownerModel.lastname;
   }
 
   constructor(public activeModal: NgbActiveModal, private fb: FormBuilder) {
@@ -41,11 +49,18 @@ export class UsersModalInfoOwnerComponent implements OnInit{
       ownerType: [''],
       taxStatus: [''],
       businessName: [''],
-      active: [''] //no se muestra en el form xq se deberían traer por defecto los activos
+      active: [''] 
     });
+
+    this.filesOwner = [];
   }
 
   closeModal(){
     this.activeModal.close();
   }
+
+  downloadFile(fileId: string) {
+    this.fileService.downloadFile(fileId);
+  }
 }
+

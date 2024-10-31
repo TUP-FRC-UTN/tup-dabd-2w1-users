@@ -6,6 +6,8 @@ import { UserService } from '../../../users-servicies/user.service';
 import Swal from 'sweetalert2';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { GetPlotModel } from '../../../users-models/plot/GetPlot';
+import { FileDto } from '../../../users-models/owner/FileDto';
+import { FileService } from '../../../users-servicies/file.service';
 
 @Component({
   selector: 'app-users-moda-info-plot',
@@ -19,6 +21,9 @@ export class UsersModaInfoPlotComponent implements OnInit {
   @Input() plotModel: GetPlotModel = new GetPlotModel();
 
   plotForm: FormGroup;
+  filesPlot: FileDto[];
+
+  private readonly fileService = inject(FileService);
 
   constructor(public activeModal: NgbActiveModal, private fb: FormBuilder) {
     this.plotForm = this.fb.group({
@@ -29,11 +34,11 @@ export class UsersModaInfoPlotComponent implements OnInit {
       state: [''],
       type: ['']
     });
+    this.filesPlot = [];
   }
 
   // Método para detectar cambios en el @Input
   ngOnInit() {        
-      console.log("aaa");
       this.plotForm.patchValue({
         plot: this.plotModel.plot_number  ,
         block: this.plotModel.block_number,
@@ -43,11 +48,14 @@ export class UsersModaInfoPlotComponent implements OnInit {
         type: this.plotModel.plot_type
       });
       this.plotForm.disable();
+      this.filesPlot = this.plotModel.files;
   }
 
   closeModal(){
     this.activeModal.close();
   }
 
-  
+  downloadFile(fileId: string) {
+    this.fileService.downloadFile(fileId);
+  }
 }

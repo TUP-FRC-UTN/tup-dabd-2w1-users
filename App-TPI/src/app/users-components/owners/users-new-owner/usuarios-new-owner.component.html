@@ -1,229 +1,210 @@
-<section class="container pt-5">
-    <h3>Añadir Propietario</h3>
-    <form [formGroup]="formReactivo" (ngSubmit)="createOwner()">
-        <div class="row mb-3 mt-5">
-            <div class="col d-flex flex-column">
-                <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-end">Nombre</label>
-                    <input type="text" class="form-control custom-input" formControlName="name" 
-                    [ngClass]="{'is-invalid': formReactivo.controls['name'].invalid  && (formReactivo.get('name')?.dirty|| formReactivo.get('name')?.touched),'is-valid': formReactivo.controls['name'].valid }" >
-                </div>   
-                @if(formReactivo.controls['name'].invalid && (formReactivo.controls['name'].dirty || formReactivo.controls['name'].touched)){
-                    
-                    <div class="text-danger align-self-end" style="width: 500px;">
-                        Ingrese su nombre
-                    </div>
-                }
-            </div>
-            <div class="col d-flex flex-column">
-                <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-end">Apellido</label>
-                    <input type="text" class="form-control custom-input" formControlName="lastname"
-                    [ngClass]="{'is-invalid': formReactivo.controls['lastname'].invalid  && (formReactivo.get('lastname')?.dirty|| formReactivo.get('lastname')?.touched),'is-valid': formReactivo.controls['lastname'].valid }">
-                </div>   
-                @if(formReactivo.controls['lastname'].invalid && (formReactivo.controls['lastname'].dirty || formReactivo.controls['lastname'].touched)){
-                    <div class="text-danger align-self-end" style="width: 500px;">
-                        Ingrese su apellido
-                    </div>
-                }
-            </div>
+<section class="container p-5 border rounded border-3 border-secundary" style="min-height: 70vh">
+  <form [formGroup]="formReactivo" (ngSubmit)="createOwner()">
+    <div class="row">
+      <div class="col-lg-6 mb-3">
+        <div class="row">
+          <label class="col-2 col-form-label">Nombre</label>
+          <div class="col-10">
+            <input type="text" class="form-control" formControlName="name" [ngClass]="onValidate('name')" />
+            <div class="invalid-feedback">{{ showError("name") }}</div>
+          </div>
         </div>
+      </div>
 
-        <div class="row mb-3">
-            <div class="col d-flex flex-column">
-                <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-end">DNI</label>
-                    <input type="text" class="form-control custom-input" formControlName="dni"
-                    [ngClass]="{'is-invalid': formReactivo.controls['dni'].invalid  && (formReactivo.get('dni')?.dirty|| formReactivo.get('dni')?.touched),'is-valid': formReactivo.controls['dni'].valid }">
-                </div>   
-                @if(formReactivo.controls['dni'].invalid && (formReactivo.controls['dni'].dirty || formReactivo.controls['dni'].touched)){
-                    <div class="text-danger align-self-end" style="width: 500px;">
-                        Ingrese su DNI
-                    </div>
-                }
-            </div>
-            <div class="col d-flex flex-column">
-                <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-end">CUIT - CUIL</label>
-                    <input type="text" class="form-control custom-input" formControlName="cuit_cuil"
-                    [ngClass]="{'is-invalid': formReactivo.controls['cuit_cuil'].invalid  && (formReactivo.get('cuit_cuil')?.dirty|| formReactivo.get('cuit_cuil')?.touched),'is-valid': formReactivo.controls['cuit_cuil'].valid }">
-                </div>   
-                @if(formReactivo.controls['cuit_cuil'].invalid && (formReactivo.controls['cuit_cuil'].dirty || formReactivo.controls['cuit_cuil'].touched)){
-                    <div class="text-danger align-self-end" style="width: 500px;">
-                        Ingrese su CUIT - CUIL
-                    </div>
-                }
-            </div>
+      <div class="col-lg-6 mb-3">
+        <div class="row">
+          <label class="col-2 col-form-label">Apellido</label>
+          <div class="col-10">
+            <input type="text" class="form-control" formControlName="lastname" [ngClass]="onValidate('lastname')" />
+            <div class="invalid-feedback">{{ showError("lastname") }}</div>
+          </div>
         </div>
+      </div>
 
-        <div class="row mb-3">
-            <div class="col d-flex flex-column">
-                <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-end">Fecha de nacimiento</label>
-                    <input type="date" class="form-control custom-input" formControlName="birthdate"
-                    [ngClass]="{'is-invalid': formReactivo.controls['birthdate'].invalid  && (formReactivo.get('birthdate')?.dirty|| formReactivo.get('birthdate')?.touched),'is-valid': formReactivo.controls['birthdate'].valid }">
-                </div>   
-                @if(formReactivo.controls['birthdate'].invalid && (formReactivo.controls['birthdate'].dirty || formReactivo.controls['birthdate'].touched)){
-                    <div class="text-danger align-self-end" style="width: 500px;">
-                        Ingrese su Fecha de nacimiento
-                    </div>
-                }
-            </div>
-            <div class="col d-flex flex-column ">
-                <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-end">Email</label>
-                    <input type="text" class="form-control custom-input" formControlName="email"
-                    [ngClass]="{'is-invalid': formReactivo.controls['email'].invalid  && (formReactivo.get('email')?.dirty|| formReactivo.get('email')?.touched),'is-valid': formReactivo.controls['email'].valid }">
-                </div>   
-                @if(formReactivo.controls['email'].invalid && (formReactivo.controls['email'].dirty || formReactivo.controls['email'].touched)){
-                    <div class="text-danger align-self-end" style="width: 500px;">
-                        Ingrese su Email
-                    </div>
-                }
-            </div>
+      <div class="col-lg-6 mb-3">
+        <div class="row">
+          <label class="col-2 col-form-label">Dni</label>
+          <div class="col-10">
+            <input type="text" class="form-control" formControlName="dni" [ngClass]="onValidate('dni')" />
+            <div class="invalid-feedback">{{ showError("dni") }}</div>
+          </div>
         </div>
+      </div>
+
+      <div class="col-lg-6 mb-3">
+        <div class="row">
+          <label class="col-2 col-form-label">Cuit-Cuil</label>
+          <div class="col-10">
+            <input type="text" class="form-control" formControlName="cuit_cuil" [ngClass]="onValidate('cuit_cuil')" />
+            <div class="invalid-feedback">{{ showError("cuit_cuil") }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 mb-3">
+        <div class="row">
+          <label class="col-2 col-form-label">Fecha de nacimiento</label>
+          <div class="col-10">
+            <input type="date" class="form-control" formControlName="birthdate" value="2000-01-01"
+              [ngClass]="onValidate('birthdate')" />
+            <div class="invalid-feedback">{{ showError("birthdate") }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 mb-3">
+        <div class="row">
+          <label class="col-2 col-form-label">Email</label>
+          <div class="col-10">
+            <input type="email" class="form-control" formControlName="email" [ngClass]="onValidate('email')" />
+            <div class="invalid-feedback">{{ showError("email") }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 mb-3">
+        <div class="row">
+          <label class="col-2 col-form-label">Estado Fiscal</label>
+          <div class="col-10">
+            <select id="selectOption" class="form-select" formControlName="state" [ngClass]="onValidate('state')">
+              @for (s of states; track $index) {
+              <option value="{{ s.id }}">{{ s.description }}</option>
+              }
+            </select>
+            <div class="invalid-feedback">{{ showError("state") }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 mb-3">
+        <div class="row">
+          <label class="col-2 col-form-label">Tipo de propietario</label>
+          <div class="col-10">
+            <select id="selectOption" class="form-select" formControlName="type" [ngClass]="onValidate('type')">
+              @for (t of types; track $index) {
+              <option value="{{ t.id }}">{{ t.description }}</option>
+              }
+            </select>
+            <div class="invalid-feedback">{{ showError("type") }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 mb-3">
+        <div class="row">
+          <label class="col-2 col-form-label">Nombre de usuario</label>
+          <div class="col-10">
+            <input type="email" class="form-control" formControlName="username" [ngClass]="onValidate('username')" />
+            <div class="invalid-feedback">{{ showError("username") }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 mb-3">
+        <div class="row">
+          <label class="col-2 col-form-label">Contraseña</label>
+          <div class="col-10">
+            <input [type]="passwordVisible ? 'text' : 'password'" class="form-control" formControlName="password"
+              [ngClass]="onValidate('password')" />
+            <div class="invalid-feedback">{{ showError("password") }}</div>
+            <i class="bi" [ngClass]="passwordVisible ? 'bi-eye-slash' : 'bi-eye'" (click)="togglePasswordVisibility()"
+              style="
+                cursor: pointer;
+                position: absolute;
+                right: -35px;
+                top: 20px;
+                transform: translateY(-50%);
+              "></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 mb-3">
+        <div class="row">
+          <label class="col-2 col-form-label">Teléfono</label>
+          <div class="col-10">
+            <input type="text" class="form-control" formControlName="phone" [ngClass]="onValidate('phone')" />
+            <div class="invalid-feedback">{{ showError("phone") }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 mb-3">
+        <div class="row">
+          <label class="col-2 col-form-label">Razón social</label>
+          <div class="col-10">
+            <input type="text" class="form-control" formControlName="company" [ngClass]="onValidate('company')" />
+            <div class="invalid-feedback">{{ showError("company") }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 mb-3">
+        <div class="row">
+          <label class="col-2 col-form-label">Lote</label>
+          <div class="col-10">
+            <select id="selectOption" class="form-select" formControlName="plot" [ngClass]="onValidate('plot')">
+              <option value="" disabled selected>Seleccione un lote</option>
+              @for (s of lotes; track $index) {
+              <option value="{{ s.id }}">
+                Numero de lote: {{ s.plot_number }}, Manzana:
+                {{ s.block_number }}
+              </option>
+              }
+            </select>
+            <div class="invalid-feedback">{{ showError("plot") }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 mb-3">
+        <div class="row">
+          <label class="col-2 col-form-label">Telegram id</label>
+          <div class="col-10">
+            <input type="text" class="form-control" formControlName="telegram_id"
+              [ngClass]="onValidate('telegram_id')" />
+            <div class="invalid-feedback">{{ showError("telegram_id") }}</div>
+          </div>
+        </div>
+      </div>
 
 
-
-
-
-        <div class="row mb-3 mt-5">
-            <div class="col d-flex flex-column">
-                <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-end">Estado fiscal</label>
-                     <!-- <div class="d-flex" style="flex: 1;"> -->
-                        <select class="form-select me-2" id="stateId" formControlName="state" style="width: 418px;"
-                            [ngClass]="{'is-invalid': formReactivo.controls['state'].invalid  && (formReactivo.get('state')?.dirty|| formReactivo.get('state')?.touched),'is-valid': formReactivo.controls['state'].valid }">
-                            @for (s of states; track $index) {
-                            <option value="{{s.id}}">{{s.description}}</option>
-                            }
-                        </select>
-                    <!-- </div> -->
+      <div class="col-lg-6 mb-3">
+        <div class="row">
+          <label class="col-2 col-form-label">Subir Archivos</label>
+          <div class="col-10">
+            <input type="file" class="form-control" multiple formControlName="file" [ngClass]="onValidate('file')"
+              (change)="onFileChange($event)">
+            <div class="invalid-feedback">{{showError('file')}}</div>
+            <!-- Listado de archivos -->
+            <div class="list-group mt-3">
+              @for (file of files; track $index) {
+              <div class="list-group-item d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                  <i class="bi-file-earmark-text me-3 text-primary fs-5"></i>
+                  <span>{{file.name.length > 40 ? file.name.slice(0, 40)+'...' :
+                    file.name}}</span>
                 </div>
-                @if(formReactivo.controls['state'].invalid && (formReactivo.get('state')?.dirty ||
-                formReactivo.get('state')?.touched)){
-                <div class="text-danger align-self-end" style="width: 500px;">
-                    Seleccione un estado fiscal
-                </div>
-                }
+                <span>{{ (file.size / (1024 * 1024)).toFixed(2) }} MB</span>
+              </div>
+              }
             </div>
-            <div class="col d-flex flex-column">
-                <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-end">Tipo</label>
-                     <!-- <div class="d-flex" style="flex: 1;"> -->
-                        <select class="form-select me-2" id="stateId" formControlName="type" style="width: 418px;"
-                            [ngClass]="{'is-invalid': formReactivo.controls['type'].invalid  && (formReactivo.get('type')?.dirty|| formReactivo.get('type')?.touched),'is-valid': formReactivo.controls['type'].valid }">
-                            @for (t of types; track $index) {
-                            <option value="{{t.id}}">{{t.description}}</option>
-                            }
-                        </select>
-                    <!-- </div> -->
-                </div>
-                @if(formReactivo.controls['type'].invalid && (formReactivo.get('type')?.dirty ||
-                formReactivo.get('type')?.touched)){
-                <div class="text-danger align-self-end" style="width: 500px;">
-                    Seleccione un tipo propietario
-                </div>
-                }
-            </div>
+          </div>
         </div>
+      </div>
 
-
-        <div class="row mb-3">
-            <div class="col d-flex flex-column">
-                <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-end">Nombre de usuario</label>
-                    <input type="text" class="form-control custom-input" formControlName="username"
-                    [ngClass]="{'is-invalid': formReactivo.controls['username'].invalid  && (formReactivo.get('username')?.dirty|| formReactivo.get('username')?.touched),'is-valid': formReactivo.controls['username'].valid }">
-                </div>   
-                @if(formReactivo.controls['username'].invalid && (formReactivo.controls['username'].dirty || formReactivo.controls['username'].touched)){
-                    <div class="text-danger align-self-end" style="width: 500px;">
-                        Ingrese su nombre de usuario
-                    </div>
-                }
-            </div>
-            <div class="col d-flex flex-column">
-                <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-end">Contraseña</label>
-                    <input type="text" class="form-control custom-input" formControlName="password"
-                    [ngClass]="{'is-invalid': formReactivo.controls['password'].invalid  && (formReactivo.get('password')?.dirty|| formReactivo.get('password')?.touched),'is-valid': formReactivo.controls['password'].valid }">
-                </div>   
-                @if(formReactivo.controls['password'].invalid && (formReactivo.controls['password'].dirty || formReactivo.controls['password'].touched)){
-                    <div class="text-danger align-self-end" style="width: 500px;">
-                        Ingrese su contraseña
-                    </div>
-                }
-            </div>
+      <div class="row mb-3 justify-content-end">
+        <div class="col-auto">
+          <button type="button" class="btn btn-secondary" (click)="confirmExit()">
+            Cancelar
+          </button>
         </div>
-
-
-
-        <div class="row mb-3">
-            <div class="col-md-6 d-flex justify-content-end">
-                <label class="form-label me-2 text-end pt-2" style="width: 150px; margin-bottom: 0;">Roles</label>
-                <app-users-select-multiple [rolesSelected]="rolesSelected"></app-users-select-multiple>
-            </div>
-            <div class="col d-flex flex-column">
-                <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-end">Nombre del negocio</label>
-                    <input type="text" class="form-control custom-input" formControlName="nombreNegocio"
-                    >
-                </div>   
-                @if(formReactivo.controls['nombreNegocio'].invalid && (formReactivo.controls['nombreNegocio'].dirty || formReactivo.controls['nombreNegocio'].touched)){
-                    <div class="text-danger align-self-end" style="width: 500px;">
-                        Ingrese un nombre de negocio válido
-                    </div>
-                }
-            </div>
+        <div class="col-auto">
+          <button type="submit" class="btn btn-primary" [disabled]="!formReactivo.valid">
+            Guardar
+          </button>
         </div>
-
-
-        <div class="row mb-3 mt-5">
-            <div class="col d-flex flex-column">
-                <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-end">Lote</label>
-                     <!-- <div class="d-flex" style="flex: 1;"> -->
-                        <select class="form-select me-2" id="stateId" formControlName="lote" style="width: 418px;"
-                            [ngClass]="{'is-invalid': formReactivo.controls['lote'].invalid  && (formReactivo.get('lote')?.dirty|| formReactivo.get('lote')?.touched),'is-valid': formReactivo.controls['lote'].valid }">
-                            @for (s of lotes; track $index) {
-                            <option value="{{s.id}}">{{s.block_number}}</option>
-                            }
-                        </select>
-                    <!-- </div> -->
-                </div>
-                @if(formReactivo.controls['lote'].invalid && (formReactivo.get('lote')?.dirty ||
-                formReactivo.get('lote')?.touched)){
-                <div class="text-danger align-self-end" style="width: 500px;">
-                    Seleccione un lote
-                </div>
-                }
-            </div>
-            <div class="col d-flex flex-column">
-                <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-end">Número de teléfono</label>
-                    <input type="text" class="form-control custom-input" formControlName="phone"
-                    [ngClass]="{'is-invalid': formReactivo.controls['phone'].invalid  && (formReactivo.get('phone')?.dirty|| formReactivo.get('phone')?.touched),'is-valid': formReactivo.controls['phone'].valid }">
-                </div>   
-                @if(formReactivo.controls['phone'].invalid && (formReactivo.controls['phone'].dirty || formReactivo.controls['phone'].touched)){
-                    <div class="text-danger align-self-end" style="width: 500px;">
-                        Ingrese su número de teléfono
-                    </div>
-                }
-            </div>
-        </div>
-
-        
-        <div class="row mb-3">
-            <div class="col">
-                <div class="d-flex justify-content-end">
-                    <button type="button" class="btn btn-danger me-3">Cancelar</button>
-                    @if(formReactivo.valid){
-                        <button type="submit" class="btn btn-primary">Guardar</button>
-                    }@else{
-                        <button type="submit" class="btn btn-primary" disabled>Guardar</button>
-                    }
-                </div>                              
-            </div>
-        </div>
-    </form>
+      </div>
+    </div>
+  </form>
 </section>

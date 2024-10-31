@@ -19,7 +19,6 @@
     background-color: rgb(234, 234, 234);
 }
 
-.form-control{
-    min-width: 500px !important;
-    max-width: 500px !important;   
+.form-check-label:hover {
+    pointer-events: none!important;     
 }
