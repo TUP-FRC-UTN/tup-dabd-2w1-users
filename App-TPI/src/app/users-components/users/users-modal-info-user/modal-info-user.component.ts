@@ -106,7 +106,7 @@ export class ModalInfoUserComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         (window as any).Swal.fire({
-          position: "top-end",
+          position: "center-center",
           title: '¡Usuario borrado!',
           text: 'El usuario se ha borrado correctamente.',
           icon: 'success',
@@ -116,7 +116,7 @@ export class ModalInfoUserComponent implements OnInit {
         this.confirmDesactivate();
       } else {
         (window as any).Swal.fire({
-          position: "top-end",
+          position: "center-center",
           title: '¡Usuario no se ha borrado!',
           text: 'La operación se ha cancelado exitosamente.',
           icon: 'info',

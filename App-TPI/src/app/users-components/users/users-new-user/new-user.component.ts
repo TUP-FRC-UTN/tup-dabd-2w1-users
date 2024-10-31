@@ -64,7 +64,7 @@ export class NewUserComponent implements OnInit {
     });
 
     if(this.authService.getActualRole() == "Propietario"){
-      this.formReactivo.controls['plot'].disable();
+      this.reactiveForm.controls['plot'].disable();
     }
   }
 
@@ -200,7 +200,7 @@ export class NewUserComponent implements OnInit {
       next: (response) => {
         //Mostramos que la operación fue exitosa
         (window as any).Swal.fire({
-          position: "top-end",
+          position: "center-center",
           title: 'Usuario creado',
           text: 'El usuario se ha creado correctamente',
           icon: 'success',
@@ -217,11 +217,13 @@ export class NewUserComponent implements OnInit {
       },
       error: (error) => {
         //Mostramos que hubo un error
-        Swal.fire({
+        (window as any).Swal.fire({
+          position: "center-center",
           title: 'Error',
           text: 'El usuario no se pudo crear',
           icon: 'error',
-          confirmButtonText: 'Aceptar'
+          confirmButtonText: 'Aceptar',
+          
         });
       },
     });

@@ -8,6 +8,7 @@ import { LoginUser } from '../users-models/users/Login';
 import { UserPut } from '../users-models/users/UserPut';
 import { map } from 'rxjs/operators';
 import { DeleteUser } from '../users-models/owner/DeleteUser';
+import { GetuserDto } from '../users-models/users/GetUserDto';
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +41,10 @@ export class UserService {
 
   getUserById(userId: number): Observable<UserGet> {
     return this.http.get<UserGet>(this.url + "getById/" + userId);
+  }
+
+  getUserById2(userId: number): Observable<GetuserDto> {
+    return this.http.get<GetuserDto>(this.url + "getById/" + userId);
   }
 
   getUserByEmail(email: string): Observable<UserGet> {

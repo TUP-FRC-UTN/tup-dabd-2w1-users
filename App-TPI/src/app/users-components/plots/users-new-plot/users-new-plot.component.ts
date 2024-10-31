@@ -79,6 +79,7 @@ export class UsersNewPlotComponent {
     this.states = [];
     this.types = [];
     this.fileUploadComponent.files = [];
+    this.files = [];
     
   }
 
@@ -163,8 +164,12 @@ export class UsersNewPlotComponent {
     }
   }  
 
-      //Evento para actualizar el listado de files a los seleccionados actualmente
-      onFileChange(event: any) {
-        this.files = Array.from(FileList = event.target.files); //Convertir FileList a Array
-      }
+  //Evento para actualizar el listado de files a los seleccionados actualmente
+  onFileChange(event: any) {
+    this.files.push(...Array.from(event.target.files as FileList)); //Convertir FileList a Array
+  }
+
+  deleteFile(index: number) {
+    this.files.splice(index, 1);
+  }
 }

@@ -27,6 +27,7 @@ export class UsersFamiliarGroupComponent implements OnInit {
 
   familyGroup: UserGet[] = [];
   plot : GetPlotDto = new GetPlotDto();
+  userModal: UserGet = new UserGet();
 
   ngOnInit() {
     this.apiService.getUsersByPlotID(1).subscribe({
@@ -54,11 +55,13 @@ export class UsersFamiliarGroupComponent implements OnInit {
 
 
   }
-
+  
+  //Acorta el nombre completo
   showName(name: String){
     return name.substring(0, 17) + "...";
   }
 
+  //Mostrar solo un rol
   showRoles(name: String[]){
     if(name.length == 1){
       return name[0];
@@ -66,31 +69,33 @@ export class UsersFamiliarGroupComponent implements OnInit {
     return name[0] + "...." ;
   }
 
-
+  //Mostrar el email
   showEmail(name: String){
     return name.substring(0, 15) + "...";
   }
-
+  
+  //Redirecciona a editar un usuario
   redirectEdit(id: number) {
     this.router.navigate(['/home/users/edit', id]); 
   }
 
-  
+  //Redirecciona  a agregar usuario
   redirectAdd() {
     this.router.navigate(['/home/users/add']); 
   }
 
+  //Abre el modal con la información del usuario
   async abrirModal(type: string, userId: number) {
     console.log("Esperando a que userModal se cargue...");
   
-    // Espera a que se cargue el usuario seleccionado
+    //Espera a que se cargue el usuario seleccionado
     try {
       await this.selectUser(userId);
       console.log("userModal cargado:", this.userModal);
   
       // Una vez cargado, abre el modal
       const modalRef = this.modal.open(ModalInfoUserComponent, { size: 'lg', keyboard: false });
-      modalRef.componentInstance.typeModal = type; // Pasar el tipo de modal al componente hijo
+      modalRef.componentInstance.typeModal = type; //Pasar el tipo de modal al componente hijo
       modalRef.componentInstance.userModal = this.userModal;
       modalRef.componentInstance.plotModal = this.plot;
 
@@ -102,10 +107,8 @@ export class UsersFamiliarGroupComponent implements OnInit {
       console.error('Error al abrir el modal:', error);
     }
   }
-  
 
-  userModal: UserGet = new UserGet();
-
+  //Selecciona un usuario por su id
   selectUser(id: number): Promise<UserGet> {
       return new Promise((resolve, reject) => {
           this.apiService.getUserById(id).subscribe({
@@ -127,5 +130,4 @@ export class UsersFamiliarGroupComponent implements OnInit {
           });
       });
   }
-
 }

@@ -8,6 +8,9 @@ import { AuthService } from '../../../users-servicies/auth.service';
 import { DateService } from '../../../users-servicies/date.service';
 import Swal from 'sweetalert2';
 import { ImageUploadComponent } from "../../utils/image-upload/image-upload.component";
+import { GetuserDto } from '../../../users-models/users/GetUserDto';
+import { PlotService } from '../../../users-servicies/plot.service';
+import { GetPlotDto } from '../../../users-models/plot/GetPlotDto';
 
 @Component({
   selector: 'app-users-profile',
@@ -20,10 +23,13 @@ export class UsersProfileComponent implements OnInit {
 
   private readonly authService = inject(AuthService);
   private readonly usersService = inject(UserService);
-  dniType: number = 0;
+  private readonly plotsService = inject(PlotService);
 
-  selectedIconUrl: string = '../../../../assets/icons/icono1.svg';
+  dniType: number = 0;
+  selectedIconUrl: string = '';
   isDropdownOpen = false;
+  plots : GetPlotDto[] = [];
+  noIcon = '../../../../assets/icons/avatar.png'
   icons = [
     {name: 'Icono 1', url:'../../../../assets/icons/icono1.svg'},
     {name: 'Icono 2', url:'../../../../assets/icons/icono2.svg'},
@@ -41,8 +47,8 @@ export class UsersProfileComponent implements OnInit {
   type: string = 'info';
 
   ngOnInit(): void {
-    this.usersService.getUserById(this.authService.getUser().id).subscribe({
-        next: (user: UserGet) => {
+    this.usersService.getUserById2(this.authService.getUser().id).subscribe({
+        next: (user: GetuserDto) => {
 
             this.formProfile.patchValue({
                 name: user.name,
@@ -73,6 +79,13 @@ export class UsersProfileComponent implements OnInit {
             });
         }
     })
+
+    this.plotsService.getPlotById(this.authService.getUser().id).subscribe({
+      next: (plot : GetPlotDto) => {
+        this.plots = [];
+        this.plots.push(plot);
+      }
+    });
   };
 
   //Crea y establece las validaciones del formulario
@@ -148,6 +161,15 @@ export class UsersProfileComponent implements OnInit {
       this.formProfile.disable();
     }
   }
+
+  haveIcon(url: string): boolean {
+    for (const icon of this.icons) {
+      if (icon.url === url) {
+        return true;
+      }
+    }
+    return false;
+  }
   
   //Crea un UserPut
   updateUser() {
@@ -184,4 +206,53 @@ export class UsersProfileComponent implements OnInit {
         },
     });
   }
+
+    //Retorna una clase para poner el input en verde o rojo dependiendo si esta validado
+    onValidate(controlName: string) {
+      const control = this.formProfile.get(controlName);
+      return {
+        'is-invalid': control?.invalid && (control?.dirty || control?.touched),
+        'is-valid': control?.valid
+      }
+    }
+
+    showError(controlName: string): string {
+      const control = this.formProfile.get(controlName);
+    
+      if (control && control.errors) {
+        const errorKey = Object.keys(control.errors)[0];
+        
+        switch (errorKey) {
+          case 'required':
+            return 'Este campo no puede estar vacío.';
+          case 'email':
+            return 'Formato de correo electrónico inválido.';
+          case 'minlength':
+            return `El valor ingresado es demasiado corto. Mínimo ${control.errors['minlength'].requiredLength} caracteres.`;
+          case 'maxlength':
+            return `El valor ingresado es demasiado largo. Máximo ${control.errors['maxlength'].requiredLength} caracteres.`;
+          case 'pattern':
+            return 'El formato ingresado no es válido.';
+          case 'min':
+            return `El valor es menor que el mínimo permitido (${control.errors['min'].min}).`;
+          case 'max':
+            return `El valor es mayor que el máximo permitido (${control.errors['max'].max}).`;
+          case 'requiredTrue':
+            return 'Debe aceptar el campo requerido para continuar.';
+          case 'date':
+            return 'La fecha ingresada es inválida.';
+          case 'url':
+            return 'El formato de URL ingresado no es válido.';
+          case 'number':
+            return 'Este campo solo acepta números.';
+          case 'customError':
+            return 'Error personalizado: verifique el dato ingresado.';
+          default:
+            return 'Error no identificado en el campo.';
+        }
+      }
+      
+      return ''; // No hay errores o el control no existe
+    }
+    
 }
