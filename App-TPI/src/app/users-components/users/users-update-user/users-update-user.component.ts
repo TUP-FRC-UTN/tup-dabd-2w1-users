@@ -76,7 +76,7 @@ export class UsersUpdateUserComponent implements OnInit {
   updateForm = new FormGroup({
     name: new FormControl('', [Validators.required]),
     lastname: new FormControl('', [Validators.required]),
-    phoneNumber: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(20)]),
+    phoneNumber: new FormControl('', [Validators.required, Validators.pattern(/^\d+$/),Validators.minLength(10), Validators.maxLength(20)]),
     telegram_id: new FormControl(0),
     dni: new FormControl(''),
     email: new FormControl(''),
@@ -170,5 +170,45 @@ export class UsersUpdateUserComponent implements OnInit {
       this.router.navigate(['home/users/list']);
     }
   }
+
+  //Retorna una clase para poner el input en verde o rojo dependiendo si esta validado
+  onValidate(controlName: string) {
+    const control = this.updateForm.get(controlName);
+    return {
+      'is-invalid': control?.invalid && (control?.dirty || control?.touched),
+      'is-valid': control?.valid
+    }
+  }
+
+
+  showError(controlName: string): string {
+    const control = this.updateForm.get(controlName);
+  
+    if (control && control.errors) {
+      const errorKey = Object.keys(control.errors)[0];
+  
+      switch (errorKey) {
+        case 'required':
+          return 'Este campo no puede estar vacío.';
+        case 'email':
+          return 'Formato de correo electrónico inválido.';
+        case 'minlength':
+          return `El valor ingresado es demasiado corto. Mínimo ${control.errors['minlength'].requiredLength} caracteres.`;
+        case 'maxlength':
+          return `El valor ingresado es demasiado largo. Máximo ${control.errors['maxlength'].requiredLength} caracteres.`;
+        case 'min':
+          return `El valor es menor que el mínimo permitido (${control.errors['min'].min}).`;
+        case 'pattern':
+          return 'El formato ingresado no es válido.';
+        case 'requiredTrue':
+          return 'Debe aceptar el campo requerido para continuar.';
+        case 'date':
+          return 'La fecha ingresada es inválida.';
+        default:
+          return 'Error no identificado en el campo.';
+      }
+    }
+    return ''; // Retorna cadena vacía si no hay errores.
+  }  
 }
 

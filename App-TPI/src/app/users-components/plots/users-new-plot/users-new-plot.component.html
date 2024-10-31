@@ -1,117 +1,121 @@
-<section class="container p-5 border rounded border-3 border-secundary" style="min-height: 70vh;">
-    <h3>Añadir Lote</h3>
+<section class="container p-5 border rounded border-3 border-secundary">
     <form [formGroup]="formReactivo" (ngSubmit)="createPlot()">
+        <div class="row">
 
-        <div class="row mb-3 mt-5">
-            <div class="col d-flex flex-column">
-                <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-start">N°. de lote</label>
-                    <input type="number" class="form-control custom-input" formControlName="plotNumber" min="0"
-                        [ngClass]="{'is-invalid': formReactivo.controls['plotNumber'].invalid  && (formReactivo.get('plotNumber')?.dirty|| formReactivo.get('plotNumber')?.touched),'is-valid': formReactivo.controls['plotNumber'].valid }">
+            <div class="col-lg-6 mb-3">
+                <div class="row">
+                    <label class="col-2 col-form-label">N°. de lote</label>
+                    <div class="col-10">
+                        <input type="number" class="form-control" formControlName="plotNumber" min="0"
+                            [ngClass]="onValidate('plotNumber')">
+                        <div class="invalid-feedback">{{showError('plotNumber')}}</div>
+                    </div>
                 </div>
-                @if(formReactivo.controls['plotNumber'].invalid && (formReactivo.controls['plotNumber'].dirty ||
-                formReactivo.controls['plotNumber'].touched)){
-                <div class="text-danger align-self-start" style="width: 500px;">
-                    Ingrese un número de lote
-                </div>
-                }
             </div>
-            <div class="col d-flex flex-column">
-                <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-start">N°. de manzana</label>
-                    <input type="number" class="form-control custom-input" formControlName="blockNumber"
-                        [ngClass]="{'is-invalid': formReactivo.controls['blockNumber'].invalid  && (formReactivo.get('blockNumber')?.dirty|| formReactivo.get('blockNumber')?.touched),'is-valid': formReactivo.controls['blockNumber'].valid }">
+
+
+            <div class="col-lg-6 mb-3">
+                <div class="row">
+                    <label class="col-2 col-form-label">N°. de manzana</label>
+                    <div class="col-10">
+                        <input type="number" class="form-control" formControlName="blockNumber"
+                            [ngClass]="onValidate('blockNumber')">
+                        <div class="invalid-feedback">{{showError('blockNumber')}}</div>
+                    </div>
                 </div>
-                @if(formReactivo.controls['blockNumber'].invalid && (formReactivo.controls['blockNumber'].dirty ||
-                formReactivo.controls['blockNumber'].touched)){
-                <div class="text-danger align-self-start" style="width: 500px;">
-                    Ingrese un número de manzana
-                </div>
-                }
             </div>
-        </div>
 
 
-
-        <div class="row mb-3 mt-5">
-            <div class="col d-flex flex-column">
-                <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-start">Terreno del lote (m²)</label>
-                    <input type="number" class="form-control custom-input" formControlName="totalArea"
-                        [ngClass]="{'is-invalid': formReactivo.controls['totalArea'].invalid  && (formReactivo.get('totalArea')?.dirty|| formReactivo.get('totalArea')?.touched),'is-valid': formReactivo.controls['totalArea'].valid }">
+            <div class="col-lg-6 mb-3">
+                <div class="row">
+                    <label class="col-2 col-form-label">Terreno del lote (m²)</label>
+                    <div class="col-10">
+                        <input type="number" class="form-control" formControlName="totalArea"
+                            [ngClass]="onValidate('totalArea')">
+                        <div class="invalid-feedback">{{showError('totalArea')}}</div>
+                    </div>
                 </div>
-                @if(formReactivo.controls['totalArea'].invalid && (formReactivo.controls['totalArea'].dirty ||
-                formReactivo.controls['totalArea'].touched)){
-                <div class="text-danger align-self-start" style="width: 500px;">
-                    Ingrese un área de lote
-                </div>
-                }
             </div>
-            <div class="col d-flex flex-column">
-                <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-3 text-start">Área construida (m²)</label>
-                    <input type="number" class="form-control custom-input" formControlName="totalBuild"
-                        [ngClass]="{'is-invalid': formReactivo.controls['totalBuild'].invalid  && (formReactivo.get('totalBuild')?.dirty|| formReactivo.get('totalBuild')?.touched),'is-valid': formReactivo.controls['totalBuild'].valid }">
-                </div>
-                @if(formReactivo.controls['totalBuild'].invalid && (formReactivo.controls['totalBuild'].dirty ||
-                formReactivo.controls['totalBuild'].touched)){
-                <div class="text-danger align-self-start" style="width: 500px;">
-                    Ingrese una cantidad de metros construídos
-                </div>
-                }
-            </div>
-        </div>
 
-        <div class="row mb-3 mt-5">
-            <div class="col d-flex flex-column">
-                <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-4 text-start">Estado</label>
-                     <!-- <div class="d-flex" style="flex: 1;"> -->
-                        <select class="form-select form-control me-1" id="stateId" formControlName="state" style="width: 418px;"
-                            [ngClass]="{'is-invalid': formReactivo.controls['state'].invalid  && (formReactivo.get('state')?.dirty|| formReactivo.get('state')?.touched),'is-valid': formReactivo.controls['state'].valid }">
+
+            <div class="col-lg-6 mb-3">
+                <div class="row">
+                    <label class="col-2 col-form-label">Área construida (m²)</label>
+                    <div class="col-10">
+                        <input type="number" class="form-control" formControlName="totalBuild"
+                            [ngClass]="onValidate('totalBuild')">
+                        <div class="invalid-feedback">{{showError('totalBuild')}}</div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-lg-6 mb-3">
+                <div class="row">
+                    <label class="col-2 col-form-label">Estado</label>
+                    <div class="col-10">
+                        <select id="selectOption" class="form-select" id="stateId" formControlName="state"
+                            [ngClass]="onValidate('state')">
+                            <option value="" disabled selected>Seleccione una opción</option>
                             @for (s of states; track $index) {
-                            <option value="{{s.id}}">{{s.name}}</option>
-                            }
+                                <option value="{{s.id}}">{{s.name}}</option>
+                                }
                         </select>
-                    <!-- </div> -->
+                        <div class="invalid-feedback">{{showError('state')}}</div>
+                    </div>
                 </div>
-                @if(formReactivo.controls['state'].invalid && (formReactivo.get('state')?.dirty ||
-                formReactivo.get('state')?.touched)){
-                <div class="text-danger align-self-end" style="width: 500px;">
-                    Seleccione un estado
-                </div>
-                }
             </div>
-            <div class="col d-flex flex-column">
-                <div class="d-flex align-items-center justify-content-end">
-                    <label class="form-label mb-0 me-5 text-start">Tipo</label>
-                     <!-- <div class="d-flex" style="flex: 1;"> -->
-                        <select class="form-select  form-control me-1" id="stateId" formControlName="type" style="width: 418px;" placeholder="Seleccione un tipo"
-                            [ngClass]="{'is-invalid': formReactivo.controls['type'].invalid  && (formReactivo.get('type')?.dirty|| formReactivo.get('type')?.touched),'is-valid': formReactivo.controls['type'].valid }">
+
+
+            <div class="col-lg-6 mb-3">
+                <div class="row">
+                    <label class="col-2 col-form-label">Tipo</label>
+                    <div class="col-10">
+                        <select id="selectOption" class="form-select" formControlName="type"
+                            [ngClass]="onValidate('type')">
+                            <option value="" disabled selected>Seleccione una opción</option>
                             @for (t of types; track $index) {
-                            <option value="{{t.id}}">{{t.name}}</option>
-                            }
+                                <option value="{{t.id}}">{{t.name}}</option>
+                                }
                         </select>
-                    <!-- </div> -->
+                        <div class="invalid-feedback">{{showError('type')}}</div>
+                    </div>
                 </div>
-                @if(formReactivo.controls['type'].invalid && (formReactivo.get('type')?.dirty ||
-                formReactivo.get('type')?.touched)){
-                <div class="text-danger align-self-end" style="width: 500px;">
-                    Seleccione un tipo de lote
+            </div>
+
+
+            <div class="col-lg-6 mb-3">
+                <div class="row">
+                  <label class="col-2 col-form-label">Subir Archivos</label>
+                  <div class="col-10">
+                    <input type="file" class="form-control" multiple formControlName="file" [ngClass]="onValidate('file')"
+                      (change)="onFileChange($event)">
+                    <div class="invalid-feedback">{{showError('file')}}</div>
+                    <!-- Listado de archivos -->
+                    <div class="list-group mt-3">
+                      @for (file of files; track $index) {
+                      <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                          <i class="bi-file-earmark-text me-3 text-primary fs-5"></i>
+                          <span>{{file.name.length > 40 ? file.name.slice(0, 40)+'...' :
+                            file.name}}</span>
+                        </div>
+                        <span>{{ (file.size / (1024 * 1024)).toFixed(2) }} MB</span>
+                      </div>
+                      }
+                    </div>
+                  </div>
                 </div>
-                }
-            </div>
-        </div>
-        <div>
-            <app-file-upload (filesChange)="getFiles($event)" />
-        </div>
+              </div>
 
-        <div class="row mb-3 mt-5">
-            <div class="col text-end">
-                <button class="btn btn-primary" type="submit" [disabled]="formReactivo.invalid">Guardar</button>
-            </div>
+            <div class="row mb-3 justify-content-end">
+                <div class="col-auto">
+                  <button class="btn btn-secondary" type="submit" (click)="redirect('home/plots/list')">Cancelar</button>
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-primary" type="submit" [disabled]="formReactivo.invalid">Guardar</button>
+                </div>
+              </div>
         </div>
-
-
     </form>
 </section>

@@ -310,4 +310,9 @@ export class UsersUpdateOwnerComponent implements OnInit {
   
     return errorMessages[errorKey] || 'Error no identificado en el campo.';
   }
+
+      //Evento para actualizar el listado de files a los seleccionados actualmente
+      onFileChange(event: any) {
+        this.newFiles = Array.from(FileList = event.target.files); //Convertir FileList a Array
+      }
 }

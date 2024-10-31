@@ -56,6 +56,7 @@ export class UsuariosNewOwnerComponent {
       Validators.pattern(/^\d+$/)]), //Esto valida que sea numerico el string
     cuit_cuil: new FormControl("", [
       Validators.required,
+      Validators.pattern(/^\d+$/),
       Validators.minLength(11),
       Validators.maxLength(20)]),
     birthdate: new FormControl(null, [
@@ -312,4 +313,9 @@ export class UsuariosNewOwnerComponent {
       }
     });
   }
+
+    //Evento para actualizar el listado de files a los seleccionados actualmente
+    onFileChange(event: any) {
+      this.files = Array.from(FileList = event.target.files); //Convertir FileList a Array
+    }
 }
