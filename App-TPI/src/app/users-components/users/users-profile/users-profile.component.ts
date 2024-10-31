@@ -57,6 +57,7 @@ export class UsersProfileComponent implements OnInit {
                 username: user.username,
                 phoneNumber: user.phone_number,
                 dni: user.dni,
+                dniType: user.dni_type,
                 avatar_url: user.avatar_url,
                 roles: user.roles ,
                 telegram_id: user.telegram_id
@@ -124,6 +125,8 @@ export class UsersProfileComponent implements OnInit {
         Validators.minLength(1),
         Validators.maxLength(11)
     ]),
+    dniType: new FormControl({value: "", disabled: true }, [
+  ]),
     avatar_url: new FormControl({value: '...', disabled: true }),
     datebirth: new FormControl({value: '', disabled: true }, [Validators.required]),
     roles: new FormControl<string[]>({value: [], disabled: true }) 

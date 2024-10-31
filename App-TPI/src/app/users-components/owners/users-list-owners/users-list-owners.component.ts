@@ -47,7 +47,12 @@ export class UsersListOwnersComponent {
     this.apiService.getAll().subscribe({
       next: (data: Owner[]) => {
         // Cambiar guiones por barras en la fecha de nacimiento
-        this.owners = data;
+        this.owners = data.map(owner => ({
+          ...owner,
+          create_date: owner.create_date.replace(/-/g, '/'),
+        }));
+        
+      
         this.loadTypes();   
         
         // Inicializar DataTables después de cargar los datos
@@ -92,9 +97,9 @@ export class UsersListOwnersComponent {
                //rellenar por columna
                owner.create_date,
               `${owner.name + ", " + owner.lastname}`,
-              owner.dni,
-              owner.cuitCuil,
-              owner.ownerType
+                owner.dni,
+                owner.cuitCuil,
+                owner.ownerType
               
             ]), dom:
             '<"mb-3"t>' +                           

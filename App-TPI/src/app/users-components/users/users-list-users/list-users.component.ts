@@ -41,6 +41,8 @@ export class ListUsersComponent implements OnInit {
   plots : GetPlotDto[] = [];
   selectRol: FormControl = new FormControl('');
   selectedRole: string = '';
+  initialDate = new FormControl();
+  endDate = new FormControl();
 
   getPlotByUser(plotId : number){
     this.plotService.getPlotById(plotId).subscribe({
@@ -52,7 +54,6 @@ export class ListUsersComponent implements OnInit {
   
   ngOnInit() {
 
-    
     this.loadRoles();
 
     this.plotService.getAllPlots().subscribe({
@@ -204,7 +205,8 @@ export class ListUsersComponent implements OnInit {
   resetFilters() {
     // Reiniciar el valor del control de rol
     this.selectRol.setValue('');
-
+    this.initialDate.setValue('');
+    this.endDate.setValue('');
     // Limpiar el campo de búsqueda
     const searchInput = document.getElementById("myTable_search") as HTMLInputElement;
     if (searchInput) {
@@ -212,18 +214,53 @@ export class ListUsersComponent implements OnInit {
     }
 
     // Obtener la instancia de DataTable
+    $.fn.dataTable.ext.search.pop();
     const table = $('#myTable').DataTable();
+    
 
     table.search('').draw();
 
     table.column(2).search('').draw();
 }
 
+
+
+
   updateFilterRol() {
     const table = $('#myTable').DataTable();
     table.column(2).search(this.selectRol.value).draw();
   }
 
+  filterDateStart: string = '';
+  filterDateEnd: string = '';
+  //Metodo para filtrar la tabla en base a las 2 fechas
+  filterByDate() {
+    const table = $('#myTable').DataTable();
+  
+    // Convertir las fechas seleccionadas a objetos Date para comparar
+    const start = this.initialDate.value ? new Date(this.initialDate.value) : null;
+    const end = this.endDate.value ? new Date(this.endDate.value) : null;
+  
+    // Agregar función de filtro a DataTable
+    $.fn.dataTable.ext.search.push((settings: any, data: any, dataIndex: any) => {
+      // Convertir la fecha de la fila (data[0]) a un objeto Date
+      const rowDateParts = data[0].split('/'); // Asumiendo que la fecha está en formato DD/MM/YYYY
+      const rowDate = new Date(`${rowDateParts[2]}-${rowDateParts[1]}-${rowDateParts[0]}`); // Convertir a formato YYYY-MM-DD
+  
+      console.log("--------------------");
+      console.log("Start:", start, "End:", end);
+      console.log("Row Date:", rowDate);
+  
+      // Realizar las comparaciones
+      if (start && rowDate < start) return false;
+      if (end && rowDate > end) return false;
+      return true;
+    });
+  
+    // Redibujar la tabla después de aplicar el filtro
+    table.draw();
+  }
+  
   
 
   showRole(roles : string[]) : string {
@@ -410,6 +447,7 @@ export class ListUsersComponent implements OnInit {
   
     doc.save('usuarios.pdf'); // Descarga el archivo PDF
   }
+
 
   //Exporta por excel los registros de la tabla
   exportExcel() {
