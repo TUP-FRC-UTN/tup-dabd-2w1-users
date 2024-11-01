@@ -29,32 +29,30 @@ export const routes: Routes = [
     data: {roles : ['SuperAdmin', 'Gerente', 'Propietario']},
     children: [
       {
+        //En caso de que sea un botón principal, llamas al component con lazyLoading
+        //UsersProfileComponent es mi único componente
         path: 'profile',
         component: UsersProfileComponent,
-        canActivate: [authGuard, roleGuard],
         data: {roles: ['SuperAdmin', 'Gerente', 'Propietario']}
       },
       {
         path: 'family',
-        component: UsersFamiliarGroupComponent ,
-        canActivate: [authGuard, roleGuard],
+        component: UsersFamiliarGroupComponent,
         data: {roles: ['Propietario', 'Familiar mayor']}
       },
       {
+        //En este caso este path tiene componentes hijos, por lo que tengo que llamar al archivo en donde definí sus rutas
         path: 'users',
-        canActivate: [authGuard, roleGuard],
         data: {roles: ['SuperAdmin', 'Gerente', 'Propietario']},
         loadChildren: () => import('./users-components/users/users.module').then(m => m.UsersModule)
       },
       {
         path: 'plots',
-        canActivate: [authGuard],
         data: {roles: ['SuperAdmin', 'Gerente']},
         loadChildren: () => import('./users-components/plots/plots.module').then(m => m.PlotsModule)
       },
       {
         path: 'owners',
-        canActivate: [authGuard, roleGuard],
         data: {roles: ['SuperAdmin', 'Gerente']},
         loadChildren: () => import('./users-components/owners/owners.module').then(m => m.OwnersModule)
       }
