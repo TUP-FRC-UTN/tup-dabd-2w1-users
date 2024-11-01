@@ -12,6 +12,7 @@ import { AuthService } from '../../../users-servicies/auth.service';
 import Swal from 'sweetalert2';
 import { PlotService } from '../../../users-servicies/plot.service';
 import { GetPlotDto } from '../../../users-models/plot/GetPlotDto';
+import { ValidatorsService } from '../../../users-servicies/validators.service';
 
 @Component({
   selector: 'app-new-user',
@@ -29,6 +30,7 @@ export class NewUserComponent implements OnInit {
   private readonly apiService = inject(UserService);
   private readonly authService = inject(AuthService);
   private readonly plotService = inject(PlotService);
+  private readonly validatorService = inject(ValidatorsService);
   @ViewChild(UsersSelectMultipleComponent) rolesComponent!: UsersSelectMultipleComponent;
 
   rolesSelected : string[] = [];
@@ -84,7 +86,9 @@ export class NewUserComponent implements OnInit {
         Validators.required,
         Validators.minLength(1),
         Validators.maxLength(30)
-    ]),
+      ],
+        this.validatorService.validarUsernameUnico()
+    ),
     password: new FormControl('', [
       Validators.required,
       Validators.minLength(6),
@@ -93,7 +97,9 @@ export class NewUserComponent implements OnInit {
     email: new FormControl('', [
         Validators.required,
         Validators.email
-    ]),
+      ],
+        this.validatorService.validarEmailUnico()
+    ),
     phone_number: new FormControl('', [
         Validators.required,
         Validators.pattern(/^\d+$/),
@@ -108,7 +114,9 @@ export class NewUserComponent implements OnInit {
         Validators.required,
         Validators.pattern(/^\d+$/),
         Validators.minLength(8)
-    ]),
+      ],
+        this.validatorService.validarDniUnico()
+    ),
     telegram_id: new FormControl(0,[
         Validators.required,
         Validators.min(0),
@@ -262,6 +270,12 @@ export class NewUserComponent implements OnInit {
           return 'Debe aceptar el campo requerido para continuar.';
         case 'date':
           return 'La fecha ingresada es inválida.';
+        case 'usernameTaken':
+          return 'Este nombre de usuario ya está en uso.';
+        case 'emailTaken':
+          return 'Este correo electrónico ya está en uso.';
+        case 'dniTaken':
+          return 'Este DNI ya está en uso.';
         default:
           return 'Error no identificado en el campo.';
       }
