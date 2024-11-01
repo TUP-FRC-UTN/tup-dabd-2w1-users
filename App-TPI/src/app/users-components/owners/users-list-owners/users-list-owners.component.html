@@ -13,6 +13,12 @@
       </select>
     </div>
     <div>
+      <input type="date" class="form-control me-3" formControlName="datebirth" style="width: 200px" [formControl]="initialDate" (change)="filterByDate()"/>
+    </div>
+    <div>
+      <input type="date" class="form-control me-3" formControlName="datebirth" style="width: 200px" [formControl]="endDate" (change)="filterByDate()"/>
+    </div>
+    <div>
       <button class="btn btn-light" (click)="resetFilters()">
         <i class="bi bi-trash"></i>
       </button>

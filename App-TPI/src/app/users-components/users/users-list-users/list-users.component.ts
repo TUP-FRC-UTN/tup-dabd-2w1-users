@@ -393,77 +393,74 @@ export class ListUsersComponent implements OnInit {
     return plot?.plot_number || 0;
   }
 
-  
-  //Exporta a pdf la tabla, si esta filtrada solo exporta los datos filtrados
   exportPdf() {
     const doc = new jsPDF();
   
-    // Agregar título centrado
     const title = 'Lista de Usuarios';
     const pageWidth = doc.internal.pageSize.getWidth();
     doc.setFontSize(16);
     const textWidth = doc.getTextWidth(title);
     doc.text(title, (pageWidth - textWidth) / 2, 20);
   
-    // Obtener columnas de la tabla (añadido 'Email')
     const columns = ['Fecha de creación', 'Nombre', 'Rol', 'Nro. de lote'];
   
-    // Filtrar datos visibles en la tabla
-    const table = $('#myTable').DataTable(); // Inicializa DataTable una vez
+    const table = $('#myTable').DataTable(); 
   
-    // Cambia la forma de obtener las filas visibles usando 'search' en lugar de 'filter'
-    const visibleRows = table.rows({ search: 'applied' }).data().toArray(); // Usar 'search: applied'
+    const visibleRows = table.rows({ search: 'applied' }).data().toArray(); 
   
-    // Mapear los datos filtrados a un formato adecuado para jsPDF
     const rows = visibleRows.map((row: any) => [
       row[0].replace(/-/g, '/'), // Fecha de creación
-      `${row[1]}`,       // Nombre
-      `${this.getContentBetweenArrows(row[2])}`,     // Rol
-      `${this.getPlotById(row[3])}`      // Lote
+      `${row[1]}`,               // Nombre
+      `${this.getContentBetweenArrows(row[2])}`, // Rol
+      `${this.getPlotById(row[3])}` // Lote
     ]);
   
-    // Generar la tabla en el PDF usando autoTable
     autoTable(doc, {
       head: [columns],
       body: rows,
-      startY: 30, // Ajusta la posición de inicio de la tabla
-      theme: 'striped', // Tema de tabla con filas alternadas
-      headStyles: { fillColor: [0, 0, 0] }, // Color de fondo del encabezado
-      styles: { halign: 'center', valign: 'middle' }, // Alineación del contenido
+      startY: 30, 
+      theme: 'striped', 
+      headStyles: { fillColor: [0, 0, 0] }, 
+      styles: { halign: 'center', valign: 'middle' }, 
       columnStyles: { 
         0: { cellWidth: 50 }, 
         1: { cellWidth: 30 }, 
         2: { cellWidth: 30 }, 
         3: { cellWidth: 50 }, 
         4: { cellWidth: 30 } 
-      }, // Ajusta el ancho de las columnas
+      }, 
     });
+    const today = new Date();
+    const formattedDate = today.toISOString().split('T')[0].replace(/-/g, '_'); 
+    const fileName = `${formattedDate}_USUARIOS.pdf`; 
   
-    doc.save('usuarios.pdf'); // Descarga el archivo PDF
+    doc.save(fileName); 
   }
 
-
-  //Exporta por excel los registros de la tabla
   exportExcel() {
-    const table = $('#myTable').DataTable(); // Inicializa DataTable una vez
+    const table = $('#myTable').DataTable();
+    const visibleRows = table.rows({ search: 'applied' }).data().toArray(); 
   
-    // Cambia la forma de obtener las filas visibles usando 'search' en lugar de 'filter'
-    const visibleRows = table.rows({ search: 'applied' }).data().toArray(); // Usar 'search: applied'
-
-    // Filtrar a los usuarios x aquellos que aparzcan en la tabla visibleRows
-    let users = this.users.filter(user => visibleRows.some(row => (row[1]).includes(user.name+', '+user.lastname)));
-
+    let users = this.users.filter(user => 
+      visibleRows.some(row => (row[1]).includes(user.name + ', ' + user.lastname))
+    );
+  
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(users.map(user => ({
       FechaNacimiento: user.create_date.replace(/-/g, '/'),
       Nombre: `${user.lastname}, ${user.name}`,
       Rol: user.roles.join(', '),
       Lote: this.getPlotById(user.plot_id),
-       // Cambia el formato de la fecha aquí
+  
     })));
-    
+  
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Usuarios');
   
-    XLSX.writeFile(wb, 'usuarios.xlsx'); // Descarga el archivo Excel
+    const today = new Date();
+    const formattedDate = today.toISOString().split('T')[0].replace(/-/g, '_');
+    const fileName = `${formattedDate}_USUARIOS.xlsx`; 
+  
+    XLSX.writeFile(wb, fileName); 
   }
+
 }

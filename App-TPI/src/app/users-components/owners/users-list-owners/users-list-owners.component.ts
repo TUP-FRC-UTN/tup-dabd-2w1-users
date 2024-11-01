@@ -36,6 +36,8 @@ export class UsersListOwnersComponent {
   userToDeactivate: number = 0;
   types: OwnerTypeModel[] = [];
   selectType: FormControl = new FormControl('');
+  initialDate = new FormControl();
+  endDate = new FormControl();
 
 
 
@@ -68,9 +70,9 @@ export class UsersListOwnersComponent {
             columns: [
               { title: 'Fecha de creación', width: '15%', className: 'text-start' },
               { title: 'Nombre', width: '15%', className: 'text-start' },
-              { title: 'Dni', width: '10%', className: 'text-start'},
-              { title: 'Cuit/Cuil', width: '15%', className: 'text-start' },
+              { title: 'Documento', width: '10%', className: 'text-start'},
               { title: 'Tipo', width: '10%', className: 'text-start' },
+              { title: 'Lotes', width: '15%', className: 'text-start' },
               {
                 title: 'Acciones',
                 orderable: false,
@@ -98,8 +100,9 @@ export class UsersListOwnersComponent {
                owner.create_date,
               `${owner.name + ", " + owner.lastname}`,
                 owner.dni,
-                owner.cuitCuil,
-                owner.ownerType
+                owner.ownerType,
+                owner.id,
+                
               
             ]), dom:
             '<"mb-3"t>' +                           
@@ -229,6 +232,33 @@ export class UsersListOwnersComponent {
     table.column(4).search(this.selectType.value).draw();
   }
 
+  filterDateStart: string = '';
+  filterDateEnd: string = '';
+  //Metodo para filtrar la tabla en base a las 2 fechas
+  filterByDate() {
+    const table = $('#myTable').DataTable();
+  
+    // Convertir las fechas seleccionadas a objetos Date para comparar
+    const start = this.initialDate.value ? new Date(this.initialDate.value) : null;
+    const end = this.endDate.value ? new Date(this.endDate.value) : null;
+  
+    // Agregar función de filtro a DataTable
+    $.fn.dataTable.ext.search.push((settings: any, data: any, dataIndex: any) => {
+      // Convertir la fecha de la fila (data[0]) a un objeto Date
+      const rowDateParts = data[0].split('/'); // Asumiendo que la fecha está en formato DD/MM/YYYY
+      const rowDate = new Date(`${rowDateParts[2]}-${rowDateParts[1]}-${rowDateParts[0]}`); // Convertir a formato YYYY-MM-DD
+  
+      // Realizar las comparaciones
+      if (start && rowDate < start) return false;
+      if (end && rowDate > end) return false;
+      return true;
+    });
+  
+    // Redibujar la tabla después de aplicar el filtro
+    table.draw();
+  }
+  
+
 
   // Busca el user y se lo pasa al modal
   ownerModel: Owner = new Owner();
@@ -266,7 +296,7 @@ export class UsersListOwnersComponent {
     doc.text(title, (pageWidth - textWidth) / 2, 20);
   
     // Definir columnas para el PDF
-    const columns = ['Fecha de Creación','Nombre', 'DNI', 'CUIT/CUIL', 'Tipo'];
+    const columns = ['Fecha de Creación','Nombre', 'Documento', 'Tipo', 'Lotes'];
   
     // Filtrar datos visibles en la tabla
     const table = $('#myTable').DataTable();
@@ -299,8 +329,12 @@ export class UsersListOwnersComponent {
         4: { cellWidth: 30 } 
       },
     });
+    
+    const today = new Date();
+    const formattedDate = today.toISOString().split('T')[0].replace(/-/g, '_'); 
+    const fileName = `${formattedDate}_PROPIETARIOS.pdf`; 
   
-    doc.save('propietarios.pdf'); // Descargar el archivo PDF
+    doc.save(fileName); 
   }
   
   exportExcel() {
@@ -324,7 +358,11 @@ export class UsersListOwnersComponent {
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Propietarios');
   
-    XLSX.writeFile(wb, 'propietarios.xlsx'); // Descargar el archivo Excel
+    const today = new Date();
+    const formattedDate = today.toISOString().split('T')[0].replace(/-/g, '_');
+    const fileName = `${formattedDate}_PROPIETARIOS.xlsx`; 
+  
+    XLSX.writeFile(wb, fileName); 
   }
   
 }

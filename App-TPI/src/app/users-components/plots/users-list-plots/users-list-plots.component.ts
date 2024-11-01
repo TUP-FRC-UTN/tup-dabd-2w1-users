@@ -187,6 +187,12 @@ export class UsersListPlotsComponent {
     table.column(5).search(this.selectState.value ?? '').draw();
   }
 
+  getContentBetweenArrows(input: string): string[] {
+    const matches = [...input.matchAll(/>(.*?)</g)];
+    return matches.map(match => match[1]).filter(content => content !== "");
+  }
+
+
   resetFilters() {
     // Reiniciar el valor del control de rol
     this.selectType.setValue('');
@@ -230,12 +236,12 @@ export class UsersListPlotsComponent {
   
     // Mapear los datos filtrados a un formato adecuado para jsPDF
     const rows = visibleRows.map((row: any) => [
-      `${row[0]}`,       // Nombre
-      `${row[1]}`,       // Rol
-      `${row[2]}`,       // Lote
+      `${row[0]}`,       
+      `${row[1]}`,       
+      `${row[2]}`,       
       `${row[3]}`,
-      `${row[4]}`,
-      `${row[5]}`,
+      `${this.getContentBetweenArrows(row[4])}`,
+      `${this.getContentBetweenArrows(row[5])}`,
     ]);
   
     // Generar la tabla en el PDF usando autoTable
@@ -256,7 +262,11 @@ export class UsersListPlotsComponent {
       }, // Ajusta el ancho de las columnas
     });
   
-    doc.save('lotes.pdf'); // Descarga el archivo PDF
+    const today = new Date();
+    const formattedDate = today.toISOString().split('T')[0].replace(/-/g, '_'); 
+    const fileName = `${formattedDate}_LOTES.pdf`; 
+  
+    doc.save(fileName); 
   }
 
   //Exporta por excel los registros de la tabla
@@ -282,7 +292,11 @@ export class UsersListPlotsComponent {
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Lotes');
   
-    XLSX.writeFile(wb, 'lotes.xlsx'); // Descarga el archivo Excel
+    const today = new Date();
+    const formattedDate = today.toISOString().split('T')[0].replace(/-/g, '_');
+    const fileName = `${formattedDate}_LOTES.xlsx`; 
+  
+    XLSX.writeFile(wb, fileName);
   }
 
   async abrirModal(plotId: number) {

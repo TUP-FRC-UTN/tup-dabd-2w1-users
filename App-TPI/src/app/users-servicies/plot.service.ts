@@ -57,6 +57,10 @@ export class PlotService {
   getPlotById(plotId: number): Observable<GetPlotModel>{
     return this.http.get<GetPlotModel>(this.url + '/plots/' + plotId);
   }
+
+  getPlotsByOwnerId(ownerId: number): Observable<GetPlotModel[]>{
+    return this.http.get<GetPlotModel[]>(this.url + '/plots/' + ownerId + '/owner' )
+  }
   
   getAllStates(): Observable<PlotStateModel[]>{
     return this.http.get<PlotStateModel[]>(this.url + '/plots/states');
