@@ -19,6 +19,8 @@ import { GetPlotModel } from '../../../users-models/plot/GetPlot';
 import { UsersModaInfoPlotComponent } from '../users-moda-info-plot/users-moda-info-plot.component';
 import { PlotStateModel } from '../../../users-models/plot/PlotState';
 import { PlotTypeModel } from '../../../users-models/plot/PlotType';
+import { OwnerService } from '../../../users-servicies/owner.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-users-list-plots',
@@ -30,6 +32,7 @@ import { PlotTypeModel } from '../../../users-models/plot/PlotType';
 export class UsersListPlotsComponent {
   plots: GetPlotModel[] = [];
   private readonly plotService = inject(PlotService);
+  private readonly ownerService = inject(OwnerService);
   showDeactivateModal: boolean = false;
   userToDeactivate: number = 0;
 
@@ -39,6 +42,8 @@ export class UsersListPlotsComponent {
   
   plotTypes : string[] = [];
   plotStatus : string[] = [];
+
+  
 
   constructor(private router: Router,private modal: NgbModal) { }
 
@@ -63,111 +68,112 @@ export class UsersListPlotsComponent {
 
     this.plotService.getAllPlots().subscribe({
       next: (data: GetPlotModel[]) => {
-        // Cambiar guiones por barras en la fecha de nacimiento
-        this.plots = data;         
-        
-        // Inicializar DataTables después de cargar los datos
-        setTimeout(() => {
-          const table = $('#myTable').DataTable({
-            paging: true,
-            searching: true,
-            ordering: true,
-            lengthChange: true,
-            lengthMenu: [10, 25, 50],
-            order: [[0, 'asc']],
-            pageLength: 10,
-            columns: [
-              { title: 'Lote', width: '10%', className: 'text-start' },
-              { title: 'Manzana', width: '10%', className: 'text-start'},
-              { title: 'Mts.2 terreno', width: '15%', className: 'text-start' },
-              { title: 'Mts.2 construidos', width: '15%', className: 'text-start' },
-              { title: 'Tipo lote', width: '15%', className: 'text-start' },
-              { title: 'Estado', width: '15%', className: 'text-start' },
-              {
-                title: 'Acciones',
-                orderable: false,
-                width: '15%',
-                className: 'text-left',  
-                render: (data, type, row, meta) => {
-                  const plotId = this.plots[meta.row].id;
-                  return `
-                    <div class="dropdown-center d-flex align-items-center">
-                      <button class="btn btn-light border border-1 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-three-dots-vertical"></i>
-                      </button>
-                      <ul class="dropdown-menu">
-                        <li><a class="dropdown-item view-plot" data-id="${plotId}">Ver más</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item edit-plot" data-id="${plotId}">Editar</a></li>
-                      </ul>
-                    </div>
-                  `; // si queremos el ver mas de nuevo <li><a class="dropdown-item view-plot" data-id="${meta.row}">Ver más</a></li>
+        this.plots = data;
+    
+        // Crear un arreglo de promesas para obtener los propietarios
+        const ownerPromises = this.plots.map(plot => {
+          return this.ownerService.getOwnerByPlotId(plot.id).pipe(
+            map(owners => owners[0]?.lastname + ', ' + owners[0]?.name) // Suponiendo que siempre hay un solo propietario
+          ).toPromise(); // Convertir el Observable en una Promesa
+        });
+    
+        // Esperar a que todas las promesas se resuelvan
+        Promise.all(ownerPromises).then(owners => {
+          // Inicializar DataTables después de cargar los datos
+          setTimeout(() => {
+            const table = $('#myTable').DataTable({
+              paging: true,
+              searching: true,
+              ordering: true,
+              lengthChange: true,
+              lengthMenu: [10, 25, 50],
+              order: [[0, 'asc']],
+              pageLength: 10,
+              data: this.plots.map((plot, index) => [
+                plot.plot_number,
+                plot.block_number,
+                plot.total_area_in_m2 + ' m²',
+                plot.built_area_in_m2 + ' m²',
+                this.showPlotType(plot.plot_type),
+                this.showPlotState(plot.plot_state),
+                owners[index] || 'No disponible', // Agregar el propietario
+              ]),
+              columns: [
+                { title: 'Lote', width: '10%', className: 'text-start' },
+                { title: 'Manzana', width: '10%', className: 'text-start' },
+                { title: 'Mts.2 terreno', width: '15%', className: 'text-start' },
+                { title: 'Mts.2 construidos', width: '15%', className: 'text-start' },
+                { title: 'Tipo lote', width: '15%', className: 'text-start' },
+                { title: 'Estado', width: '15%', className: 'text-start' },
+                { title: 'Propietario', width: '15%', className: 'text-start' }, // Nueva columna
+                {
+                  title: 'Acciones',
+                  orderable: false,
+                  width: '15%',
+                  className: 'text-left',
+                  render: (data, type, row, meta) => {
+                    const plotId = this.plots[meta.row].id;
+                    return `
+                      <div class="dropdown-center d-flex align-items-center">
+                        <button class="btn btn-light border border-1 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          <i class="bi bi-three-dots-vertical"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                          <li><a class="dropdown-item view-plot" data-id="${plotId}">Ver más</a></li>
+                          <li><hr class="dropdown-divider"></li>
+                          <li><a class="dropdown-item edit-plot" data-id="${plotId}">Editar</a></li>
+                        </ul>
+                      </div>
+                    `;
+                  }
                 }
-              }
-            ],
-            data: this.plots.map(plot => [
-               // Ejemplo de acción
-              plot.plot_number,
-              plot.block_number,
-              plot.total_area_in_m2 + ' m²',
-              plot.built_area_in_m2  + ' m²',  
-              this.showPlotType(plot.plot_type),
-              this.showPlotState(plot.plot_state)
-            ]),
-            dom:
-            '<"mb-3"t>' +                           
-            '<"d-flex justify-content-between"lp>',
-            language: {
-              lengthMenu: "_MENU_",
-              zeroRecords: "No se encontraron resultados",
-              info: "Mostrando página _PAGE_ de _PAGES_",
-              infoEmpty: "No hay registros disponibles",
-              infoFiltered: "(filtrado de _MAX_ registros totales)",
-              search: "Buscar:",
-              loadingRecords: "Cargando...",
-              processing: "Procesando...",
-              emptyTable: "No hay datos disponibles en la tabla"
-            },
-          });    
-
-          // Alinear la caja de búsqueda a la derecha
-          const searchInputWrapper = $('#myTable_filter');
-          searchInputWrapper.addClass('d-flex justify-content-start');
-
-          // Desvincular el comportamiento predeterminado de búsqueda
-          $('#myTable_filter input').unbind(); 
-          $('#myTable_filter input').bind('input', (event) => { // Usar función de flecha aquí
-              const searchValue = (event.target as HTMLInputElement).value; // Acceder al valor correctamente
-          
+              ],
+              dom: '<"mb-3"t>' + '<"d-flex justify-content-between"lp>',
+              language: {
+                lengthMenu: "_MENU_",
+                zeroRecords: "No se encontraron resultados",
+                info: "Mostrando página _PAGE_ de _PAGES_",
+                infoEmpty: "No hay registros disponibles",
+                infoFiltered: "(filtrado de _MAX_ registros totales)",
+                search: "Buscar:",
+                loadingRecords: "Cargando...",
+                processing: "Procesando...",
+                emptyTable: "No hay datos disponibles en la tabla"
+              },
+            });
+    
+            // Alinear la caja de búsqueda a la derecha
+            const searchInputWrapper = $('#myTable_filter');
+            searchInputWrapper.addClass('d-flex justify-content-start');
+    
+            // Desvincular el comportamiento predeterminado de búsqueda
+            $('#myTable_filter input').unbind(); 
+            $('#myTable_filter input').bind('input', (event) => {
+              const searchValue = (event.target as HTMLInputElement).value;
+    
               // Comienza a buscar solo si hay 3 o más caracteres
               if (searchValue.length >= 2) {
-                  table.search(searchValue).draw();
+                table.search(searchValue).draw();
               } else {
-                  table.search('').draw(); // Limpia la búsqueda si hay menos de 3 caracteres
+                table.search('').draw();
               }
-          });
-
-          // Asignar el evento click a los botones "Ver más"
-          // Asignar el evento click a los botones "Ver más"
-        $('#myTable').on('click', '.view-plot', (event) => {
-          
-          //Comente estas lineas porque daba error
-          //const id = $(event.currentTarget).data('id');
-          //const userId = this.plots[id].id; // Obtén el ID real del usuario
-          const plotId = $(event.currentTarget).data('id');
-          this.abrirModal( plotId); // Abre el modal en modo "ver"
+            });
+    
+            // Asignar eventos a los botones "Ver más" y "Editar"
+            $('#myTable').on('click', '.view-plot', (event) => {
+              const plotId = $(event.currentTarget).data('id');
+              this.abrirModal(plotId);
+            });
+    
+            $('#myTable').on('click', '.edit-plot', (event) => {
+              const plotId = $(event.currentTarget).data('id');
+              this.redirectEdit(plotId);
+            });
+    
+          }, 0);
+        }).catch(error => {
+          console.error('Error al obtener propietarios:', error);
         });
-
-          // Asignar el evento click a los botones "Editar"
-          $('#myTable').on('click', '.edit-plot', (event) => {
-            console.log("a");
-            
-            const userId = $(event.currentTarget).data('id');
-            this.redirectEdit(userId); // Redirigir al método de edición
-          });
-
-
-        }, 0); // Asegurar que la tabla se inicializa en el próximo ciclo del evento
       },
       error: (error) => {
         console.error('Error al cargar los lotes:', error);

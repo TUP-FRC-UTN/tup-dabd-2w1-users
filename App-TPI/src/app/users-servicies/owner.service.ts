@@ -18,6 +18,10 @@ export class OwnerService {
 
   constructor() { }
 
+  getOwnerByPlotId(plotId : number): Observable<Owner[]>{
+    return this.http.get<Owner[]>('http://localhost:8081/owners/plot/' + plotId);
+  }
+
   getAll(): Observable<Owner[]>{
     return this.http.get<Owner[]>(this.url + 'owners');
   }
