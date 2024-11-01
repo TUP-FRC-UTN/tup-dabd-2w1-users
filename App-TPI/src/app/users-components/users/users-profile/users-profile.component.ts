@@ -11,6 +11,7 @@ import { ImageUploadComponent } from "../../utils/image-upload/image-upload.comp
 import { GetuserDto } from '../../../users-models/users/GetUserDto';
 import { PlotService } from '../../../users-servicies/plot.service';
 import { GetPlotDto } from '../../../users-models/plot/GetPlotDto';
+import { ValidatorsService } from '../../../users-servicies/validators.service';
 
 @Component({
   selector: 'app-users-profile',
@@ -105,7 +106,7 @@ export class UsersProfileComponent implements OnInit {
       Validators.required,
       Validators.minLength(1),
       Validators.maxLength(30)
-    ]),
+    ] ),
     telegram_id: new FormControl({value: 0, disabled: true }, [
         Validators.required,
         Validators.minLength(1),
@@ -115,6 +116,7 @@ export class UsersProfileComponent implements OnInit {
         Validators.required,
         Validators.email
     ]),
+
     phoneNumber: new FormControl({value: 0, disabled: true }, [
         Validators.required,
         Validators.minLength(10),

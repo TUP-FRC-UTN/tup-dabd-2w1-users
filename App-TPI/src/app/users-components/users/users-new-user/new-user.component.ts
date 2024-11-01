@@ -158,6 +158,7 @@ export class NewUserComponent implements OnInit {
     this.rolesInput = [];
   }
 
+
   //Añade los roles seleccionados por users-select-multiple
   fillRolesSelected(roles: any) {
     this.rolesSelected = roles;  // Asignamos directamente los roles emitidos
@@ -195,6 +196,9 @@ export class NewUserComponent implements OnInit {
       telegram_id: this.reactiveForm.get('telegram_id')?.value || 0
     
     };
+
+    console.log(userData);
+    
 
     //Si el usuario es de tipo owner se setea el plotId
     if(this.authService.hasRole('Propietario')){

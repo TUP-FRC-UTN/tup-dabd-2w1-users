@@ -2,7 +2,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { UserGet } from '../../../users-models/users/UserGet';
 import { CommonModule, getLocaleMonthNames } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../../users-servicies/user.service';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -17,26 +17,51 @@ import { PlotModel } from '../../../users-models/plot/Plot';
 import { PlotService } from '../../../users-servicies/plot.service';
 import { GetPlotModel } from '../../../users-models/plot/GetPlot';
 import { UsersModaInfoPlotComponent } from '../users-moda-info-plot/users-moda-info-plot.component';
+import { PlotStateModel } from '../../../users-models/plot/PlotState';
+import { PlotTypeModel } from '../../../users-models/plot/PlotType';
 
 @Component({
   selector: 'app-users-list-plots',
   standalone: true,
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './users-list-plots.component.html',
   styleUrl: './users-list-plots.component.css'
 })
 export class UsersListPlotsComponent {
   plots: GetPlotModel[] = [];
-  private readonly apiService = inject(PlotService);
+  private readonly plotService = inject(PlotService);
   showDeactivateModal: boolean = false;
   userToDeactivate: number = 0;
 
+  //Filtros
+  selectType = new FormControl("Seleccione un tipo");
+  selectState = new FormControl("Seleccione un estado");
+  
+  plotTypes : string[] = [];
+  plotStatus : string[] = [];
+
   constructor(private router: Router,private modal: NgbModal) { }
 
-  
-
   ngOnInit() {
-    this.apiService.getAllPlots().subscribe({
+    this.plotService.getAllStates().subscribe({
+      next: (data: PlotStateModel[]) => {
+        this.plotStatus = data.map(state => state.name);
+      },
+      error: (error) => {
+        console.error('Error al cargar los estados:', error);
+      }
+    });
+
+    this.plotService.getAllTypes().subscribe({
+      next: (data: PlotTypeModel[]) =>{
+        this.plotTypes = data.map(type => type.name)
+      }  ,
+      error: (error) => {
+        console.error('Error al cargar los tipos:', error);
+      }
+    });
+
+    this.plotService.getAllPlots().subscribe({
       next: (data: GetPlotModel[]) => {
         // Cambiar guiones por barras en la fecha de nacimiento
         this.plots = data;         
@@ -54,9 +79,9 @@ export class UsersListPlotsComponent {
             columns: [
               { title: 'Lote', width: '10%', className: 'text-start' },
               { title: 'Manzana', width: '10%', className: 'text-start'},
-              { title: 'Mts.2 Terreno', width: '15%', className: 'text-start' },
-              { title: 'Mts.2 Construidos', width: '15%', className: 'text-start' },
-              { title: 'Tipo Lote', width: '15%', className: 'text-start' },
+              { title: 'Mts.2 terreno', width: '15%', className: 'text-start' },
+              { title: 'Mts.2 construidos', width: '15%', className: 'text-start' },
+              { title: 'Tipo lote', width: '15%', className: 'text-start' },
               { title: 'Estado', width: '15%', className: 'text-start' },
               {
                 title: 'Acciones',
@@ -84,10 +109,10 @@ export class UsersListPlotsComponent {
                // Ejemplo de acción
               plot.plot_number,
               plot.block_number,
-              plot.total_area_in_m2,
-              plot.built_area_in_m2,  
-              plot.plot_type,
-              plot.plot_state
+              plot.total_area_in_m2 + ' m²',
+              plot.built_area_in_m2  + ' m²',  
+              this.showPlotType(plot.plot_type),
+              this.showPlotState(plot.plot_state)
             ]),
             dom:
             '<"mb-3"t>' +                           
@@ -149,6 +174,39 @@ export class UsersListPlotsComponent {
       }
     });
   }
+
+  //Filtrat por tipo
+  updateFilterType(){
+    const table = $('#myTable').DataTable();
+    table.column(4).search(this.selectType.value ?? '').draw();
+  }
+  
+  //Filtrar por estado
+  updateFilterState() {
+    const table = $('#myTable').DataTable();
+    table.column(5).search(this.selectState.value ?? '').draw();
+  }
+
+  resetFilters() {
+    // Reiniciar el valor del control de rol
+    this.selectType.setValue('');
+    this.selectState.setValue('');
+
+    // Limpiar el campo de búsqueda general y el filtro de la columna de tipo
+    const searchInput = document.querySelector('#myTable_filter input') as HTMLInputElement;
+    if (searchInput) {
+        searchInput.value = ''; // Limpiar el valor del input de búsqueda general
+    }
+
+    // Obtener la instancia de DataTable
+    const table = $('#myTable').DataTable();
+
+    // Limpiar búsqueda y filtros
+    table.search('').draw(); // Limpiar búsqueda general
+    table.column(4).search('').draw(); // Limpiar filtro de tipo
+    table.column(5).search('').draw(); // Limpiar filtro de tipo
+}
+
 
    //Exporta a pdf la tabla, si esta filtrada solo exporta los datos filtrados
    exportPdf() {
@@ -262,7 +320,7 @@ export class UsersListPlotsComponent {
    selectUser(id: number): Promise<GetPlotModel> {
        // Mostrar SweetAlert de tipo 'cargando'
      return new Promise((resolve, reject) => {
-       this.apiService.getPlotById(id).subscribe({
+       this.plotService.getPlotById(id).subscribe({
          next: (data: GetPlotModel) => {
            this.plotModel = data;        
            Swal.close(); // Cerrar SweetAlert
@@ -280,5 +338,43 @@ export class UsersListPlotsComponent {
          }
        });
      });
+  }
+
+  showPlotType(plotType : any) : string {
+
+    let color : string = ''
+   
+      switch (plotType) {
+        case "Comercial":
+          color = "secondary";
+          break;
+        case "Residencial":
+          color = "success";
+          break;
+        case "Baldío":
+          color = "danger";
+          break;
+      }
+
+      return `<button class='btn btn-${color} rounded-pill m-1'>${plotType}</button>`;
+  }
+
+  showPlotState(plotState : any) : string {
+
+    let color : string = ''
+   
+      switch (plotState) {
+        case "Disponible":
+          color = "success";
+          break;
+        case "Habitado":
+          color = "secondary";
+          break;
+        case "En construcción":
+          color = "danger";
+          break;
+      }
+
+      return `<button class='btn btn-${color} rounded-pill m-1'>${plotState}</button>`;
   }
 }

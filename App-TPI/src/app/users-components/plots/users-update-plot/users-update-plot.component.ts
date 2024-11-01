@@ -81,6 +81,7 @@ export class UsersUpdatePlotComponent implements OnInit {
              // Crear un nuevo objeto File a partir del Blob
              const newFile = new File([blob], filename, { type: blob.type });
              this.existingFiles.push(newFile);
+             
            }, error => {
              console.error(`Error al descargar el archivo ${fileDto.uuid}, error`);
            });

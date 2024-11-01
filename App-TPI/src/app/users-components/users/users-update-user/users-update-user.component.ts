@@ -120,7 +120,6 @@ export class UsersUpdateUserComponent implements OnInit {
     }
   }
 
-
   //Actualiza el usuario
   updateUser() {
     const user: UserPut = new UserPut();
@@ -180,6 +179,7 @@ export class UsersUpdateUserComponent implements OnInit {
     }
   }
 
+  
 
   showError(controlName: string): string {
     const control = this.updateForm.get(controlName);

@@ -247,10 +247,6 @@ export class ListUsersComponent implements OnInit {
       const rowDateParts = data[0].split('/'); // Asumiendo que la fecha está en formato DD/MM/YYYY
       const rowDate = new Date(`${rowDateParts[2]}-${rowDateParts[1]}-${rowDateParts[0]}`); // Convertir a formato YYYY-MM-DD
   
-      console.log("--------------------");
-      console.log("Start:", start, "End:", end);
-      console.log("Row Date:", rowDate);
-  
       // Realizar las comparaciones
       if (start && rowDate < start) return false;
       if (end && rowDate > end) return false;
@@ -260,8 +256,6 @@ export class ListUsersComponent implements OnInit {
     // Redibujar la tabla después de aplicar el filtro
     table.draw();
   }
-  
-  
 
   showRole(roles : string[]) : string {
     let rolesA : string = ""

@@ -11,7 +11,6 @@ import { FileUploadComponent } from '../../utils/file-upload/file-upload.compone
 import { AuthService } from '../../../users-servicies/auth.service';
 import { Router } from '@angular/router';
 
-
 @Component({
   selector: 'app-users-new-plot',
   standalone: true,
@@ -78,10 +77,19 @@ export class UsersNewPlotComponent {
     this.formReactivo.reset();
     this.states = [];
     this.types = [];
-    this.fileUploadComponent.files = [];
-    this.files = [];
-    
+    this.clearFileInput();
   }
+  
+  clearFileInput() {
+    // Limpia el array de archivos
+    this.files = [];
+    // Limpia el input file
+    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    }
+  }
+  
 
   createPlot(){
     const plot: PlotModel = {

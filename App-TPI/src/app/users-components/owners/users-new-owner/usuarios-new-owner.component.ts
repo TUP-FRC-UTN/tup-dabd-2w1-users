@@ -14,6 +14,7 @@ import Swal from 'sweetalert2';
 import { Route, Router } from '@angular/router';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { FileUploadComponent } from '../../utils/file-upload/file-upload.component';
+import { ValidatorsService } from '../../../users-servicies/validators.service';
 
 @Component({
   selector: 'app-usuarios-new-owner',
@@ -29,6 +30,7 @@ export class UsuariosNewOwnerComponent {
   private readonly ownerService = inject(OwnerService);
   private readonly apiService = inject(UserService);
   private readonly plotService = inject(PlotService);
+  private readonly validatorService = inject(ValidatorsService);
   JURIDICA_ID = 2;
 
   types: OwnerTypeModel[] = [];
@@ -53,7 +55,10 @@ export class UsuariosNewOwnerComponent {
     dni: new FormControl("", [
       Validators.required,
       Validators.minLength(8),
-      Validators.pattern(/^\d+$/)]), //Esto valida que sea numerico el string
+      Validators.pattern(/^\d+$/)
+    ],
+      this.validatorService.validarDniUnico()
+    ), //Esto valida que sea numerico el string
     cuit_cuil: new FormControl("", [
       Validators.required,
       Validators.pattern(/^\d+$/),
@@ -64,7 +69,10 @@ export class UsuariosNewOwnerComponent {
       this.dateLessThanTodayValidator()]),
     email: new FormControl("", [
       Validators.required,
-      Validators.email]),
+      Validators.email
+    ],
+      this.validatorService.validarEmailUnico()
+  ),
     state: new FormControl(null, [
       Validators.required]),
     type: new FormControl(null, [
@@ -72,7 +80,10 @@ export class UsuariosNewOwnerComponent {
     username: new FormControl("", [
       Validators.required,
       Validators.minLength(1),
-      Validators.maxLength(30)]),
+      Validators.maxLength(30)
+    ],
+      this.validatorService.validarUsernameUnico()
+    ),
     password: new FormControl("", [
       Validators.required,
       Validators.minLength(6),
@@ -258,6 +269,9 @@ export class UsuariosNewOwnerComponent {
       url: 'El formato de URL ingresado no es válido.',
       number: 'Este campo solo acepta números.',
       customError: 'Error personalizado: verifique el dato ingresado.',
+      usernameTaken: 'El nombre de usuario ya está en uso.',
+      emailTaken: 'El correo electrónico ya está en uso.',
+      dniTaken: 'El DNI ya está en uso.',
     };
   
     return errorMessages[errorKey] || 'Error no identificado en el campo.';
@@ -300,7 +314,7 @@ export class UsuariosNewOwnerComponent {
           showConfirmButton: false,
           timer: 1460
         });
-        this.formReactivo.reset(); // Resetea el formulario después de guardar
+        this.resetForm() // Resetea el formulario después de guardar
       },
       error: (error) => {
         console.error('Error al guardar el propietario:', error);
@@ -314,8 +328,27 @@ export class UsuariosNewOwnerComponent {
     });
   }
 
-    //Evento para actualizar el listado de files a los seleccionados actualmente
-    onFileChange(event: any) {
-      this.files = Array.from(FileList = event.target.files); //Convertir FileList a Array
+     //Evento para actualizar el listado de files a los seleccionados actualmente
+  onFileChange(event: any) {
+    this.files.push(...Array.from(event.target.files as FileList)); //Convertir FileList a Array
+  }
+
+  deleteFile(index: number) {
+    this.files.splice(index, 1);
+  }
+
+  resetForm(){
+    this.formReactivo.reset();
+    this.clearFileInput();
+  }
+
+  clearFileInput() {
+    // Limpia el array de archivos
+    this.files = [];
+    // Limpia el input file
+    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
     }
+  }
 }

@@ -28,7 +28,7 @@ import { lastValueFrom, timeout } from 'rxjs';
 export class UsersUpdateOwnerComponent implements OnInit {
   owner: Owner = new Owner();
   existingFiles: File[] = [];
-  newFiles: File[] = [];
+  files: File[] = [];
   existingFilesDownload: FileDto[] = [];
   id: string = "";
   types: OwnerTypeModel[] = [];
@@ -162,14 +162,14 @@ export class UsersUpdateOwnerComponent implements OnInit {
       businessName: form.get('bussinesName')?.value,
       phoneNumber: form.get('phoneNumber')?.value,
       email: form.get('email')?.value,
-      files: this.newFiles,
+      files: this.files,
       userUpdateId: 1,
       active: true
     } as PutOwnerDto
   }
 
   getFiles(files: File[]) {
-    this.newFiles = files;
+    this.files = files;
   }
 
   updateOwner(form: any) {
@@ -311,8 +311,12 @@ export class UsersUpdateOwnerComponent implements OnInit {
     return errorMessages[errorKey] || 'Error no identificado en el campo.';
   }
 
-      //Evento para actualizar el listado de files a los seleccionados actualmente
-      onFileChange(event: any) {
-        this.newFiles = Array.from(FileList = event.target.files); //Convertir FileList a Array
-      }
+  //Evento para actualizar el listado de files a los seleccionados actualmente
+  onFileChange(event: any) {
+    this.files.push(...Array.from(event.target.files as FileList)); //Convertir FileList a Array
+  }
+
+  deleteFile(index: number) {
+    this.files.splice(index, 1);
+  }
 }
