@@ -5,12 +5,6 @@ import { DataTablesModule } from 'angular-datatables';
 import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs5';
-import 'datatables.net-buttons/js/dataTables.buttons.js';
-import 'datatables.net-buttons/js/buttons.html5.js';
-import 'datatables.net-buttons/js/buttons.print.js';
-import 'pdfmake/build/pdfmake';
-import 'pdfmake/build/vfs_fonts';
-import 'jszip';
 import Swal from 'sweetalert2';
 
 

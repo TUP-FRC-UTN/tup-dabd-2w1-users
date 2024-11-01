@@ -57,7 +57,7 @@ export class UsersUpdateUserComponent implements OnInit {
         // Asigna `rolesSelected` después de obtener `data.roles`
         this.rolesSelected = data.roles || [];
         console.log('Roles:', this.rolesSelected);
-        this.rolesComponent.updateRoles(this.rolesSelected);
+        this.rolesComponent.emptyList();
         
       },
       error: (error) => {

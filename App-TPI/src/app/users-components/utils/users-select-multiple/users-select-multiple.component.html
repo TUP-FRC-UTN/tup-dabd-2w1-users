@@ -1,21 +1,17 @@
-<div class="">
-    <button type="button" class="select nav-link d-flex w-100 form-control" data-bs-toggle="collapse" data-bs-target="#selectDrop" style="border: solid 1px; padding-left: 10px;">
-        {{title}}
-    </button>
 
-    <div class="sub-menu collapse fs-6 mb-3 w-100 form-control" id="selectDrop" style="border: solid 1px;border-color: #dbd8d8;">
-        
-        @for (item of roles; track $index) {
-            <div class="hover">
-                <div class="cbx form-check">
-                    <input class="form-check-input" type="checkbox" value="{{item.description}}" (change)="onCheckboxChange($event)" [checked]="isChecked(item.description)"  id="{{item.id}}" style="padding-left: 10px;"
->
-                    <label class="form-check-label w-100" for="{{item.id}}">
-                      {{item.description}}
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            {{subTitleLabel}}
+            <span class="selected-count"></span>
+        </button>
+        <ul class="dropdown-menu w-100" aria-labelledby="dropdownEntryExit">
+            @for (opt of options; track $index) {
+                <li>
+                    <label class="dropdown-item">
+                        <input type="checkbox" (change)="onChange($event)" class="form-check-input me-2" [value]="opt"> {{opt}}
                     </label>
-                  </div>
-            </div> 
-        }
+                </li>
+            }
+        </ul>
     </div>
-</div>
-

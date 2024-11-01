@@ -39,8 +39,12 @@ export class NewUserComponent implements OnInit {
   rolesString: string = "Roles añadidos:";
   rolesInput: string[] = [];
   select: string = "";
-  checkRole: boolean = false;
+  checkOption: boolean = false;
   lotes: GetPlotDto[] = [];
+
+  subTitleLabel: string = 'Seleccione los roles del usuario';
+  options: string[] = [];
+  selectedOptions: string[] = [];
   
 
   ngOnInit() {
@@ -49,8 +53,6 @@ export class NewUserComponent implements OnInit {
      //SOLO MUESTRA LOS LOTES DISPONIBLES
      this.plotService.getAllPlotsAvailables().subscribe({
       next: (data: GetPlotDto[]) => {
-        console.log(data);
-        
           if(this.authService.getActualRole() == "Propietario"){
               this.lotes = data.filter(lote => lote.id == this.authService.getUser().plotId);
               this.reactiveForm.get('plot')?.setValue(this.authService.getUser().plotId.toString());
@@ -68,6 +70,16 @@ export class NewUserComponent implements OnInit {
     if(this.authService.getActualRole() == "Propietario"){
       this.reactiveForm.controls['plot'].disable();
     }
+
+
+    this.apiService.getAllRoles().subscribe({
+      next: (data: RolModel[]) => {
+        this.options = data.map(rol => rol.description);
+      },
+      error: (error) => {
+        console.error('Error al cargar los roles:', error);
+      }
+    });
   }
 
 
@@ -160,16 +172,16 @@ export class NewUserComponent implements OnInit {
 
 
   //Añade los roles seleccionados por users-select-multiple
-  fillRolesSelected(roles: any) {
-    this.rolesSelected = roles;  // Asignamos directamente los roles emitidos
+  fillOptionsSelected(options: any) {
+    this.selectedOptions = options;  // Asignamos directamente los roles emitidos
   }
 
-  verifyRole() {
-    if(this.rolesSelected.length === 0){  
-      this.checkRole = false;
+verifyOptions() {
+    if(this.selectedOptions.length === 0){  
+      this.checkOption = false;
     }
     else{
-      this.checkRole = true;
+      this.checkOption = true;
     }
   }
   
@@ -190,7 +202,7 @@ export class NewUserComponent implements OnInit {
       active: true,
       avatar_url: "asd",
       datebirth: fechaValue ? new Date(fechaValue).toISOString().split('T')[0] : '',
-      roles: this.rolesSelected,
+      roles: this.selectedOptions,
       phone_number: this.reactiveForm.get('phone_number')?.value?.toString() || '',
       userUpdateId: this.reactiveForm.get('userUpdateId')?.value || 0,
       telegram_id: this.reactiveForm.get('telegram_id')?.value || 0
@@ -201,7 +213,7 @@ export class NewUserComponent implements OnInit {
     
 
     //Si el usuario es de tipo owner se setea el plotId
-    if(this.authService.hasRole('Propietario')){
+    if(this.authService.getActualRole() == "Propietario"){
       userData.plot_id = this.authService.getUser().plotId;
     }else{
       userData.plot_id = 0;
@@ -224,7 +236,7 @@ export class NewUserComponent implements OnInit {
         }
         //Reseteamos el formulario
         this.reactiveForm.reset();
-        this.rolesComponent.updateRoles([]);
+        this.rolesComponent.emptyList();
         
       },
       error: (error) => {
@@ -287,6 +299,15 @@ export class NewUserComponent implements OnInit {
   
     // Retorna cadena vacía si no hay errores.
     return '';
+  }
+
+  showFormError(){
+    Object.keys(this.reactiveForm.controls).forEach((field) => {
+      const control = this.reactiveForm.get(field);
+      if (control && control.errors) {
+        console.log(`Errores en ${field}:`, control.errors);
+      }
+    });
   }
   
 }

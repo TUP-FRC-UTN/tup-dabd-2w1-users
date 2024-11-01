@@ -6,11 +6,12 @@ import { UsersSelectMultipleComponent } from '../../utils/users-select-multiple/
 import { LoginService } from '../../../users-servicies/login.service';
 import { FileService } from '../../../users-servicies/file.service';
 import { AuthService } from '../../../users-servicies/auth.service';
+import { AccessTableComponent } from "../access-table/access-table.component";
 
 @Component({
   selector: 'app-landing-page',
   standalone: true,
-  imports: [RouterOutlet, ModalInfoUserComponent, NavbarComponent, UsersSelectMultipleComponent],
+  imports: [RouterOutlet, ModalInfoUserComponent, NavbarComponent, UsersSelectMultipleComponent, AccessTableComponent],
   templateUrl: './landing-page.component.html',
   styleUrls: ['./landing-page.component.css'],  // Corrige 'styleUrl' a 'styleUrls'
 })
