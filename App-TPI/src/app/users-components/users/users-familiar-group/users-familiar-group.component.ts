@@ -26,7 +26,7 @@ export class UsersFamiliarGroupComponent implements OnInit {
   private readonly authService = inject(AuthService);
 
   familyGroup: UserGet[] = [];
-  plot : GetPlotDto = new GetPlotDto();
+  plots : GetPlotDto[] = [];
   userModal: UserGet = new UserGet();
 
   ngOnInit() {
@@ -43,15 +43,17 @@ export class UsersFamiliarGroupComponent implements OnInit {
       }
     })
 
-    this.plotService.getPlotById(this.authService.getUser().plotId).subscribe({
-      next: plot => {
-        // traer a todos menos al que tenga un rol owner
-        this.plot = plot;    
-      },
-      error: error => {
-        console.error(error);
-      }
-    })
+    for(let plot of this.authService.getUser().plotId){
+      this.plotService.getPlotById(plot).subscribe({
+        next: plot => {
+          // traer a todos menos al que tenga un rol owner
+          this.plots.push(plot);  
+        },
+        error: error => {
+          console.error(error);
+        }
+      })
+    }
 
 
   }
@@ -97,7 +99,7 @@ export class UsersFamiliarGroupComponent implements OnInit {
       const modalRef = this.modal.open(ModalInfoUserComponent, { size: 'lg', keyboard: false });
       modalRef.componentInstance.typeModal = type; //Pasar el tipo de modal al componente hijo
       modalRef.componentInstance.userModal = this.userModal;
-      modalRef.componentInstance.plotModal = this.plot;
+      modalRef.componentInstance.plotModal = this.plots;
 
       modalRef.result.then((result) => {        
         this.ngOnInit();

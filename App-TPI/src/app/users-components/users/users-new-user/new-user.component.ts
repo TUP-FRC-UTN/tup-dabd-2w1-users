@@ -43,6 +43,7 @@ export class NewUserComponent implements OnInit {
   lotes: GetPlotDto[] = [];
 
   subTitleLabel: string = 'Seleccione los roles del usuario';
+  optionsForOwner: string[] = ["Familiar mayor", "Familiar menor"];
   options: string[] = [];
   selectedOptions: string[] = [];
   
@@ -54,7 +55,7 @@ export class NewUserComponent implements OnInit {
      this.plotService.getAllPlotsAvailables().subscribe({
       next: (data: GetPlotDto[]) => {
           if(this.authService.getActualRole() == "Propietario"){
-              this.lotes = data.filter(lote => lote.id == this.authService.getUser().plotId);
+              this.lotes = data.filter(lote => this.authService.getUser().plotId.includes(lote.id));
               this.reactiveForm.get('plot')?.setValue(this.authService.getUser().plotId.toString());
               this.reactiveForm.get('plot')?.disable();
 
@@ -75,11 +76,21 @@ export class NewUserComponent implements OnInit {
     this.apiService.getAllRoles().subscribe({
       next: (data: RolModel[]) => {
         this.options = data.map(rol => rol.description);
+        if(this.authService.getActualRole() == "Propietario"){
+          this.options = this.options.filter(rol => this.optionsForOwner.includes(rol));
+        } else{
+          this.options = this.options.filter(rol => !this.optionsForOwner.includes(rol) && rol != "Propietario" && rol != "SuperAdmin");
+        }
       },
       error: (error) => {
         console.error('Error al cargar los roles:', error);
       }
     });
+
+    if(this.authService.getActualRole() == "Gerente"){
+      this.reactiveForm.get("plot")?.disable();
+      this.reactiveForm.get("plot")?.setValue("Sin lote");
+    }
   }
 
 
@@ -214,10 +225,13 @@ verifyOptions() {
 
     //Si el usuario es de tipo owner se setea el plotId
     if(this.authService.getActualRole() == "Propietario"){
-      userData.plot_id = this.authService.getUser().plotId;
+      userData.plot_id = this.authService.getUser().plotId[0];  
     }else{
       userData.plot_id = 0;
     }
+
+    console.log(userData);
+    
     
 
     this.apiService.postUser(userData).subscribe({
