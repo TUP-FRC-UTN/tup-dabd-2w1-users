@@ -407,7 +407,7 @@ export class UsersListPlotsComponent {
         break;
     }
 
-    return `<button class='btn btn-${color} rounded-pill m-1'>${plotType}</button>`;
+    return `<button class='btn btn-${color} rounded-pill m-1' style='cursor: default; box-shadow: none;'>${plotType}</button>`;
   }
 
   showPlotState(plotState: any): string {
@@ -426,6 +426,6 @@ export class UsersListPlotsComponent {
         break;
     }
 
-    return `<button class='btn btn-${color} rounded-pill m-1'>${plotState}</button>`;
+    return `<button class='btn btn-${color} rounded-pill m-1' style='cursor: default; box-shadow: none;'>${plotState}</button>`;
   }
 }
