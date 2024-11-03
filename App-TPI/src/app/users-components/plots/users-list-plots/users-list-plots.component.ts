@@ -41,13 +41,13 @@ export class UsersListPlotsComponent {
   //Filtros
   selectType = new FormControl("Seleccione un tipo");
   selectState = new FormControl("Seleccione un estado");
-  
-  plotTypes : string[] = [];
-  plotStatus : string[] = [];
 
-  
+  plotTypes: string[] = [];
+  plotStatus: string[] = [];
 
-  constructor(private router: Router,private modal: NgbModal) { }
+
+
+  constructor(private router: Router, private modal: NgbModal) { }
 
   async ngOnInit() {
     this.plotService.getAllStates().subscribe({
@@ -200,11 +200,11 @@ export class UsersListPlotsComponent {
 
 
   //Filtrat por tipo
-  updateFilterType(){
+  updateFilterType() {
     const table = $('#myTable').DataTable();
     table.column(4).search(this.selectType.value ?? '').draw();
   }
-  
+
   //Filtrar por estado
   updateFilterState() {
     const table = $('#myTable').DataTable();
@@ -225,7 +225,7 @@ export class UsersListPlotsComponent {
     // Limpiar el campo de búsqueda general y el filtro de la columna de tipo
     const searchInput = document.querySelector('#myTable_filter input') as HTMLInputElement;
     if (searchInput) {
-        searchInput.value = ''; // Limpiar el valor del input de búsqueda general
+      searchInput.value = ''; // Limpiar el valor del input de búsqueda general
     }
 
     // Obtener la instancia de DataTable
@@ -235,111 +235,124 @@ export class UsersListPlotsComponent {
     table.search('').draw(); // Limpiar búsqueda general
     table.column(4).search('').draw(); // Limpiar filtro de tipo
     table.column(5).search('').draw(); // Limpiar filtro de tipo
-}
+  }
 
 
-   //Exporta a pdf la tabla, si esta filtrada solo exporta los datos filtrados
-   exportPdf() {
-    const doc = new jsPDF();
-  
-    // Agregar título centrado
+  //Exporta a pdf la tabla, si esta filtrada solo exporta los datos filtrados
+  exportPdf() {
+    // Mantener la orientación del documento en portrait
+    const doc = new jsPDF('portrait');
+
+    // Agregar título centrado con la fecha actual a la derecha
     const title = 'Lista de Lotes';
+    const today = new Date();
+    const formattedDate = today.toISOString().split('T')[0].replace(/-/g, '/');
     const pageWidth = doc.internal.pageSize.getWidth();
+
+    // Configuración del título
     doc.setFontSize(16);
-    const textWidth = doc.getTextWidth(title);
-    doc.text(title, (pageWidth - textWidth) / 2, 20);
-  
-    // Obtener columnas de la tabla (añadido 'Email')
-    const columns = ['Lote', 'Manzana', 'M2', 'M2 Construidos','Tipo','Estado'];
-  
-    // Filtrar datos visibles en la tabla
-    const table = $('#myTable').DataTable(); // Inicializa DataTable una vez
-  
-    // Cambia la forma de obtener las filas visibles usando 'search' en lugar de 'filter'
-    const visibleRows = table.rows({ search: 'applied' }).data().toArray(); // Usar 'search: applied'
-  
-    // Mapear los datos filtrados a un formato adecuado para jsPDF
+    const titleText = `${title} - ${formattedDate}`;
+    const textWidth = doc.getTextWidth(titleText);
+
+    // Posicionamiento del título centrado con fecha
+    doc.text(titleText, (pageWidth - textWidth) / 2, 20);
+
+    // Definir las columnas de la tabla
+    const columns = ['Lote', 'Manzana', 'M2', 'M2 Construidos', 'Tipo', 'Estado', 'Propietario'];
+
+    // Obtener los datos filtrados en la tabla HTML
+    const table = $('#myTable').DataTable();
+    const visibleRows = table.rows({ search: 'applied' }).data().toArray();
+
+    // Mapear los datos visibles para el PDF
     const rows = visibleRows.map((row: any) => [
-      `${row[0]}`,       
-      `${row[1]}`,       
-      `${row[2]}`,       
+      `${row[0]}`,
+      `${row[1]}`,
+      `${row[2]}`,
       `${row[3]}`,
       `${this.getContentBetweenArrows(row[4])}`,
       `${this.getContentBetweenArrows(row[5])}`,
+      `${row[6]}`
     ]);
-  
-    // Generar la tabla en el PDF usando autoTable
+
+    // Configuración de autoTable en modo portrait, con fuente y padding reducidos
     autoTable(doc, {
       head: [columns],
       body: rows,
-      startY: 30, // Ajusta la posición de inicio de la tabla
-      theme: 'striped', // Tema de tabla con filas alternadas
-      headStyles: { fillColor: [0, 0, 0] }, // Color de fondo del encabezado
-      styles: { halign: 'center', valign: 'middle' }, // Alineación del contenido
-      columnStyles: { 
-        0: { cellWidth: 30 }, 
-        1: { cellWidth: 30 }, 
-        2: { cellWidth: 30 }, 
-        3: { cellWidth: 30 }, 
-        4: { cellWidth: 40 },
-        5: { cellWidth: 40 }
-      }, // Ajusta el ancho de las columnas
+      startY: 30,
+      theme: 'striped',
+      headStyles: { fillColor: [0, 0, 0] },
+      styles: { fontSize: 8, cellPadding: 1, halign: 'center', valign: 'middle' }, // Reducción de fuente y padding
+      margin: { left: 8, right: 8 }, // Márgenes más ajustados
+      columnStyles: {
+        0: { cellWidth: 25 },
+        1: { cellWidth: 25 },
+        2: { cellWidth: 25 },
+        3: { cellWidth: 25 },
+        4: { cellWidth: 30 },
+        5: { cellWidth: 30 },
+        6: { cellWidth: 30 }
+      },
     });
-  
-    const today = new Date();
-    const formattedDate = today.toISOString().split('T')[0].replace(/-/g, '_'); 
-    const fileName = `${formattedDate}_LOTES.pdf`; 
-  
-    doc.save(fileName); 
+
+    // Guardar el PDF con la fecha actual en el nombre
+    const fileName = `${today.toISOString().split('T')[0].replace(/-/g, '_')}_LOTES.pdf`;
+    doc.save(fileName);
   }
 
-  //Exporta por excel los registros de la tabla
-  exportExcel() {
+  async exportExcel() {
+    const table = $('#myTable').DataTable();
+    const visibleRows = table.rows({ search: 'applied' }).data().toArray();
 
-    const table = $('#myTable').DataTable(); // Inicializa DataTable una vez
-  
-    // Cambia la forma de obtener las filas visibles usando 'search' en lugar de 'filter'
-    const visibleRows = table.rows({ search: 'applied' }).data().toArray(); // Usar 'search: applied'
+    // Filtrar los lotes visibles
+    const filteredPlots = this.plots.filter(plot =>
+      visibleRows.some(row => row[0] === plot.plot_number)
+    );
 
-    // Filtrar a los lotes x aquellos que aparzcan en la tabla visibleRows
-    let plots = this.plots.filter(plot => visibleRows.some(row => row[0] === plot.plot_number));
+    // Mapeo de plots con sus propietarios
+    const plotData = await Promise.all(filteredPlots.map(async plot => {
+      const ownerName = await this.showOwner(plot.id); // Obtiene el propietario
+      return {
+        Lote: plot.plot_number,
+        Manzana: plot.block_number,
+        'M2': plot.total_area_in_m2,
+        'M2 Construidos': plot.built_area_in_m2,
+        Tipo: plot.plot_type, // Directamente del objeto
+        Estado: plot.plot_state, // Directamente del objeto
+        Propietario: ownerName // Ahora aquí funciona el await
+      };
+    }));
 
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(plots.map(plot => ({
-      Lote: plot.plot_number,
-      Manzana: plot.block_number,
-      M2: plot.total_area_in_m2,
-      M2_Construidos: plot.built_area_in_m2,
-      Tipo: plot.plot_type,
-      Estado: plot.plot_state 
-    })));
-  
+    // Convertir los datos a una hoja de Excel
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(plotData);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Lotes');
-  
+
+    // Guardar el archivo Excel
     const today = new Date();
     const formattedDate = today.toISOString().split('T')[0].replace(/-/g, '_');
-    const fileName = `${formattedDate}_LOTES.xlsx`; 
-  
+    const fileName = `${formattedDate}_LOTES.xlsx`;
     XLSX.writeFile(wb, fileName);
   }
 
+
   async abrirModal(plotId: number) {
     console.log("Esperando a que userModal se cargue...");
-  
+
     // Espera a que se cargue el usuario seleccionado
     try {
       console.log("Cargando lote...");
-      
+
       await this.selectUser(plotId);
       console.log("lote cargado:", this.plotModel);
       console.log("Abriendo modal...");
-      
-  
+
+
       // Una vez cargado, abre el modal
       const modalRef = this.modal.open(UsersModaInfoPlotComponent, { size: 'md', keyboard: false });
       modalRef.componentInstance.plotModel = this.plotModel;
 
-      modalRef.result.then((result) => {        
+      modalRef.result.then((result) => {
         $('#myTable').DataTable().ajax.reload();
       });
 
@@ -348,71 +361,71 @@ export class UsersListPlotsComponent {
     }
   }
 
-  
+
   redirectEdit(id: number) {
     this.router.navigate(['/home/plots/edit', id])
   }
 
   // Busca el user y se lo pasa al modal
   plotModel: GetPlotModel = new GetPlotModel();
-   selectUser(id: number): Promise<GetPlotModel> {
-       // Mostrar SweetAlert de tipo 'cargando'
-     return new Promise((resolve, reject) => {
-       this.plotService.getPlotById(id).subscribe({
-         next: (data: GetPlotModel) => {
-           this.plotModel = data;        
-           Swal.close(); // Cerrar SweetAlert
-           resolve(data); // Resuelve la promesa cuando los datos se cargan
-         },
-         error: (error) => {
-           console.error('Error al cargar el lote:', error);
-           reject(error); // Rechaza la promesa si ocurre un error
-           Swal.close();
-           Swal.fire({
-             icon: 'error',
-             title: 'Error',
-             text: 'Hubo un problema al cargar el lote. Por favor, inténtalo de nuevo.'
-           });
-         }
-       });
-     });
+  selectUser(id: number): Promise<GetPlotModel> {
+    // Mostrar SweetAlert de tipo 'cargando'
+    return new Promise((resolve, reject) => {
+      this.plotService.getPlotById(id).subscribe({
+        next: (data: GetPlotModel) => {
+          this.plotModel = data;
+          Swal.close(); // Cerrar SweetAlert
+          resolve(data); // Resuelve la promesa cuando los datos se cargan
+        },
+        error: (error) => {
+          console.error('Error al cargar el lote:', error);
+          reject(error); // Rechaza la promesa si ocurre un error
+          Swal.close();
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Hubo un problema al cargar el lote. Por favor, inténtalo de nuevo.'
+          });
+        }
+      });
+    });
   }
 
-  showPlotType(plotType : any) : string {
+  showPlotType(plotType: any): string {
 
-    let color : string = ''
-   
-      switch (plotType) {
-        case "Comercial":
-          color = "secondary";
-          break;
-        case "Residencial":
-          color = "success";
-          break;
-        case "Baldío":
-          color = "danger";
-          break;
-      }
+    let color: string = ''
 
-      return `<button class='btn btn-${color} rounded-pill m-1'>${plotType}</button>`;
+    switch (plotType) {
+      case "Comercial":
+        color = "secondary";
+        break;
+      case "Residencial":
+        color = "success";
+        break;
+      case "Baldío":
+        color = "danger";
+        break;
+    }
+
+    return `<button class='btn btn-${color} rounded-pill m-1'>${plotType}</button>`;
   }
 
-  showPlotState(plotState : any) : string {
+  showPlotState(plotState: any): string {
 
-    let color : string = ''
-   
-      switch (plotState) {
-        case "Disponible":
-          color = "success";
-          break;
-        case "Habitado":
-          color = "secondary";
-          break;
-        case "En construcción":
-          color = "danger";
-          break;
-      }
+    let color: string = ''
 
-      return `<button class='btn btn-${color} rounded-pill m-1'>${plotState}</button>`;
+    switch (plotState) {
+      case "Disponible":
+        color = "success";
+        break;
+      case "Habitado":
+        color = "secondary";
+        break;
+      case "En construcción":
+        color = "danger";
+        break;
+    }
+
+    return `<button class='btn btn-${color} rounded-pill m-1'>${plotState}</button>`;
   }
 }
