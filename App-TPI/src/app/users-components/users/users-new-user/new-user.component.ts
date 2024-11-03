@@ -44,7 +44,7 @@ export class NewUserComponent implements OnInit {
 
   subTitleLabel: string = 'Seleccione los roles del usuario';
   optionsForOwner: string[] = ["Familiar mayor", "Familiar menor"];
-  options: string[] = [];
+  options: any[] = [];
   selectedOptions: string[] = [];
   
 
@@ -77,9 +77,11 @@ export class NewUserComponent implements OnInit {
       next: (data: RolModel[]) => {
         this.options = data.map(rol => rol.description);
         if(this.authService.getActualRole() == "Propietario"){
-          this.options = this.options.filter(rol => this.optionsForOwner.includes(rol));
+          let optionsFilter = this.options.filter(rol => this.optionsForOwner.includes(rol));
+          optionsFilter.forEach(o => this.options.push({value : o, name: o}))
         } else{
-          this.options = this.options.filter(rol => !this.optionsForOwner.includes(rol) && rol != "Propietario" && rol != "SuperAdmin");
+          let optionsFilter = this.options.filter(rol => !this.optionsForOwner.includes(rol) && rol != "Propietario" && rol != "SuperAdmin");
+          optionsFilter.forEach(o => this.options.push({value : o, name: o}))
         }
       },
       error: (error) => {

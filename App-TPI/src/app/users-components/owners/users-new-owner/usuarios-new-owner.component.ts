@@ -15,6 +15,7 @@ import { Route, Router } from '@angular/router';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { FileUploadComponent } from '../../utils/file-upload/file-upload.component';
 import { ValidatorsService } from '../../../users-servicies/validators.service';
+import { AuthService } from '../../../users-servicies/auth.service';
 
 @Component({
   selector: 'app-usuarios-new-owner',
@@ -31,12 +32,23 @@ export class UsuariosNewOwnerComponent {
   private readonly apiService = inject(UserService);
   private readonly plotService = inject(PlotService);
   private readonly validatorService = inject(ValidatorsService);
+
+  //Obtener el id del usuario logueado
+  private readonly authService = inject(AuthService);
+
   JURIDICA_ID = 2;
 
   types: OwnerTypeModel[] = [];
   states: OwnerStateModel[] = [];
-  lotes: GetPlotDto[] = [];
+
+  //Lotes disponibles (cargan el select)
+  availablePlots: any[] = [];
+
+  //Roles seleccionados
   rolesSelected: string[] = [];
+
+  //Lotes seleccionados
+  plotsSelected : number[] = [];
 
   passwordVisible: boolean = false;
   files: File[] = [];
@@ -58,12 +70,9 @@ export class UsuariosNewOwnerComponent {
       Validators.pattern(/^\d+$/)
     ],
       this.validatorService.validarDniUnico()
-    ), //Esto valida que sea numerico el string
-    cuit_cuil: new FormControl("", [
-      Validators.required,
-      Validators.pattern(/^\d+$/),
-      Validators.minLength(11),
-      Validators.maxLength(20)]),
+    ), //Tipo de documento
+    documentType: new FormControl("", [
+      Validators.required]),
     birthdate: new FormControl(null, [
       Validators.required,
       this.dateLessThanTodayValidator()]),
@@ -116,8 +125,8 @@ export class UsuariosNewOwnerComponent {
       next: (data: OwnerTypeModel[]) => {
         this.types = data;
       },
-      error: (err) => {
-        console.error('Error al cargar los tipos de lote:', err);
+      error: (err) => { //ver
+        console.error('Error al cargar los tipos de propietario:', err);
       }
     });
 
@@ -133,10 +142,14 @@ export class UsuariosNewOwnerComponent {
     //SOLO MUESTRA LOS LOTES DISPONIBLES
     this.plotService.getAllPlotsAvailables().subscribe({
       next: (data: GetPlotDto[]) => {
-        this.lotes = data;
+
+        //Se filtran los datos y se agregan como un objeto clave : valor para que puedan ser renderizados en el selectmultiple
+        let dataFiltered : any[] = [];
+        data.forEach(d => dataFiltered.push({value: d.id, name: `Numero de lote: ${d.plot_number}, Manzana:${d.block_number }`}))
+        this.availablePlots = dataFiltered;
       },
       error: (err) => {
-        console.error('Error al cargar los tipos de lote:', err);
+        console.error('Error al cargar los lotes:', err);
       }
     });
   }
@@ -174,27 +187,27 @@ export class UsuariosNewOwnerComponent {
     }
   }
 
-  formatCUIT(value: string): void {
-    const cleaned = value.replace(/\D/g, ''); // Eliminar caracteres no numéricos
+  // formatCUIT(value: string): void {
+  //   const cleaned = value.replace(/\D/g, ''); // Eliminar caracteres no numéricos
 
-    if (cleaned.length < 2) {
-      this.formReactivo.get('cuit_cuil')?.setValue(cleaned);
-      return;
-    }
+  //   if (cleaned.length < 2) {
+  //     this.formReactivo.get('cuit_cuil')?.setValue(cleaned);
+  //     return;
+  //   }
 
-    let formatted = cleaned;
-    if (cleaned.length >= 2) {
-      formatted = cleaned.substring(0, 2) + '-'; // Agrega guión después de los primeros 2 dígitos
-    }
-    if (cleaned.length > 2) {
-      formatted += cleaned.substring(2);
-    }
-    if (cleaned.length >= 10) {
-      formatted = formatted.substring(0, 11) + '-' + cleaned.charAt(10); // Agrega guión antes del último dígito
-    }
+  //   let formatted = cleaned;
+  //   if (cleaned.length >= 2) {
+  //     formatted = cleaned.substring(0, 2) + '-'; // Agrega guión después de los primeros 2 dígitos
+  //   }
+  //   if (cleaned.length > 2) {
+  //     formatted += cleaned.substring(2);
+  //   }
+  //   if (cleaned.length >= 10) {
+  //     formatted = formatted.substring(0, 11) + '-' + cleaned.charAt(10); // Agrega guión antes del último dígito
+  //   }
 
-    this.formReactivo.get('cuit_cuil')?.setValue(formatted, { emitEvent: false }); // Evita el loop de eventos
-  }
+  //   this.formReactivo.get('cuit_cuil')?.setValue(formatted, { emitEvent: false }); // Evita el loop de eventos
+  // }
 
   confirmExit() {
     Swal.fire({
@@ -222,7 +235,7 @@ export class UsuariosNewOwnerComponent {
   redirect(path: string) {
     this.router.navigate([path]);
   }
-
+  
   addRole() {
     const rolSeleccionado = this.formReactivo.get('rol')?.value;
     if (rolSeleccionado && !this.rolesInput.includes(rolSeleccionado)) {
@@ -231,6 +244,7 @@ export class UsuariosNewOwnerComponent {
     this.formReactivo.get('rol')?.setValue('');
   }
 
+  //Cambiar visibilidad de la contraseña
   togglePasswordVisibility(): void {
     this.passwordVisible = !this.passwordVisible;
   }
@@ -286,7 +300,7 @@ export class UsuariosNewOwnerComponent {
       name: this.formReactivo.get('name')?.value || '',
       lastname: this.formReactivo.get('lastname')?.value || '',
       dni: this.formReactivo.get('dni')?.value || '',
-      cuitCuil: this.formReactivo.get('cuit_cuil')?.value || '',
+      dni_type: this.formReactivo.get('documentType')?.value || '', //Tipo de documento
       dateBirth: this.formReactivo.get('birthdate')?.value || new Date(),
       ownerTypeId: this.formReactivo.get('type')?.value || 0,
       taxStatusId: this.formReactivo.get('state')?.value || 0,
@@ -297,15 +311,23 @@ export class UsuariosNewOwnerComponent {
       phoneNumber: this.formReactivo.get('phone')?.value || '',
       avatarUrl: 'nada',
       businessName: this.formReactivo.get('company')?.value || '',
-     
+      telegramId: Number(this.formReactivo.get('telegram_id')?.value) || 0,
+
+      //--------------------------------------------------VER-----------------------------------------------
      /* estos estan hardcodeado para que ande*/
       roles: ["Propietario"],//this.rolesSelected,
-      userCreateId: 1,
-      plotId: this.formReactivo.get('plot')?.value || 0,
-      telegramId: 1,
+
+      //Id del usuario logueado
+      userCreateId: this.authService.getUser().id,
+
+      //Lista de ids de los lotes seleccionados
+      plotId: this.plotsSelected,
+
+      //Archivos seleccionados
       files: this.files
     };
 
+    //Se intenta crear el propietario
     this.ownerService.postOwner(owner).subscribe({
       next: (response) => {
         Swal.fire({
@@ -314,8 +336,12 @@ export class UsuariosNewOwnerComponent {
           showConfirmButton: false,
           timer: 1460
         });
-        this.resetForm() // Resetea el formulario después de guardar
+
+        //Resetea el fomulario
+        this.resetForm() 
       },
+
+      //Se intercepta el error, si sucede
       error: (error) => {
         console.error('Error al guardar el propietario:', error);
         Swal.fire({
@@ -328,27 +354,34 @@ export class UsuariosNewOwnerComponent {
     });
   }
 
-     //Evento para actualizar el listado de files a los seleccionados actualmente
+  //Evento para actualizar el listado de files a los seleccionados actualmente
   onFileChange(event: any) {
     this.files.push(...Array.from(event.target.files as FileList)); //Convertir FileList a Array
   }
 
+  //Eliminar archivo
   deleteFile(index: number) {
     this.files.splice(index, 1);
   }
 
+  //Resetear el formulario
   resetForm(){
     this.formReactivo.reset();
     this.clearFileInput();
   }
 
+  //Limpiar los archivos
   clearFileInput() {
-    // Limpia el array de archivos
     this.files = [];
-    // Limpia el input file
+
     const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
     if (fileInput) {
       fileInput.value = '';
     }
+  }
+
+  //Obtener lotes seleccionados del selectmultiple
+  getSelectedPlots(event : any){
+    this.plotsSelected = event;
   }
 }

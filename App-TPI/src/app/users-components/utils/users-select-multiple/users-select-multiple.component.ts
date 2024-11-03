@@ -1,33 +1,28 @@
 import { CommonModule } from '@angular/common';
-import { Component,EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import { Component,EventEmitter,Input, Output} from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { UserService } from '../../../users-servicies/user.service';
-import { RolModel } from '../../../users-models/users/Rol';
-import { AuthService } from '../../../users-servicies/auth.service';
-import Swal from 'sweetalert2';
-import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-users-select-multiple',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './users-select-multiple.component.html',
   styleUrl: './users-select-multiple.component.css',
 })
 export class UsersSelectMultipleComponent{
   //Título del select ('Seleccione...')
-  @Input() subTitleLabel: string = '';
+  @Input() titleDefault: string = '';
 
-  //Opciones a seleccionar
-  @Input() options: string[] = [];
+  //Opciones a seleccionar (lista de objetos)
+  @Input() options: any[] = [];
 
   //Opciones seleccionadas
-  @Output() valuesEmited = new EventEmitter<string[]>();
+  @Output() valuesEmited = new EventEmitter<any[]>();
 
   //lista de opciones
-  loptions : string[] = [];
+  loptions : any[] = [];
 
-  addOption(option : string){
+  addOption(option : any){
     if(!this.loptions.includes(option)){
       this.loptions.push(option);
 
@@ -35,9 +30,9 @@ export class UsersSelectMultipleComponent{
     }
   }
 
-  removeOption(option : string){
+  removeOption(option : any){
     //Quita la opción que no coincida
-    this.loptions = this.loptions.filter( o => o !== option);
+    this.loptions = this.loptions.filter(o => o !== option);
 
     //Emite la lista
      this.valuesEmited.emit(this.loptions)

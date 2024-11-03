@@ -47,7 +47,7 @@ export class OwnerService {
     formData.append('name', owner.name);
     formData.append('lastname', owner.lastname);
     formData.append('dni', owner.dni);
-    formData.append('cuitCuil', owner.cuitCuil);
+    formData.append('dni_type', owner.dni_type);
     formData.append('dateBirth', new Date(owner.dateBirth).toISOString().split('T')[0]);
     formData.append('ownerTypeId', owner.ownerTypeId.toString());
     formData.append('taxStatusId', owner.taxStatusId.toString());

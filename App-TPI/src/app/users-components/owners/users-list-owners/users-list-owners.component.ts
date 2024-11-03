@@ -39,11 +39,7 @@ export class UsersListOwnersComponent {
   initialDate = new FormControl();
   endDate = new FormControl();
 
-
-
   constructor(private router: Router,private modal: NgbModal) { }
-
-  
 
   ngOnInit() {
     this.apiService.getAll().subscribe({
@@ -57,7 +53,7 @@ export class UsersListOwnersComponent {
       
         this.loadTypes();   
         
-        // Inicializar DataTables después de cargar los datos
+        //Inicializar DataTables después de cargar los datos
         setTimeout(() => {
           const table = $('#myTable').DataTable({
             paging: true,
@@ -121,13 +117,13 @@ export class UsersListOwnersComponent {
             },
           });    
 
-          // Alinear la caja de búsqueda a la derecha
+          //Alinear la caja de búsqueda a la derecha
           const searchInputWrapper = $('#myTable_filter');
           searchInputWrapper.addClass('d-flex justify-content-start');
 
-          // Desvincular el comportamiento predeterminado de búsqueda
+          //Desvincular el comportamiento predeterminado de búsqueda
           $('#myTable_filter input').unbind(); 
-          $('#myTable_filter input').bind('input', (event) => { // Usar función de flecha aquí
+          $('#myTable_filter input').bind('input', (event) => { //Usar función de flecha aquí
               const searchValue = (event.target as HTMLInputElement).value; // Acceder al valor correctamente
           
               // Comienza a buscar solo si hay 3 o más caracteres
@@ -138,8 +134,8 @@ export class UsersListOwnersComponent {
               }
           });
 
-          // Asignar el evento click a los botones "Ver más"
-          // Asignar el evento click a los botones "Ver más"
+          //Asignar el evento click a los botones "Ver más"
+          //Asignar el evento click a los botones "Ver más"
         $('#myTable').on('click', '.view-owner', (event) => {
           
           //Esto daba error por eso lo comente
@@ -257,8 +253,6 @@ export class UsersListOwnersComponent {
     // Redibujar la tabla después de aplicar el filtro
     table.draw();
   }
-  
-
 
   // Busca el user y se lo pasa al modal
   ownerModel: Owner = new Owner();

@@ -23,7 +23,7 @@
 
       <div class="col-lg-6 mb-3">
         <div class="row">
-          <label class="col-2 col-form-label">Dni</label>
+          <label class="col-2 col-form-label">Documento</label>
           <div class="col-10">
             <input type="text" class="form-control" formControlName="dni" [ngClass]="onValidate('dni')" />
             <div class="invalid-feedback">{{ showError("dni") }}</div>
@@ -33,10 +33,14 @@
 
       <div class="col-lg-6 mb-3">
         <div class="row">
-          <label class="col-2 col-form-label">Cuit-Cuil</label>
+          <label class="col-2 col-form-label">Tipo de documento</label>
           <div class="col-10">
-            <input type="text" class="form-control" formControlName="cuit_cuil" [ngClass]="onValidate('cuit_cuil')" />
-            <div class="invalid-feedback">{{ showError("cuit_cuil") }}</div>
+            <select id="selectOption" class="form-select" formControlName="documentType" [ngClass]="onValidate('documentType')">
+              <option value="" disabled selected>Seleccione una opción</option>
+              <option value="1">DNI</option>
+              <option value="2">Pasaporte</option>
+            </select>
+            <div class="invalid-feedback">{{showError('documentType')}}</div>
           </div>
         </div>
       </div>
@@ -141,18 +145,12 @@
 
       <div class="col-lg-6 mb-3">
         <div class="row">
-          <label class="col-2 col-form-label">Lote</label>
+          <label class="col-2 col-form-label">Lotes</label>
           <div class="col-10">
-            <select id="selectOption" class="form-select" formControlName="plot" [ngClass]="onValidate('plot')">
-              <option value="" disabled selected>Seleccione un lote</option>
-              @for (s of lotes; track $index) {
-              <option value="{{ s.id }}">
-                Numero de lote: {{ s.plot_number }}, Manzana:
-                {{ s.block_number }}
-              </option>
-              }
-            </select>
-            <div class="invalid-feedback">{{ showError("plot") }}</div>
+            <app-users-select-multiple [options]="availablePlots" [titleDefault]="'Seleccione un lote...'" (valuesEmited)="getSelectedPlots($event)"></app-users-select-multiple>
+            <div class="text-danger form-error">
+              @if(plotsSelected.length == 0){ Seleccione al menos una opción }
+            </div>
           </div>
         </div>
       </div>
@@ -187,12 +185,13 @@
                 <button type="button" class="btn bi-x-lg" (click)="deleteFile($index)"></button>
 
               </div>
-
               }
             </div>
           </div>
         </div>
       </div>
+
+      
       <div class="row mb-3 justify-content-end">
         <div class="col-auto">
           <button type="button" class="btn btn-secondary" (click)="confirmExit()">
@@ -200,7 +199,7 @@
           </button>
         </div>
         <div class="col-auto">
-          <button type="submit" class="btn btn-primary" [disabled]="!formReactivo.valid">
+          <button type="submit" class="btn btn-primary" [disabled]="!formReactivo.valid && plotsSelected.length != 0">
             Guardar
           </button>
         </div>

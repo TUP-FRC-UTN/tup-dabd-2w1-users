@@ -1,17 +1,16 @@
-
-    <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown"
-            aria-expanded="false">
-            {{subTitleLabel}}
-            <span class="selected-count"></span>
-        </button>
-        <ul class="dropdown-menu w-100" aria-labelledby="dropdownEntryExit">
-            @for (opt of options; track $index) {
-                <li>
-                    <label class="dropdown-item">
-                        <input type="checkbox" (change)="onChange($event)" class="form-check-input me-2" [value]="opt"> {{opt}}
-                    </label>
-                </li>
-            }
-        </ul>
-    </div>
+<div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown"
+        aria-expanded="false">
+        {{titleDefault}}
+        <span class="selected-count"></span>
+    </button>
+    <ul class="dropdown-menu w-100" aria-labelledby="dropdownEntryExit">
+        @for (opt of options; track $index) {
+        <li>
+            <label class="dropdown-item">
+                <input type="checkbox" (change)="onChange($event)" class="form-check-input me-2" [value]="opt.value"> {{opt.name}}
+            </label>
+        </li>
+        }
+    </ul>
+</div>

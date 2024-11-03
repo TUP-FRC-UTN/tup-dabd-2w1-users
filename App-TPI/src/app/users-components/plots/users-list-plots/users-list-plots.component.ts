@@ -45,8 +45,6 @@ export class UsersListPlotsComponent {
   plotTypes: string[] = [];
   plotStatus: string[] = [];
 
-
-
   constructor(private router: Router, private modal: NgbModal) { }
 
   async ngOnInit() {
