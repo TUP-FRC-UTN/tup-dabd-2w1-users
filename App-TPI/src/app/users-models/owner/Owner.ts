@@ -14,7 +14,6 @@ export class Owner{
     ownerType: string;
     files: FileDto[];
     create_date: string;
-    plot?: number[];
     // files: string[]
 
     constructor(){

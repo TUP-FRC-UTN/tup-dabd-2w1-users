@@ -91,50 +91,26 @@ export class ListUsersComponent implements OnInit {
               { title: 'Nro. de lote', className: 'text-start', width: '15%' ,
                  render: (data) => { 
                 
-                  console.log(data);
-
-                  let plotNumber: GetPlotDto[] = [];
-
-                  data.forEach((d: any) => {
-                    const plot = this.plots.find((plot: GetPlotDto) => plot.id == d);
-                    if (plot) {
-                      plotNumber.push(plot);
-                    }
-                  });
-
-
-                  console.log(plotNumber);
-                  
-                
-                  if(plotNumber != undefined){
+                  const plotNumber: GetPlotDto = this.plots.find(plot => plot.id === data) || new GetPlotDto
+                    console.log(data)
                     
-                    if (plotNumber.length > 0) { 
-                      var plots : string = "";
-                      for(let i = 0; i < plotNumber.length; i++){
-                        plots = plots + plotNumber[i].plot_number + ", ";
-                        // borrar la ultima letra del plots
-                      }
-                      plots = plots.substring(0, plots.length - 2);
-                      return plots;
+                    if (plotNumber != null) { 
+                        return plotNumber.plot_number ? `${plotNumber.plot_number}` : 'Sin lote';
                   } else {
                         return "Sin lote"; 
                     }
                 } 
-                return "Sin lote"; 
-                    
-
-                    }
             },
               {
                 title: 'Acciones',
                 orderable: false,
                 width: '15%',
-                className: 'align-middle text-center',
+                className: 'text-left',  
                 render: (data, type, row, meta) => {
                   const userId = this.users[meta.row].id;
                   return `
-                    <div class="dropdown-center d-flex text-center justify-content-center">
-                      <button class="btn btn-light border border-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="dropdown-center d-flex align-items-center">
+                      <button class="btn btn-light border border-1 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-three-dots-vertical"></i>
                       </button>
                       <ul class="dropdown-menu">
@@ -296,15 +272,12 @@ export class ListUsersComponent implements OnInit {
         case "Familiar mayor":
           color = "secondary";
           break;
-        case "Familiar menor":
+          case "Familiar menor":
           color = "secondary";
-          break;
-          case "SuperAdmin":
-          color = "dark";
           break;
       }
 
-      rolesA = rolesA + (`<button class='btn btn-${color} rounded-pill m-1 hover'>${r}</button>`);
+      rolesA = rolesA + (`<button class='btn btn-${color} rounded-pill m-1'>${r}</button>`);
     })
     return rolesA
   }
@@ -324,36 +297,21 @@ export class ListUsersComponent implements OnInit {
 
 
   //Método para abrir el modal
-  async openModal(type: string, userId: number) {  
+  async openModal(type: string, userId: number) {
+    console.log("Esperando a que userModal se cargue...");
+  
     //Espera a que se cargue el usuario seleccionado
     try {
       await this.selectUser(userId);
-
-      console.log(this.plots);
-      console.log(this.userModal.plot_id);
+      console.log("userModal cargado:", this.userModal);
       
-      
-      let user : any = this.userModal.plot_id;
-      let userPlots : any = [];
-      user.forEach((plot: any) => {
-        console.log("AA" + plot);
-        
-        const userPlot = this.plots.find((p: any) => p.id == plot);
-        console.log(userPlot);
-        
-        if (userPlot) {
-          userPlots.push(userPlot);
-        }
-      });
-
-      console.log(userPlots);
-      
+      const userPlot = this.plots.find(plot => plot.id === this.userModal.plot_id);
 
       //Cuando se carga se abre el modal
       const modalRef = this.modal.open(ModalInfoUserComponent, { size: 'lg', keyboard: false });
       modalRef.componentInstance.typeModal = type; 
       modalRef.componentInstance.userModal = this.userModal;
-      modalRef.componentInstance.plotModal = userPlots;
+      modalRef.componentInstance.plotModal = userPlot;
 
       modalRef.result.then((result) => {        
       });

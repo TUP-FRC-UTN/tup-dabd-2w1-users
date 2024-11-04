@@ -5,9 +5,6 @@ import { Owner } from '../../../users-models/owner/Owner';
 import { FileService } from '../../../users-servicies/file.service';
 import { FileDto } from '../../../users-models/owner/FileDto';
 import { CommonModule } from '@angular/common';
-import { PlotService } from '../../../users-servicies/plot.service';
-import { GetPlotDto } from '../../../users-models/plot/GetPlotDto';
-import { OwnerService } from '../../../users-servicies/owner.service';
 
 @Component({
   selector: 'app-users-modal-info-owner',
@@ -20,11 +17,10 @@ export class UsersModalInfoOwnerComponent implements OnInit{
   @Input() ownerModel: Owner = new Owner();
   infoOwner : FormGroup;
   filesOwner: FileDto[];
-  plotsOwner : GetPlotDto[] = [];
+
   fullName : string = "";
 
   private readonly fileService = inject(FileService);
-  private readonly ownerService = inject(OwnerService);
 
   ngOnInit(): void {
     this.infoOwner.patchValue({
@@ -40,17 +36,6 @@ export class UsersModalInfoOwnerComponent implements OnInit{
     this.filesOwner =  this.ownerModel.files;
     this.infoOwner.disable();
     this.fullName = this.ownerModel.name + " " + this.ownerModel.lastname;
-
-    this.ownerService.getByIdWithUser(this.ownerModel.id).subscribe({
-      next: (data: any) => {     
-        
-        this.plotsOwner = data.plot;
-        console.log(this.plotsOwner);
-        
-      }
-    });
-
-    
   }
 
   constructor(public activeModal: NgbActiveModal, private fb: FormBuilder) {

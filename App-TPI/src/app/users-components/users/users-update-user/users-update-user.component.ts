@@ -34,8 +34,9 @@ export class UsersUpdateUserComponent implements OnInit {
   id: string = '';
   checkRole: boolean = false;
 
-  rolesSelected : any[] = [];
-  existingRoles : any[] = [];
+
+  
+  rolesSelected : string[] = [];
   async ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id') || ''; // Obtiene el parámetro 'id'
   
@@ -54,39 +55,15 @@ export class UsersUpdateUserComponent implements OnInit {
         this.updateForm.get('telegram_id')?.setValue(data.telegram_id) || 0;
   
         // Asigna `rolesSelected` después de obtener `data.roles`
-        data.roles.forEach(r => this.rolesSelected.push({value: r, name: r, checked: true}));
-      
-        this.rolesComponent.addOption(data.roles);
+        this.rolesSelected = data.roles || [];
+        console.log('Roles:', this.rolesSelected);
+        this.rolesComponent.emptyList();
         
       },
       error: (error) => {
         console.error('Error al cargar el usuario:', error);
       }
     });
-
-    this.apiService.getAllRoles().subscribe({
-      next: (data: RolModel[]) => {
-        
-        data.forEach(r => this.existingRoles.push({value: r.description, name: r.description, checked: false}))
-        console.log(this.existingRoles);
-        console.log(this.rolesSelected);
-        
-        
-        // si el el objeto de existingRoles, esta repetido en rolesSelected, cambiar el checked a true
-        this.rolesSelected.forEach((selected) => {
-          alert("Si se esta cambiando!!!!")
-          const option = this.existingRoles.find((o) => o.value === selected.value);
-          if (option) {
-              option.checked = true;
-          }
-        });
-        
-        
-        console.log('Roles:', this.rolesSelected);
-        console.log('Roles final:', this.existingRoles);
-        
-      }
-    })
   
     // Desactiva campos específicos del formulario
     this.updateForm.get('dni')?.disable();
@@ -201,7 +178,9 @@ export class UsersUpdateUserComponent implements OnInit {
       'is-valid': control?.valid
     }
   }
+
   
+
   showError(controlName: string): string {
     const control = this.updateForm.get(controlName);
   

@@ -103,9 +103,8 @@
                 <div class="row">
                     <label class="col-2 col-form-label">Teléfono</label>
                     <div class="col-10">
-                        <input type="text" class="form-control" formControlName="phoneNumber"
-       [ngClass]="onValidate('phoneNumber')">
-
+                        <input type="number" class="form-control" formControlName="phoneNumber"
+                            [ngClass]="onValidate('phoneNumber')">
                         <div class="invalid-feedback">{{showError('phoneNumber')}}</div>
                     </div>
                 </div>
@@ -138,7 +137,9 @@
                 <div class="row">
                     <label class="col-2 col-form-label">Telegram id</label>
                     <div class="col-10">
-                        <input type="number" class="form-control" formControlName="telegram_id">
+                        <input type="number" class="form-control" formControlName="telegram_id"
+                            [ngClass]="onValidate('telegram_id')">
+                        <div class="invalid-feedback">{{showError('telegram_id')}}</div>
                     </div>
                 </div>
             </div>

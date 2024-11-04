@@ -78,12 +78,9 @@ export class NewUserComponent implements OnInit {
         this.options = data.map(rol => rol.description);
         if(this.authService.getActualRole() == "Propietario"){
           let optionsFilter = this.options.filter(rol => this.optionsForOwner.includes(rol));
-          this.options = [];
           optionsFilter.forEach(o => this.options.push({value : o, name: o}))
-                    
         } else{
           let optionsFilter = this.options.filter(rol => !this.optionsForOwner.includes(rol) && rol != "Propietario" && rol != "SuperAdmin");
-          this.options = [];
           optionsFilter.forEach(o => this.options.push({value : o, name: o}))
         }
       },
@@ -148,8 +145,7 @@ export class NewUserComponent implements OnInit {
     telegram_id: new FormControl(0,[
         Validators.required,
         Validators.min(0),
-        Validators.minLength(1),
-        Validators.maxLength(9)
+        Validators.minLength(1)
     ]),
     active: new FormControl(true), 
     datebirth: new FormControl(DateService.formatDate(new Date("2000-01-02")), [Validators.required]),
@@ -320,4 +316,14 @@ verifyOptions() {
     // Retorna cadena vacía si no hay errores.
     return '';
   }
+
+  showFormError(){
+    Object.keys(this.reactiveForm.controls).forEach((field) => {
+      const control = this.reactiveForm.get(field);
+      if (control && control.errors) {
+        console.log(`Errores en ${field}:`, control.errors);
+      }
+    });
+  }
+  
 }

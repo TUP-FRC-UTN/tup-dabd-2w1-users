@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component,EventEmitter,Input, OnInit, Output} from '@angular/core';
+import { Component,EventEmitter,Input, Output} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -16,9 +16,6 @@ export class UsersSelectMultipleComponent{
   //Opciones a seleccionar (lista de objetos)
   @Input() options: any[] = [];
 
-  //Opciones ya seleccionadas
-  @Input() selectedOptions?: any[] = [];
-
   //Opciones seleccionadas
   @Output() valuesEmited = new EventEmitter<any[]>();
 
@@ -29,7 +26,7 @@ export class UsersSelectMultipleComponent{
     if(!this.loptions.includes(option)){
       this.loptions.push(option);
 
-    this.valuesEmited.emit(this.loptions)
+      this.valuesEmited.emit(this.loptions)
     }
   }
 
@@ -60,5 +57,4 @@ export class UsersSelectMultipleComponent{
   emptyList(){
     this.loptions = [];
   }
-  
 }

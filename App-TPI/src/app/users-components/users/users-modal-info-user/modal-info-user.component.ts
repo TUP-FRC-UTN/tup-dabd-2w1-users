@@ -36,7 +36,7 @@ export class ModalInfoUserComponent implements OnInit {
   }
 
   @Input() userModal: UserGet = new UserGet();
-  @Input() plotModal: GetPlotDto[] = [];
+  @Input() plotModal: GetPlotDto = new GetPlotDto();
   @Input() typeModal: string = '';
 
   //activeModal = inject(NgbActiveModal);
@@ -47,8 +47,6 @@ export class ModalInfoUserComponent implements OnInit {
 
   // Método para detectar cambios en el @Input
   ngOnInit() {
-      console.log("------------------------------------------------------");
-    
       console.log('userModal:', this.userModal);
       console.log('plotModal:', this.plotModal);
       // Actualiza los valores del formulario cuando cambian los datos del usuario
@@ -62,6 +60,8 @@ export class ModalInfoUserComponent implements OnInit {
           dni_type: this.userModal.dni_type+': ',
           phoneNumber: this.userModal.phone_number,
           roles: this.rolesInput,
+          plot_number : this.plotModal?.plot_number || 'N/A'  ,
+          block_number: this.plotModal?.block_number || 'N/A',
           username: this.userModal.username,
           telegram_id: this.userModal?.telegram_id || 'N/A',
           birthdate: formattedDate ? DateService.formatDate(formattedDate) : 'N/A',
