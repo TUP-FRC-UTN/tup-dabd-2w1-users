@@ -56,7 +56,7 @@ export class UsersProfileComponent implements OnInit {
                 lastName: user.lastname,
                 email: user.email,
                 username: user.username,
-                phoneNumber: user.phone_number,
+                phoneNumber: String(user.phone_number),
                 dni: user.dni,
                 dniType: user.dni_type,
                 avatar_url: user.avatar_url,
@@ -107,21 +107,18 @@ export class UsersProfileComponent implements OnInit {
       Validators.minLength(1),
       Validators.maxLength(30)
     ] ),
-    telegram_id: new FormControl({value: 0, disabled: true }, [
-        Validators.required,
-        Validators.minLength(1),
-        Validators.maxLength(30)
-    ]),
+    telegram_id: new FormControl({value: 0, disabled: true }),
     email: new FormControl({value: '...', disabled: true }, [
         Validators.required,
         Validators.email
     ]),
 
-    phoneNumber: new FormControl({value: 0, disabled: true }, [
-        Validators.required,
-        Validators.minLength(10),
-        Validators.maxLength(20)
-    ]),
+    phoneNumber: new FormControl({ value: '', disabled: true }, [
+      Validators.required,
+      Validators.minLength(9),
+      Validators.maxLength(20),
+      Validators.pattern('^[0-9]*$')
+  ]),
     dni: new FormControl({value: 0, disabled: true }, [
         Validators.required,
         Validators.minLength(1),
