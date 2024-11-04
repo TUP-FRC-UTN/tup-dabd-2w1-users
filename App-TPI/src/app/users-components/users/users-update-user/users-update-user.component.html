@@ -81,9 +81,7 @@
                     <div class="row">
                         <label class="col-2 col-form-label">Roles</label>  
                         <div class="col-10">
-                            <app-users-select-multiple (rolesEmited)="fillRolesSelected($event); verifyRole()"
-                            (click)="verifyRole()" (rolesSelected)="rolesSelected">
-                              </app-users-select-multiple>
+                            <app-users-select-multiple [titleDefault]="'Seleccione un rol...'" [options]="existingRoles" [selectedOptions]="rolesSelected" (valuesEmited)="fillRolesSelected($event)"/>
                         </div> 
                         
                     </div>

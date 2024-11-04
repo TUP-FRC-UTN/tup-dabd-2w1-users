@@ -20,6 +20,8 @@ import { Owner } from '../../../users-models/owner/Owner';
 import { UsersModalInfoOwnerComponent } from '../users-modal-info-owner/users-modal-info-owner.component';
 import { OwnerTypeModel } from '../../../users-models/owner/OwnerType';
 import { FormControl, ReactiveFormsModule} from '@angular/forms';
+import { GetPlotDto } from '../../../users-models/plot/GetPlotDto';
+import { PlotService } from '../../../users-servicies/plot.service';
 
 @Component({
   selector: 'app-users-list-owners',
@@ -30,18 +32,28 @@ import { FormControl, ReactiveFormsModule} from '@angular/forms';
 })
 export class UsersListOwnersComponent {
   owners: Owner[] = [];
-
+  
   private readonly apiService = inject(OwnerService);
+  private readonly plotService = inject(PlotService);
   showDeactivateModal: boolean = false;
   userToDeactivate: number = 0;
   types: OwnerTypeModel[] = [];
   selectType: FormControl = new FormControl('');
   initialDate = new FormControl();
   endDate = new FormControl();
+  plots : GetPlotDto[] = [];
+  ownersWithPlots: any[] = [];
 
   constructor(private router: Router,private modal: NgbModal) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    // Convertir Observable en Promesa y esperar que se resuelva
+    this.plots = await this.plotService.getAllPlots().toPromise() || [];
+    this.apiService.getAllWithTheirPlots().subscribe({
+      next: (data: Owner[]) => {
+        this.ownersWithPlots = data;
+      }
+    });
     this.apiService.getAll().subscribe({
       next: (data: Owner[]) => {
         // Cambiar guiones por barras en la fecha de nacimiento
@@ -49,7 +61,6 @@ export class UsersListOwnersComponent {
           ...owner,
           create_date: owner.create_date.replace(/-/g, '/'),
         }));
-        
       
         this.loadTypes();   
         
@@ -67,18 +78,19 @@ export class UsersListOwnersComponent {
               { title: 'Fecha de creación', width: '15%', className: 'text-start' },
               { title: 'Nombre', width: '15%', className: 'text-start' },
               { title: 'Documento', width: '10%', className: 'text-start'},
-              { title: 'Tipo', width: '10%', className: 'text-start' },
-              { title: 'Lotes', width: '15%', className: 'text-start' },
+              { title: 'Tipo', width: '15%', className: 'text-start' },
+              { title: 'Lotes', width: '10%', className: 'text-start'
+              },
               {
                 title: 'Acciones',
                 orderable: false,
                 width: '15%',
-                className: 'text-left',  
+                className: 'align-center',  
                 render: (data, type, row, meta) => {
                   const ownerId = this.owners[meta.row].id;
                   return `
-                    <div class="dropdown-center d-flex align-items-center">
-                      <button class="btn btn-light border border-1 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="dropdown-center d-flex align-items-center justify-content-center text-center">
+                      <button class="btn btn-light border border-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-three-dots-vertical"></i>
                       </button>
                       <ul class="dropdown-menu">
@@ -97,7 +109,8 @@ export class UsersListOwnersComponent {
               `${owner.name + ", " + owner.lastname}`,
                 owner.dni,
                 owner.ownerType,
-                owner.id,
+                this.loadPlots(owner.id),
+                owner.id
                 
               
             ]), dom:
@@ -147,7 +160,6 @@ export class UsersListOwnersComponent {
 
           // Asignar el evento click a los botones "Editar"
           $('#myTable').on('click', '.edit-owner', (event) => {
-            console.log("a");
             
             const userId = $(event.currentTarget).data('id');
             this.redirectEdit(userId); // Redirigir al método de edición
@@ -161,6 +173,27 @@ export class UsersListOwnersComponent {
       }
     });
   }
+
+  loadPlots(ownerId: number) : string {
+
+    let plots = this.ownersWithPlots.find(owner => owner.owner.id == ownerId);
+
+    let response = '';
+    console.log(plots);
+    console.log(this.plots);
+    
+
+     for (let i = 0; i < plots.plot.length; i++) {
+       console.log(this.plots.find(plot => plot.id == plots.plot[i])?.plot_number );
+      
+       response += this.plots.find(plot => plot.id == plots.plot[i])?.plot_number + ", " || '';
+     }
+
+     response = response.substring(0, response.length - 2);
+
+    return response;
+  }
+
 
   async abrirModal(ownerId: number) {
     console.log("Esperando a que userModal se cargue...");

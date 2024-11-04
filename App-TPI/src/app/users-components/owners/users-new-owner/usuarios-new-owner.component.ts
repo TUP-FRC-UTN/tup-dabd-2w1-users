@@ -313,7 +313,7 @@ export class UsuariosNewOwnerComponent {
       businessName: this.formReactivo.get('company')?.value || '',
       telegramId: Number(this.formReactivo.get('telegram_id')?.value) || 0,
 
-      //--------------------------------------------------VER-----------------------------------------------
+      //--------------------------------------------------VER-----------------------------------------------------------------------------------------------------------------------
      /* estos estan hardcodeado para que ande*/
       roles: ["Propietario"],//this.rolesSelected,
 

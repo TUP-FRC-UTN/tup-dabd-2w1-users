@@ -83,21 +83,38 @@ export class UsersModaInfoPlotComponent implements OnInit {
     this.fileService.downloadFile(fileId);
   }
 
-  showOwnerType(type : string) : string {
+  // showOwnerType(type : string) : string {
     
-      let color : string = "";
+  //     let color : string = "";
+  //     switch (type) {
+  //       case "Persona Física":
+  //         color = "danger";
+  //         break;
+  //       case "Persona Jurídica":
+  //         color = "primary";
+  //         break;
+  //       case "Otro":
+  //         color = "secondary";
+  //         break;
+  //     }
+
+  //     return `<button class='btn btn-${color} rounded-pill m-1' disabled>${type}</button>`;
+  // }
+
+  setClass(type : string) : string{
+    let classButton : string = "rounded-pill m-1 btn btn-";
       switch (type) {
         case "Persona Física":
-          color = "danger";
+          classButton += "danger";
           break;
         case "Persona Jurídica":
-          color = "primary";
+          classButton += "primary";
           break;
         case "Otro":
-          color = "secondary";
+          classButton += "secondary";
           break;
       }
 
-      return `<button class='btn btn-${color} rounded-pill m-1' disabled>${type}</button>`;
+    return classButton;
   }
 }
