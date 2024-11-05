@@ -144,7 +144,6 @@ export class UsersUpdatePlotComponent implements OnInit {
             Swal.fire({
                 title: 'Operación cancelada',
                 icon: 'info',
-                position: 'top-right', 
                 showConfirmButton: false, 
                 timer: 1000 
             });
@@ -183,7 +182,6 @@ export class UsersUpdatePlotComponent implements OnInit {
         console.log("Error al actualizar el lote" + error);
 
           Swal.fire({
-            position: "top-end",
             icon: "error",
             title: "Ha ocurrido un error",
             showConfirmButton: false,

@@ -189,7 +189,6 @@ export class UsersUpdateOwnerComponent implements OnInit {
             icon: "success",
             title: "Se han guardado los cambios",
             showConfirmButton: false,
-            position: 'top-right',
             timer: 1000
           });
 
@@ -201,7 +200,6 @@ export class UsersUpdateOwnerComponent implements OnInit {
 
           //mostrar alerta de error
           Swal.fire({
-            position: "top-right",
             icon: "error",
             title: "Ha ocurrido un error",
             showConfirmButton: false,
@@ -227,7 +225,6 @@ export class UsersUpdateOwnerComponent implements OnInit {
             Swal.fire({
                 title: 'Operación cancelada',
                 icon: 'info',
-                position: 'top-right', 
                 showConfirmButton: false, 
                 timer: 1000 
             });

@@ -244,7 +244,6 @@ verifyOptions() {
       next: (response) => {
         //Mostramos que la operación fue exitosa
         (window as any).Swal.fire({
-          position: "center-center",
           title: 'Usuario creado',
           text: 'El usuario se ha creado correctamente',
           icon: 'success',
@@ -262,7 +261,6 @@ verifyOptions() {
       error: (error) => {
         //Mostramos que hubo un error
         (window as any).Swal.fire({
-          position: "center-center",
           title: 'Error',
           text: 'El usuario no se pudo crear',
           icon: 'error',

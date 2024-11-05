@@ -70,8 +70,10 @@ export class ListUsersComponent implements OnInit {
         //Cambiar guiones por barras en la fecha de nacimiento
         this.users = data.map(user => ({
           ...user,
-          datebirth: user.datebirth.replace(/-/g, '/'),
-          create_date: user.create_date.replace(/-/g, '/'),
+
+          datebirth: user.datebirth.replace(/-/g, '-'),
+          create_date: user.create_date.replace(/-/g, '-'),
+
         }));
       
         //Inicializar DataTables después de cargar los datos
@@ -87,11 +89,9 @@ export class ListUsersComponent implements OnInit {
             columns: [
               { title: 'Fecha de creación', width: '20%' },
               { title: 'Nombre', width: '20%' },
-              { title: 'Rol', width: '30%' },
+              { title: 'Rol', width: '30%'},
               { title: 'Nro. de lote', className: 'text-start', width: '15%' ,
                  render: (data) => { 
-                
-                  console.log(data);
 
                   let plotNumber: GetPlotDto[] = [];
 
@@ -101,11 +101,7 @@ export class ListUsersComponent implements OnInit {
                       plotNumber.push(plot);
                     }
                   });
-
-
-                  console.log(plotNumber);
                   
-                
                   if(plotNumber != undefined){
                     
                     if (plotNumber.length > 0) { 
@@ -451,7 +447,7 @@ export class ListUsersComponent implements OnInit {
     const visibleRows = table.rows({ search: 'applied' }).data().toArray(); 
   
     const rows = visibleRows.map((row: any) => [
-      row[0].replace(/-/g, '/'), // Fecha de creación
+      row[0], // Fecha de creación
       `${row[1]}`,               // Nombre
       `${this.getContentBetweenArrows(row[2])}`, // Rol
       `${this.getPlotById(row[3])}` // Lote

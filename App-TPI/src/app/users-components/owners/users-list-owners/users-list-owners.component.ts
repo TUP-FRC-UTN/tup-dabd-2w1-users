@@ -48,23 +48,35 @@ export class UsersListOwnersComponent {
 
   async ngOnInit() {
     // Convertir Observable en Promesa y esperar que se resuelva
-    this.plots = await this.plotService.getAllPlots().toPromise() || [];
     this.apiService.getAllWithTheirPlots().subscribe({
       next: (data: Owner[]) => {
         this.ownersWithPlots = data;
-      }
+      },
     });
+  
     this.apiService.getAll().subscribe({
-      next: (data: Owner[]) => {
+      next: async (data: Owner[]) => {
         // Cambiar guiones por barras en la fecha de nacimiento
-        this.owners = data.map(owner => ({
+        this.owners = data.map((owner) => ({
           ...owner,
           create_date: owner.create_date.replace(/-/g, '/'),
         }));
-      
-        this.loadTypes();   
-        
-        //Inicializar DataTables después de cargar los datos
+  
+        this.loadTypes();
+  
+        // Esperar a que todas las promesas de loadPlots se resuelvan
+        const plotsData = await Promise.all(
+          this.owners.map(async (owner) => [
+            owner.create_date,
+            `${owner.name}, ${owner.lastname}`,
+            owner.dni,
+            owner.ownerType,
+            await this.loadPlots(owner.id), // Espera a que loadPlots se resuelva
+            owner.id,
+          ])
+        );
+  
+        // Inicializar DataTables después de cargar los datos
         setTimeout(() => {
           const table = $('#myTable').DataTable({
             paging: true,
@@ -77,15 +89,14 @@ export class UsersListOwnersComponent {
             columns: [
               { title: 'Fecha de creación', width: '15%', className: 'text-start' },
               { title: 'Nombre', width: '15%', className: 'text-start' },
-              { title: 'Documento', width: '10%', className: 'text-start'},
+              { title: 'Documento', width: '10%', className: 'text-start' },
               { title: 'Tipo', width: '15%', className: 'text-start' },
-              { title: 'Lotes', width: '10%', className: 'text-start'
-              },
+              { title: 'Lotes', width: '10%', className: 'text-start' },
               {
                 title: 'Acciones',
                 orderable: false,
                 width: '15%',
-                className: 'align-center',  
+                className: 'align-center',
                 render: (data, type, row, meta) => {
                   const ownerId = this.owners[meta.row].id;
                   return `
@@ -99,89 +110,70 @@ export class UsersListOwnersComponent {
                         <li><a class="dropdown-item edit-owner" data-id="${ownerId}">Editar</a></li>
                       </ul>
                     </div>
-                  `; 
-                }
-              }
+                  `;
+                },
+              },
             ],
-            data: this.owners.map(owner => [
-               //rellenar por columna
-               owner.create_date,
-              `${owner.name + ", " + owner.lastname}`,
-                owner.dni,
-                owner.ownerType,
-                this.loadPlots(owner.id),
-                owner.id
-                
-              
-            ]), dom:
-            '<"mb-3"t>' +                           
-            '<"d-flex justify-content-between"lp>',
-
+            data: plotsData, // Usar los datos resueltos
+            dom: '<"mb-3"t>' + '<"d-flex justify-content-between"lp>',
+  
             language: {
-              lengthMenu: "_MENU_",
-              zeroRecords: "No se encontraron resultados",
-              info: "Mostrando página _PAGE_ de _PAGES_",
-              infoEmpty: "No hay registros disponibles",
-              infoFiltered: "(filtrado de _MAX_ registros totales)",
-              search: "Buscar:",
-              loadingRecords: "Cargando...",
-              processing: "Procesando...",
-              emptyTable: "No hay datos disponibles en la tabla"
+              lengthMenu: '_MENU_',
+              zeroRecords: 'No se encontraron resultados',
+              info: 'Mostrando página _PAGE_ de _PAGES_',
+              infoEmpty: 'No hay registros disponibles',
+              infoFiltered: '(filtrado de _MAX_ registros totales)',
+              search: 'Buscar:',
+              loadingRecords: 'Cargando...',
+              processing: 'Procesando...',
+              emptyTable: 'No hay datos disponibles en la tabla',
             },
-          });    
-
-          //Alinear la caja de búsqueda a la derecha
+          });
+  
+          // Alinear la caja de búsqueda a la derecha
           const searchInputWrapper = $('#myTable_filter');
           searchInputWrapper.addClass('d-flex justify-content-start');
-
-          //Desvincular el comportamiento predeterminado de búsqueda
-          $('#myTable_filter input').unbind(); 
-          $('#myTable_filter input').bind('input', (event) => { //Usar función de flecha aquí
-              const searchValue = (event.target as HTMLInputElement).value; // Acceder al valor correctamente
-          
-              // Comienza a buscar solo si hay 3 o más caracteres
-              if (searchValue.length >= 3) {
-                  table.search(searchValue).draw();
-              } else {
-                  table.search('').draw(); // Limpia la búsqueda si hay menos de 3 caracteres
-              }
+  
+          // Desvincular el comportamiento predeterminado de búsqueda
+          $('#myTable_filter input').unbind();
+          $('#myTable_filter input').bind('input', (event) => {
+            const searchValue = (event.target as HTMLInputElement).value;
+  
+            // Comienza a buscar solo si hay 3 o más caracteres
+            if (searchValue.length >= 3) {
+              table.search(searchValue).draw();
+            } else {
+              table.search('').draw(); // Limpia la búsqueda si hay menos de 3 caracteres
+            }
           });
-
-          //Asignar el evento click a los botones "Ver más"
-          //Asignar el evento click a los botones "Ver más"
-        $('#myTable').on('click', '.view-owner', (event) => {
-          
-          //Esto daba error por eso lo comente
-          //const id = $(event.currentTarget).data('id');
-          //const ownerId = this.owners[id].id; 
-          const ownerId = $(event.currentTarget).data('id'); // Obtén el ID real del usuario
-          this.abrirModal( ownerId); // Abre el modal en modo "ver"
-        });
-
+  
+          // Asignar el evento click a los botones "Ver más"
+          $('#myTable').on('click', '.view-owner', (event) => {
+            const ownerId = $(event.currentTarget).data('id');
+            this.abrirModal(ownerId);
+          });
+  
           // Asignar el evento click a los botones "Editar"
           $('#myTable').on('click', '.edit-owner', (event) => {
-            
             const userId = $(event.currentTarget).data('id');
-            this.redirectEdit(userId); // Redirigir al método de edición
+            this.redirectEdit(userId);
           });
-
-
         }, 0); // Asegurar que la tabla se inicializa en el próximo ciclo del evento
       },
       error: (error) => {
         console.error('Error al cargar los lotes:', error);
-      }
+      },
     });
   }
+  
 
-  loadPlots(ownerId: number) : string {
+  async loadPlots(ownerId: number) : Promise<string> {
+    
+    this.plots = await this.plotService.getAllPlots().toPromise() || [];
 
     let plots = this.ownersWithPlots.find(owner => owner.owner.id == ownerId);
 
-    let response = '';
-    console.log(plots);
-    console.log(this.plots);
-    
+    let response = ''; 
 
      for (let i = 0; i < plots.plot.length; i++) {
        console.log(this.plots.find(plot => plot.id == plots.plot[i])?.plot_number );
@@ -191,22 +183,20 @@ export class UsersListOwnersComponent {
 
      response = response.substring(0, response.length - 2);
 
+     console.log(response);
+     
+
     return response;
   }
 
 
   async abrirModal(ownerId: number) {
-    console.log("Esperando a que userModal se cargue...");
   
     // Espera a que se cargue el usuario seleccionado
     try {
-      console.log("Cargando propietario...");
       
       await this.selectOwner(ownerId);
-      console.log("Propietario cargado:", this.ownerModel);
-      console.log("Abriendo modal...");
       
-  
       // Una vez cargado, abre el modal
       const modalRef = this.modal.open(UsersModalInfoOwnerComponent, { size: 'lg', keyboard: false });
       modalRef.componentInstance.ownerModel = this.ownerModel;
@@ -333,7 +323,7 @@ export class UsersListOwnersComponent {
   
     // Mapear los datos visibles a un formato adecuado para jsPDF
     const rows = visibleRows.map((row: any) => [
-      `${row[0].replace(/-/g, '/')}`,        
+      `${row[0]}`,        
       `${row[1]}`,        
       `${row[2]}`, 
       `${row[3]}`,     

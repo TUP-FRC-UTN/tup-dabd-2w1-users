@@ -40,7 +40,7 @@
         </p>
       </div>
     </div>
-
+    <hr>
     <!-- Información de Contacto -->
     <h5>Información de Contacto</h5>
     <div class="row mb-3">
@@ -60,7 +60,7 @@
         </p>
       </div>
     </div>
-
+    <hr>
     <h5>Información de los Lotes</h5>
     <div class="row mb-3 mt-3">
       @if(plotModal.length == 0){
@@ -75,18 +75,19 @@
       <div class="col-md-6">
         <p><strong>Nro. de manzana:</strong> {{ plot.block_number }}</p>
       </div>
-      <hr>
 
       } }
     </div>
-
+    <hr>
     <!-- Roles -->
     <h5>Roles</h5>
     <div class="row mb-3">
       <div class="col-md-12">
         <div class="container">
           <ul>
-            <li *ngFor="let rol of userModal?.roles">{{ rol }}</li>
+            @for (rol of userModal.roles; track $index) {
+              <li>{{rol}}</li>
+            }
           </ul>
         </div>
       </div>

@@ -170,7 +170,6 @@ export class UsersUpdateUserComponent implements OnInit {
             Swal.fire({
               icon: "success",
               title: 'Usuario actualizado exitosamente',
-              position: 'top-right',
               timer: 1000,
               showConfirmButton: false
             });

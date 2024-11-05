@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, NgModel, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { OwnerService } from '../../../users-servicies/owner.service';
 import { OwnerTypeModel } from '../../../users-models/owner/OwnerType';
 import { OwnerStateModel } from '../../../users-models/owner/OwnerState';
@@ -16,11 +17,12 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { FileUploadComponent } from '../../utils/file-upload/file-upload.component';
 import { ValidatorsService } from '../../../users-servicies/validators.service';
 import { AuthService } from '../../../users-servicies/auth.service';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-usuarios-new-owner',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, UsersSelectMultipleComponent, FileUploadComponent],
+  imports: [ReactiveFormsModule, CommonModule, UsersSelectMultipleComponent, FileUploadComponent, NgSelectModule, FormsModule, CommonModule],
   templateUrl: './usuarios-new-owner.component.html',
   styleUrls: ['./usuarios-new-owner.component.css'] // Asegúrate de que sea styleUrls en lugar de styleUrl
 })
@@ -48,7 +50,7 @@ export class UsuariosNewOwnerComponent {
   rolesSelected: string[] = [];
 
   //Lotes seleccionados
-  plotsSelected : number[] = [];
+  plotsSelected : any[] = [];
 
   passwordVisible: boolean = false;
   files: File[] = [];
@@ -82,9 +84,9 @@ export class UsuariosNewOwnerComponent {
     ],
       this.validatorService.validateUniqueEmail()
   ),
-    state: new FormControl(null, [
+    state: new FormControl("", [
       Validators.required]),
-    type: new FormControl(null, [
+    type: new FormControl("", [
       Validators.required]),
     username: new FormControl("", [
       Validators.required,
@@ -117,7 +119,7 @@ export class UsuariosNewOwnerComponent {
     const typeControl = this.formReactivo.get('type');
     if (typeControl) {
       typeControl.valueChanges.subscribe(value => {
-        this.toggleCompanyField(value ?? '');
+        this.toggleCompanyField(String(value ?? ""));
       });
     }
 
@@ -145,18 +147,26 @@ export class UsuariosNewOwnerComponent {
 
         //Se filtran los datos y se agregan como un objeto clave : valor para que puedan ser renderizados en el selectmultiple
         let dataFiltered : any[] = [];
-        data.forEach(d => dataFiltered.push({value: d.id, name: `Numero de lote: ${d.plot_number}, Manzana:${d.block_number }`}))
+        data.forEach(d => dataFiltered.push({value: d.id, name: `Numero de lote: ${d.plot_number} - Manzana:${d.block_number }`}))
         this.availablePlots = dataFiltered;
       },
       error: (err) => {
         console.error('Error al cargar los lotes:', err);
       }
     });
+
+    this.formReactivo.get('type')?.setValue("");
+    this.formReactivo.get('state')?.setValue("");
   }
 
   roles: RolModel[] = [];
   rolesInput: string[] = [];
   select: string = "";
+
+  onPlotChange(selectedPlots: any[]) {
+    this.plotsSelected = [...selectedPlots.values()];
+    console.log(selectedPlots); // Verifica los valores seleccionados
+  }
 
   loadRoles() {
     this.apiService.getAllRoles().subscribe({
@@ -224,7 +234,6 @@ export class UsuariosNewOwnerComponent {
             Swal.fire({
                 title: 'Operación cancelada',
                 icon: 'info',
-                position: 'top-right', 
                 showConfirmButton: false, 
                 timer: 1000 
             });
@@ -302,14 +311,14 @@ export class UsuariosNewOwnerComponent {
       dni: this.formReactivo.get('dni')?.value || '',
       dni_type: this.formReactivo.get('documentType')?.value || '', //Tipo de documento
       dateBirth: this.formReactivo.get('birthdate')?.value || new Date(),
-      ownerTypeId: this.formReactivo.get('type')?.value || 0,
-      taxStatusId: this.formReactivo.get('state')?.value || 0,
+      ownerTypeId: Number(this.formReactivo.get('type')?.value || ""),
+      taxStatusId:  Number(this.formReactivo.get('state')?.value || ""),
       active: true,
       username: this.formReactivo.get('username')?.value || '',
       password: this.formReactivo.get('password')?.value || '',
       email: this.formReactivo.get('email')?.value || '',
       phoneNumber: this.formReactivo.get('phone')?.value || '',
-      avatarUrl: 'nada',
+      avatarUrl: '',
       businessName: this.formReactivo.get('company')?.value || '',
       telegramId: Number(this.formReactivo.get('telegram_id')?.value) || 0,
 
@@ -326,6 +335,16 @@ export class UsuariosNewOwnerComponent {
       //Archivos seleccionados
       files: this.files
     };
+
+    var plotsIds: number[] = [];
+    this.plotsSelected.forEach((plot: any) => {
+      plotsIds.push(plot.value);
+    });
+
+    owner.plotId = plotsIds;
+
+    console.log(owner);
+    
 
     //Se intenta crear el propietario
     this.ownerService.postOwner(owner).subscribe({
@@ -354,6 +373,7 @@ export class UsuariosNewOwnerComponent {
     });
   }
 
+
   //Evento para actualizar el listado de files a los seleccionados actualmente
   onFileChange(event: any) {
     this.files.push(...Array.from(event.target.files as FileList)); //Convertir FileList a Array
@@ -378,10 +398,5 @@ export class UsuariosNewOwnerComponent {
     if (fileInput) {
       fileInput.value = '';
     }
-  }
-
-  //Obtener lotes seleccionados del selectmultiple
-  getSelectedPlots(event : any){
-    this.plotsSelected = event;
   }
 }

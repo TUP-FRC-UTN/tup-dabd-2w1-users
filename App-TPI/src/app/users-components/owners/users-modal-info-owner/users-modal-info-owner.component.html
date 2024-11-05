@@ -17,7 +17,7 @@
                 <p><strong>CUIT - CUIL:</strong> {{ infoOwner.get('cuitCuil')?.value || 'N/A' }}</p>
             </div>
         </div>
-
+        <hr>
         <h5>Información Comercial</h5>
         <div class="row mb-3">
             <div class="col-md-6">
@@ -28,7 +28,7 @@
                 <p><strong>Estado fiscal:</strong> {{ infoOwner.get('taxStatus')?.value || 'N/A' }}</p>
             </div>
         </div>
-
+        <hr>
         <h5>Lotes</h5>
         <div class="row mb-3">
             @for (plot of plotsOwner; track $index) {
@@ -38,11 +38,10 @@
                 <div class="col-md-6">
                     <p><strong>Nro. de manzana:</strong> {{ plot.block_number }}</p>
                 </div>
-                <hr>
             }
 
         </div>
-
+        <hr>
         <div class="mt-4">
             <h5 class="mb-3">Archivos adjuntos</h5>
             <div class="list-group">
