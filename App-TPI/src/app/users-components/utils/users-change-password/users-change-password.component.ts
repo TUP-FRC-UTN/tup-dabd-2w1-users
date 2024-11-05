@@ -2,7 +2,7 @@ import { Component, inject, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ChangePasswordService } from '../../../users-servicies/change-password.service';
-
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-users-change-password',
   standalone: true,
@@ -14,6 +14,7 @@ export class ChangePasswordComponent implements OnInit {
   
   @Input() email: string = "";
   private readonly changePasswordService = inject(ChangePasswordService);
+
 
   showCurrentPassword = false;
   showNewPassword = false;
@@ -69,11 +70,28 @@ export class ChangePasswordComponent implements OnInit {
 
       this.changePasswordService.changePassword(changePasswordDto).subscribe({
         next: (response) => {
-          alert('Contraseña cambiada con éxito');
+        
+          Swal.fire({
+            title: 'Contraseña cambiada',
+            text: 'La contraseña se ha cambiado correctamente',
+            icon: 'success',
+            timer: 2000,
+            showConfirmButton: false
+          });
           this.form.reset();
         },
         error: (error) => {
-          alert('Error al cambiar la contraseña');
+
+          if(error.status === 401 && error.error.message === 'Current password is incorrect.') {
+            this.form.controls['currentPassword'].setErrors({ incorrectPassword: true });
+            return;
+          }
+          Swal.fire({
+            title: 'Error',
+            text: 'Error al actualizar la contraseña',
+            timer: 2000,
+            icon: 'error',
+          });
         }
       });
     }
@@ -102,6 +120,8 @@ export class ChangePasswordComponent implements OnInit {
           return `El valor ingresado es demasiado largo. Máximo ${control.errors['maxlength'].requiredLength} caracteres.`;
         case 'passwordsDifferent':
           return 'Las contraseñas no coinciden.';
+        case 'incorrectPassword':
+          return 'La contraseña actual es incorrecta.';
         default:
           return 'Error no identificado en el campo.';
       }
