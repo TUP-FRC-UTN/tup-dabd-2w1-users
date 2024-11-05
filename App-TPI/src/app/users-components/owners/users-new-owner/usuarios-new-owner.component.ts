@@ -69,7 +69,7 @@ export class UsuariosNewOwnerComponent {
       Validators.minLength(8),
       Validators.pattern(/^\d+$/)
     ],
-      this.validatorService.validarDniUnico()
+      this.validatorService.validateUniqueDni()
     ), //Tipo de documento
     documentType: new FormControl("", [
       Validators.required]),
@@ -80,7 +80,7 @@ export class UsuariosNewOwnerComponent {
       Validators.required,
       Validators.email
     ],
-      this.validatorService.validarEmailUnico()
+      this.validatorService.validateUniqueEmail()
   ),
     state: new FormControl(null, [
       Validators.required]),
@@ -91,7 +91,7 @@ export class UsuariosNewOwnerComponent {
       Validators.minLength(1),
       Validators.maxLength(30)
     ],
-      this.validatorService.validarUsernameUnico()
+      this.validatorService.validateUniqueUsername()
     ),
     password: new FormControl("", [
       Validators.required,

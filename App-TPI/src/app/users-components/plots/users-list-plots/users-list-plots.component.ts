@@ -85,9 +85,9 @@ export class UsersListPlotsComponent {
             searching: true,
             ordering: true,
             lengthChange: true,
-            lengthMenu: [10, 25, 50],
+            lengthMenu: [5, 10, 25, 50],
             order: [[0, 'asc']],
-            pageLength: 10,
+            pageLength: 5,
             data: this.plots.map((plot, index) => [
               plot.plot_number,
               plot.block_number,

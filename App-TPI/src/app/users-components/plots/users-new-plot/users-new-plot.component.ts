@@ -10,6 +10,7 @@ import { FormArray } from '@angular/forms';
 import { FileUploadComponent } from '../../utils/file-upload/file-upload.component';
 import { AuthService } from '../../../users-servicies/auth.service';
 import { Router } from '@angular/router';
+import { ValidatorsService } from '../../../users-servicies/validators.service';
 
 @Component({
   selector: 'app-users-new-plot',
@@ -25,10 +26,11 @@ export class UsersNewPlotComponent {
   toggleShowOwners(event: any): void {
     this.showOwners = event.target.checked;
   }
-
+  
   private readonly plotService = inject(PlotService);
   private readonly authService = inject(AuthService);
   private readonly router : Router = inject(Router);
+  private readonly validatorService = inject(ValidatorsService);
 
   @ViewChild(FileUploadComponent) fileUploadComponent!: FileUploadComponent;
 
@@ -37,6 +39,8 @@ export class UsersNewPlotComponent {
   files: File[] = [];
 
   ngOnInit(): void {
+
+    this.formReactivo.get('type')?.setValue("");
 
     this.plotService.getAllTypes().subscribe({
       next: (data: PlotTypeModel[]) => {
@@ -47,6 +51,7 @@ export class UsersNewPlotComponent {
         console.error('Error al cargar los tipos de lote:', err);
       }
     });
+
 
     this.plotService.getAllStates().subscribe({ 
       next: (data: PlotStateModel[]) => {
@@ -65,13 +70,31 @@ export class UsersNewPlotComponent {
 
    
   formReactivo = new FormGroup({
-    plotNumber: new FormControl(0, [Validators.required,Validators.min(0)]),
-    blockNumber: new FormControl(0, [Validators.required,Validators.min(0)]),
-    totalArea: new FormControl(0, [Validators.required,Validators.min(0)]),
-    totalBuild: new FormControl(0, [Validators.required,Validators.min(0)]),
-    state: new FormControl(null, [Validators.required]),
-    type: new FormControl(null, [Validators.required])
+    plotNumber: new FormControl(1, [
+    Validators.required,Validators.min(1),
+    ],
+    this.validatorService.validateUniquePlotNumber()
+  ),
+    blockNumber: new FormControl(1, [
+      Validators.required,
+      Validators.min(1)
+    ]),
+    totalArea: new FormControl(0, [
+      Validators.required,
+      Validators.min(1)
+    ]),
+    totalBuild: new FormControl(0, [
+      Validators.required,
+      Validators.min(0)
+    ]),
+    state: new FormControl("", [
+      Validators.required
+    ]),
+    type: new FormControl("", [
+      Validators.required
+    ])
   })
+
 
   resetForm() {
     this.formReactivo.reset();
@@ -97,8 +120,8 @@ export class UsersNewPlotComponent {
       block_number: this.formReactivo.get('blockNumber')?.value || 0,
       total_area_in_m2: this.formReactivo.get('totalArea')?.value || 0,
       built_area_in_m2: this.formReactivo.get('totalBuild')?.value ||0,
-      plot_state_id: this.formReactivo.get('state')?.value || 0,
-      plot_type_id: this.formReactivo.get('type')?.value || 0,
+      plot_state_id: Number(this.formReactivo.get('state')?.value || 0),
+      plot_type_id: Number(this.formReactivo.get('type')?.value || 0),
       userCreateId: this.authService.getUser().id || 0,
       files: this.files
 
@@ -153,6 +176,8 @@ export class UsersNewPlotComponent {
         return `Máximo ${errorDetails.requiredLength} caracteres.`;
       case 'pattern':
         return 'El formato ingresado no es válido.';
+      case 'plotNumberTaken':
+        return 'El numero de lote ya está asignado a un lote'
       case 'min':
         return `El valor debe ser mayor o igual a ${errorDetails.min}.`;
       case 'max':

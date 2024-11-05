@@ -115,7 +115,7 @@ export class NewUserComponent implements OnInit {
         Validators.minLength(1),
         Validators.maxLength(30)
       ],
-        this.validatorService.validarUsernameUnico()
+        this.validatorService.validateUniqueUsername()
     ),
     password: new FormControl('', [
       Validators.required,
@@ -126,7 +126,7 @@ export class NewUserComponent implements OnInit {
         Validators.required,
         Validators.email
       ],
-        this.validatorService.validarEmailUnico()
+        this.validatorService.validateUniqueEmail()
     ),
     phone_number: new FormControl('', [
         Validators.required,
@@ -143,7 +143,7 @@ export class NewUserComponent implements OnInit {
         Validators.pattern(/^\d+$/),
         Validators.minLength(8)
       ],
-        this.validatorService.validarDniUnico()
+        this.validatorService.validateUniqueDni()
     ),
     telegram_id: new FormControl(0,[
         Validators.required,
