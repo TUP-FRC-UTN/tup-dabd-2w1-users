@@ -15,22 +15,32 @@ declare var google: any;
 export class ChartComponent implements OnInit {
   activeCount = 0;
   inactiveCount = 0;
-  intervaloId: any;
-  monthlyData: {[key: string]: {active: number, inactive: number}} = {};
+  monthlyData: { [key: string]: { active: number, inactive: number } } = {};
 
   constructor(private ownerService: OwnerService) {}
 
   ngOnInit(): void {
-    this.loadGoogleCharts(); 
-     
+    google.charts.load('current', { packages: ['corechart'] });
+    google.charts.setOnLoadCallback(() => this.loadOwners());
   }
 
   loadOwners(): void {
-    this.ownerService.getAll().subscribe((owners: Owner[]) => {
-      this.activeCount = owners.filter(owner => owner.active).length;
-      this.inactiveCount = owners.length - this.activeCount;
-      this.drawChart(); 
-    });
+    this.ownerService.getAll().subscribe(
+      (owners: Owner[]) => {
+        this.processOwnerData(owners);
+        this.processMonthlyData(owners);
+        this.drawChart();
+        this.drawMonthlyChart(); // Llama a esta función para dibujar el gráfico mensual
+      },
+      (error) => {
+        console.error('Error al cargar los propietarios:', error);
+      }
+    );
+  }
+
+  processOwnerData(owners: Owner[]): void {
+    this.activeCount = owners.filter(owner => owner.active).length;
+    this.inactiveCount = owners.length - this.activeCount;
   }
 
   processMonthlyData(owners: Owner[]): void {
@@ -49,20 +59,12 @@ export class ChartComponent implements OnInit {
     });
   }
 
-
-  loadGoogleCharts(): void {
-    google.charts.load('current', { packages: ['corechart'] }); 
-    google.charts.setOnLoadCallback(() => this.loadOwners()); 
-  }
-
-
   drawChart(): void {
     const data = google.visualization.arrayToDataTable([
       ['Estado', 'Cantidad'],
       ['Activo', this.activeCount], 
       ['Inactivo', this.inactiveCount]
     ]);
-
 
     const options = {
       title: 'Propietarios activos e inactivos',
@@ -73,10 +75,32 @@ export class ChartComponent implements OnInit {
 
     const chart = new google.visualization.PieChart(document.getElementById('chart_div'));
     chart.draw(data, options);
+  }
 
-     
+  drawMonthlyChart(): void {
+    // Declaramos el tipo de `dataArray` para aceptar una mezcla de strings y números
+    const dataArray: (string | number)[][] = [['Mes', 'Activos', 'Inactivos']];
     
+    for (const [month, counts] of Object.entries(this.monthlyData)) {
+      // Verificamos que counts tiene las propiedades 'active' e 'inactive'
+      if (typeof counts === 'object' && 'active' in counts && 'inactive' in counts) {
+        dataArray.push([month, counts.active, counts.inactive]);
+      } else {
+        console.warn(`Datos inválidos para el mes: ${month}`, counts);
+      }
+    }
+    const data = google.visualization.arrayToDataTable(dataArray);
+
+    const options = {
+      title: 'Propietarios activos e inactivos por mes',
+      width: 600,
+      height: 400,
+      isStacked: true,
+      legend: { position: 'top', maxLines: 3 },
+      bar: { groupWidth: '75%' }
+    };
+
+    const chart = new google.visualization.ColumnChart(document.getElementById('monthly_chart_div'));
+    chart.draw(data, options);
   }
 }
-
-
