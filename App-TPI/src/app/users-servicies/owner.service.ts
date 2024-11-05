@@ -7,6 +7,7 @@ import { OwnerModel } from '../users-models/owner/PostOwnerDto';
 import { Owner } from '../users-models/owner/Owner';
 import { PutOwnerDto } from '../users-models/owner/PutOwnerDto';
 import { OwnerPlotUserDto } from '../users-models/owner/OwnerPlotUserDto';
+import { DniTypeModel } from '../users-models/owner/DniTypeModel';
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +41,10 @@ export class OwnerService {
 
   getAllTypes(): Observable<OwnerTypeModel[]>{
     return this.http.get<OwnerTypeModel[]>(this.url + 'owners/ownertypes');
+  }
+
+  getAllDniTypes(): Observable<DniTypeModel[]>{
+    return this.http.get<DniTypeModel[]>(this.url + 'owners/dnitypes')
   }
   
   getAllStates(): Observable<OwnerStateModel[]>{
@@ -84,7 +89,7 @@ export class OwnerService {
     formData.append('name', owner.name);
     formData.append('lastname', owner.lastname);
     formData.append('dni', owner.dni);
-    formData.append('cuitCuil', owner.cuitCuil);
+    formData.append('dniTypeId', owner.dniTypeId.toString());
     formData.append('dateBirth', new Date(owner.dateBirth).toISOString().split('T')[0]);
     formData.append('ownerTypeId', owner.ownerTypeId.toString());
     formData.append('taxStatusId', owner.taxStatusId.toString());

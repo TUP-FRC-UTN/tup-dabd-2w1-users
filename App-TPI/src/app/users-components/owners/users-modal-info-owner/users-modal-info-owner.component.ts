@@ -30,8 +30,9 @@ export class UsersModalInfoOwnerComponent implements OnInit{
     this.infoOwner.patchValue({
       name: this.ownerModel.name,
       lastname: this.ownerModel.lastname,
+      dni_type: this.ownerModel.dni_type,
       dni: this.ownerModel.dni,
-      cuitCuil: this.ownerModel.cuitCuil,
+      dno_type: this.ownerModel.dni_type,
       birthdate: this.ownerModel.dateBirth,
       ownerType: this.ownerModel.ownerType,
       taxStatus: this.ownerModel.taxStatus,
@@ -58,8 +59,8 @@ export class UsersModalInfoOwnerComponent implements OnInit{
     this.infoOwner = this.fb.group({
       name: [''],
       lastname: [''],
+      dni_type: [''],
       dni: [''],
-      cuitCuil: [''],
       birthdate: [''],
       ownerType: [''],
       taxStatus: [''],

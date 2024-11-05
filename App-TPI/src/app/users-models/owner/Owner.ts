@@ -6,7 +6,7 @@ export class Owner{
     name: string;
     lastname: string;
     dni: string;
-    cuitCuil: string;
+    dni_type: string;
     dateBirth: string;
     businessName: string;
     taxStatus: string;
@@ -22,7 +22,7 @@ export class Owner{
         this.name = "";
         this.lastname = "";
         this.dni = "";
-        this.cuitCuil = "";
+        this.dni_type = "";
         this.dateBirth = "";
         this.businessName = "";
         this.taxStatus = "";

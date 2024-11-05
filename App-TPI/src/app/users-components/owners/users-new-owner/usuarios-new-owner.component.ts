@@ -38,7 +38,7 @@ export class UsuariosNewOwnerComponent {
   //Obtener el id del usuario logueado
   private readonly authService = inject(AuthService);
 
-  JURIDICA_ID = 2;
+  juridicId = 2;
 
   types: OwnerTypeModel[] = [];
   states: OwnerStateModel[] = [];
@@ -189,7 +189,7 @@ export class UsuariosNewOwnerComponent {
   }
 
   private toggleCompanyField(ownerType: string) {
-    if (ownerType === this.JURIDICA_ID.toString()) {
+    if (ownerType === this.juridicId.toString()) {
       this.formReactivo.get('company')?.enable();
     } else {
       this.formReactivo.get('company')?.disable();

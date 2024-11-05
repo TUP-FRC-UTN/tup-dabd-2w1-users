@@ -368,7 +368,6 @@ export class UsersListOwnersComponent {
       FechaCreacion: owner.create_date.replace(/-/g, '/'),
       Nombre: `${owner.lastname}, ${owner.name}`,
       DNI: owner.dni,
-      CUIT_CUIL: owner.cuitCuil,
       Tipo: owner.ownerType
     })));
   

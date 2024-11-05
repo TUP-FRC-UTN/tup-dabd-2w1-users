@@ -2,8 +2,8 @@ export class PutOwnerDto {
     name: string;
     lastname: string;
     dni: string;
-    cuitCuil: string;
     dateBirth: Date;
+    dniTypeId: number;
     ownerTypeId: number;
     taxStatusId: number;
     businessName?: string;
@@ -17,7 +17,7 @@ export class PutOwnerDto {
         this.name = '';        
         this.lastname = '';          
         this.dni = '';             
-        this.cuitCuil = '';          
+        this.dniTypeId = 0;          
         this.dateBirth = new Date();
         this.ownerTypeId = 0;        
         this.taxStatusId = 0;

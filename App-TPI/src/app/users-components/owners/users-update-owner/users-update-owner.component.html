@@ -29,46 +29,54 @@
                     </div>
                 </div>
 
+                <!-- Tipo Documento -->
+                <div class="col-lg-6 mb-3">
+                    <div class="row">
+                        <label class="col-2 col-form-label">Tipo de documento</label>
+                        <div class="col-10">
+                            <select id="selectOption" class="form-select" formControlName="dniType"
+                                [ngClass]="onValidate('dniType')">
+                                @for (dniType of dniTypes; track $index) {
+                                <option [value]="dniType.id">{{dniType.description}}</option>
+                                }
+                            </select>
+                            <div class="invalid-feedback">{{showError('dniType')}}</div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Dni -->
                 <div class="col-lg-6 mb-3">
                     <div class="row">
-                        <label class="col-2 col-form-label">Dni</label>
+                        <label class="col-2 col-form-label">Documento</label>
                         <div class="col-10">
-                            <input type="text" class="form-control" formControlName="dni" [ngClass]="onValidate('dni')">
+                            <input type="text" class="form-control" formControlName="dni"
+                                [ngClass]="onValidate('dni')">
                             <div class="invalid-feedback">{{showError('dni')}}</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Dni -->
+                <!-- Tipo de propietario -->
                 <div class="col-lg-6 mb-3">
                     <div class="row">
-                        <label class="col-2 col-form-label">CUIT / CUIL</label>
+                        <label class="col-2 col-form-label">Tipo propietario</label>
                         <div class="col-10">
-                            <input type="text" class="form-control" formControlName="cuitCuil"
-                                [ngClass]="onValidate('cuitCuil')">
-                            <div class="invalid-feedback">{{showError('cuitCuil')}}</div>
+                            <select id="selectOption" class="form-select" formControlName="ownerType"
+                                [ngClass]="onValidate('ownerType')">
+                                @for (type of types; track $index) {
+                                <option [value]="type.id">{{type.description}}</option>
+                                }
+                            </select>
+                            <div class="invalid-feedback">{{showError('ownerType')}}</div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Fecha -->
-                <div class="col-lg-6 mb-3">
-                    <div class="row">
-                        <label class="col-2 col-form-label">Fecha de nacimiento</label>
-                        <div class="col-10">
-                            <input type="date" class="form-control" formControlName="birthdate"
-                                [ngClass]="onValidate('birthdate')">
-                            <div class="invalid-feedback">{{showError('birthdate')}}</div>
-                        </div>
-                    </div>
-                </div>
-
 
                 <!-- Nombre de empresa -->
                 <div class="col-lg-6 mb-3">
                     <div class="row">
-                        <label class="col-2 col-form-label">Nombre de la Empresa</label>
+                        <label class="col-2 col-form-label">Razón social</label>
                         <div class="col-10">
                             <input type="text" class="form-control" formControlName="bussinesName"
                                 [ngClass]="onValidate('bussinesName')">
@@ -93,18 +101,14 @@
                     </div>
                 </div>
 
-                <!-- Tipo de propietario -->
+                <!-- Fecha -->
                 <div class="col-lg-6 mb-3">
                     <div class="row">
-                        <label class="col-2 col-form-label">Tipo propietario</label>
+                        <label class="col-2 col-form-label">Fecha de nacimiento</label>
                         <div class="col-10">
-                            <select id="selectOption" class="form-select" formControlName="ownerType"
-                                [ngClass]="onValidate('ownerType')">
-                                @for (type of types; track $index) {
-                                <option [value]="type.id">{{type.description}}</option>
-                                }
-                            </select>
-                            <div class="invalid-feedback">{{showError('ownerType')}}</div>
+                            <input type="date" class="form-control" formControlName="birthdate"
+                                [ngClass]="onValidate('birthdate')">
+                            <div class="invalid-feedback">{{showError('birthdate')}}</div>
                         </div>
                     </div>
                 </div>

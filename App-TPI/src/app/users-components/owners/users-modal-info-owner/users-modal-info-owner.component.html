@@ -9,12 +9,12 @@
         <h5>Información Personal</h5>
         <div class="row mb-3">
             <div class="col-md-6">
-                <p><strong>Nombre Completo:</strong> {{ fullName }}</p>
-                <p><strong>DNI:</strong> {{ infoOwner.get('dni')?.value || 'N/A' }}</p>
+                <p><strong>Nombre completo:</strong> {{ fullName }}</p>
+                <p><strong>Tipo de documento:</strong> {{ infoOwner.get('dni_type')?.value || 'N/A' }}</p>
             </div>
             <div class="col-md-6">
                 <p><strong>Fecha de nacimiento:</strong> {{ infoOwner.get('birthdate')?.value || 'N/A' }}</p>
-                <p><strong>CUIT - CUIL:</strong> {{ infoOwner.get('cuitCuil')?.value || 'N/A' }}</p>
+                <p><strong>Número de documento:</strong> {{ infoOwner.get('dni')?.value || 'N/A' }}</p>
             </div>
         </div>
         <hr>

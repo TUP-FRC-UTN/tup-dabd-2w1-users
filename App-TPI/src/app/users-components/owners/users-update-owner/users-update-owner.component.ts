@@ -17,6 +17,7 @@ import { DateService } from '../../../users-servicies/date.service';
 import { OwnerTypeModel } from '../../../users-models/owner/OwnerType';
 import { OwnerStateModel } from '../../../users-models/owner/OwnerState';
 import { lastValueFrom, timeout } from 'rxjs';
+import { DniTypeModel } from '../../../users-models/owner/DniTypeModel';
 
 @Component({
   selector: 'app-users-update-owner',
@@ -32,13 +33,23 @@ export class UsersUpdateOwnerComponent implements OnInit {
   existingFilesDownload: FileDto[] = [];
   id: string = "";
   types: OwnerTypeModel[] = [];
+  dniTypes : DniTypeModel[] = [];
   states: OwnerStateModel[] = [];
+  
+  juridicId = 2;
 
   private readonly ownerService = inject(OwnerService)
   private readonly fileService = inject(FileService);
   constructor(private router: Router, private route: ActivatedRoute) { }
 
   async ngOnInit(): Promise<void> {
+
+    const typeControl = this.editOwner.get('ownerType');
+    if (typeControl) {
+      typeControl.valueChanges.subscribe(value => {
+        this.toggleCompanyField(String(value ?? ""));
+      });
+    }
     // Obtener el ID del propietario
     this.id = this.route.snapshot.paramMap.get('id') || '';
 
@@ -52,7 +63,7 @@ export class UsersUpdateOwnerComponent implements OnInit {
           name: this.owner.name,
           lastname: this.owner.lastname,
           dni: this.owner.dni,
-          cuitCuil: this.owner.cuitCuil,
+          dniType : this.owner.dni_type,
           ownerType: this.owner.ownerType, // Valor inicial para ownerType
           taxStatus: this.owner.taxStatus, // Valor inicial para taxStatus
           bussinesName: this.owner.businessName,
@@ -89,15 +100,10 @@ export class UsersUpdateOwnerComponent implements OnInit {
     await this.ownerService.getAllTypes().subscribe({
       next: (data: OwnerTypeModel[]) => {
         this.types = data;
-        console.log(this.types);
-        console.log(this.owner);
-        
         
         this.types.forEach((type) => {
           if(type.description === this.owner.ownerType
-          ) {
-            console.log(type.id);
-            
+          ) {    
             this.editOwner.patchValue({
               ownerType: type.id.toString(),
             });
@@ -106,6 +112,22 @@ export class UsersUpdateOwnerComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error al cargar los tipos de propietario:', err);
+      },
+    });
+
+    this.ownerService.getAllDniTypes().subscribe({
+      next: (data: DniTypeModel[]) => {
+        this.dniTypes = data;
+        this.dniTypes.forEach((dni_type) => {
+          if(dni_type.description === this.owner.dni_type) {
+            this.editOwner.patchValue({
+              dniType: dni_type.id.toString(),
+            });
+          }
+        });
+      },
+      error: (err) => {
+        console.error('Error al cargar los estados fiscales:', err);
       },
     });
   
@@ -128,6 +150,10 @@ export class UsersUpdateOwnerComponent implements OnInit {
     console.log(this.owner.taxStatus);
     console.log(this.editOwner.get('taxStatus')?.value);
     
+    this.editOwner.get('dni')?.disable();
+    this.editOwner.get('dniType')?.disable();
+    this.editOwner.get('email')?.disable();
+    this.editOwner.get('birthdate')?.disable();
     
   }
   
@@ -137,7 +163,7 @@ export class UsersUpdateOwnerComponent implements OnInit {
     name: new FormControl("", [Validators.required, Validators.minLength(3) , Validators.maxLength(50)]),
     lastname: new FormControl("", [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
     dni: new FormControl("", [Validators.required, Validators.minLength(8), Validators.pattern(/^\d+$/)]),
-    cuitCuil: new FormControl("", [Validators.required, Validators.minLength(11), Validators.maxLength(20),  Validators.pattern(/^\d+$/)]),
+    dniType: new FormControl("",[Validators.required]),
     ownerType: new FormControl("", [Validators.required]),
     taxStatus: new FormControl("", [Validators.required]),
     bussinesName: new FormControl(""),
@@ -150,15 +176,24 @@ export class UsersUpdateOwnerComponent implements OnInit {
     this.router.navigate([`${url}`]);
   }
 
+  private toggleCompanyField(ownerType: string) {
+    if (ownerType === this.juridicId.toString()) {
+      this.editOwner.get('bussinesName')?.enable();
+    } else {
+      this.editOwner.get('bussinesName')?.disable();
+      this.editOwner.get('bussinesName')?.setValue(""); // Limpiar el campo si se deshabilita
+    }
+  }
+
   createObject(form: any) {
     return {
       name: form.get('name')?.value,
       lastname: form.get('lastname')?.value,
       dni: form.get('dni')?.value,
-      cuitCuil: form.get('cuitCuil')?.value,
       dateBirth: form.get('birthdate')?.value,
-      ownerTypeId: 1,//form.get('ownerType')?.value,
-      taxStatusId: 1,//form.get('taxStatus')?.value,
+      ownerTypeId: form.get('ownerType')?.value,
+      taxStatusId: form.get('taxStatus')?.value,
+      dniTypeId: form.get('dniType')?.value,
       businessName: form.get('bussinesName')?.value,
       phoneNumber: form.get('phoneNumber')?.value,
       email: form.get('email')?.value,
