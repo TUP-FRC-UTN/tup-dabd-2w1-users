@@ -251,8 +251,6 @@ export class UsersListOwnersComponent {
     table.column(4).search(this.selectType.value).draw();
   }
 
-  filterDateStart: string = '';
-  filterDateEnd: string = '';
   //Metodo para filtrar la tabla en base a las 2 fechas
   filterByDate() {
     const table = $('#myTable').DataTable();
@@ -302,57 +300,73 @@ export class UsersListOwnersComponent {
      });
   }
 
-  exportPdf() {
-    const doc = new jsPDF();
-  
-    // Agregar título centrado
-    const title = 'Lista de Propietarios';
-    const pageWidth = doc.internal.pageSize.getWidth();
-    doc.setFontSize(16);
-    const textWidth = doc.getTextWidth(title);
-    doc.text(title, (pageWidth - textWidth) / 2, 20);
-  
-    // Definir columnas para el PDF
-    const columns = ['Fecha de Creación','Nombre', 'Documento', 'Tipo', 'Lotes'];
-  
-    // Filtrar datos visibles en la tabla
-    const table = $('#myTable').DataTable();
-  
-    // Obtener las filas visibles de la tabla
-    const visibleRows = table.rows({ search: 'applied' }).data().toArray();
-  
-    // Mapear los datos visibles a un formato adecuado para jsPDF
-    const rows = visibleRows.map((row: any) => [
-      `${row[0]}`,        
-      `${row[1]}`,        
-      `${row[2]}`, 
-      `${row[3]}`,     
-      `${row[4]}`         
-    ]);
-  
-    // Generar la tabla en el PDF usando autoTable
-    autoTable(doc, {
+  private formatDate(date: Date): string {
+    const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: '2-digit', year: 'numeric' };
+    return new Intl.DateTimeFormat('es-ES', options).format(date);
+}
+
+exportPdf() {
+  const doc = new jsPDF();
+
+  // Agregar título centrado
+  const title = 'Lista de Propietarios';
+  doc.setFontSize(18);
+  doc.text(title, 15, 20);
+  doc.setFontSize(12);
+
+  // Inicializar variables para el nombre del archivo
+  let fileName = 'listado_propietarios';
+  let formattedDesde = '';
+  let formattedHasta = '';
+
+  // Verificar si las fechas están seleccionadas antes de agregarlas al PDF
+  if (this.initialDate.value && this.endDate.value) {
+      formattedDesde = this.formatDate(new Date(this.initialDate.value));
+      formattedHasta = this.formatDate(new Date(this.endDate.value));
+      doc.text(`Fechas: Desde ${formattedDesde} hasta ${formattedHasta}`, 15, 30);
+
+      // Actualizar el nombre del archivo con las fechas seleccionadas
+      fileName += `_${formattedDesde}_${formattedHasta}`;
+  }
+
+  // Definir columnas para el PDF
+  const columns = ['Fecha de Creación', 'Nombre', 'Documento', 'Tipo', 'Lotes'];
+
+  // Filtrar datos visibles en la tabla
+  const table = $('#myTable').DataTable();
+
+  // Obtener las filas visibles de la tabla
+  const visibleRows = table.rows({ search: 'applied' }).data().toArray();
+
+  // Mapear los datos visibles a un formato adecuado para jsPDF
+  const rows = visibleRows.map((row: any) => [
+      `${row[0]}`,
+      `${row[1]}`,
+      `${row[2]}`,
+      `${row[3]}`,
+      `${row[4]}`
+  ]);
+
+  // Generar la tabla en el PDF usando autoTable
+  autoTable(doc, {
       head: [columns],
       body: rows,
-      startY: 30,
-      theme: 'striped',
-      headStyles: { fillColor: [0, 0, 0] },
-      styles: { halign: 'center', valign: 'middle' },
-      columnStyles: { 
-        0: { cellWidth: 50 }, 
-        1: { cellWidth: 30 }, 
-        2: { cellWidth: 30 }, 
-        3: { cellWidth: 50 }, 
-        4: { cellWidth: 30 } 
+      startY: 35,
+      theme: 'grid',
+      margin: { top: 30, bottom: 20 },
+      columnStyles: {
+          0: { cellWidth: 50 },
+          1: { cellWidth: 30 },
+          2: { cellWidth: 30 },
+          3: { cellWidth: 50 },
+          4: { cellWidth: 30 }
       },
-    });
-    
-    const today = new Date();
-    const formattedDate = today.toISOString().split('T')[0].replace(/-/g, '_'); 
-    const fileName = `${formattedDate}_PROPIETARIOS.pdf`; 
-  
-    doc.save(fileName); 
-  }
+  });
+
+  // Guardar el PDF con el nombre dinámico
+  doc.save(`${fileName}.pdf`);
+}
+
   
   exportExcel() {
     const table = $('#myTable').DataTable(); // Inicializa DataTable una vez
@@ -368,7 +382,7 @@ export class UsersListOwnersComponent {
       FechaCreacion: owner.create_date.replace(/-/g, '/'),
       Nombre: `${owner.lastname}, ${owner.name}`,
       DNI: owner.dni,
-      Tipo: owner.ownerType
+      Tipo: owner.ownerType,
     })));
   
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
