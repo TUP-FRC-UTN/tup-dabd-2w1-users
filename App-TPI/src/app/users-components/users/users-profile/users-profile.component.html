@@ -37,6 +37,7 @@
                 </div>
             }
     </div>
+
     <form [formGroup]="formProfile" class=" mt-5" (ngSubmit)="updateUser()">
         <div class="row mb-3">
 
@@ -153,6 +154,12 @@
                     </div>
                 </div>
             </div>
+
+             <!-- Aca abre el componente de abrir formulario -->
+             @if(type == 'edit') {
+
+                <app-users-change-password [email]="formProfile.controls.email.value ?? ''"></app-users-change-password>
+            }
 
             <hr>
             <div class="col-lg-6 mb-3">

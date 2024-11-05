@@ -12,11 +12,12 @@ import { GetuserDto } from '../../../users-models/users/GetUserDto';
 import { PlotService } from '../../../users-servicies/plot.service';
 import { GetPlotDto } from '../../../users-models/plot/GetPlotDto';
 import { ValidatorsService } from '../../../users-servicies/validators.service';
+import { ChangePasswordComponent } from "../../utils/users-change-password/users-change-password.component";
 
 @Component({
   selector: 'app-users-profile',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, FormsModule, ImageUploadComponent],
+  imports: [ReactiveFormsModule, CommonModule, FormsModule, ImageUploadComponent, ChangePasswordComponent],
   templateUrl: './users-profile.component.html',
   styleUrl: './users-profile.component.css'
 })
