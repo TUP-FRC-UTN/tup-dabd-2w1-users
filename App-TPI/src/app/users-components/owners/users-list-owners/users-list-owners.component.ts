@@ -38,13 +38,17 @@ export class UsersListOwnersComponent {
   showDeactivateModal: boolean = false;
   userToDeactivate: number = 0;
   types: OwnerTypeModel[] = [];
+  maxDate: string = new Date().toISOString().split('T')[0];
+  minDate: string = new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0];
   selectType: FormControl = new FormControl('');
-  initialDate = new FormControl();
-  endDate = new FormControl();
+  initialDate: FormControl = new FormControl(this.minDate);
+  endDate: FormControl = new FormControl(this.maxDate);
   plots : GetPlotDto[] = [];
   ownersWithPlots: any[] = [];
 
-  constructor(private router: Router,private modal: NgbModal) { }
+  constructor(private router: Router,private modal: NgbModal) {
+    const fecha = new Date();
+   }
 
   async ngOnInit() {
     // Convertir Observable en Promesa y esperar que se resuelva
@@ -84,7 +88,7 @@ export class UsersListOwnersComponent {
             ordering: true,
             lengthChange: true,
             lengthMenu: [5, 10, 25, 50],
-            order: [[0, 'desc']],
+            order: [[0, 'asc']],
             pageLength: 5,
             columns: [
               { title: 'Fecha de creación', width: '15%', className: 'text-start' },
@@ -210,6 +214,10 @@ export class UsersListOwnersComponent {
     }
   }
 
+  addOwner(){
+    this.router.navigate(['home/owners/add'])
+  }
+
   
   redirectEdit(id: number) {
     this.router.navigate(['/home/owners/edit', id])
@@ -301,9 +309,22 @@ export class UsersListOwnersComponent {
   }
 
   private formatDate(date: Date): string {
+    // Obtener la zona horaria de Argentina (UTC-3)
+    const argentinaOffset = 3 * 60;  // Argentina está a UTC-3, por lo que el offset es 3 horas * 60 minutos
+  
+    // Ajustar la fecha a la zona horaria de Argentina, estableciendo la hora en 00:00
+    const localDate = new Date(date.getTime() + (argentinaOffset - date.getTimezoneOffset()) * 60000);
+    
+    // Establecer la hora en 00:00 para evitar cambios de fecha no deseados
+    localDate.setHours(0, 0, 0, 0);
+  
+    // Sumar un día
+    localDate.setDate(localDate.getDate() + 1);
+  
     const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: '2-digit', year: 'numeric' };
-    return new Intl.DateTimeFormat('es-ES', options).format(date);
-}
+    return new Intl.DateTimeFormat('es-ES', options).format(localDate);
+  }
+
 
 exportPdf() {
   const doc = new jsPDF();
@@ -314,20 +335,9 @@ exportPdf() {
   doc.text(title, 15, 20);
   doc.setFontSize(12);
 
-  // Inicializar variables para el nombre del archivo
-  let fileName = 'listado_propietarios';
-  let formattedDesde = '';
-  let formattedHasta = '';
-
-  // Verificar si las fechas están seleccionadas antes de agregarlas al PDF
-  if (this.initialDate.value && this.endDate.value) {
-      formattedDesde = this.formatDate(new Date(this.initialDate.value));
-      formattedHasta = this.formatDate(new Date(this.endDate.value));
-      doc.text(`Fechas: Desde ${formattedDesde} hasta ${formattedHasta}`, 15, 30);
-
-      // Actualizar el nombre del archivo con las fechas seleccionadas
-      fileName += `_${formattedDesde}_${formattedHasta}`;
-  }
+  const formattedDesde = this.formatDate(new Date(this.initialDate.value));
+  const formattedHasta = this.formatDate(new Date(this.endDate.value));
+  doc.text(`Fechas: Desde ${formattedDesde} hasta ${formattedHasta}`, 15, 30);
 
   // Definir columnas para el PDF
   const columns = ['Fecha de Creación', 'Nombre', 'Documento', 'Tipo', 'Lotes'];
@@ -364,35 +374,50 @@ exportPdf() {
   });
 
   // Guardar el PDF con el nombre dinámico
-  doc.save(`${fileName}.pdf`);
+  doc.save(`${formattedDesde}_${formattedHasta}_listado_propietarios.pdf`);
 }
 
-  
-  exportExcel() {
-    const table = $('#myTable').DataTable(); // Inicializa DataTable una vez
-  
-    // Cambia la forma de obtener las filas visibles usando 'search' en lugar de 'filter'
-    const visibleRows = table.rows({ search: 'applied' }).data().toArray(); // Usar 'search: applied'
+ async exportExcel() {
+  const table = $('#myTable').DataTable(); // Inicializa DataTable una vez
 
-    // Filtrar a los propietarios x aquellos que aparzcan en la tabla visibleRows
-    let owners = this.owners.filter(owner => visibleRows.some(row => row[1].includes(owner.name) && row[1].includes(owner.lastname)));
+  // Cambiar la forma de obtener las filas visibles usando 'search' en lugar de 'filter'
+  const visibleRows = table.rows({ search: 'applied' }).data().toArray(); // Usar 'search: applied'
 
+  // Filtrar a los propietarios por aquellos que aparezcan en la tabla visibleRows
+  let owners = this.owners.filter(owner => visibleRows.some(row => row[1].includes(owner.name) && row[1].includes(owner.lastname)));
 
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(owners.map(owner => ({
+  // Obtener las fechas 'Desde' y 'Hasta' solo para el nombre del archivo
+  const formattedDesde = this.formatDate(new Date(this.initialDate.value));
+  const formattedHasta = this.formatDate(new Date(this.endDate.value));
+
+  const dataRows = await Promise.all(this.owners.map(async (owner) => {
+    // Obtener los lotes de manera asíncrona
+    const lotes = await this.loadPlots(owner.id);
+
+    // Retornar la fila con la información del propietario
+    return {
       FechaCreacion: owner.create_date.replace(/-/g, '/'),
       Nombre: `${owner.lastname}, ${owner.name}`,
-      DNI: owner.dni,
+      Documento: owner.dni,
       Tipo: owner.ownerType,
-    })));
-  
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Propietarios');
-  
-    const today = new Date();
-    const formattedDate = today.toISOString().split('T')[0].replace(/-/g, '_');
-    const fileName = `${formattedDate}_PROPIETARIOS.xlsx`; 
-  
-    XLSX.writeFile(wb, fileName); 
-  }
+      Lote: lotes  // El string con los lotes
+    };
+  }));
+
+  // Crear la hoja de trabajo con los datos de los propietarios
+  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataRows, { header: ['FechaCreacion', 'Nombre', 'Documento', 'Tipo', 'Lote'] });
+
+  // Crear el libro de trabajo
+  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Propietarios');
+
+  // Obtener la fecha actual para el nombre del archivo
+  const today = new Date();
+  const formattedDate = today.toISOString().split('T')[0].replace(/-/g, '_');
+  const fileName = `${formattedDesde}_${formattedHasta}_listado_propietarios.xlsx`;
+
+  // Guardar el archivo Excel
+  XLSX.writeFile(wb, fileName);
+}
   
 }
