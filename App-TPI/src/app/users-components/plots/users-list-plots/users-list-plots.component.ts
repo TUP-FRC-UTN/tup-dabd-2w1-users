@@ -243,20 +243,22 @@ export class UsersListPlotsComponent {
 
     // Agregar título centrado con la fecha actual a la derecha
     const title = 'Lista de Lotes';
+    doc.setFontSize(18);
+    doc.text(title, 15, 20);
+    doc.setFontSize(12);
+
     const today = new Date();
-    const formattedDate = today.toISOString().split('T')[0].replace(/-/g, '/');
-    const pageWidth = doc.internal.pageSize.getWidth();
+    const formattedDate = 
+    today.getDate().toString().padStart(2, '0') + '/' + 
+    (today.getMonth() + 1).toString().padStart(2, '0') + '/' + 
+    today.getFullYear();
+    doc.text(`Fecha: ${formattedDate}`, 15, 30);
 
     // Configuración del título
-    doc.setFontSize(16);
-    const titleText = `${title} - ${formattedDate}`;
-    const textWidth = doc.getTextWidth(titleText);
-
-    // Posicionamiento del título centrado con fecha
-    doc.text(titleText, (pageWidth - textWidth) / 2, 20);
+    const titleText = `${title}`;
 
     // Definir las columnas de la tabla
-    const columns = ['Lote', 'Manzana', 'M2', 'M2 Construidos', 'Tipo', 'Estado', 'Propietario'];
+    const columns = ['Lote', 'Manzana', 'M2 Totales', 'M2 Construidos', 'Tipo', 'Estado', 'Propietario'];
 
     // Obtener los datos filtrados en la tabla HTML
     const table = $('#myTable').DataTable();
@@ -277,11 +279,9 @@ export class UsersListPlotsComponent {
     autoTable(doc, {
       head: [columns],
       body: rows,
-      startY: 30,
-      theme: 'striped',
-      headStyles: { fillColor: [0, 0, 0] },
-      styles: { fontSize: 8, cellPadding: 1, halign: 'center', valign: 'middle' }, // Reducción de fuente y padding
-      margin: { left: 8, right: 8 }, // Márgenes más ajustados
+      startY: 35,
+      theme: 'grid', // Reducción de fuente y padding
+      margin: { top: 30, bottom: 20 }, // Márgenes más ajustados
       columnStyles: {
         0: { cellWidth: 25 },
         1: { cellWidth: 25 },
@@ -294,14 +294,14 @@ export class UsersListPlotsComponent {
     });
 
     // Guardar el PDF con la fecha actual en el nombre
-    const fileName = `${today.toISOString().split('T')[0].replace(/-/g, '_')}_LOTES.pdf`;
+    const fileName = `${formattedDate}_listado_lotes.pdf`;
     doc.save(fileName);
   }
 
   async exportExcel() {
     const table = $('#myTable').DataTable();
     const visibleRows = table.rows({ search: 'applied' }).data().toArray();
-
+    
     // Filtrar los lotes visibles
     const filteredPlots = this.plots.filter(plot =>
       visibleRows.some(row => row[0] === plot.plot_number)
@@ -313,7 +313,7 @@ export class UsersListPlotsComponent {
       return {
         Lote: plot.plot_number,
         Manzana: plot.block_number,
-        'M2': plot.total_area_in_m2,
+        'M2 Totales': plot.total_area_in_m2,
         'M2 Construidos': plot.built_area_in_m2,
         Tipo: plot.plot_type, // Directamente del objeto
         Estado: plot.plot_state, // Directamente del objeto
@@ -328,8 +328,11 @@ export class UsersListPlotsComponent {
 
     // Guardar el archivo Excel
     const today = new Date();
-    const formattedDate = today.toISOString().split('T')[0].replace(/-/g, '_');
-    const fileName = `${formattedDate}_LOTES.xlsx`;
+    const formattedDate = 
+    today.getDate().toString().padStart(2, '0') + '/' + 
+    (today.getMonth() + 1).toString().padStart(2, '0') + '/' + 
+    today.getFullYear();
+    const fileName = `${formattedDate}_listado_lotes.xlsx`;
     XLSX.writeFile(wb, fileName);
   }
 
@@ -359,6 +362,9 @@ export class UsersListPlotsComponent {
     }
   }
 
+  addPlot() {
+    this.router.navigate(['/home/plots/add'])
+  }
 
   redirectEdit(id: number) {
     this.router.navigate(['/home/plots/edit', id])

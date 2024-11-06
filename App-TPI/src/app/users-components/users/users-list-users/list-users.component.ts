@@ -38,11 +38,13 @@ export class ListUsersComponent implements OnInit {
   private readonly apiService = inject(UserService);
   showDeactivateModal: boolean = false;
   userToDeactivate: number = 0;
+  maxDate: string = new Date().toISOString().split('T')[0];
+  minDate: string = new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0];
   plots : GetPlotDto[] = [];
   selectRol: FormControl = new FormControl('');
   selectedRole: string = '';
-  initialDate = new FormControl();
-  endDate = new FormControl();
+  initialDate: FormControl = new FormControl(this.minDate);
+  endDate: FormControl = new FormControl(this.maxDate);
 
   getPlotByUser(plotId : number){
     this.plotService.getPlotById(plotId).subscribe({
@@ -71,8 +73,8 @@ export class ListUsersComponent implements OnInit {
         this.users = data.map(user => ({
           ...user,
 
-          datebirth: user.datebirth.replace(/-/g, '-'),
-          create_date: user.create_date.replace(/-/g, '-'),
+          datebirth: user.datebirth.replace(/-/g, '/'),
+          create_date: user.create_date.replace(/-/g, '/'),
 
         }));
       
@@ -84,13 +86,13 @@ export class ListUsersComponent implements OnInit {
             ordering: true,
             lengthChange: true,
             lengthMenu: [5, 10, 25, 50],
-            order: [[0, 'desc']],
+            order: [[0, 'asc']],
             pageLength: 5,
             columns: [
               { title: 'Fecha de creación', width: '20%' },
               { title: 'Nombre', width: '20%' },
               { title: 'Rol', width: '30%'},
-              { title: 'Nro. de lote', className: 'text-start', width: '15%' ,
+              { title: 'Lotes', className: 'text-start', width: '15%' ,
                  render: (data) => { 
 
                   let plotNumber: GetPlotDto[] = [];
@@ -225,8 +227,8 @@ export class ListUsersComponent implements OnInit {
   resetFilters() {
     // Reiniciar el valor del control de rol
     this.selectRol.setValue('');
-    this.initialDate.setValue('');
-    this.endDate.setValue('');
+    this.initialDate.setValue(this.minDate);
+    this.endDate.setValue(this.maxDate);
     // Limpiar el campo de búsqueda
     const searchInput = document.getElementById("myTable_search") as HTMLInputElement;
     if (searchInput) {
@@ -251,8 +253,6 @@ export class ListUsersComponent implements OnInit {
     table.column(2).search(this.selectRol.value).draw();
   }
 
-  filterDateStart: string = '';
-  filterDateEnd: string = '';
   //Metodo para filtrar la tabla en base a las 2 fechas
   filterByDate() {
     const table = $('#myTable').DataTable();
@@ -376,6 +376,10 @@ export class ListUsersComponent implements OnInit {
       }
     });
   }
+
+  addUser(){
+    this.router.navigate(['/home/users/add'])
+  }
   
   //Redirige
   redirectEdit(id: number) {
@@ -431,16 +435,36 @@ export class ListUsersComponent implements OnInit {
     return plot?.plot_number || 0;
   }
 
+  private formatDate(date: Date): string {
+    // Obtener la zona horaria de Argentina (UTC-3)
+    const argentinaOffset = 3 * 60;  // Argentina está a UTC-3, por lo que el offset es 3 horas * 60 minutos
+  
+    // Ajustar la fecha a la zona horaria de Argentina, estableciendo la hora en 00:00
+    const localDate = new Date(date.getTime() + (argentinaOffset - date.getTimezoneOffset()) * 60000);
+    
+    // Establecer la hora en 00:00 para evitar cambios de fecha no deseados
+    localDate.setHours(0, 0, 0, 0);
+  
+    // Sumar un día
+    localDate.setDate(localDate.getDate() + 1);
+  
+    const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: '2-digit', year: 'numeric' };
+    return new Intl.DateTimeFormat('es-ES', options).format(localDate);
+  }
+
   exportPdf() {
     const doc = new jsPDF();
   
     const title = 'Lista de Usuarios';
-    const pageWidth = doc.internal.pageSize.getWidth();
-    doc.setFontSize(16);
-    const textWidth = doc.getTextWidth(title);
-    doc.text(title, (pageWidth - textWidth) / 2, 20);
+    doc.setFontSize(18);
+    doc.text(title, 15, 20);
+    doc.setFontSize(12);
+
+    const formattedDesde = this.formatDate(new Date(this.initialDate.value));
+    const formattedHasta = this.formatDate(new Date(this.endDate.value));
+    doc.text(`Fechas: Desde ${formattedDesde} hasta ${formattedHasta}`, 15, 30);
   
-    const columns = ['Fecha de creación', 'Nombre', 'Rol', 'Nro. de lote'];
+    const columns = ['Fecha de creación', 'Nombre', 'Rol', 'Lotes'];
   
     const table = $('#myTable').DataTable(); 
   
@@ -450,55 +474,73 @@ export class ListUsersComponent implements OnInit {
       row[0], // Fecha de creación
       `${row[1]}`,               // Nombre
       `${this.getContentBetweenArrows(row[2])}`, // Rol
-      `${this.getPlotById(row[3])}` // Lote
+      `${row[3]}` // Lote
     ]);
   
     autoTable(doc, {
       head: [columns],
       body: rows,
-      startY: 30, 
-      theme: 'striped', 
-      headStyles: { fillColor: [0, 0, 0] }, 
-      styles: { halign: 'center', valign: 'middle' }, 
+      startY: 35, 
+      theme: 'grid', 
+      margin: { top: 30, bottom: 20 }, 
       columnStyles: { 
         0: { cellWidth: 50 }, 
-        1: { cellWidth: 30 }, 
-        2: { cellWidth: 30 }, 
-        3: { cellWidth: 50 }, 
-        4: { cellWidth: 30 } 
+        1: { cellWidth: 50 }, 
+        2: { cellWidth: 50 }, 
+        3: { cellWidth: 30 }
       }, 
     });
-    const today = new Date();
-    const formattedDate = today.toISOString().split('T')[0].replace(/-/g, '_'); 
-    const fileName = `${formattedDate}_USUARIOS.pdf`; 
-  
-    doc.save(fileName); 
+    doc.save(`${formattedDesde}_${formattedHasta}_listado_usuarios.pdf`);
   }
 
   exportExcel() {
-    const table = $('#myTable').DataTable();
-    const visibleRows = table.rows({ search: 'applied' }).data().toArray(); 
+    const table = $('#myTable').DataTable(); // Inicializa DataTable una vez
   
-    let users = this.users.filter(user => 
-      visibleRows.some(row => (row[1]).includes(user.name + ', ' + user.lastname))
-    );
+    // Cambiar la forma de obtener las filas visibles usando 'search' en lugar de 'filter'
+    const visibleRows = table.rows({ search: 'applied' }).data().toArray(); // Usar 'search: applied'
   
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(users.map(user => ({
-      FechaNacimiento: user.create_date.replace(/-/g, '/'),
-      Nombre: `${user.lastname}, ${user.name}`,
-      Rol: user.roles.join(', '),
-      Lote: this.getPlotById(user.plot_id),
+    // Filtrar a los propietarios por aquellos que aparezcan en la tabla visibleRows
+    let users = this.users.filter(user => visibleRows.some(row => row[1].includes(user.name) && row[1].includes(user.lastname)));
   
-    })));
+    // Obtener las fechas 'Desde' y 'Hasta' solo para el nombre del archivo
+    const formattedDesde = this.formatDate(new Date(this.initialDate.value));
+    const formattedHasta = this.formatDate(new Date(this.endDate.value));
   
+    // Crear las filas de datos directamente desde las filas visibles de la tabla
+    const dataRows = visibleRows.map((row) => {
+      const user = users.find(user => `${user.name} ${user.lastname}` === row[1]); // Encontrar al usuario correspondiente
+      
+      if (user) {
+        // Obtener los datos de la fila (en este caso, la columna 4 sería el lote)
+        const roles = user.roles.join(", "); // Si roles es un array, convertirlo a string
+        const lotes = row[3]; // Asumimos que la columna 4 (índice 3) tiene los lotes
+  
+        // Retornar la fila con la información del propietario
+        return {
+          FechaCreacion: user.create_date.replace(/-/g, '/'),
+          Nombre: `${user.lastname}, ${user.name}`,
+          Rol: roles,  // Convertido a string
+          Lote: lotes  // Usando la columna 4 directamente
+        };
+      } else {
+        // Si no se encuentra el usuario, no retornar nada (filtramos fuera más adelante)
+        return null;
+      }
+    }).filter(row => row !== null); // Filtrar valores nulos o no definidos
+  
+    // Crear la hoja de trabajo con los datos de los propietarios
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataRows, { header: ['FechaCreacion', 'Nombre', 'Rol', 'Lote'] });
+  
+    // Crear el libro de trabajo
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Usuarios');
   
+    // Obtener la fecha actual para el nombre del archivo
     const today = new Date();
     const formattedDate = today.toISOString().split('T')[0].replace(/-/g, '_');
-    const fileName = `${formattedDate}_USUARIOS.xlsx`; 
+    const fileName = `${formattedDesde}_${formattedHasta}_listado_usuarios.xlsx`;
   
-    XLSX.writeFile(wb, fileName); 
+    // Guardar el archivo Excel
+    XLSX.writeFile(wb, fileName);
   }
-
 }
