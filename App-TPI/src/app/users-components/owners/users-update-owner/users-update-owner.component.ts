@@ -18,11 +18,12 @@ import { OwnerTypeModel } from '../../../users-models/owner/OwnerType';
 import { OwnerStateModel } from '../../../users-models/owner/OwnerState';
 import { lastValueFrom, timeout } from 'rxjs';
 import { DniTypeModel } from '../../../users-models/owner/DniTypeModel';
+import { UsersMultipleSelectComponent } from "../../utils/users-multiple-select/users-multiple-select.component";
 
 @Component({
   selector: 'app-users-update-owner',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, FileUploadComponent],
+  imports: [ReactiveFormsModule, CommonModule, FileUploadComponent, UsersMultipleSelectComponent],
   templateUrl: './users-update-owner.component.html',
   styleUrl: './users-update-owner.component.css'
 })
@@ -34,8 +35,10 @@ export class UsersUpdateOwnerComponent implements OnInit {
   id: string = "";
   types: OwnerTypeModel[] = [];
   dniTypes : DniTypeModel[] = [];
-  states: OwnerStateModel[] = [];
-  
+  // states: OwnerStateModel[] = []; -----------------------------VER
+  states : any[] = []
+  stateOptions : any[] = []
+  stateSelected : string = ''
   juridicId = 2;
 
   private readonly ownerService = inject(OwnerService)
@@ -141,6 +144,8 @@ export class UsersUpdateOwnerComponent implements OnInit {
             });
           }
         });
+        //aca termina el filtrado
+        this.states.forEach(s => this.stateOptions.push({value: s.id, name: s.description}));
       },
       error: (err) => {
         console.error('Error al cargar los estados fiscales:', err);
@@ -192,7 +197,7 @@ export class UsersUpdateOwnerComponent implements OnInit {
       dni: form.get('dni')?.value,
       dateBirth: form.get('birthdate')?.value,
       ownerTypeId: form.get('ownerType')?.value,
-      taxStatusId: form.get('taxStatus')?.value,
+      taxStatusId: Number(this.stateSelected),
       dniTypeId: form.get('dniType')?.value,
       businessName: form.get('bussinesName')?.value,
       phoneNumber: form.get('phoneNumber')?.value,
@@ -350,5 +355,9 @@ export class UsersUpdateOwnerComponent implements OnInit {
 
   deleteFile(index: number) {
     this.files.splice(index, 1);
+  }
+
+  getStatus(state : any){
+    this.stateSelected = state;
   }
 }

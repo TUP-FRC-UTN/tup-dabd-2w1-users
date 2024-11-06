@@ -1,5 +1,1 @@
-:root{
-    --color-nav: rgb(45, 106, 79);
-    --color-side: rgb(64, 145, 108);
-    --color-hover: rgb(82, 183, 136);
-}
+@import "@ng-select/ng-select/themes/default.theme.css";
