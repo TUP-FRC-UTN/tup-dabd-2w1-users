@@ -27,7 +27,7 @@
 
         <div class="col-lg-6 mb-3">
           <div class="row">
-            <label class="col-2 col-form-label">Tipo de documento</label>
+            <label class="col-2 col-form-label">Tipo de Documento</label>
             <div class="col-10">
               <select id="selectOption" class="form-select" formControlName="dniType" [ngClass]="onValidate('dniType')">
                 <option value="" disabled selected>Seleccione una opción</option>
@@ -92,7 +92,7 @@
         
         <div class="col-lg-6 mb-3">
           <div class="row">
-            <label class="col-2 col-form-label">Fecha de nacimiento</label>
+            <label class="col-2 col-form-label">Fecha de Nacimiento</label>
             <div class="col-10">
               <input type="date" class="form-control" formControlName="datebirth" value="2000-01-01"
                 [ngClass]="onValidate('datebirth')">
@@ -118,7 +118,7 @@
 
         <div class="col-lg-6 mb-3">
           <div class="row">
-            <label class="col-2 col-form-label">Nombre de usuario</label>
+            <label class="col-2 col-form-label">Nombre de Usuario</label>
             <div class="col-10">
               <input type="text" class="form-control" formControlName="username" [ngClass]="onValidate('username')">
               <div class="invalid-feedback">{{showError('username')}}</div>
@@ -143,9 +143,13 @@
         <div class="col-lg-6 mb-3">
           <div class="row">
             <label class="col-2 col-form-label">Contraseña</label>
-            <div class="col-10">
-              <input type="password" class="form-control" formControlName="password" autocomplete="current-password"
+            <div class="col-10 position: relative">
+              <input [type]="passwordVisible ? 'text' : 'password'" class="form-control" formControlName="password" autocomplete="current-password"
                 [ngClass]="onValidate('password')">
+                <i class="bi" 
+                  [ngClass]="passwordVisible ? 'bi-eye-slash' : 'bi-eye'" 
+                  (click)="togglePasswordVisibility()" 
+                  style="cursor: pointer; position: absolute; right: 180px; top: auto; transform: translateY(-125%);"></i>
               <div class="invalid-feedback">{{showError('password')}}</div>
             </div>
           </div>
