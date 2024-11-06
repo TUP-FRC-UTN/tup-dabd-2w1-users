@@ -248,8 +248,9 @@ verifyOptions() {
           title: 'Usuario creado',
           text: 'El usuario se ha creado correctamente',
           icon: 'success',
-          timer: 1000,
-          showConfirmButton: false
+          timer: undefined,
+          showConfirmButton: true,
+          confirmButtonText: 'Aceptar',
         });
         if(this.authService.getActualRole() == "Propietario"){
           this.router.navigate(['/home/family']);

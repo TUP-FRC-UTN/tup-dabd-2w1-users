@@ -144,8 +144,11 @@ export class UsersUpdatePlotComponent implements OnInit {
             Swal.fire({
                 title: 'Operación cancelada',
                 icon: 'info',
-                showConfirmButton: false, 
-                timer: 1000 
+                showConfirmButton: true, 
+                timer: undefined,
+                confirmButtonText: 'Aceptar',
+                allowEscapeKey: true,
+                allowOutsideClick: true
             });
         }
     });

@@ -30,12 +30,12 @@
       <div class="col-md-6">
         <p>
           <strong>Fecha de nacimiento:</strong>
-          {{ editUser?.get("birthdate")?.value | date : "dd-MM-yyyy" || "N/A" }}
+          {{ editUser?.get("birthdate")?.value | date : "dd/MM/yyyy" || "N/A" }}
         </p>
         <p>
           <strong>Fecha de alta:</strong>
           {{
-            editUser?.get("create_date")?.value | date : "dd-MM-yyyy" || "N/A"
+            editUser?.get("create_date")?.value | date : "dd/MM/yyyy" || "N/A"
           }}
         </p>
       </div>
