@@ -74,7 +74,8 @@ export class UsersListOwnersComponent {
             owner.create_date,
             `${owner.name}, ${owner.lastname}`,
             owner.dni,
-            owner.ownerType,
+            //owner.ownerType,
+            this.showOwerType(owner.ownerType),
             await this.loadPlots(owner.id), // Espera a que loadPlots se resuelva
             owner.id,
           ])
@@ -170,6 +171,19 @@ export class UsersListOwnersComponent {
     });
   }
   
+  showOwerType(ownerType: string) {
+    let color = '';
+    
+    switch (ownerType) {
+      case 'Persona Física':
+        color = 'text-bg-primary';
+        break;
+      case 'Persona Jurídica':
+        color = 'text-bg-danger';
+        break;
+    }
+    return `<span class='badge rounded-pill ${color}'>${ownerType}</span>`;
+  }
 
   async loadPlots(ownerId: number) : Promise<string> {
     
