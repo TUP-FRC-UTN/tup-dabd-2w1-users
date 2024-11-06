@@ -46,6 +46,7 @@ export class NewUserComponent implements OnInit {
   optionsForOwner: string[] = ["Familiar mayor", "Familiar menor"];
   options: any[] = [];
   selectedOptions: string[] = [];
+  passwordVisible: boolean = false; 
   
 
   ngOnInit() {
@@ -317,5 +318,9 @@ verifyOptions() {
   
     // Retorna cadena vacía si no hay errores.
     return '';
+  }
+
+  togglePasswordVisibility(): void {
+    this.passwordVisible = !this.passwordVisible;
   }
 }
