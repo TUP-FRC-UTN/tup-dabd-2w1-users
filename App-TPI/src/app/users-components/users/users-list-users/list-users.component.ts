@@ -71,8 +71,8 @@ export class ListUsersComponent implements OnInit {
         this.users = data.map(user => ({
           ...user,
 
-          datebirth: user.datebirth.replace(/-/g, '-'),
-          create_date: user.create_date.replace(/-/g, '-'),
+          datebirth: user.datebirth.replace(/-/g, '/'),
+          create_date: user.create_date.replace(/-/g, '/'),
 
         }));
       
@@ -214,7 +214,11 @@ export class ListUsersComponent implements OnInit {
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'Hubo un problema al cargar los usuarios. Por favor, inténtalo más tarde.'
+          text: 'Hubo un problema al cargar los usuarios. Por favor, inténtalo más tarde.',
+          showConfirmButton: true,
+          confirmButtonText: 'Aceptar',
+          allowOutsideClick: false,
+          allowEscapeKey: false
           })
         this.router.navigate(['/home']);
       }

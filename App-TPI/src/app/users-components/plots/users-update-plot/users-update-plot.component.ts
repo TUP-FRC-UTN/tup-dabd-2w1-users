@@ -175,8 +175,12 @@ export class UsersUpdatePlotComponent implements OnInit {
         Swal.fire({
           icon: "success",
           title: "Se han guardado los cambios",
-          showConfirmButton: false,
-          timer: 1500
+          showConfirmButton: true,
+          confirmButtonText: "Aceptar",
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          timer: undefined,
+
         });
         
         this.redirect('home/plots/list');
@@ -187,8 +191,11 @@ export class UsersUpdatePlotComponent implements OnInit {
           Swal.fire({
             icon: "error",
             title: "Ha ocurrido un error",
-            showConfirmButton: false,
-            timer: 1000
+            showConfirmButton: true,
+            confirmButtonText: "Aceptar",
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            timer: undefined,
           });
       }
     });
