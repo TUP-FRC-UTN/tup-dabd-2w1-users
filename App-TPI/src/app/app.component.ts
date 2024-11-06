@@ -9,6 +9,7 @@ import { ModalInfoUserComponent } from './users-components/users/users-modal-inf
 import { UsersNewPlotComponent } from './users-components/plots/users-new-plot/users-new-plot.component';
 import { UsersUpdateUserComponent } from './users-components/users/users-update-user/users-update-user.component';
 
+
 @Component({
   selector: 'app-root',
   standalone: true,

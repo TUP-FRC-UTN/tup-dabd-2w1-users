@@ -414,7 +414,9 @@ export class ListUsersComponent implements OnInit {
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Hubo un problema al cargar el usuario. Por favor, inténtalo de nuevo.'
+            text: 'Hubo un problema al cargar el usuario. Por favor, inténtalo de nuevo.',
+            confirmButtonText: 'Aceptar'
+
           });
         }
       });
