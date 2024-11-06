@@ -23,8 +23,7 @@
           {{ editUser?.get("username")?.value || "N/A" }}
         </p>
         <p>
-          <strong>{{ editUser?.get("dni_type")?.value || "N/A" }}</strong>
-          {{ editUser?.get("dni")?.value || "N/A" }}
+          <strong>Tipo de documento:</strong> {{ editUser.get("dni_type")?.value || "N/A" }}
         </p>
       </div>
       <div class="col-md-6">
@@ -37,6 +36,9 @@
           {{
             editUser?.get("create_date")?.value | date : "dd-MM-yyyy" || "N/A"
           }}
+        </p>
+        <p>
+          <strong>Número de documento:</strong> {{ editUser.get("dni")?.value || "N/A" }}
         </p>
       </div>
     </div>

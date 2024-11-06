@@ -284,23 +284,23 @@ export class ListUsersComponent implements OnInit {
       let color : string = "";
       switch (r) {
         case "Gerente":
-          color = "danger";
+          color = "text-bg-danger";
           break;
         case "Propietario":
-          color = "primary";
+          color = "text-bg-primary";
           break;
         case "Familiar mayor":
-          color = "secondary";
+          color = "text-bg-secondary";
           break;
         case "Familiar menor":
-          color = "secondary";
+          color = "text-bg-secondary";
           break;
           case "SuperAdmin":
-          color = "dark";
+          color = "text-bg-dark";
           break;
       }
 
-      rolesA = rolesA + (`<button class='btn btn-${color} rounded-pill m-1 hover'>${r}</button>`);
+      rolesA = rolesA + (`<span class='${color} badge rounded-pill'>${r}</span>`);
     })
     return rolesA
   }

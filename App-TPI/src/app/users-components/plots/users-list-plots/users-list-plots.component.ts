@@ -401,17 +401,17 @@ export class UsersListPlotsComponent {
 
     switch (plotType) {
       case "Comercial":
-        color = "secondary";
+        color = "text-bg-secondary";
         break;
       case "Residencial":
-        color = "success";
+        color = "text-bg-success";
         break;
       case "Baldío":
-        color = "danger";
+        color = "text-bg-danger";
         break;
     }
 
-    return `<button class='btn btn-${color} rounded-pill m-1' style='cursor: default; box-shadow: none;'>${plotType}</button>`;
+    return `<span class='badge rounded-pill ${color}'>${plotType}</span>`;
   }
 
   showPlotState(plotState: any): string {
@@ -420,16 +420,16 @@ export class UsersListPlotsComponent {
 
     switch (plotState) {
       case "Disponible":
-        color = "success";
+        color = "text-bg-success";
         break;
       case "Habitado":
-        color = "secondary";
+        color = "text-bg-secondary";
         break;
       case "En construcción":
-        color = "danger";
+        color = "text-bg-danger";
         break;
     }
 
-    return `<button class='btn btn-${color} rounded-pill m-1' style='cursor: default; box-shadow: none;'>${plotState}</button>`;
+    return `<span class='${color} badge rounded-pill'>${plotState}</span>`;
   }
 }

@@ -59,7 +59,7 @@ export class ModalInfoUserComponent implements OnInit {
           fullname: this.userModal.lastname + ', ' + this.userModal.name,
           email: this.userModal.email,
           dni: this.userModal.dni,
-          dni_type: this.userModal.dni_type+': ',
+          dni_type: this.userModal.dni_type,
           phoneNumber: this.userModal.phone_number,
           roles: this.rolesInput,
           username: this.userModal.username,
