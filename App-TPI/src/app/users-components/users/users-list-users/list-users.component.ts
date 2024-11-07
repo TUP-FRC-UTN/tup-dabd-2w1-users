@@ -216,7 +216,11 @@ export class ListUsersComponent implements OnInit {
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'Hubo un problema al cargar los usuarios. Por favor, inténtalo más tarde.'
+          text: 'Hubo un problema al cargar los usuarios. Por favor, inténtalo más tarde.',
+          showConfirmButton: true,
+          confirmButtonText: 'Aceptar',
+          allowOutsideClick: false,
+          allowEscapeKey: false
           })
         this.router.navigate(['/home']);
       }
@@ -418,7 +422,9 @@ export class ListUsersComponent implements OnInit {
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Hubo un problema al cargar el usuario. Por favor, inténtalo de nuevo.'
+            text: 'Hubo un problema al cargar el usuario. Por favor, inténtalo de nuevo.',
+            confirmButtonText: 'Aceptar'
+
           });
         }
       });

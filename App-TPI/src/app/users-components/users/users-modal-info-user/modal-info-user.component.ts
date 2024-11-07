@@ -109,8 +109,12 @@ export class ModalInfoUserComponent implements OnInit {
           title: '¡Usuario borrado!',
           text: 'El usuario se ha borrado correctamente.',
           icon: 'success',
-          timer: 1000,
-          showConfirmButton: false
+          timer: undefined,
+          showConfirmButton: true,
+          confirmButtonText: 'Aceptar',
+          allowEscapeKey: false,
+          allowOutsideClick: false
+
         });
         this.confirmDesactivate();
       } else {
@@ -118,7 +122,7 @@ export class ModalInfoUserComponent implements OnInit {
           title: '¡Usuario no se ha borrado!',
           text: 'La operación se ha cancelado exitosamente.',
           icon: 'info',
-          timer: 1000,
+          timer: undefined,
           showConfirmButton: false
         });
       }

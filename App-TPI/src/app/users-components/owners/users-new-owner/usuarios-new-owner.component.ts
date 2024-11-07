@@ -366,8 +366,12 @@ export class UsuariosNewOwnerComponent {
         Swal.fire({
           icon: "error",
           title: "Error al guardar los cambios",
-          showConfirmButton: false,
-          timer: 1460
+          showConfirmButton: true,
+          confirmButtonText: "Aceptar",
+          allowOutsideClick: false, 
+          allowEscapeKey: false, 
+          timer: undefined,
+
         });
       }
     });

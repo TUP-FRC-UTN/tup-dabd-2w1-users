@@ -388,7 +388,8 @@ export class UsersListPlotsComponent {
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Hubo un problema al cargar el lote. Por favor, inténtalo de nuevo.'
+            text: 'Hubo un problema al cargar el lote. Por favor, inténtalo de nuevo.',
+            confirmButtonText: 'Aceptar'
           });
         }
       });

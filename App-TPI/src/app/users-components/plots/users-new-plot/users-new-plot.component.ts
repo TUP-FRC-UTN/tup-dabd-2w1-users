@@ -132,8 +132,12 @@ export class UsersNewPlotComponent {
         Swal.fire({
           icon: "success",
           title: "Lote guardado",
-          showConfirmButton: false,
-          timer: 1500
+          showConfirmButton: true,
+          confirmButtonText: "Aceptar",
+          timer: undefined,
+          allowEscapeKey: false,
+          allowOutsideClick: false
+
         });
         this.resetForm();
         this.ngOnInit();
