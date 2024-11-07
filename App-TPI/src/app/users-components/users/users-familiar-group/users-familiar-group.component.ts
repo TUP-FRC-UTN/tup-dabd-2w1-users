@@ -10,6 +10,7 @@ import { GetPlotDto } from '../../../users-models/plot/GetPlotDto';
 import { PlotService } from '../../../users-servicies/plot.service';
 import { AuthService } from '../../../users-servicies/auth.service';
 import { OwnerService } from '../../../users-servicies/owner.service';
+import { ModalEliminarUserComponent } from '../users-modal-eliminar-user/modal-eliminar-user/modal-eliminar-user.component';
 
 @Component({
   selector: 'app-users-familiar-group',
@@ -82,6 +83,16 @@ export class UsersFamiliarGroupComponent implements OnInit {
   //Redirecciona  a agregar usuario
   redirectAdd() {
     this.router.navigate(['/home/users/add']); 
+  }
+
+  async openModalEliminar(userId: number) {
+    const modalRef = this.modal.open(ModalEliminarUserComponent, { size: 'md', keyboard: false });
+    modalRef.componentInstance.userModal = { id: userId };
+
+    // Escuchar el evento de eliminación para recargar
+    modalRef.componentInstance.userDeleted.subscribe(() => {
+      this.ngOnInit()
+    });
   }
 
   //Abre el modal con la información del usuario
