@@ -65,7 +65,7 @@ export class NewUserComponent implements OnInit {
           }
       },
       error: (err) => {
-        console.error('Error al cargar los tipos de lote:', err);
+        console.error('Error al cargar los lotes:', err);
       }
     });
 

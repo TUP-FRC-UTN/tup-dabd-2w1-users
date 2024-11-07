@@ -291,7 +291,7 @@ export class UsuariosNewOwnerComponent {
       name: this.formReactivo.get('name')?.value || '',
       lastname: this.formReactivo.get('lastname')?.value || '',
       dni: this.formReactivo.get('dni')?.value || '',
-      dni_type: this.formReactivo.get('documentType')?.value || '', //Tipo de documento
+      dni_type_id: Number(this.formReactivo.get('documentType')?.value) || 0, //Tipo de documento
       dateBirth: this.formReactivo.get('birthdate')?.value || new Date(),
       ownerTypeId: Number(this.formReactivo.get('type')?.value || ""),
       taxStatusId:  Number(this.stateSelected),
@@ -365,6 +365,7 @@ export class UsuariosNewOwnerComponent {
   resetForm(){
     this.formReactivo.reset();
     this.clearFileInput();
+    this.ngOnInit();
   }
 
   //Limpiar los archivos

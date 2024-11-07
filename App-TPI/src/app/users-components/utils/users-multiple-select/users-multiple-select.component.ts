@@ -13,7 +13,7 @@ import { NgLabelTemplateDirective, NgSelectModule } from '@ng-select/ng-select';
 })
 export class UsersMultipleSelectComponent implements OnChanges {
    //Lista de opciones (Requiere un objeto {value: , name: })
-   @Input() options : any[] = []
+   @Input() options: { value: number, name: string }[] = [];
 
    //Lista con los VALUES de los objetos que ya tienen que venir seleccionados (Ej: [1, 2] o ["Persona Física"])
    @Input() optionsChecked : any[] = []
@@ -23,9 +23,6 @@ export class UsersMultipleSelectComponent implements OnChanges {
  
    //Listado de ids de los objetos seleccionados (el value del select)
    @Output() sendList = new EventEmitter<any[]>();
-
-   contador : number = 0;
- 
  
    //Opciones seleccionadas
    selectedOptions : any[] = [];
@@ -37,14 +34,19 @@ export class UsersMultipleSelectComponent implements OnChanges {
    }
 
    ngOnChanges(changes: SimpleChanges): void {
+      
       this.selectedOptions = [...this.optionsChecked];
       if (changes['options'].currentValue.length > 0) {
         this.selectedOptions = [...this.optionsChecked];
-        console.log("Opciones actualizadas en ngOnChanges:", this.options);
       }
    }
  
    send(){
      this.sendList.emit(this.selectedOptions);
    }
+
+     // Función para comparar valores
+  compareWithFn = (o1: any, o2: any): boolean => {
+    return o1 === o2;
+  };
 }

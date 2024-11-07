@@ -15,12 +15,12 @@ import { DniTypeModel } from '../users-models/owner/DniTypeModel';
 export class OwnerService {
 
   private readonly http: HttpClient = inject(HttpClient);
-  private readonly url = 'http://localhost:8081/';
+  private readonly url = 'http://localhost:9062/';
 
   constructor() { }
 
   getOwnerByPlotId(plotId : number): Observable<Owner[]>{
-    return this.http.get<Owner[]>('http://localhost:8081/owners/plot/' + plotId);
+    return this.http.get<Owner[]>('http://localhost:9062/owners/plot/' + plotId);
   }
 
   getAll(): Observable<Owner[]>{
@@ -56,7 +56,7 @@ export class OwnerService {
     formData.append('name', owner.name);
     formData.append('lastname', owner.lastname);
     formData.append('dni', owner.dni);
-    formData.append('dni_type', owner.dni_type);
+    formData.append('dni_type', owner.dni_type_id.toString());
     formData.append('dateBirth', new Date(owner.dateBirth).toISOString().split('T')[0]);
     formData.append('ownerTypeId', owner.ownerTypeId.toString());
     formData.append('taxStatusId', owner.taxStatusId.toString());
