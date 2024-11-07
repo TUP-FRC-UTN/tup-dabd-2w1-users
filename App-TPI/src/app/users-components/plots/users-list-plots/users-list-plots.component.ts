@@ -23,11 +23,12 @@ import { OwnerService } from '../../../users-servicies/owner.service';
 import { map } from 'rxjs/operators';
 import { Owner } from '../../../users-models/owner/Owner';
 import { LoginComponent } from '../../utils/users-login/login.component';
+import { UsersMultipleSelectComponent } from '../../utils/users-multiple-select/users-multiple-select.component';
 
 @Component({
   selector: 'app-users-list-plots',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, UsersMultipleSelectComponent],
   templateUrl: './users-list-plots.component.html',
   styleUrl: './users-list-plots.component.css'
 })
@@ -44,13 +45,24 @@ export class UsersListPlotsComponent {
 
   plotTypes: string[] = [];
   plotStatus: string[] = [];
+  typesForFilter: any[] = [];
+  statusForFilter: any[] = [];
+
 
   constructor(private router: Router, private modal: NgbModal) { }
 
   async ngOnInit() {
     this.plotService.getAllStates().subscribe({
       next: (data: PlotStateModel[]) => {
+
         this.plotStatus = data.map(state => state.name);
+
+        this.statusForFilter = data.map(r => ({
+          value: r.name,
+          name: r.name
+        }));
+
+        
       },
       error: (error) => {
         console.error('Error al cargar los estados:', error);
@@ -60,6 +72,11 @@ export class UsersListPlotsComponent {
     this.plotService.getAllTypes().subscribe({
       next: (data: PlotTypeModel[]) => {
         this.plotTypes = data.map(type => type.name);
+
+        this.typesForFilter = data.map(r => ({
+          value: r.name,
+          name: r.name
+        }));
       },
       error: (error) => {
         console.error('Error al cargar los tipos:', error);
@@ -198,15 +215,24 @@ export class UsersListPlotsComponent {
 
 
   //Filtrat por tipo
-  updateFilterType() {
+  updateFilterType(options: any[]) {
+   // Asignamos directamente los roles emitidos
+    var optionsFilter = options.map((option: any) => option).join(' ');
+    console.log(optionsFilter);
+    
     const table = $('#myTable').DataTable();
-    table.column(4).search(this.selectType.value ?? '').draw();
+    
+    table.column(4).search(optionsFilter ?? '').draw();
   }
 
   //Filtrar por estado
-  updateFilterState() {
+  updateFilterState(options: any[]) {
+    var optionsFilter = options.map((option: any) => option).join(' ');
+    console.log(optionsFilter);
+    
     const table = $('#myTable').DataTable();
-    table.column(5).search(this.selectState.value ?? '').draw();
+    
+    table.column(5).search(optionsFilter ?? '').draw();
   }
 
   getContentBetweenArrows(input: string): string[] {

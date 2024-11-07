@@ -2,7 +2,7 @@ export class OwnerModel {
     name: string;
     lastname: string;
     dni: string;
-    dni_type: string;
+    dni_type_id: number;
     dateBirth: Date;
     ownerTypeId: number;
     taxStatusId: number;
@@ -23,7 +23,7 @@ export class OwnerModel {
         this.name = '';        
         this.lastname = '';          
         this.dni = '';             
-        this.dni_type = '';          
+        this.dni_type_id = 0;          
         this.dateBirth = new Date();
         this.ownerTypeId = 0;        
         this.taxStatusId = 0;   

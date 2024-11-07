@@ -19,6 +19,8 @@ import { OwnerStateModel } from '../../../users-models/owner/OwnerState';
 import { lastValueFrom, timeout } from 'rxjs';
 import { DniTypeModel } from '../../../users-models/owner/DniTypeModel';
 import { UsersMultipleSelectComponent } from "../../utils/users-multiple-select/users-multiple-select.component";
+import { PlotService } from '../../../users-servicies/plot.service';
+import { GetPlotModel } from '../../../users-models/plot/GetPlot';
 
 @Component({
   selector: 'app-users-update-owner',
@@ -36,12 +38,15 @@ export class UsersUpdateOwnerComponent implements OnInit {
   types: OwnerTypeModel[] = [];
   dniTypes : DniTypeModel[] = [];
   // states: OwnerStateModel[] = []; -----------------------------VER
-  states : any[] = []
-  stateOptions : any[] = []
-  stateSelected : string = ''
+  states : any[] = [];
+  stateOptions : any[] = [];
+  stateSelected : string = '';
   juridicId = 2;
+  optionnn: any[] = [];
+  plots: String[] = [];
 
   private readonly ownerService = inject(OwnerService)
+  private readonly plotService = inject(PlotService)
   private readonly fileService = inject(FileService);
   constructor(private router: Router, private route: ActivatedRoute) { }
 
@@ -99,6 +104,15 @@ export class UsersUpdateOwnerComponent implements OnInit {
       console.error('Error al cargar el propietario:', error);
   }
 
+    this.plotService.getPlotsByOwnerId(Number(this.id)).subscribe({
+      next: (data: GetPlotModel[]) => {
+        this.plots = data.map(plot =>  "Lote: " + plot.plot_number + ", " + "Manzana: " + plot.block_number);
+      },
+      error: (err) => {
+        console.error('Error al cargar los terrenos del propietario:', err);
+      },
+    })
+
     // Cargar las opciones para los selectores
     await this.ownerService.getAllTypes().subscribe({
       next: (data: OwnerTypeModel[]) => {
@@ -145,15 +159,15 @@ export class UsersUpdateOwnerComponent implements OnInit {
           }
         });
         //aca termina el filtrado
-        this.states.forEach(s => this.stateOptions.push({value: s.id, name: s.description}));
+        
+        this.stateOptions = data.map(d => ({ value: d.id, name: d.description }));
+        
+        
       },
       error: (err) => {
         console.error('Error al cargar los estados fiscales:', err);
       },
     });
-
-    console.log(this.owner.taxStatus);
-    console.log(this.editOwner.get('taxStatus')?.value);
     
     this.editOwner.get('dni')?.disable();
     this.editOwner.get('dniType')?.disable();

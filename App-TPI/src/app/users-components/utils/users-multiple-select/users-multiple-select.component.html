@@ -6,6 +6,7 @@
     bindValue="value"
     [closeOnSelect]="!multiple"
     [(ngModel)]="selectedOptions"
+    [compareWith]="compareWithFn"
     (ngModelChange)="send()">
     @if(multiple){
         <ng-template ng-multi-label-tmp let-items="items">

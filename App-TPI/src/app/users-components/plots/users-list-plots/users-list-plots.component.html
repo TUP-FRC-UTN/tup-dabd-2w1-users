@@ -5,22 +5,24 @@
         <input class="form-control me-3" placeholder="Buscar" style="width: 300px;" aria-controls="myTable">
       </div>
       <div id="myTable_filter" class="dataTables_filter" style="text-align: left;">
-        <select class="form-select m-3" aria-controls="myTable" style="width: 300px;" aria-controls="myTable"
+        <!-- <select class="form-select m-3" aria-controls="myTable" style="width: 300px;" aria-controls="myTable"
           (change)="updateFilterType()" [formControl]="selectType">
           <option value="" disabled >Seleccionar tipo</option>
           @for (type of plotTypes; track $index) {
           <option [value]="type">{{type}}</option>
           }
-        </select>
+        </select> -->
+        <app-users-multiple-select [options]="typesForFilter" (sendList)="updateFilterType($event)" />
       </div>
       <div id="myTable_filter" class="dataTables_filter" style="text-align: left;">
-        <select class="form-select m-3" aria-controls="myTable" style="width: 300px;" aria-controls="myTable place"
+        <!-- <select class="form-select m-3" aria-controls="myTable" style="width: 300px;" aria-controls="myTable place"
           (change)="updateFilterState()" [formControl]="selectState">
           <option value disabled selected >Seleccionar estado</option>
           @for (status of plotStatus; track $index) {
           <option [value]="status">{{status}}</option>
           }
-        </select>
+        </select> -->
+        <app-users-multiple-select [options]="statusForFilter" (sendList)="updateFilterState($event)" />
       </div>
       <div>
         <button class="btn btn-primary" (click)="resetFilters()">
