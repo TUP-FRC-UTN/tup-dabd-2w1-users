@@ -109,12 +109,12 @@ export class UsersListPlotsComponent {
                 title: 'Acciones',
                 orderable: false,
                 width: '15%',
-                className: 'text-left',
+                className: 'aling-center',
                 render: (data, type, row, meta) => {
                   const plotId = this.plots[meta.row].id;
                   return `
                     <div class="dropdown-center d-flex align-items-center">
-                      <button class="btn btn-light border border-1 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      <button class="btn btn-light border border-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-three-dots-vertical"></i>
                       </button>
                       <ul class="dropdown-menu">
@@ -350,7 +350,7 @@ export class UsersListPlotsComponent {
 
 
       // Una vez cargado, abre el modal
-      const modalRef = this.modal.open(UsersModaInfoPlotComponent, { size: 'md', keyboard: false });
+      const modalRef = this.modal.open(UsersModaInfoPlotComponent, { size: 'lg', keyboard: false });
       modalRef.componentInstance.plotModel = this.plotModel;
 
       modalRef.result.then((result) => {

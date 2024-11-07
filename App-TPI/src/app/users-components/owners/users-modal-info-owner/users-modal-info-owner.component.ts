@@ -33,7 +33,7 @@ export class UsersModalInfoOwnerComponent implements OnInit{
       dni_type: this.ownerModel.dni_type,
       dni: this.ownerModel.dni,
       dno_type: this.ownerModel.dni_type,
-      birthdate: this.ownerModel.dateBirth,
+      birthdate: this.formatDate(this.ownerModel.dateBirth),
       ownerType: this.ownerModel.ownerType,
       taxStatus: this.ownerModel.taxStatus,
       businessName: this.ownerModel.businessName
@@ -73,6 +73,12 @@ export class UsersModalInfoOwnerComponent implements OnInit{
 
   closeModal(){
     this.activeModal.close();
+  }
+
+  private formatDate(date: string): string {
+    if (!date) return '';
+    const [day, month, year] = date.split('-');
+    return `${day}/${month}/${year}`;
   }
 
   downloadFile(fileId: string) {

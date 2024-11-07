@@ -273,6 +273,11 @@ export class UsersListOwnersComponent {
     table.column(4).search(this.selectType.value).draw();
   }
 
+  getContentBetweenArrows(input: string): string[] {
+    const matches = [...input.matchAll(/>(.*?)</g)];
+    return matches.map(match => match[1]).filter(content => content !== "");
+  }
+
   //Metodo para filtrar la tabla en base a las 2 fechas
   filterByDate() {
     const table = $('#myTable').DataTable();
@@ -370,7 +375,7 @@ exportPdf() {
       `${row[0]}`,
       `${row[1]}`,
       `${row[2]}`,
-      `${row[3]}`,
+      `${this.getContentBetweenArrows(row[3])}`,
       `${row[4]}`
   ]);
 

@@ -44,9 +44,7 @@
                 <p><strong>DNI:</strong> {{ ownerDNI || 'N/A' }}</p> <!-- Muestra el DNI del propietario -->
             </div>
             <div class="col-md-6">
-                <div><strong>Tipo propietario:</strong>
-                    <button [ngClass]="setClass(ownerType) " class="hover">{{ownerType}}</button>
-                </div>
+                <p><strong>Tipo propietario:</strong> {{ ownerType || 'N/A'}}<p>
             </div>
         </div>
         <hr>

@@ -101,20 +101,4 @@ export class UsersModaInfoPlotComponent implements OnInit {
   //     return `<button class='btn btn-${color} rounded-pill m-1' disabled>${type}</button>`;
   // }
 
-  setClass(type : string) : string{
-    let classButton : string = "rounded-pill m-1 btn btn-";
-      switch (type) {
-        case "Persona Física":
-          classButton += "danger";
-          break;
-        case "Persona Jurídica":
-          classButton += "primary";
-          break;
-        case "Otro":
-          classButton += "secondary";
-          break;
-      }
-
-    return classButton;
-  }
 }

@@ -53,8 +53,8 @@ export class ModalInfoUserComponent implements OnInit {
       console.log('plotModal:', this.plotModal);
       // Actualiza los valores del formulario cuando cambian los datos del usuario
       if (this.userModal.datebirth) {
-        const formattedDate = DateService.parseDateString(this.userModal.datebirth);
-        const formattedCreatedDate = DateService.parseDateString(this.userModal.create_date)
+        const formattedDate = formatDate(this.userModal.datebirth, 'dd/MM/yyyy', 'en-US');
+        const formattedCreatedDate = formatDate(this.userModal.create_date, 'dd/MM/yyyy', 'en-US');
         this.editUser.patchValue({
           fullname: this.userModal.lastname + ', ' + this.userModal.name,
           email: this.userModal.email,
@@ -64,8 +64,8 @@ export class ModalInfoUserComponent implements OnInit {
           roles: this.rolesInput,
           username: this.userModal.username,
           telegram_id: this.userModal?.telegram_id || 'N/A',
-          birthdate: formattedDate ? DateService.formatDate(formattedDate) : 'N/A',
-          create_date: formattedCreatedDate ? DateService.formatDate(formattedCreatedDate) : 'N/A'
+          birthdate: formattedDate || 'N/A',
+          create_date: formattedCreatedDate || 'N/A'
         });
       }
 
