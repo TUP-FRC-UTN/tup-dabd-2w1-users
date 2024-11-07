@@ -75,8 +75,11 @@ export class ChangePasswordComponent implements OnInit {
             title: 'Contraseña cambiada',
             text: 'La contraseña se ha cambiado correctamente',
             icon: 'success',
-            timer: 2000,
-            showConfirmButton: false
+            showConfirmButton: true,
+            confirmButtonText: "Aceptar",
+            timer: undefined,
+            allowEscapeKey: false,
+            allowOutsideClick: false
           });
           this.form.reset();
         },
