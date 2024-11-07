@@ -233,12 +233,27 @@ export class ListUsersComponent implements OnInit {
   }
 
   async openModalEliminar(userId: number) {
-    const modalRef = this.modal.open(ModalEliminarUserComponent, { size: 'md', keyboard: false });
-    modalRef.componentInstance.userModal = { id: userId };
-
-    // Escuchar el evento de eliminación para recargar los usuarios
-    modalRef.componentInstance.userDeleted.subscribe(() => {
-      this.cargarTabla(); // Recargar los usuarios después de eliminar
+    // Obtener el usuario completo usando el UserService
+    this.apiService.getUserById(userId).subscribe(user => {
+      // Verifica si el usuario tiene el rol "Propietario"
+      if (user.roles.includes('Propietario')) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Acción no permitida',
+          text: 'No se puede eliminar a un propietario desde esta lista. Por favor, elimínelo desde la lista de propietarios.',
+          confirmButtonText: 'OK',
+        });
+        return; // Salir de la función sin abrir el modal
+      }
+  
+      // Abrir el modal si el usuario no es "Propietario"
+      const modalRef = this.modal.open(ModalEliminarUserComponent, { size: 'md', keyboard: false });
+      modalRef.componentInstance.userModal = { id: userId };
+  
+      // Escuchar el evento de eliminación para recargar los usuarios
+      modalRef.componentInstance.userDeleted.subscribe(() => {
+        this.cargarTabla(); // Recargar los usuarios después de eliminar
+      });
     });
   }
 
