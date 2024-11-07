@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnChanges, SimpleChanges } from '@angular/core';
 import { JsonPipe } from '@angular/common';
 import { EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -11,7 +11,7 @@ import { NgLabelTemplateDirective, NgSelectModule } from '@ng-select/ng-select';
   templateUrl: './users-multiple-select.component.html',
   styleUrl: './users-multiple-select.component.css'
 })
-export class UsersMultipleSelectComponent {
+export class UsersMultipleSelectComponent implements OnChanges {
    //Lista de opciones (Requiere un objeto {value: , name: })
    @Input() options : any[] = []
 
@@ -23,13 +23,25 @@ export class UsersMultipleSelectComponent {
  
    //Listado de ids de los objetos seleccionados (el value del select)
    @Output() sendList = new EventEmitter<any[]>();
+
+   contador : number = 0;
  
  
    //Opciones seleccionadas
    selectedOptions : any[] = [];
  
    ngOnInit(): void {
-     this.selectedOptions = (this.optionsChecked ? this.optionsChecked : [])
+    console.log("options", this.options);
+    
+    this.selectedOptions = [...this.optionsChecked];
+   }
+
+   ngOnChanges(changes: SimpleChanges): void {
+      this.selectedOptions = [...this.optionsChecked];
+      if (changes['options'].currentValue.length > 0) {
+        this.selectedOptions = [...this.optionsChecked];
+        console.log("Opciones actualizadas en ngOnChanges:", this.options);
+      }
    }
  
    send(){

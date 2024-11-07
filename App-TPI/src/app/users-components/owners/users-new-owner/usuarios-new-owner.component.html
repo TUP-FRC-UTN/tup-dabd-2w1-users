@@ -79,7 +79,7 @@
           <div class="col-10">
             <app-users-multiple-select (sendList)="getState($event)" [multiple]="false" [options]="states" />
             @if(!stateSelected){
-            <div>Debe seleccionar un estado</div>
+            <div class="text-danger">Debe seleccionar un estado</div>
             }
             <!-- <select id="selectOption" class="form-select" formControlName="state" [ngClass]="onValidate('state')">
               @for (s of states; track $index) {
@@ -191,8 +191,6 @@
         </div>
       </div>
 
-      <br />Selected car ID: {{ plotsSelected | json }}
-
       <div class="col-lg-6 mb-3">
         <div class="row">
           <label class="col-2 col-form-label">Telegram id</label>
@@ -237,7 +235,7 @@
           </button>
         </div>
         <div class="col-auto">
-          <button type="submit" class="btn btn-primary" [disabled]="!formReactivo.valid && plotsSelected.length != 0 && stateSelected">
+          <button type="submit" class="btn btn-primary" [disabled]="!isFormValid()">
             Guardar
           </button>
         </div>

@@ -6,18 +6,18 @@ import { UserService } from '../../../users-servicies/user.service';
 import { UserGet } from '../../../users-models/users/UserGet';
 import { UserPost } from '../../../users-models/users/UserPost';
 import { Router, RouterModule } from '@angular/router';
-import { UsersSelectMultipleComponent } from "../../utils/users-select-multiple/users-select-multiple.component";
 import { DateService } from '../../../users-servicies/date.service';
 import { AuthService } from '../../../users-servicies/auth.service';
 import Swal from 'sweetalert2';
 import { PlotService } from '../../../users-servicies/plot.service';
 import { GetPlotDto } from '../../../users-models/plot/GetPlotDto';
 import { ValidatorsService } from '../../../users-servicies/validators.service';
+import { UsersMultipleSelectComponent } from '../../utils/users-multiple-select/users-multiple-select.component';
 
 @Component({
   selector: 'app-new-user',
   standalone: true,
-  imports: [FormsModule, CommonModule, ReactiveFormsModule, RouterModule, UsersSelectMultipleComponent],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule, RouterModule, UsersMultipleSelectComponent],
   templateUrl: './new-user.component.html',
   styleUrl: './new-user.component.css'
 })
@@ -27,11 +27,11 @@ export class NewUserComponent implements OnInit {
     
   }
 
-  private readonly apiService = inject(UserService);
+  private readonly userService = inject(UserService);
   private readonly authService = inject(AuthService);
   private readonly plotService = inject(PlotService);
   private readonly validatorService = inject(ValidatorsService);
-  @ViewChild(UsersSelectMultipleComponent) rolesComponent!: UsersSelectMultipleComponent;
+  @ViewChild(UsersMultipleSelectComponent) rolesComponent!: UsersMultipleSelectComponent;
 
   rolesSelected : string[] = [];
   roles: RolModel[] = [];
@@ -74,7 +74,7 @@ export class NewUserComponent implements OnInit {
     }
 
 
-    this.apiService.getAllRoles().subscribe({
+    this.userService.getAllRoles().subscribe({
       next: (data: RolModel[]) => {
         this.options = data.map(rol => rol.description);
         if(this.authService.getActualRole() == "Propietario"){
@@ -161,7 +161,7 @@ export class NewUserComponent implements OnInit {
   
   //Carga los roles
   loadRoles() {
-    this.apiService.getAllRoles().subscribe({
+    this.userService.getAllRoles().subscribe({
       next: (data: RolModel[]) => {
 
         this.roles = data;
@@ -241,7 +241,7 @@ verifyOptions() {
     
     
 
-    this.apiService.postUser(userData).subscribe({
+    this.userService.postUser(userData).subscribe({
       next: (response) => {
         //Mostramos que la operación fue exitosa
         (window as any).Swal.fire({
@@ -256,7 +256,6 @@ verifyOptions() {
         }
         //Reseteamos el formulario
         this.reactiveForm.reset();
-        this.rolesComponent.emptyList();
         
       },
       error: (error) => {

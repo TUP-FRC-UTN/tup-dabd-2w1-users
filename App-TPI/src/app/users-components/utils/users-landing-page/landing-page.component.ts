@@ -2,16 +2,16 @@ import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { NavbarComponent } from '../users-navbar/navbar.component';
 import { ModalInfoUserComponent } from '../../users/users-modal-info-user/modal-info-user.component';
 import { RouterOutlet } from '@angular/router';
-import { UsersSelectMultipleComponent } from '../../utils/users-select-multiple/users-select-multiple.component';
 import { LoginService } from '../../../users-servicies/login.service';
 import { FileService } from '../../../users-servicies/file.service';
 import { AuthService } from '../../../users-servicies/auth.service';
 import { AccessTableComponent } from "../access-table/access-table.component";
+import { UsersMultipleSelectComponent } from '../users-multiple-select/users-multiple-select.component';
 
 @Component({
   selector: 'app-landing-page',
   standalone: true,
-  imports: [RouterOutlet, ModalInfoUserComponent, NavbarComponent, UsersSelectMultipleComponent, AccessTableComponent],
+  imports: [RouterOutlet, ModalInfoUserComponent, NavbarComponent, UsersMultipleSelectComponent, AccessTableComponent],
   templateUrl: './landing-page.component.html',
   styleUrls: ['./landing-page.component.css'],  // Corrige 'styleUrl' a 'styleUrls'
 })

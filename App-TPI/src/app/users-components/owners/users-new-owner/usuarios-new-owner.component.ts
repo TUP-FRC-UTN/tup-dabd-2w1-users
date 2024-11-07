@@ -104,8 +104,6 @@ export class UsuariosNewOwnerComponent {
       Validators.minLength(6),
       Validators.maxLength(30)]),
     rol: new FormControl(""),
-    plot: new FormControl(null, [
-      Validators.required]),
     phone: new FormControl('', [
       Validators.required,
       Validators.minLength(10),
@@ -138,13 +136,14 @@ export class UsuariosNewOwnerComponent {
 
     this.ownerService.getAllStates().subscribe({
       next: (data: OwnerStateModel[]) => {
-        this.states = data;
-        data.forEach(d => this.states.push({value: d.id, name: d.description}))
+        this.states = data.map(d => ({ value: d.id, name: d.description }));
+        console.log('Opciones procesadas para pasar al hijo:', this.states);
       },
       error: (err) => {
         console.error('Error al cargar los estados de lote:', err);
       }
     });
+    
 
     //SOLO MUESTRA LOS LOTES DISPONIBLES
     this.plotService.getAllPlotsAvailables().subscribe({
@@ -201,28 +200,6 @@ export class UsuariosNewOwnerComponent {
       this.formReactivo.get('company')?.setValue(""); // Limpiar el campo si se deshabilita
     }
   }
-
-  // formatCUIT(value: string): void {
-  //   const cleaned = value.replace(/\D/g, ''); // Eliminar caracteres no numéricos
-
-  //   if (cleaned.length < 2) {
-  //     this.formReactivo.get('cuit_cuil')?.setValue(cleaned);
-  //     return;
-  //   }
-
-  //   let formatted = cleaned;
-  //   if (cleaned.length >= 2) {
-  //     formatted = cleaned.substring(0, 2) + '-'; // Agrega guión después de los primeros 2 dígitos
-  //   }
-  //   if (cleaned.length > 2) {
-  //     formatted += cleaned.substring(2);
-  //   }
-  //   if (cleaned.length >= 10) {
-  //     formatted = formatted.substring(0, 11) + '-' + cleaned.charAt(10); // Agrega guión antes del último dígito
-  //   }
-
-  //   this.formReactivo.get('cuit_cuil')?.setValue(formatted, { emitEvent: false }); // Evita el loop de eventos
-  // }
 
   confirmExit() {
     Swal.fire({
@@ -340,15 +317,10 @@ export class UsuariosNewOwnerComponent {
       //Archivos seleccionados
       files: this.files
     };
+  
 
-    var plotsIds: number[] = [];
-    this.plotsSelected.forEach((plot: any) => {
-      plotsIds.push(plot.value);
-    });
-
-    owner.plotId = plotsIds;
-
-    console.log(owner);
+    console.log('Propietario a guardar:', owner);
+    
     
 
     //Se intenta crear el propietario
@@ -412,5 +384,10 @@ export class UsuariosNewOwnerComponent {
   //Obtener lotes del componente select
   getPlots(plots : any[]){
     this.plotsSelected = plots;
+  }
+
+  isFormValid(): boolean {
+    
+    return this.formReactivo.valid && this.plotsSelected.length > 0 && this.stateSelected != '' && this.stateSelected != null;
   }
 }

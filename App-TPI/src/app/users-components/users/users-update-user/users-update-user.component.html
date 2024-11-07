@@ -81,17 +81,17 @@
                     <div class="row">
                         <label class="col-2 col-form-label">Roles</label>  
                         <div class="col-10">
-                            <app-users-select-multiple [titleDefault]="'Seleccione un rol...'" [options]="existingRoles" [selectedOptions]="rolesSelected" (valuesEmited)="fillRolesSelected($event)"/>
-                        </div> 
-                        
+                            <app-users-multiple-select [options]="existingRoles" (sendList)="fillRolesSelected($event)" [optionsChecked]="rolesUser" />
+                            <div class="text-danger">
+                                @if(!rolesSelected){
+                                Ingrese al menos un rol
+                                }
+                            </div>
+                        </div>
                     </div>
-                    <div class="text-danger form-error text-start">
-                        @if(!checkRole){
-                        Ingrese al menos un rol
-                        }
-                    </div>
+                    
                 </div>
-            </div>
+            
 
             <div class="row mb-3 justify-content-end">
                 <div class="col-auto">
@@ -101,5 +101,6 @@
                     <button type="submit" class="btn btn-primary" [disabled]="!updateForm.valid">Guardar</button>
                 </div>
               </div>
+        </div>
     </form>
 </section>
