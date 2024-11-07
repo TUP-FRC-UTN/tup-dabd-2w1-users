@@ -18,6 +18,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 import { RolModel } from '../../../users-models/users/Rol';
 import { GetPlotModel } from '../../../users-models/plot/GetPlot';
+import { ModalEliminarUserComponent } from '../users-modal-eliminar-user/modal-eliminar-user/modal-eliminar-user.component';
 
 
 @Component({
@@ -199,7 +200,7 @@ export class ListUsersComponent implements OnInit {
           $('#myTable').on('click', '.delete-user', (event) => {
             const id = $(event.currentTarget).data('id');
             const userId = this.users[id].id; //Obtén el ID real del usuario
-            this.openModal("delete", userId); //Pasa el ID del usuario al abrir el modal
+            this.openModalEliminar(userId); //Pasa el ID del usuario al abrir el modal
           });
 
           //Asignar el evento click a los botones "Editar"
@@ -226,6 +227,12 @@ export class ListUsersComponent implements OnInit {
       }
     });
 
+  }
+
+  async openModalEliminar(userId: number){
+  const modalRef = this.modal.open(ModalEliminarUserComponent, { size: 'md', keyboard: false });
+  await this.selectUser(userId);
+  modalRef.componentInstance.userModal = { id: userId };
   }
 
   resetFilters() {
