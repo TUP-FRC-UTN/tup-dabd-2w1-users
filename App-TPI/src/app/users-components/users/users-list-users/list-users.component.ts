@@ -304,9 +304,9 @@ export class ListUsersComponent implements OnInit {
   }
 
   showRole(roles: string[]): string {
-    let rolesA: string = ""
-
-    roles.forEach(r => {
+    let rolesA: string = "";
+  
+    roles.forEach((r, index) => {
       let color: string = "";
       switch (r) {
         case "Gerente":
@@ -324,11 +324,16 @@ export class ListUsersComponent implements OnInit {
         case "SuperAdmin":
           color = "text-bg-dark";
           break;
+        default:
+          color = "badge bg-info text-dark";
+          break;
       }
-
-      rolesA = rolesA + (`<span class='${color} badge rounded-pill'>${r}</span>`);
-    })
-    return rolesA
+  
+      // Agrega un espacio después de cada badge excepto el último
+      rolesA += `<span class='${color} badge rounded-pill'>${r}</span>` + (index < roles.length - 1 ? " " : "");
+    });
+    
+    return rolesA;
   }
 
 

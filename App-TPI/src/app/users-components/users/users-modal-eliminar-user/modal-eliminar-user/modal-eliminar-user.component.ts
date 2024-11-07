@@ -5,6 +5,7 @@ import { DeleteUser } from '../../../../users-models/owner/DeleteUser';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UserService } from '../../../../users-servicies/user.service';
 import { UserGet } from '../../../../users-models/users/UserGet';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-modal-eliminar-user',
@@ -33,8 +34,7 @@ export class ModalEliminarUserComponent {
         this.showSuccessModal(); // Muestra el modal temporal de éxito (Aún sin implementar)
       },
       error: (error) => {
-        console.error('Error al eliminar el usuario:', error);
-        this.showErrorModal(); // Muestra el modal temporal de error (Aún sin implementar)
+        console.error('Error al eliminar el usuario:', error); // Muestra el modal temporal de error (Aún sin implementar)
       }
     });
   }
@@ -44,11 +44,13 @@ export class ModalEliminarUserComponent {
   }
 
   showSuccessModal() {
-
-  }
-
-  showErrorModal() {
-
+    Swal.fire({
+      title: '¡Usuario eliminado!',
+      text: 'El usuario ha sido eliminado exitosamente.',
+      icon: 'success',
+      showConfirmButton: false, 
+      timer: 2000 
+    });
   }
 
   confirmDelete() {

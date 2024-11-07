@@ -149,7 +149,7 @@
                 <i class="bi" 
                   [ngClass]="passwordVisible ? 'bi-eye-slash' : 'bi-eye'" 
                   (click)="togglePasswordVisibility()" 
-                  style="cursor: pointer; position: absolute; right: 180px; top: auto; transform: translateY(-125%);"></i>
+                  style="cursor: pointer; position: absolute; right: 265px; top: auto; transform: translateY(-125%);"></i>
               <div class="invalid-feedback">{{showError('password')}}</div>
             </div>
           </div>
@@ -161,7 +161,7 @@
             <button type="button" class="btn btn-secondary" (click)="redirect()">Cancelar</button>
           </div>
           <div class="col-auto">
-            <button type="submit" class="btn btn-primary" [disabled]="!reactiveForm.valid || selectedOptions.length === 0">
+            <button type="submit" class="btn btn-success" [disabled]="!reactiveForm.valid || selectedOptions.length === 0">
               Registrar
             </button>
           </div>
