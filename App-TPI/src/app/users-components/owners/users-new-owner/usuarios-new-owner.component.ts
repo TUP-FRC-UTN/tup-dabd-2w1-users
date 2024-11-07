@@ -39,6 +39,8 @@ export class UsuariosNewOwnerComponent {
   private readonly authService = inject(AuthService);
 
   juridicId = 2;
+  date: string = new Date(2000, 0, 1).toISOString().split('T')[0];
+  initialDate: FormControl = new FormControl(this.date);
 
   types: OwnerTypeModel[] = [];
   states: OwnerStateModel[] = [];

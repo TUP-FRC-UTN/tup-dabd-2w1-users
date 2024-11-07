@@ -445,8 +445,8 @@ export class ListUsersComponent implements OnInit {
   }
 
   getContentBetweenArrows(input: string): string[] {
-    const matches = [...input.matchAll(/>(.*?)</g)];
-    return matches.map(match => match[1]).filter(content => content !== "");
+    const matches = [...input.matchAll(/>([^<,]*)</g)];
+    return matches.map(match => match[1].trim()).filter(content => content !== "");
   }
 
   getPlotById(plotId: number): number {
@@ -531,7 +531,7 @@ export class ListUsersComponent implements OnInit {
 
       if (user) {
         // Obtener los datos de la fila (en este caso, la columna 4 sería el lote)
-        const roles = user.roles.join(", "); // Si roles es un array, convertirlo a string
+        const roles = user.roles // Si roles es un array, convertirlo a string
         const lotes = row[3]; // Asumimos que la columna 4 (índice 3) tiene los lotes
 
         // Retornar la fila con la información del propietario

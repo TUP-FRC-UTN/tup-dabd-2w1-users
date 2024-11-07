@@ -94,7 +94,7 @@
           <div class="row">
             <label class="col-2 col-form-label">Fecha de Nacimiento</label>
             <div class="col-10">
-              <input type="date" class="form-control" formControlName="datebirth" value="2000-01-01"
+              <input type="date" class="form-control" formControlName="datebirth" [formControl]="initialDate"
                 [ngClass]="onValidate('datebirth')">
               <div class="invalid-feedback">{{showError('datebirth')}}</div>
             </div>

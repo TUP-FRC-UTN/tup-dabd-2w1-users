@@ -132,27 +132,8 @@ export class UsersUpdatePlotComponent implements OnInit {
   }
 
   confirmExit() {
-    Swal.fire({
-        title: '¿Seguro que desea cancelar la operación?',
-        showCancelButton: true,
-        confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#dc3545',
-        cancelButtonText: 'Cancelar',
-    }).then((result) => {
-        if (result.isConfirmed) {
-            this.redirect('/home/plots/list');
-            Swal.fire({
-                title: 'Operación cancelada',
-                icon: 'info',
-                showConfirmButton: true, 
-                timer: undefined,
-                confirmButtonText: 'Aceptar',
-                allowEscapeKey: true,
-                allowOutsideClick: true
-            });
-        }
-    });
-}
+    this.redirect('/home/plots/list');
+  }
 
   
 

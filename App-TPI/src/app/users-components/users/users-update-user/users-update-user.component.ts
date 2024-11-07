@@ -114,25 +114,13 @@ export class UsersUpdateUserComponent implements OnInit {
   }
 
   confirmExit() {
-    Swal.fire({
-      title: '¿Seguro que desea cancelar la operación?',
-      showCancelButton: true,
-      confirmButtonText: 'Aceptar',
-      confirmButtonColor: "#dc3545",
-      cancelButtonText: 'Cancelar',
-      cancelButtonColor: "#6c757d",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        if (this.authService.getActualRole() == 'Propietario') {
-          this.router.navigate(['home/family']);
-        } else if (this.authService.getActualRole() == 'Gerente') {
-          this.router.navigate(['home/users/list']);
-        }
-      }
-    });
+    if (this.authService.getActualRole() === 'Propietario') {
+      this.router.navigate(['home/family']);
+    } else if (this.authService.getActualRole() === 'Gerente') {
+      this.router.navigate(['home/users/list']);
+    }
   }
   
-
   //Verifica que haya algún rol chequeado
   verifyRole() {
     if(this.rolesSelected.length === 0){  

@@ -1,40 +1,39 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DeleteUser } from '../../../../users-models/owner/DeleteUser';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { UserService } from '../../../../users-servicies/user.service';
-import { UserGet } from '../../../../users-models/users/UserGet';
+import { OwnerService } from '../../../users-servicies/owner.service';
+import { DeleteUser } from '../../../users-models/owner/DeleteUser';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-modal-eliminar-user',
+  selector: 'app-modal-eliminar-owner',
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, ],
-  templateUrl: './modal-eliminar-user.component.html',
-  styleUrl: './modal-eliminar-user.component.css'
+  templateUrl: './users-modal-delete-owner.component.html',
+  styleUrl: './users-modal-delete-owner.component.css'
 })
-export class ModalEliminarUserComponent {
+export class ModalEliminarOwnerComponent {
 
   @Input() userModal: { id: number } = { id: 0 }; // Recibe solo el userId
   @Output() userDeleted = new EventEmitter<void>(); // Emitir evento para que el componente principal recargue la tabla
 
-  constructor(public activeModal: NgbActiveModal, private fb: FormBuilder, private apiService: UserService, private modal: NgbModal) {
+  constructor(public activeModal: NgbActiveModal, private fb: FormBuilder, private apiService: OwnerService, private modal: NgbModal) {
   }
 
   confirmDesactivate() {
     var user = new DeleteUser();
     user.id = this.userModal.id;
     user.userIdUpdate = 1; // Cambiar por el id del usuario logueado
-    this.apiService.deleteUser(user).subscribe({
+    this.apiService.deleteOwner(user).subscribe({
       next: () => {
-        console.log('Usuario eliminado correctamente');
+        console.log('Propietario eliminado correctamente');
         this.activeModal.close();
         this.userDeleted.emit(); // Emitir evento para recargar los usuarios en el componente principal
         this.showSuccessModal(); // Muestra el modal temporal de éxito (Aún sin implementar)
       },
       error: (error) => {
-        console.error('Error al eliminar el usuario:', error); // Muestra el modal temporal de error (Aún sin implementar)
+        console.error('Error al eliminar el propietario:', error); // Muestra el modal temporal de error (Aún sin implementar)
       }
     });
   }
@@ -57,3 +56,4 @@ export class ModalEliminarUserComponent {
     this.confirmDesactivate();
   }
 }
+

@@ -41,7 +41,8 @@ export class NewUserComponent implements OnInit {
   select: string = "";
   checkOption: boolean = false;
   lotes: GetPlotDto[] = [];
-
+  date: string = new Date(2000, 0, 1).toISOString().split('T')[0];
+  initialDate: FormControl = new FormControl(this.date);
   subTitleLabel: string = 'Seleccione los roles del usuario';
   optionsForOwner: string[] = ["Familiar mayor", "Familiar menor"];
   options: any[] = [];

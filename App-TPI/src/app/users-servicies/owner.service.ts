@@ -8,6 +8,7 @@ import { Owner } from '../users-models/owner/Owner';
 import { PutOwnerDto } from '../users-models/owner/PutOwnerDto';
 import { OwnerPlotUserDto } from '../users-models/owner/OwnerPlotUserDto';
 import { DniTypeModel } from '../users-models/owner/DniTypeModel';
+import { DeleteUser } from '../users-models/owner/DeleteUser';
 
 @Injectable({
   providedIn: 'root'
@@ -45,6 +46,10 @@ export class OwnerService {
 
   getAllDniTypes(): Observable<DniTypeModel[]>{
     return this.http.get<DniTypeModel[]>(this.url + 'owners/dnitypes')
+  }
+
+  deleteOwner( owner: DeleteUser): Observable<any> {
+    return this.http.delete(this.url + 'owners/' + owner.id + '/' + owner.userIdUpdate); 
   }
   
   getAllStates(): Observable<OwnerStateModel[]>{

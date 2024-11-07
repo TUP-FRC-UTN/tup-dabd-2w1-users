@@ -22,6 +22,7 @@ import { OwnerTypeModel } from '../../../users-models/owner/OwnerType';
 import { FormControl, ReactiveFormsModule} from '@angular/forms';
 import { GetPlotDto } from '../../../users-models/plot/GetPlotDto';
 import { PlotService } from '../../../users-servicies/plot.service';
+import { ModalEliminarOwnerComponent } from '../users-modal-delete-owner/users-modal-delete-owner.component';
 
 @Component({
   selector: 'app-users-list-owners',
@@ -113,6 +114,8 @@ export class UsersListOwnersComponent {
                         <li><a class="dropdown-item view-owner" data-id="${ownerId}">Ver más</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item edit-owner" data-id="${ownerId}">Editar</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item delete-owner" data-id="${meta.row}">Eliminar</a></li>
                       </ul>
                     </div>
                   `;
@@ -162,6 +165,12 @@ export class UsersListOwnersComponent {
           $('#myTable').on('click', '.edit-owner', (event) => {
             const userId = $(event.currentTarget).data('id');
             this.redirectEdit(userId);
+          });
+
+          $('#myTable').on('click', '.delete-owner', (event) => {
+            const id = $(event.currentTarget).data('id');
+            const userId = this.owners[id].id; //Obtén el ID real del usuario
+            this.openModalEliminar(userId); //Pasa el ID del usuario al abrir el modal 
           });
         }, 0); // Asegurar que la tabla se inicializa en el próximo ciclo del evento
       },
@@ -248,6 +257,24 @@ export class UsersListOwnersComponent {
         
       }
     });
+  }
+
+  async openModalEliminar(userId: number) {
+    const modalRef = this.modal.open(ModalEliminarOwnerComponent, { size: 'md', keyboard: false });
+    modalRef.componentInstance.userModal = { id: userId};
+
+    // Escuchar el evento de eliminación para recargar los usuarios
+    modalRef.componentInstance.userDeleted.subscribe(() => {
+      this.cargarTabla(); // Recargar los usuarios después de eliminar
+    });
+  }
+
+  cargarTabla() {
+    // Destruir la instancia de DataTable si ya existe
+    if ($.fn.dataTable.isDataTable('#myTable')) {
+      $('#myTable').DataTable().clear().destroy();
+    }
+    this.ngOnInit();
   }
 
   resetFilters() {
