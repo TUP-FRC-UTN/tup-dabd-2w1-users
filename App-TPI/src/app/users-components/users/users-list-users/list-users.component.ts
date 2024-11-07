@@ -19,6 +19,7 @@ import Swal from 'sweetalert2';
 import { RolModel } from '../../../users-models/users/Rol';
 import { GetPlotModel } from '../../../users-models/plot/GetPlot';
 import { ModalEliminarUserComponent } from '../users-modal-eliminar-user/modal-eliminar-user/modal-eliminar-user.component';
+import DataTable from 'datatables.net-bs5';
 
 
 @Component({
@@ -200,7 +201,7 @@ export class ListUsersComponent implements OnInit {
           $('#myTable').on('click', '.delete-user', (event) => {
             const id = $(event.currentTarget).data('id');
             const userId = this.users[id].id; //Obtén el ID real del usuario
-            this.openModalEliminar(userId); //Pasa el ID del usuario al abrir el modal
+            this.openModalEliminar(userId); //Pasa el ID del usuario al abrir el modal 
           });
 
           //Asignar el evento click a los botones "Editar"
@@ -401,19 +402,7 @@ export class ListUsersComponent implements OnInit {
   userModal: UserGet = new UserGet();
   selectUser(id: number): Promise<UserGet> {
     
-      //Mostrar una alerta mientras carga
-    Swal.fire({
-      title: 'Cargando usuario...',
-      html: 'Por favor, espera un momento',
-
-      //No deja cerrar clickeando afurea
-      allowOutsideClick: false,
-      didOpen: () => {
-
-        //Mostrar el indicador de carga
-        Swal.showLoading();
-      }
-    });
+    
     return new Promise((resolve, reject) => {
       this.user = id;
       this.apiService.getUserById(id).subscribe({
