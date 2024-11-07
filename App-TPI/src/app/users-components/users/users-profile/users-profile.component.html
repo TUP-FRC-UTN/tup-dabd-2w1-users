@@ -167,10 +167,9 @@
                     <h4>Mis lotes</h4>
                     <div class="col-10">
                         @for (p of plots; track $index) {
-                            <div class="card mb-2">
-                                <div class="card-body">
-                                    {{'Lote: ' + p.plot_number + " Manzana: " + p.block_number}}
-                                </div>
+                        
+                            <div class="mt-2">
+                                {{'Lote: ' + p.plot_number + " Manzana: " + p.block_number}}
                             </div>
                         }
                        

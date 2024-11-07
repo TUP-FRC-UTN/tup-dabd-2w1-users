@@ -80,7 +80,7 @@
               @for (s of states; track $index) {
               <option value="{{ s.id }}">{{ s.description }}</option>
               }
-              <option value="" disabled>Seleccione una opcion</option>
+              <option value="" disabled>Seleccione una opción</option>
             </select>
             <div class="invalid-feedback">{{ showError("state") }}</div>
           </div>
@@ -96,7 +96,7 @@
               @for (t of types; track $index) {
               <option value="{{ t.id }}">{{ t.description }}</option>
               }
-              <option value="" disabled>Seleccione una opcion</option>
+              <option value="" disabled>Seleccione una opción</option>
             </select>
             <div class="invalid-feedback">{{ showError("type") }}</div>
           </div>
