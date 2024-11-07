@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DeleteUser } from '../../../../users-models/owner/DeleteUser';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -15,10 +15,11 @@ import { UserGet } from '../../../../users-models/users/UserGet';
 })
 export class ModalEliminarUserComponent {
 
+  @Input() userModal: { id: number } = { id: 0 }; // Recibe solo el userId
+  @Output() userDeleted = new EventEmitter<void>(); // Emitir evento para que el componente principal recargue la tabla
+
   constructor(public activeModal: NgbActiveModal, private fb: FormBuilder, private apiService: UserService, private modal: NgbModal) {
   }
-
-  @Input() userModal: { id: number } = { id: 0 }; // Recibe solo el userId
 
   confirmDesactivate() {
     var user = new DeleteUser();
@@ -28,6 +29,7 @@ export class ModalEliminarUserComponent {
       next: () => {
         console.log('Usuario eliminado correctamente');
         this.activeModal.close();
+        this.userDeleted.emit(); // Emitir evento para recargar los usuarios en el componente principal
         this.showSuccessModal(); // Muestra el modal temporal de éxito (Aún sin implementar)
       },
       error: (error) => {
