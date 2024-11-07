@@ -242,4 +242,45 @@
       </div>
     </div>
   </form>
+
+  <!-- Modal de info -->
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="infoModalLabel">Información sobre la pantalla</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Esta pantalla permite la creación de un nuevo propietario mediante un formulario que contiene los siguientes campos:</p>
+        <ul>
+          <li><strong>Nombre y Apellido</strong>: Campo obligatorio para ingresar el nombre completo del propietario.</li>
+          <li><strong>Tipo de Documento</strong>: Selecciona el tipo de documento del propietario (DNI, Pasaporte, CUIT/CUIL).</li>
+          <li><strong>Documento</strong>: Número de identificación del propietario, este campo es obligatorio.</li>
+          <li><strong>Fecha de Nacimiento</strong>: Selecciona la fecha de nacimiento, o usa la fecha predeterminada del 1 de enero de 2000 si no se ingresa.</li>
+          <li><strong>Email</strong>: Correo electrónico del propietario. Asegúrate de que tenga un formato válido.</li>
+          <li><strong>Estado Fiscal</strong>: Permite seleccionar el estado fiscal entre las opciones disponibles.</li>
+          <li><strong>Tipo de Propietario</strong>: Selecciona el tipo de propietario (varía según el contexto del sistema).</li>
+          <li><strong>Nombre de Usuario</strong>: Nombre de usuario único para acceder al sistema.</li>
+          <li><strong>Contraseña</strong>: Contraseña segura para el propietario. Puedes ver el texto de la contraseña mientras la ingresas haciendo clic en el icono de "ojo".</li>
+          <li><strong>Teléfono</strong>: Número de teléfono de contacto del propietario.</li>
+          <li><strong>Razón Social</strong>: Nombre legal de la empresa si el propietario es una entidad jurídica.</li>
+          <li><strong>Lotes</strong>: Selecciona uno o más lotes asociados al propietario (se requiere al menos un lote).</li>
+          <li><strong>Telegram ID</strong>: ID de Telegram asociado al propietario (opcional).</li>
+          <li><strong>Subir Archivos</strong>: Permite cargar archivos relacionados con el propietario. Puedes ver una lista de archivos cargados.</li>
+        </ul>
+        <p>Al final del formulario encontrarás los siguientes botones:</p>
+        <ul>
+          <li><strong>Cancelar</strong>: Cierra el formulario sin guardar los cambios.</li>
+          <li><strong>Guardar</strong>: Guarda la información ingresada. Este botón se habilita solo si el formulario es válido.</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 </section>

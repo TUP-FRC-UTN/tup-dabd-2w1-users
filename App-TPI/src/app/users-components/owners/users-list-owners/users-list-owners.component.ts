@@ -22,11 +22,12 @@ import { OwnerTypeModel } from '../../../users-models/owner/OwnerType';
 import { FormControl, ReactiveFormsModule} from '@angular/forms';
 import { GetPlotDto } from '../../../users-models/plot/GetPlotDto';
 import { PlotService } from '../../../users-servicies/plot.service';
+import { UsersMultipleSelectComponent } from "../../utils/users-multiple-select/users-multiple-select.component";
 
 @Component({
   selector: 'app-users-list-owners',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, UsersMultipleSelectComponent],
   templateUrl: './users-list-owners.component.html',
   styleUrl: './users-list-owners.component.css'
 })
