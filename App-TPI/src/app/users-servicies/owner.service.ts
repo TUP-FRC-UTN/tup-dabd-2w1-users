@@ -15,12 +15,12 @@ import { DniTypeModel } from '../users-models/owner/DniTypeModel';
 export class OwnerService {
 
   private readonly http: HttpClient = inject(HttpClient);
-  private readonly url = 'http://localhost:8081/';
+  private readonly url = 'http://http://localhost:9062';
 
   constructor() { }
 
   getOwnerByPlotId(plotId : number): Observable<Owner[]>{
-    return this.http.get<Owner[]>('http://localhost:8081/owners/plot/' + plotId);
+    return this.http.get<Owner[]>('http://localhost:9062/owners/plot/' + plotId);
   }
 
   getAll(): Observable<Owner[]>{

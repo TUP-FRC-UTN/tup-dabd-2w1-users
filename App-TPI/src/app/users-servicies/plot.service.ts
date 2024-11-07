@@ -13,7 +13,7 @@ import { PutPlot } from '../users-models/plot/PutPlot';
 export class PlotService {
 
   private readonly http: HttpClient = inject(HttpClient);
-  private readonly url = 'http://localhost:8081';
+  private readonly url = 'http://localhost:9062';
 
   constructor() { }
 
