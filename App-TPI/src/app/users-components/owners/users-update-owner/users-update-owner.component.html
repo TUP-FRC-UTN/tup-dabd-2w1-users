@@ -90,16 +90,28 @@
                     <div class="row">
                         <label class="col-2 col-form-label">Estado fiscal</label>
                         <div class="col-10">
-                            <select id="selectOption" class="form-select" formControlName="taxStatus"
-                                [ngClass]="onValidate('taxStatus')">
-                                @for (state of states; track $index) {
-                                <option [value]="state.id">{{state.description}}</option>
-                                }
-                            </select>
-                            <div class="invalid-feedback">{{showError('taxStatus')}}</div>
+                            @if(stateOptions.length > 0) {
+                                <app-users-multiple-select (sendList)="getStatus($event)" [multiple]="false" [options]="stateOptions" [optionsChecked]="[1]"/>
+                            }   @if(!stateSelected){
+                                <div class="text-danger">Debe seleccionar un estado</div>
+                            } 
                         </div>
                     </div>
                 </div>
+
+                <!-- <div class="col-lg-6 mb-3">
+                    <div class="row">
+                        <label class="col-2 col-form-label">Lotes</label>
+                        <div class="col-10">
+                            <select id="selectOption" class="form-select">
+                                @for (plot of plots; track $index) {
+                                    <option [value]="" disabled>{{plot}}</option>
+                                }
+                            </select>
+                            <div class="invalid-feedback">{{showError('ownerType')}}</div>
+                        </div>
+                    </div>
+                </div> -->
 
                 <!-- Fecha -->
                 <div class="col-lg-6 mb-3">
@@ -168,7 +180,7 @@
     <div class="row">
         <div class="col d-flex justify-content-end gap-3">
             <button type="button" class="btn btn-secondary" (click)="confirmExit()">Cancelar</button>
-            <button type="submit" class="btn btn-primary" disabled [disabled]="editOwner.invalid">Guardar</button>
+            <button type="submit" class="btn btn-primary" [disabled]="!editOwner.invalid && stateSelected">Guardar</button>
         </div>
     </div>
 </div>

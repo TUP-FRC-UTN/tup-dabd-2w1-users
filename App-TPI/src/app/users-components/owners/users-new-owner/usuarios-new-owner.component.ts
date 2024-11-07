@@ -7,7 +7,6 @@ import { OwnerTypeModel } from '../../../users-models/owner/OwnerType';
 import { OwnerStateModel } from '../../../users-models/owner/OwnerState';
 import { UserService } from '../../../users-servicies/user.service';
 import { RolModel } from '../../../users-models/users/Rol';
-import { UsersSelectMultipleComponent } from '../../utils/users-select-multiple/users-select-multiple.component';
 import { PlotService } from '../../../users-servicies/plot.service';
 import { GetPlotDto } from '../../../users-models/plot/GetPlotDto';
 import { OwnerModel } from '../../../users-models/owner/PostOwnerDto';
@@ -18,11 +17,12 @@ import { FileUploadComponent } from '../../utils/file-upload/file-upload.compone
 import { ValidatorsService } from '../../../users-servicies/validators.service';
 import { AuthService } from '../../../users-servicies/auth.service';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { UsersMultipleSelectComponent } from '../../utils/users-multiple-select/users-multiple-select.component';
 
 @Component({
   selector: 'app-usuarios-new-owner',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, UsersSelectMultipleComponent, FileUploadComponent, NgSelectModule, FormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, FileUploadComponent, NgSelectModule, FormsModule, CommonModule, UsersMultipleSelectComponent],
   templateUrl: './usuarios-new-owner.component.html',
   styleUrls: ['./usuarios-new-owner.component.css'] // Asegúrate de que sea styleUrls en lugar de styleUrl
 })
@@ -43,10 +43,13 @@ export class UsuariosNewOwnerComponent {
   initialDate: FormControl = new FormControl(this.date);
 
   types: OwnerTypeModel[] = [];
-  states: OwnerStateModel[] = [];
+  states: any[] = [];
 
   //Lotes disponibles (cargan el select)
   availablePlots: any[] = [];
+
+  //----------------------------------------------------VER
+  stateSelected : string = '';
 
   //Roles seleccionados
   rolesSelected: string[] = [];
@@ -86,8 +89,9 @@ export class UsuariosNewOwnerComponent {
     ],
       this.validatorService.validateUniqueEmail()
   ),
-    state: new FormControl("", [
-      Validators.required]),
+    // state: new FormControl("", [
+    //   Validators.required]),
+    
     type: new FormControl("", [
       Validators.required]),
     username: new FormControl("", [
@@ -102,8 +106,6 @@ export class UsuariosNewOwnerComponent {
       Validators.minLength(6),
       Validators.maxLength(30)]),
     rol: new FormControl(""),
-    plot: new FormControl(null, [
-      Validators.required]),
     phone: new FormControl('', [
       Validators.required,
       Validators.minLength(10),
@@ -136,12 +138,14 @@ export class UsuariosNewOwnerComponent {
 
     this.ownerService.getAllStates().subscribe({
       next: (data: OwnerStateModel[]) => {
-        this.states = data;
+        this.states = data.map(d => ({ value: d.id, name: d.description }));
+        console.log('Opciones procesadas para pasar al hijo:', this.states);
       },
       error: (err) => {
         console.error('Error al cargar los estados de lote:', err);
       }
     });
+    
 
     //SOLO MUESTRA LOS LOTES DISPONIBLES
     this.plotService.getAllPlotsAvailables().subscribe({
@@ -158,7 +162,7 @@ export class UsuariosNewOwnerComponent {
     });
 
     this.formReactivo.get('type')?.setValue("");
-    this.formReactivo.get('state')?.setValue("");
+    // this.formReactivo.get('state')?.setValue(""); 
   }
 
   roles: RolModel[] = [];
@@ -198,28 +202,6 @@ export class UsuariosNewOwnerComponent {
       this.formReactivo.get('company')?.setValue(""); // Limpiar el campo si se deshabilita
     }
   }
-
-  // formatCUIT(value: string): void {
-  //   const cleaned = value.replace(/\D/g, ''); // Eliminar caracteres no numéricos
-
-  //   if (cleaned.length < 2) {
-  //     this.formReactivo.get('cuit_cuil')?.setValue(cleaned);
-  //     return;
-  //   }
-
-  //   let formatted = cleaned;
-  //   if (cleaned.length >= 2) {
-  //     formatted = cleaned.substring(0, 2) + '-'; // Agrega guión después de los primeros 2 dígitos
-  //   }
-  //   if (cleaned.length > 2) {
-  //     formatted += cleaned.substring(2);
-  //   }
-  //   if (cleaned.length >= 10) {
-  //     formatted = formatted.substring(0, 11) + '-' + cleaned.charAt(10); // Agrega guión antes del último dígito
-  //   }
-
-  //   this.formReactivo.get('cuit_cuil')?.setValue(formatted, { emitEvent: false }); // Evita el loop de eventos
-  // }
 
   confirmExit() {
       this.formReactivo.reset(); 
@@ -294,10 +276,10 @@ export class UsuariosNewOwnerComponent {
       name: this.formReactivo.get('name')?.value || '',
       lastname: this.formReactivo.get('lastname')?.value || '',
       dni: this.formReactivo.get('dni')?.value || '',
-      dni_type: this.formReactivo.get('documentType')?.value || '', //Tipo de documento
+      dni_type_id: Number(this.formReactivo.get('documentType')?.value) || 0, //Tipo de documento
       dateBirth: this.formReactivo.get('birthdate')?.value || new Date(),
       ownerTypeId: Number(this.formReactivo.get('type')?.value || ""),
-      taxStatusId:  Number(this.formReactivo.get('state')?.value || ""),
+      taxStatusId:  Number(this.stateSelected),
       active: true,
       username: this.formReactivo.get('username')?.value || '',
       password: this.formReactivo.get('password')?.value || '',
@@ -320,15 +302,10 @@ export class UsuariosNewOwnerComponent {
       //Archivos seleccionados
       files: this.files
     };
+  
 
-    var plotsIds: number[] = [];
-    this.plotsSelected.forEach((plot: any) => {
-      plotsIds.push(plot.value);
-    });
-
-    owner.plotId = plotsIds;
-
-    console.log(owner);
+    console.log('Propietario a guardar:', owner);
+    
     
 
     //Se intenta crear el propietario
@@ -377,6 +354,7 @@ export class UsuariosNewOwnerComponent {
   resetForm(){
     this.formReactivo.reset();
     this.clearFileInput();
+    this.ngOnInit();
   }
 
   //Limpiar los archivos
@@ -387,5 +365,19 @@ export class UsuariosNewOwnerComponent {
     if (fileInput) {
       fileInput.value = '';
     }
+  }
+
+  //Obtener estado del componente select
+  getState(state : any){
+    this.stateSelected = state;
+  }
+  //Obtener lotes del componente select
+  getPlots(plots : any[]){
+    this.plotsSelected = plots;
+  }
+
+  isFormValid(): boolean {
+    
+    return this.formReactivo.valid && this.plotsSelected.length > 0 && this.stateSelected != '' && this.stateSelected != null;
   }
 }

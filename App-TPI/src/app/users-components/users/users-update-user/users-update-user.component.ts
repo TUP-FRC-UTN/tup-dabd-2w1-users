@@ -7,86 +7,72 @@ import { UserGet } from '../../../users-models/users/UserGet';
 import { UserPut } from '../../../users-models/users/UserPut';
 import { data } from 'jquery';
 import { Router, ActivatedRoute } from '@angular/router';
-import { UsersSelectMultipleComponent } from '../../utils/users-select-multiple/users-select-multiple.component';
 import { LoginComponent } from '../../utils/users-login/login.component';
 import { DateService } from '../../../users-servicies/date.service';
 import { AuthService } from '../../../users-servicies/auth.service';
 import Swal from 'sweetalert2';
 import { BehaviorSubject } from 'rxjs';
+import { UsersMultipleSelectComponent } from '../../utils/users-multiple-select/users-multiple-select.component';
 
 @Component({
   selector: 'app-users-update-user',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, UsersSelectMultipleComponent],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, UsersMultipleSelectComponent],
   templateUrl: './users-update-user.component.html',
   styleUrl: './users-update-user.component.css'
 })
 export class UsersUpdateUserComponent implements OnInit {
 
   constructor(private router: Router, private route: ActivatedRoute){ }
-  @ViewChild(UsersSelectMultipleComponent) rolesComponent!: UsersSelectMultipleComponent;
+  @ViewChild(UsersMultipleSelectComponent) rolesComponent!: UsersMultipleSelectComponent;
   
-  private readonly apiService = inject(UserService);
+  private readonly userService = inject(UserService);
   private readonly authService = inject(AuthService);
   roles: RolModel[] = [];
 
   rolesInput: string[] = [];
   id: string = '';
   checkRole: boolean = false;
-
+  optionsForOwner: string[] = ["Familiar mayor", "Familiar menor"];
+  rolesUser : any[] = [];
   rolesSelected : any[] = [];
   existingRoles : any[] = [];
+
+
   async ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id') || ''; // Obtiene el parámetro 'id'
+
+  this.loadUserData().then(() => {
+    // Llama a un método para cargar el select solo después de cargar los datos del usuario
+    this.initSelectOptions();
+  }).catch((error) => {
+    console.error('Error al cargar el usuario:', error);
+  });
   
-    this.apiService.getUserById(parseInt(this.id)).subscribe({
-      next: (data: UserGet) => {
-        this.updateForm.get('name')?.setValue(data.name);
-        this.updateForm.get('lastname')?.setValue(data.lastname);
-        this.updateForm.get('dni')?.setValue(data.dni.toString());
-        this.updateForm.get('email')?.setValue(data.email);
-        this.updateForm.get('avatar_url')?.setValue(data.avatar_url);
-        const formattedDate = DateService.parseDateString(data.datebirth);
-        this.updateForm.patchValue({
-          datebirth: formattedDate ? DateService.formatDate(formattedDate) : ''
-        });
-        this.updateForm.get('phoneNumber')?.setValue(data.phone_number.toString());
-        this.updateForm.get('telegram_id')?.setValue(data.telegram_id) || 0;
-  
-        // Asigna `rolesSelected` después de obtener `data.roles`
-        data.roles.forEach(r => this.rolesSelected.push({value: r, name: r, checked: true}));
-      
-        this.rolesComponent.addOption(data.roles);
-        
+    
+    this.userService.getAllRoles().subscribe({
+      next: (data: RolModel[]) => {
+        this.existingRoles = data.map(rol => rol.description);
+        if(this.authService.getActualRole() == "Propietario"){
+          let optionsFilter = this.existingRoles.filter(rol => this.optionsForOwner.includes(rol));
+          this.existingRoles = [];
+          optionsFilter.forEach(o => this.existingRoles.push({value : o, name: o}))
+
+                    
+        } else{
+          let optionsFilter = this.existingRoles.filter(rol => !this.optionsForOwner.includes(rol) && rol != "Propietario" && rol != "SuperAdmin");
+          this.existingRoles = [];
+          optionsFilter.forEach(o => this.existingRoles.push({value : o, name: o}))
+        }
       },
       error: (error) => {
-        console.error('Error al cargar el usuario:', error);
+        console.error('Error al cargar los roles:', error);
       }
     });
 
-    this.apiService.getAllRoles().subscribe({
-      next: (data: RolModel[]) => {
-        
-        data.forEach(r => this.existingRoles.push({value: r.description, name: r.description, checked: false}))
-        console.log(this.existingRoles);
-        console.log(this.rolesSelected);
-        
-        
-        // si el el objeto de existingRoles, esta repetido en rolesSelected, cambiar el checked a true
-        this.rolesSelected.forEach((selected) => {
-          alert("Si se esta cambiando!!!!")
-          const option = this.existingRoles.find((o) => o.value === selected.value);
-          if (option) {
-              option.checked = true;
-          }
-        });
-        
-        
-        console.log('Roles:', this.rolesSelected);
-        console.log('Roles final:', this.existingRoles);
-        
-      }
-    })
+    
+
+    
   
     // Desactiva campos específicos del formulario
     this.updateForm.get('dni')?.disable();
@@ -94,6 +80,43 @@ export class UsersUpdateUserComponent implements OnInit {
     this.updateForm.get('avatar_url')?.disable();
     this.updateForm.get('datebirth')?.disable();
   }
+
+  //Método de chat GPT
+  private loadUserData(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this.userService.getUserById(parseInt(this.id)).subscribe({
+        next: (data: UserGet) => {
+          this.updateForm.get('name')?.setValue(data.name);
+          this.updateForm.get('lastname')?.setValue(data.lastname);
+          this.updateForm.get('dni')?.setValue(data.dni.toString());
+          this.updateForm.get('email')?.setValue(data.email);
+          this.updateForm.get('avatar_url')?.setValue(data.avatar_url);
+          const formattedDate = DateService.parseDateString(data.datebirth);
+          this.updateForm.patchValue({
+            datebirth: formattedDate ? DateService.formatDate(formattedDate) : ''
+          });
+          this.updateForm.get('phoneNumber')?.setValue(data.phone_number.toString());
+          this.updateForm.get('telegram_id')?.setValue(data.telegram_id) || 0;
+  
+          // Asigna `rolesSelected` después de obtener `data.roles`
+          this.rolesUser = [...data.roles];  // Copia los roles para que aparezcan seleccionados en el select
+  
+          resolve(); // Indica que los datos del usuario se han cargado exitosamente
+        },
+        error: (error) => {
+          console.error('Error al cargar el usuario:', error);
+          reject(error); // Rechaza la Promesa si hay un error
+        }
+      });
+    });
+  }
+
+  private initSelectOptions(): void {
+    // Aquí puedes ejecutar cualquier lógica que necesite `rolesUser` ya cargado,
+    // por ejemplo, si el select depende de la lista de `rolesUser`
+    this.rolesSelected = [...this.rolesUser];
+  }
+  //-----------------------------------------------------------------------------
 
   //Crea el formulario con sus controles
   updateForm = new FormGroup({
@@ -120,16 +143,6 @@ export class UsersUpdateUserComponent implements OnInit {
       this.router.navigate(['home/users/list']);
     }
   }
-  
-  //Verifica que haya algún rol chequeado
-  verifyRole() {
-    if(this.rolesSelected.length === 0){  
-      this.checkRole = false;
-    }
-    else{
-      this.checkRole = true;
-    }
-  }
 
   //Actualiza el usuario
   updateUser() {
@@ -153,7 +166,7 @@ export class UsersUpdateUserComponent implements OnInit {
     user.dni_type_id = 1;
     
     //Llama al servicio para actualizar el usuario
-    this.apiService.putUser(user, parseInt(this.id)).subscribe({
+    this.userService.putUser(user, parseInt(this.id)).subscribe({
         next: (response) => {
             Swal.fire({
               icon: "success",

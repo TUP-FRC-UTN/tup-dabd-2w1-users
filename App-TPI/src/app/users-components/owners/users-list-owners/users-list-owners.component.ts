@@ -23,11 +23,12 @@ import { FormControl, ReactiveFormsModule} from '@angular/forms';
 import { GetPlotDto } from '../../../users-models/plot/GetPlotDto';
 import { PlotService } from '../../../users-servicies/plot.service';
 import { ModalEliminarOwnerComponent } from '../users-modal-delete-owner/users-modal-delete-owner.component';
+import { UsersMultipleSelectComponent } from "../../utils/users-multiple-select/users-multiple-select.component";
 
 @Component({
   selector: 'app-users-list-owners',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, UsersMultipleSelectComponent],
   templateUrl: './users-list-owners.component.html',
   styleUrl: './users-list-owners.component.css'
 })
@@ -297,8 +298,10 @@ export class UsersListOwnersComponent {
 
   updateFilterType() {
     const table = $('#myTable').DataTable();
-    table.column(4).search(this.selectType.value).draw();
+    
+    table.column(3).search(this.selectType.value).draw();
   }
+
 
   getContentBetweenArrows(input: string): string[] {
     const matches = [...input.matchAll(/>(.*?)</g)];

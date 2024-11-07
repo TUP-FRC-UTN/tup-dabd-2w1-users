@@ -20,16 +20,20 @@ import { RolModel } from '../../../users-models/users/Rol';
 import { GetPlotModel } from '../../../users-models/plot/GetPlot';
 import { ModalEliminarUserComponent } from '../users-modal-eliminar-user/modal-eliminar-user/modal-eliminar-user.component';
 import DataTable from 'datatables.net-bs5';
+import { UsersMultipleSelectComponent } from "../../utils/users-multiple-select/users-multiple-select.component";
 
 
 @Component({
   selector: 'app-list-users',
   standalone: true,
-  imports: [HttpClientModule, CommonModule, FormsModule, ModalInfoUserComponent, RouterModule, ReactiveFormsModule],
+  imports: [HttpClientModule, CommonModule, FormsModule, ModalInfoUserComponent, RouterModule, ReactiveFormsModule, UsersMultipleSelectComponent],
   templateUrl: './list-users.component.html',
   styleUrls: ['./list-users.component.css']
 })
 export class ListUsersComponent implements OnInit {
+
+  selectedOptions: any; 
+  optionesFilter: any;
 
 
   constructor(private router: Router, private modal: NgbModal, private plotService: PlotService) { }
@@ -45,6 +49,7 @@ export class ListUsersComponent implements OnInit {
   minDate: string = new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0];
   plots: GetPlotDto[] = [];
   selectRol: FormControl = new FormControl('');
+  rolesFilter: any[] = [];
   selectedRole: string = '';
   initialDate: FormControl = new FormControl(this.minDate);
   endDate: FormControl = new FormControl(this.maxDate);
@@ -280,12 +285,30 @@ export class ListUsersComponent implements OnInit {
     $.fn.dataTable.ext.search.pop();
     const table = $('#myTable').DataTable();
 
-
-    table.search('').draw();
+    this.rolesFilter = [];
+    this.rolesFilter = this.roles.map(r => ({ 
+      value: r.description, 
+      name: r.description
+    }));
+    
 
     table.column(2).search('').draw();
   }
 
+fillOptionsSelected(options: any) {
+  this.optionesFilter = options;  // Asignamos directamente los roles emitidos
+  var optiones = options.map((option: any) => option).join(' ');
+  console.log(optiones);
+  
+  const table = $('#myTable').DataTable();
+  console.log(options);
+  
+  // Filtrar por roles, pero que contenga 1 o más roles de las optiones, no todos
+  $.fn.dataTable.ext.search.push((settings: any, data: any, dataIndex: any) => {
+    const roles = data[2].split(' ');
+    return options.some((option: any) => roles.includes(option));
+  });
+}
 
 
 
@@ -415,6 +438,10 @@ export class ListUsersComponent implements OnInit {
       next: (data: RolModel[]) => {
 
         this.roles = data;
+        this.rolesFilter = data.map(r => ({
+          value: r.description,
+          name: r.description
+        }));
       },
       error: (error) => {
         console.error('Error al cargar los roles:', error);
