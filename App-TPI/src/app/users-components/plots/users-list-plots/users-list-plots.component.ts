@@ -89,19 +89,19 @@ export class UsersListPlotsComponent {
             order: [[0, 'asc']],
             pageLength: 5,
             data: this.plots.map((plot, index) => [
-              plot.plot_number,
-              plot.block_number,
-              `${plot.total_area_in_m2} m²`,
-              `${plot.built_area_in_m2} m²`,
+              `<p class="text-end"> ${plot.plot_number}<p/>`,
+              `<p class="text-end"> ${plot.block_number}<p/>`,
+              ` <p class="text-end">${plot.total_area_in_m2} m²<p/>`,
+              `<p class="text-end">${plot.built_area_in_m2} m²<p/>`,
               this.showPlotType(plot.plot_type),
               this.showPlotState(plot.plot_state),
               owners[index] // Usar el nombre del propietario cargado
             ]),
             columns: [
-              { title: 'Lote', width: '10%', className: 'text-start' },
+              { title: 'Lote', width: '10%', className: 'text-center' },
               { title: 'Manzana', width: '10%', className: 'text-start' },
-              { title: 'Mts.2 terreno', width: '15%', className: 'text-start' },
-              { title: 'Mts.2 construidos', width: '15%', className: 'text-start' },
+              { title: 'Mts.2 Terreno', width: '15%', className: 'text-start' },
+              { title: 'Mts.2 Construidos', width: '15%', className: 'text-start' },
               { title: 'Tipo lote', width: '15%', className: 'text-start' },
               { title: 'Estado', width: '15%', className: 'text-start' },
               { title: 'Propietario', width: '15%', className: 'text-start' }, // Nueva columna
@@ -266,10 +266,10 @@ export class UsersListPlotsComponent {
 
     // Mapear los datos visibles para el PDF
     const rows = visibleRows.map((row: any) => [
-      `${row[0]}`,
-      `${row[1]}`,
-      `${row[2]}`,
-      `${row[3]}`,
+      `${this.getContentBetweenArrows(row[0])}`,
+      `${this.getContentBetweenArrows(row[1])}`,
+      `${this.getContentBetweenArrows(row[2])}`,
+      `${this.getContentBetweenArrows(row[3])}`,
       `${this.getContentBetweenArrows(row[4])}`,
       `${this.getContentBetweenArrows(row[5])}`,
       `${row[6]}`

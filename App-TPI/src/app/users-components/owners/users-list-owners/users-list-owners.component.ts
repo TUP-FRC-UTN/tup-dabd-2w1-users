@@ -74,7 +74,7 @@ export class UsersListOwnersComponent {
           this.owners.map(async (owner) => [
             owner.create_date,
             `${owner.name}, ${owner.lastname}`,
-            owner.dni,
+            `<p class="text-end"> ${ owner.dni }<p/>`,
             //owner.ownerType,
             this.showOwerType(owner.ownerType),
             await this.loadPlots(owner.id), // Espera a que loadPlots se resuelva
@@ -401,7 +401,7 @@ exportPdf() {
   const rows = visibleRows.map((row: any) => [
       `${row[0]}`,
       `${row[1]}`,
-      `${row[2]}`,
+      `${this.getContentBetweenArrows(row[2])}`,
       `${this.getContentBetweenArrows(row[3])}`,
       `${row[4]}`
   ]);
