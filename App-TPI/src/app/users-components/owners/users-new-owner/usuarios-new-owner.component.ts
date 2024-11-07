@@ -222,25 +222,8 @@ export class UsuariosNewOwnerComponent {
   // }
 
   confirmExit() {
-    Swal.fire({
-        title: '¿Seguro que desea cancelar la operación?',
-        showCancelButton: true,
-        confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#dc3545',
-        cancelButtonText: 'Cancelar',
-    }).then((result) => {
-        if (result.isConfirmed) {
-            this.formReactivo.reset(); 
-            this.redirect('/home/owners/list'); 
-
-            Swal.fire({
-                title: 'Operación cancelada',
-                icon: 'info',
-                showConfirmButton: false, 
-                timer: 1000 
-            });
-        }
-    });
+      this.formReactivo.reset(); 
+      this.redirect('/home/owners/list'); 
   }
   
   redirect(path: string) {
