@@ -15,7 +15,7 @@ import { DniTypeModel } from '../users-models/owner/DniTypeModel';
 export class OwnerService {
 
   private readonly http: HttpClient = inject(HttpClient);
-  private readonly url = 'http://http://localhost:9062';
+  private readonly url = 'http://localhost:9062/';
 
   constructor() { }
 
