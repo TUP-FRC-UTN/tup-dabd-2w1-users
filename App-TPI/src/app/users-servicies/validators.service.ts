@@ -11,7 +11,7 @@ export class ValidatorsService {
 
   private readonly http: HttpClient = inject(HttpClient);
   private readonly urlUser = 'http://localhost:9060/verification';
-  private readonly urlPlot = 'http://localhost:8081/verification'
+  private readonly urlPlot = 'http://localhost:9062/verification'
 
   constructor() { }
 
