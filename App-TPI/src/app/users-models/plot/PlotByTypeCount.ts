@@ -1,5 +1,5 @@
 export interface PlotByTypeCount {
     
-    state: string;
+    type: string;
     count: number;
 }

@@ -134,6 +134,7 @@ export class UsersGraphicUserComponent {
     this.loadUserStats();
     this.loadPlotStateStats();
     this.loadPlotTypeStats();
+
   }
 
   loadUserStats() {
@@ -218,81 +219,88 @@ export class UsersGraphicUserComponent {
     };
   }
 
-  //lotes por estado
-  // Configuración del gráfico de columnas para tipos de lotes
+  //lotes por tipo
+
   plotTypeChartType: ChartType = ChartType.ColumnChart;
-  plotTypeChartData: (string | number)[][] = [['Tipo de Lote', 0]]; // Inicializamos con un valor vacío.
+  plotTypeChartData = [['', 0]];
   plotTypeChartOptions = {
     height: 400,
     width: '100%',
     backgroundColor: 'transparent',
     legend: { position: 'none' },
-    bar: { groupWidth: '70%' },
+    bar: { groupWidth: '45%' },
+    colors: ['#1a73e8'],
     vAxis: {
       title: 'Cantidad de Lotes',
-      minValue: 0
+      minValue: 0,
+      gridlines: {
+        color: '#f3f3f3'
+      },
+      textStyle: {
+        color: '#666666'
+      }
     },
     hAxis: {
-      title: 'Tipos de Lote'
+      title: 'Tipos de Lote',
+      textStyle: {
+        color: '#666666'
+      }
     },
     animation: {
       startup: true,
       duration: 1000,
       easing: 'out'
+    },
+    chartArea: {
+      width: '90%',
+      height: '80%'
     }
   };
 
-  // KPIs de tipos de lote
+  // KPIs para tipos de lote
   plotTypeKPIs = {
-    mostCommonLotType: '',
-    mostCommonLotTypeCount: 0,
-    averageLotsPerType: 0
+    totalPlots: 0,
+    mostCommonType: '',
+    mostCommonTypeCount: 0,
+    averagePlotsPerType: 0
   };
-  
-  // Método para cargar los datos de los tipos de lote
+
+
+
   loadPlotTypeStats() {
     this.getPlotByTypeCount().subscribe({
       next: (data) => {
-        this.plotTypeChartData = [];
-        const lotTypeNames: string[] = [];
-        
-        data.forEach(stat => {
-          const lotType = stat.state; // Asumiendo que 'state' es el nombre del tipo de lote.
-          const lotCount = stat.count;
-          this.plotTypeChartData.push([lotType, lotCount]);
-          lotTypeNames.push(lotType);
-        });
-
-        console.log('Datos de tipos de lote cargados:', data);
-        this.calculatePlotKPIs(data); // Calcular KPIs después de cargar los datos
+        this.plotTypeChartData = data.map(stat => [stat.type, stat.count]);
+        console.log('Datos de tipos de lotes cargados:', data);
+        this.calculatePlotTypeKPIs(data);
       },
       error: (error) => {
-        console.error('Error al cargar estadísticas de tipos de lote:', error);
+        console.error('Error al cargar estadísticas de tipos de lotes:', error);
       }
     });
   }
 
-
-  // Método para calcular los KPIs de los tipos de lote
-  private calculatePlotKPIs(data: PlotByTypeCount[]) {
-    let totalLots = 0;
+  private calculatePlotTypeKPIs(data: PlotByTypeCount[]) {
+    let total = 0;
     let maxCount = 0;
-    let maxLotType = '';
+    let maxType = '';
 
     data.forEach(stat => {
-      totalLots += stat.count;
+      total += stat.count;
       if (stat.count > maxCount) {
         maxCount = stat.count;
-        maxLotType = stat.state; // Tipo de lote con la mayor cantidad
+        maxType = stat.type;
       }
     });
 
     this.plotTypeKPIs = {
-      mostCommonLotType: maxLotType,
-      mostCommonLotTypeCount: maxCount,
-      averageLotsPerType: totalLots / data.length
+      totalPlots: total,
+      mostCommonType: maxType,
+      mostCommonTypeCount: maxCount,
+      averagePlotsPerType: Math.round(total / data.length)
     };
   }
+
 
 
 }
