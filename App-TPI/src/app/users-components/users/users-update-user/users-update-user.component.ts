@@ -11,79 +11,91 @@ import { LoginComponent } from '../../utils/users-login/login.component';
 import { DateService } from '../../../users-servicies/date.service';
 import { AuthService } from '../../../users-servicies/auth.service';
 import Swal from 'sweetalert2';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { BehaviorSubject } from 'rxjs';
 import { UsersMultipleSelectComponent } from '../../utils/users-multiple-select/users-multiple-select.component';
 
 @Component({
   selector: 'app-users-update-user',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, UsersMultipleSelectComponent],
+  imports: [NgSelectModule, FormsModule, ReactiveFormsModule, CommonModule, UsersMultipleSelectComponent],
   templateUrl: './users-update-user.component.html',
   styleUrl: './users-update-user.component.css'
 })
 export class UsersUpdateUserComponent implements OnInit {
 
-  constructor(private router: Router, private route: ActivatedRoute){ }
+  constructor(private router: Router, private route: ActivatedRoute) { }
   @ViewChild(UsersMultipleSelectComponent) rolesComponent!: UsersMultipleSelectComponent;
-  
+
   private readonly userService = inject(UserService);
   private readonly authService = inject(AuthService);
-  roles: RolModel[] = [];
 
   rolesInput: string[] = [];
   id: string = '';
   checkRole: boolean = false;
   optionsForOwner: string[] = ["Familiar mayor", "Familiar menor"];
-  rolesUser : any[] = [];
-  rolesSelected : any[] = [];
-  existingRoles : any[] = [];
+  rolesUser: string[] = ["Familiar mayor"];
+  rolesSelected: any[] = [];
+  existingRoles: any[] = [];
+
+  opt: any[] = [];
+  checkedOpt: string[] = [];
 
 
-  async ngOnInit() {
+  ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id') || ''; // Obtiene el parámetro 'id'
-    
-  this.loadUserData().then(() => {
-    // Llama a un método para cargar el select solo después de cargar los datos del usuario
-    this.initSelectOptions();
-  }).catch((error) => {
-    console.error('Error al cargar el usuario:', error);
-  });
-  
-    
-  this.userService.getAllRoles().subscribe({
-    next: (data: RolModel[]) => {
-      this.existingRoles = data.map(rol => rol.description);
-      if(this.authService.getActualRole() == "Propietario"){
-        let optionsFilter = this.existingRoles.filter(rol => this.optionsForOwner.includes(rol));
-        this.existingRoles = [];
-        optionsFilter.forEach(o => this.existingRoles.push({value : o, name: o}))
 
-                  
-      } else{
-        let optionsFilter = this.existingRoles.filter(rol => !this.optionsForOwner.includes(rol) && rol != "Propietario" && rol != "SuperAdmin");
-        this.existingRoles = [];
-        optionsFilter.forEach(o => this.existingRoles.push({value : o, name: o}))
-      }
-    },
-    error: (error) => {
-      console.error('Error al cargar los roles:', error);
-    }
-  });
+    this.getAllRoles();
 
-    
+    this.loadUserData();
 
-    
-  
+
     // Desactiva campos específicos del formulario
     this.updateForm.get('dni')?.disable();
     this.updateForm.get('email')?.disable();
     this.updateForm.get('avatar_url')?.disable();
     this.updateForm.get('datebirth')?.disable();
+
+
+    this.loadSelect()
   }
 
-  
+  loadSelect(){
+    this.opt = this.existingRoles;
+    this.checkedOpt = this.rolesUser;
+  }
 
-  private loadUserData(): Promise<void> {
+  getAllRoles(){
+    this.userService.getAllRoles().subscribe({
+      next: (data: RolModel[]) => {
+        this.existingRoles = data.map(rol => rol.description);
+        if (this.authService.getActualRole() == "Propietario") {
+          let optionsFilter = this.existingRoles.filter(rol => this.optionsForOwner.includes(rol));
+          this.existingRoles = [];
+          optionsFilter.forEach(o => this.existingRoles.push({ value: o, name: o }))
+
+          console.log("Test getAll 1:")
+          console.log(this.existingRoles)
+
+
+        } else {
+          let optionsFilter = this.existingRoles.filter(rol => !this.optionsForOwner.includes(rol) && rol != "Propietario" && rol != "SuperAdmin");
+          this.existingRoles = [];
+          optionsFilter.forEach(o => this.existingRoles.push({ value: o, name: o }))
+
+          console.log("Test getAll 2:")
+          console.log(this.existingRoles)
+        }
+
+      },
+      error: (error) => {
+        console.error('Error al cargar los roles:', error);
+      }
+    });
+  }
+
+
+  loadUserData(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this.userService.getUserById(parseInt(this.id)).subscribe({
         next: (data: UserGet) => {
@@ -111,11 +123,11 @@ export class UsersUpdateUserComponent implements OnInit {
 
           this.updateForm.get('phoneNumber')?.setValue(data.phone_number.toString());
           this.updateForm.get('telegram_id')?.setValue(data.telegram_id) || 0;
-  
+
           // Asigna `rolesSelected` después de obtener `data.roles`
           this.rolesUser = [...data.roles];  // Copia los roles para que aparezcan seleccionados en el select
-          
-          resolve(); // Indica que los datos del usuario se han cargado exitosamente
+          console.log("Pre-checked:")
+          console.log(this.rolesUser);
         },
         error: (error) => {
           console.error('Error al cargar el usuario:', error);
@@ -125,26 +137,19 @@ export class UsersUpdateUserComponent implements OnInit {
     });
   }
 
-  private initSelectOptions(): void {
-    // Aquí puedes ejecutar cualquier lógica que necesite `rolesUser` ya cargado,
-    // por ejemplo, si el select depende de la lista de `rolesUser`
-    this.rolesSelected = [...this.rolesUser];
-    console.log('Roles disponibles para el select:', this.existingRoles);
-    console.log('Roles seleccionados iniciales:', this.rolesSelected);
-  }
   //-----------------------------------------------------------------------------
 
   //Crea el formulario con sus controles
   updateForm = new FormGroup({
     name: new FormControl('', [Validators.required]),
     lastname: new FormControl('', [Validators.required]),
-    phoneNumber: new FormControl('', [Validators.required, Validators.pattern(/^\d+$/),Validators.minLength(10), Validators.maxLength(20)]),
+    phoneNumber: new FormControl('', [Validators.required, Validators.pattern(/^\d+$/), Validators.minLength(10), Validators.maxLength(20)]),
     telegram_id: new FormControl(0),
     dni: new FormControl(''),
     email: new FormControl(''),
     avatar_url: new FormControl(''),
     datebirth: new FormControl(''),
-    roles: new FormControl('')
+    roles: new FormControl([])
   });
 
   //Añade los roles seleccionados por users-select-multiple
@@ -171,7 +176,7 @@ export class UsersUpdateUserComponent implements OnInit {
     user.phoneNumber = this.updateForm.get('phoneNumber')?.value?.toString() || '';
     user.email = this.updateForm.get('email')?.value || '';
     user.avatar_url = this.updateForm.get('avatar_url')?.value || '';
-    
+
     //Formatea la fecha correctamente (año-mes-día)
     const date: Date = new Date(this.updateForm.get('datebirth')?.value || '');
 
@@ -190,34 +195,42 @@ export class UsersUpdateUserComponent implements OnInit {
     user.userUpdateId = this.authService.getUser().id;
     user.dni_type_id = 1;
 
-
-    console.log(user);
-    
-    
     //Llama al servicio para actualizar el usuario
     this.userService.putUser(user, parseInt(this.id)).subscribe({
-        next: (response) => {
-            Swal.fire({
-              icon: "success",
-              title: 'Usuario actualizado exitosamente',
-              timer: 1000,
-              showConfirmButton: false
-            });
-            this.redirectList();
-        },
-        error: (error) => {
-            console.error('Error al actualizar el usuario:', error);
-            // Manejo de errores
-        },
+      next: (response) => {
+        Swal.fire({
+          icon: "success",
+          title: 'Usuario actualizado exitosamente',
+          timer: 1000,
+          showConfirmButton: false
+        });
+        this.redirectList();
+      },
+      error: (error) => {
+        console.error('Error al actualizar el usuario:', error);
+        // Manejo de errores
+      },
     });
   }
 
+  toggleSelection(item: any) {
+    const index = this.rolesSelected.indexOf(item.value);
+    if (index > -1) {
+      // Si ya está seleccionado, lo desmarcamos
+      this.rolesSelected.splice(index, 1);
+    } else {
+      // Si no está seleccionado, lo agregamos
+      this.rolesSelected.push(item.value);
+    }
+  }
+
+
   //Redirige a la lista
   redirectList() {
-    if(this.authService.getActualRole() == 'Propietario'){  
+    if (this.authService.getActualRole() == 'Propietario') {
       this.router.navigate(['home/family']);
     }
-    else if(this.authService.getActualRole() == 'Gerente'){
+    else if (this.authService.getActualRole() == 'Gerente') {
       this.router.navigate(['home/users/list']);
     }
   }
@@ -230,13 +243,24 @@ export class UsersUpdateUserComponent implements OnInit {
       'is-valid': control?.valid
     }
   }
-  
+
+  updateRoles(newRoles: any) {
+    this.updateForm.patchValue({
+      roles: newRoles
+    })
+    console.log(this.updateForm.value);
+  }
+
+  mostrarRolesSeleccionados() {
+    alert(this.rolesSelected)
+  }
+
   showError(controlName: string): string {
     const control = this.updateForm.get(controlName);
-  
+
     if (control && control.errors) {
       const errorKey = Object.keys(control.errors)[0];
-  
+
       switch (errorKey) {
         case 'required':
           return 'Este campo no puede estar vacío.';
@@ -259,8 +283,6 @@ export class UsersUpdateUserComponent implements OnInit {
       }
     }
     return ''; // Retorna cadena vacía si no hay errores.
-  }  
-
-  
+  }
 }
 

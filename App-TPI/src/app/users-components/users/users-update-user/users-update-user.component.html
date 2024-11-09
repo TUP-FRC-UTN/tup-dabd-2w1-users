@@ -81,7 +81,8 @@
                     <div class="row">
                         <label class="col-2 col-form-label">Roles</label>  
                         <div class="col-10">
-                            <app-users-multiple-select [options]="existingRoles" (sendList)="fillRolesSelected($event)" [optionsChecked]="rolesUser" />
+
+                            <app-users-multiple-select [options]="opt" [optionsChecked]="checkedOpt" (sendList)="updateRoles($event)"/>
                             <div class="text-danger">
                                 @if(!rolesSelected){
                                 Ingrese al menos un rol
@@ -89,8 +90,9 @@
                             </div>
                         </div>
                     </div>
-                    
                 </div>
+
+                <button (click)="mostrarRolesSeleccionados()">mostrar</button>
             
 
             <div class="row mb-3 justify-content-end">
