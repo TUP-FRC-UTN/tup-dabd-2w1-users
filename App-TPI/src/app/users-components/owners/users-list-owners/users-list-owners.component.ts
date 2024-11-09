@@ -103,7 +103,7 @@ export class UsersListOwnersComponent {
                 title: 'Acciones',
                 orderable: false,
                 width: '15%',
-                className: 'align-center',
+                className: 'text-center',
                 render: (data, type, row, meta) => {
                   const ownerId = this.owners[meta.row].id;
                   return `

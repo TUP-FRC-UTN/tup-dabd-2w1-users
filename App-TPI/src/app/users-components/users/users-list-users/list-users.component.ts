@@ -138,7 +138,7 @@ export class ListUsersComponent implements OnInit, AfterViewInit {
                 title: 'Acciones',
                 orderable: false,
                 width: '15%',
-                className: 'align-middle text-center',
+                className: 'text-center',
                 render: (data, type, row, meta) => {
                   const userId = this.users[meta.row].id;
                   return `
@@ -342,6 +342,7 @@ fillOptionsSelected(options: any) {
 
   showRole(roles: string[]): string {
     let rolesA: string = "";
+
   
     let max: number = 2;
   
@@ -368,7 +369,8 @@ fillOptionsSelected(options: any) {
           break;
       }
   
-      rolesA += `<span class="badge rounded-pill ${color}">${roles[i]}</span> `;
+      rolesA += `
+                   <span class="badge rounded-pill50 ${color}">${roles[i]}</span> `;
     }
   
     if (roles.length > 2) {

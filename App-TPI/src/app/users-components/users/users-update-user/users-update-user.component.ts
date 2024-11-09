@@ -1,6 +1,6 @@
 import { CommonModule, formatDate } from '@angular/common';
 import { AfterContentInit, AfterViewInit, Component, inject, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators, FormBuilder } from '@angular/forms';
 import { UserService } from '../../../users-servicies/user.service';
 import { RolModel } from '../../../users-models/users/Rol';
 import { UserGet } from '../../../users-models/users/UserGet';
@@ -23,20 +23,43 @@ import { UsersMultipleSelectComponent } from '../../utils/users-multiple-select/
   styleUrl: './users-update-user.component.css'
 })
 export class UsersUpdateUserComponent implements OnInit {
+mostrarRolesSeleccionados() {
+throw new Error('Method not implemented.');
+}
 
-  constructor(private router: Router, private route: ActivatedRoute) { }
+  constructor(private router: Router, private route: ActivatedRoute, private fb : FormBuilder) { 
+    this.updateForm = this.fb.group({
+      name: new FormControl('', [Validators.required]),
+      lastname: new FormControl('', [Validators.required]),
+      phoneNumber: new FormControl('', [Validators.required, Validators.pattern(/^\d+$/), Validators.minLength(10), Validators.maxLength(20)]),
+      telegram_id: new FormControl(0),
+      dni: new FormControl(''),
+      email: new FormControl(''),
+      avatar_url: new FormControl(''),
+      datebirth: new FormControl(''),
+      roles: new FormControl([],)
+    })
+  }
   @ViewChild(UsersMultipleSelectComponent) rolesComponent!: UsersMultipleSelectComponent;
 
   private readonly userService = inject(UserService);
   private readonly authService = inject(AuthService);
 
+  updateForm : FormGroup;
   rolesInput: string[] = [];
   id: string = '';
   checkRole: boolean = false;
-  optionsForOwner: string[] = ["Familiar mayor", "Familiar menor"];
-  rolesUser: string[] = ["Familiar mayor"];
+
+  existingRoles: string[] = [];       //Listado de todos los roles
+  userRoles: string[] = [];           //Listado de roles actuales del usuario
+  filteredRoles : string[] = [];      //Listado de roles a mostrar    
+  filteredUserRoles : string[] = [];  //Listado de roles del usuario a mostrar    
+  optionRoles : any[] = [];           //Listado de objetos para el select
+  blockedRoles: string[] = [];        //Listado de roles del usuario sin mostrar
+
   rolesSelected: any[] = [];
-  existingRoles: any[] = [];
+
+  
 
   opt: any[] = [];
   checkedOpt: string[] = [];
@@ -45,10 +68,8 @@ export class UsersUpdateUserComponent implements OnInit {
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id') || ''; // Obtiene el parámetro 'id'
 
-    this.getAllRoles();
-
-    this.loadUserData();
-
+    this.getAllRoles();   //Todos los roles
+    this.loadUserData();  //Roles del user
 
     // Desactiva campos específicos del formulario
     this.updateForm.get('dni')?.disable();
@@ -56,37 +77,16 @@ export class UsersUpdateUserComponent implements OnInit {
     this.updateForm.get('avatar_url')?.disable();
     this.updateForm.get('datebirth')?.disable();
 
-
-    this.loadSelect()
   }
 
-  loadSelect(){
-    this.opt = this.existingRoles;
-    this.checkedOpt = this.rolesUser;
-  }
 
   getAllRoles(){
     this.userService.getAllRoles().subscribe({
       next: (data: RolModel[]) => {
         this.existingRoles = data.map(rol => rol.description);
-        if (this.authService.getActualRole() == "Propietario") {
-          let optionsFilter = this.existingRoles.filter(rol => this.optionsForOwner.includes(rol));
-          this.existingRoles = [];
-          optionsFilter.forEach(o => this.existingRoles.push({ value: o, name: o }))
-
-          console.log("Test getAll 1:")
-          console.log(this.existingRoles)
-
-
-        } else {
-          let optionsFilter = this.existingRoles.filter(rol => !this.optionsForOwner.includes(rol) && rol != "Propietario" && rol != "SuperAdmin");
-          this.existingRoles = [];
-          optionsFilter.forEach(o => this.existingRoles.push({ value: o, name: o }))
-
-          console.log("Test getAll 2:")
-          console.log(this.existingRoles)
-        }
-
+        this.filteredRoles = this.filterRoles(this.existingRoles)
+        this.optionRoles = this.filteredRoles.map(o => ({ value: o, name: o }));
+        console.log("Roles en select", this.optionRoles)
       },
       error: (error) => {
         console.error('Error al cargar los roles:', error);
@@ -99,14 +99,15 @@ export class UsersUpdateUserComponent implements OnInit {
     return new Promise<void>((resolve, reject) => {
       this.userService.getUserById(parseInt(this.id)).subscribe({
         next: (data: UserGet) => {
-          console.log(data);
-          
           this.updateForm.get('name')?.setValue(data.name);
           this.updateForm.get('lastname')?.setValue(data.lastname);
           this.updateForm.get('dni')?.setValue(data.dni.toString());
           this.updateForm.get('email')?.setValue(data.email);
           this.updateForm.get('avatar_url')?.setValue(data.avatar_url);
           const formattedDate = DateService.parseDateString(data.datebirth);
+
+          this.userRoles = data.roles;
+          this.filteredUserRoles = this.filterUserRoles(this.userRoles);
 
           if (formattedDate) {
             // Formatea la fecha a 'yyyy-MM-dd' para un input de tipo date
@@ -125,9 +126,9 @@ export class UsersUpdateUserComponent implements OnInit {
           this.updateForm.get('telegram_id')?.setValue(data.telegram_id) || 0;
 
           // Asigna `rolesSelected` después de obtener `data.roles`
-          this.rolesUser = [...data.roles];  // Copia los roles para que aparezcan seleccionados en el select
-          console.log("Pre-checked:")
-          console.log(this.rolesUser);
+          
+          
+          this.updateForm.get('roles')?.setValue([...this.filteredUserRoles])
         },
         error: (error) => {
           console.error('Error al cargar el usuario:', error);
@@ -137,26 +138,50 @@ export class UsersUpdateUserComponent implements OnInit {
     });
   }
 
-  //-----------------------------------------------------------------------------
+  filterRoles(list : any[]){
+    let blockOptionsForOwner: string[] = ["Propietario", "SuperAdmin", "Gerente"];
+    let blockOptionsForManager: string[] = ["Propietario", "SuperAdmin", "Familiar mayor", "Familiar menor"];
+    this.blockedRoles = [];
 
-  //Crea el formulario con sus controles
-  updateForm = new FormGroup({
-    name: new FormControl('', [Validators.required]),
-    lastname: new FormControl('', [Validators.required]),
-    phoneNumber: new FormControl('', [Validators.required, Validators.pattern(/^\d+$/), Validators.minLength(10), Validators.maxLength(20)]),
-    telegram_id: new FormControl(0),
-    dni: new FormControl(''),
-    email: new FormControl(''),
-    avatar_url: new FormControl(''),
-    datebirth: new FormControl(''),
-    roles: new FormControl([])
-  });
+    console.log("Lista inicial:");
+    console.log(list);
 
-  //Añade los roles seleccionados por users-select-multiple
-  fillRolesSelected(roles: string[]) {
-    // Filtra roles únicos para evitar duplicados
-    this.rolesSelected = roles.filter((role, index) => roles.indexOf(role) === index);
-    console.log('Roles seleccionados:', this.rolesSelected);
+    let blockOptions: any[] = [];
+    blockOptions = ((this.authService.getActualRole() == "Propietario") ? blockOptionsForOwner : blockOptionsForManager)
+
+    const filteredList = list.filter(opt => {
+        if (blockOptions.includes(opt)) {
+            this.blockedRoles.push(opt);
+            return false;
+        }
+        
+        return true;
+    });
+
+    return filteredList;
+  }
+
+  filterUserRoles(list : any[]){
+    let blockOptionsForOwner: string[] = ["Propietario", "SuperAdmin", "Gerente"];
+    let blockOptionsForManager: string[] = ["Propietario", "SuperAdmin", "Familiar mayor", "Familiar menor"];
+    this.blockedRoles = [];
+
+    console.log("Lista inicial:");
+    console.log(list);
+
+    let blockOptions: any[] = [];
+    blockOptions = ((this.authService.getActualRole() == "Propietario") ? blockOptionsForOwner : blockOptionsForManager)
+
+    const filteredList = list.filter(opt => {
+        if (blockOptions.includes(opt)) {
+            this.blockedRoles.push(opt);
+            return false;
+        }
+        
+        return true;
+    });
+
+    return filteredList;
   }
 
   confirmExit() {
@@ -179,21 +204,21 @@ export class UsersUpdateUserComponent implements OnInit {
 
     //Formatea la fecha correctamente (año-mes-día)
     const date: Date = new Date(this.updateForm.get('datebirth')?.value || '');
-
-    console.log(date);
     
-
     //Formatear la fecha como YYYY-MM-DD
     const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
 
-
-    console.log(formattedDate);
-    
-
     user.datebirth = formattedDate;
-    user.roles = this.rolesSelected || []; // Asegúrate de que roles sea un arreglo   
+    user.roles = this.updateForm.get('roles')?.value +this.blockedRoles || [];
     user.userUpdateId = this.authService.getUser().id;
     user.dni_type_id = 1;
+
+    user.roles = this.updateForm.get('roles')?.value;
+    user.roles.push(...this.blockedRoles);
+    console.log("Usuario a actualizar:");
+    console.log(user);
+    
+    
 
     //Llama al servicio para actualizar el usuario
     this.userService.putUser(user, parseInt(this.id)).subscribe({
@@ -249,10 +274,6 @@ export class UsersUpdateUserComponent implements OnInit {
       roles: newRoles
     })
     console.log(this.updateForm.value);
-  }
-
-  mostrarRolesSeleccionados() {
-    alert(this.rolesSelected)
   }
 
   showError(controlName: string): string {

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { FormControl, FormGroup, NgModel, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, NgModel, ReactiveFormsModule, Validators, FormBuilder } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { OwnerService } from '../../../users-servicies/owner.service';
 import { OwnerTypeModel } from '../../../users-models/owner/OwnerType';
@@ -48,74 +48,72 @@ export class UsuariosNewOwnerComponent {
   //Lotes disponibles (cargan el select)
   availablePlots: any[] = [];
 
-  //----------------------------------------------------VER
-  stateSelected : string = '';
 
   //Roles seleccionados
   rolesSelected: string[] = [];
 
-  //Lotes seleccionados
-  plotsSelected : any[] = [];
-
   passwordVisible: boolean = false;
   files: File[] = [];
 
-  constructor(private router: Router) { }
+  formReactivo : FormGroup;
 
-  formReactivo = new FormGroup({
-    name: new FormControl("", [
-      Validators.required,
-      Validators.minLength(3),
-      Validators.maxLength(50)]),
-    lastname: new FormControl("", [
-      Validators.required,
-      Validators.minLength(3),
-      Validators.maxLength(50)]),
-    dni: new FormControl("", [
-      Validators.required,
-      Validators.minLength(8),
-      Validators.pattern(/^\d+$/)
-    ],
-      this.validatorService.validateUniqueDni()
-    ), //Tipo de documento
-    documentType: new FormControl("", [
-      Validators.required]),
-    birthdate: new FormControl(null, [
-      Validators.required,
-      this.dateLessThanTodayValidator()]),
-    email: new FormControl("", [
-      Validators.required,
-      Validators.email
-    ],
-      this.validatorService.validateUniqueEmail()
-  ),
-    // state: new FormControl("", [
-    //   Validators.required]),
-    
-    type: new FormControl("", [
-      Validators.required]),
-    username: new FormControl("", [
-      Validators.required,
-      Validators.minLength(1),
-      Validators.maxLength(30)
-    ],
-      this.validatorService.validateUniqueUsername()
+  constructor(private router: Router, private fb : FormBuilder) { 
+    this.formReactivo = this.fb.group({
+      name: new FormControl("", [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(50)]),
+      lastname: new FormControl("", [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(50)]),
+      dni: new FormControl("", [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.pattern(/^\d+$/)
+      ],
+        this.validatorService.validateUniqueDni()
+      ), //Tipo de documento
+      documentType: new FormControl("", [
+        Validators.required]),
+      birthdate: new FormControl(null, [
+        Validators.required,
+        this.dateLessThanTodayValidator()]),
+      email: new FormControl("", [
+        Validators.required,
+        Validators.email
+      ],
+        this.validatorService.validateUniqueEmail()
     ),
-    password: new FormControl("", [
-      Validators.required,
-      Validators.minLength(6),
-      Validators.maxLength(30)]),
-    rol: new FormControl(""),
-    phone: new FormControl('', [
-      Validators.required,
-      Validators.minLength(10),
-      Validators.maxLength(20),
-      Validators.pattern(/^\d+$/)]),
-    //phone: new FormControl('', [Validators.required]),
-    company: new FormControl({ value: "", disabled: true }),
-    telegram_id: new FormControl('')
-    
-  });
+      // state: new FormControl("", [
+      //   Validators.required]),
+      
+      type: new FormControl("", [
+        Validators.required]),
+      username: new FormControl("", [
+        Validators.required,
+        Validators.minLength(1),
+        Validators.maxLength(30)
+      ],
+        this.validatorService.validateUniqueUsername()
+      ),
+      password: new FormControl("", [
+        Validators.required,
+        Validators.minLength(6),
+        Validators.maxLength(30)]),
+      rol: new FormControl(""),
+      phone: new FormControl('', [
+        Validators.required,
+        Validators.minLength(10),
+        Validators.maxLength(20),
+        Validators.pattern(/^\d+$/)]),
+      //phone: new FormControl('', [Validators.required]),
+      company: new FormControl({ value: "", disabled: true }),
+      telegram_id: new FormControl(''),
+      state: new FormControl( [Validators.required]),
+      plots: new FormControl([Validators.required])
+    })
+  }
 
   ngOnInit(): void {
     this.loadRoles();
@@ -168,11 +166,6 @@ export class UsuariosNewOwnerComponent {
   roles: RolModel[] = [];
   rolesInput: string[] = [];
   select: string = "";
-
-  onPlotChange(selectedPlots: any[]) {
-    this.plotsSelected = [...selectedPlots.values()];
-    console.log(selectedPlots); // Verifica los valores seleccionados
-  }
 
   loadRoles() {
     this.apiService.getAllRoles().subscribe({
@@ -279,7 +272,7 @@ export class UsuariosNewOwnerComponent {
       dni_type_id: Number(this.formReactivo.get('documentType')?.value) || 0, //Tipo de documento
       dateBirth: this.formReactivo.get('birthdate')?.value || new Date(),
       ownerTypeId: Number(this.formReactivo.get('type')?.value || ""),
-      taxStatusId:  Number(this.stateSelected),
+      taxStatusId:  Number(this.formReactivo.get('state')?.value),
       active: true,
       username: this.formReactivo.get('username')?.value || '',
       password: this.formReactivo.get('password')?.value || '',
@@ -287,7 +280,7 @@ export class UsuariosNewOwnerComponent {
       phoneNumber: this.formReactivo.get('phone')?.value || '',
       avatarUrl: '',
       businessName: this.formReactivo.get('company')?.value || '',
-      telegramId: Number(this.formReactivo.get('telegram_id')?.value) || 0,
+      telegramId: 0,
 
       //--------------------------------------------------VER-----------------------------------------------------------------------------------------------------------------------
      /* estos estan hardcodeado para que ande*/
@@ -297,16 +290,12 @@ export class UsuariosNewOwnerComponent {
       userCreateId: this.authService.getUser().id,
 
       //Lista de ids de los lotes seleccionados
-      plotId: this.plotsSelected,
+      plotId: this.formReactivo.get('plots')?.value,
 
       //Archivos seleccionados
       files: this.files
     };
-  
 
-    console.log('Propietario a guardar:', owner);
-    
-    
 
     //Se intenta crear el propietario
     this.ownerService.postOwner(owner).subscribe({
@@ -367,17 +356,4 @@ export class UsuariosNewOwnerComponent {
     }
   }
 
-  //Obtener estado del componente select
-  getState(state : any){
-    this.stateSelected = state;
-  }
-  //Obtener lotes del componente select
-  getPlots(plots : any[]){
-    this.plotsSelected = plots;
-  }
-
-  isFormValid(): boolean {
-    
-    return this.formReactivo.valid && this.plotsSelected.length > 0 && this.stateSelected != '' && this.stateSelected != null;
-  }
 }

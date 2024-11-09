@@ -77,20 +77,11 @@
         <div class="row">
           <label class="col-2 col-form-label">Estado Fiscal</label>
           <div class="col-10">
-            <app-users-multiple-select (sendList)="getState($event)" [multiple]="false" [options]="states" />
-            @if(!stateSelected){
+            <app-users-multiple-select [options]="states" [placeholder]="'Seleccione un estado...'" [multiple]="false" (selectedOptionsChange)="formReactivo.get('state')?.setValue($event)" />
+            
+            @if(formReactivo.get('state')?.hasError('required')){
             <div class="text-danger">Debe seleccionar un estado</div>
             }
-            <!-- <select id="selectOption" class="form-select" formControlName="state" [ngClass]="onValidate('state')">
-              @for (s of states; track $index) {
-              <option value="{{ s.id }}">{{ s.description }}</option>
-              }
-              <option value="" disabled>Seleccione una opción</option>
-            </select>
-            <div class="invalid-feedback">{{ showError("state") }}</div>
-     <option value="" disabled>Seleccione una opcion</option>
-            </select> -->
-            <!-- <div class="invalid-feedback">{{ showError("state") }}</div> -->
           </div>
         </div>
       </div>
@@ -166,41 +157,12 @@
       </div>
 
 
-      <!-- <div class="col-lg-6 mb-3">
-        <div class="row">
-          <label class="col-2 col-form-label">Lotes</label>
-          <div class="col-10">
-            <app-users-select-multiple [options]="availablePlots" [titleDefault]="'Seleccione un lote...'" (valuesEmited)="getSelectedPlots($event)"></app-users-select-multiple>
-            <div class="text-danger form-error">
-              @if(plotsSelected.length == 0){ Seleccione al menos una opción }
-            </div>
-          </div>
-        </div>
-      </div> -->
-
       <div class="col-lg-6 mb-3">
         <div class="row">
           <label class="col-2 col-form-label">Lotes</label>
           <div class="col-10">
-            <!-- <ng-select multiple="true" formControlName="plot" [items]="availablePlots" bindLabel="name" bindValue="id"
-              (change)="onPlotChange($event)">
-            </ng-select>
-
-            @if(!plotsSelected.length){
-            <div>Debe seleccionar al menos un lote</div>
-            } -->
-            <app-users-multiple-select (sendList)="getPlots($event)" [options]="availablePlots"/>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-lg-6 mb-3">
-        <div class="row">
-          <label class="col-2 col-form-label">Telegram id</label>
-          <div class="col-10">
-            <input type="text" class="form-control" formControlName="telegram_id"
-              [ngClass]="onValidate('telegram_id')" />
-            <div class="invalid-feedback">{{ showError("telegram_id") }}</div>
+            <app-users-multiple-select [options]="availablePlots" [placeholder]="'Seleccione un lote...'" (selectedOptionsChange)="formReactivo.get('plots')?.setValue($event)" />
+            
           </div>
         </div>
       </div>
@@ -238,7 +200,7 @@
           </button>
         </div>
         <div class="col-auto">
-          <button type="submit" class="btn btn-success" [disabled]="!formReactivo.valid && plotsSelected.length != 0">
+          <button type="submit" class="btn btn-success" [disabled]="formReactivo.invalid">
             Registrar
           </button>
         </div>

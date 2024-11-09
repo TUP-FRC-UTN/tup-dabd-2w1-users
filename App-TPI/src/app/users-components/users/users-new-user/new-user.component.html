@@ -107,9 +107,9 @@
           <div class="row">
             <label class="col-2 col-form-label">Roles</label>
             <div class="col-10">
-              <app-users-multiple-select [options]="options" (sendList)="fillOptionsSelected($event)" />
+              <app-users-multiple-select [options]="options" (selectedOptionsChange)="reactiveForm.get('roles')?.setValue($event)" />
               <div class="text-danger form-error">
-                @if(selectedOptions.length == 0){ Ingrese al menos una opción }
+                @if(reactiveForm.get('roles')?.hasError('required')){ Ingrese al menos una opción }
 
               </div>
             </div>

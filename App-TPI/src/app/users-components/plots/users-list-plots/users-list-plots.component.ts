@@ -126,11 +126,11 @@ export class UsersListPlotsComponent {
                 title: 'Acciones',
                 orderable: false,
                 width: '15%',
-                className: 'aling-center',
+                className: 'text-center',
                 render: (data, type, row, meta) => {
                   const plotId = this.plots[meta.row].id;
                   return `
-                    <div class="dropdown-center d-flex align-items-center">
+                    <div class="dropdown-center d-flex align-items-center justify-content-center">
                       <button class="btn btn-light border border-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-three-dots-vertical"></i>
                       </button>
@@ -451,7 +451,7 @@ export class UsersListPlotsComponent {
         break;
     }
 
-    return `<span class='badge rounded-pill ${color}'>${plotType}</span>`;
+    return `<div class="d-flex justify-content-center"> <span class='badge rounded-pill ${color}'>${plotType}</span> </div>`;
   }
 
   showPlotState(plotState: any): string {
@@ -470,6 +470,6 @@ export class UsersListPlotsComponent {
         break;
     }
 
-    return `<span class='${color} badge rounded-pill'>${plotState}</span>`;
+    return `<div class="d-flex justify-content-center"> <span class='${color} badge rounded-pill'>${plotState}</span></div>`;
   }
 }

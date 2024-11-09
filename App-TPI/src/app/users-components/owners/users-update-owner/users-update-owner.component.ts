@@ -1,6 +1,6 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { CommonModule, formatDate } from '@angular/common';
-import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators, FormBuilder } from '@angular/forms';
 import { OwnerModel } from '../../../users-models/owner/PostOwnerDto';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OwnerService } from '../../../users-servicies/owner.service';
@@ -46,11 +46,28 @@ export class UsersUpdateOwnerComponent implements OnInit {
   juridicId = 2;
   plotsOptions: any[] = [];
   plots: String[] = [];
+  editOwner : FormGroup;
 
   private readonly ownerService = inject(OwnerService)
   private readonly plotService = inject(PlotService)
   private readonly fileService = inject(FileService);
-  constructor(private router: Router, private route: ActivatedRoute) { }
+
+  constructor(private router: Router, private route: ActivatedRoute, private fb : FormBuilder) { 
+    this.editOwner = this.fb.group({
+      name: new FormControl("", [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
+    lastname: new FormControl("", [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
+    dni: new FormControl("", [Validators.required, Validators.minLength(8), Validators.pattern(/^\d+$/)]),
+    dniType: new FormControl("", [Validators.required]),
+    ownerType: new FormControl("", [Validators.required]),
+    taxStatus: new FormControl("", [Validators.required]),
+    bussinesName: new FormControl(""),
+    birthdate: new FormControl("", [Validators.required, this.dateLessThanTodayValidator()]),
+    phoneNumber: new FormControl("", [Validators.required, Validators.minLength(10), Validators.maxLength(20), Validators.pattern(/^\d+$/)]),
+    email: new FormControl("", [Validators.required, Validators.email]),
+    state: new FormControl(0, [Validators.required]),
+    plots: new FormControl([])
+    })
+  }
 
   async ngOnInit(): Promise<void> {
 
@@ -81,6 +98,8 @@ export class UsersUpdateOwnerComponent implements OnInit {
         bussinesName: this.owner.businessName,
         phoneNumber: data.user.phone_number,
         email: data.user.email,
+        state: data.owner.taxStatus, //?????????????????????????????????????????????????
+        plots: data.user.plot_id
       });
 
       // Manejo de archivos, si existen
@@ -201,23 +220,6 @@ export class UsersUpdateOwnerComponent implements OnInit {
 
   }
 
-
-  //formulario base
-  editOwner = new FormGroup({
-    name: new FormControl("", [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
-    lastname: new FormControl("", [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
-    dni: new FormControl("", [Validators.required, Validators.minLength(8), Validators.pattern(/^\d+$/)]),
-    dniType: new FormControl("", [Validators.required]),
-    ownerType: new FormControl("", [Validators.required]),
-    taxStatus: new FormControl("", [Validators.required]),
-    bussinesName: new FormControl(""),
-    birthdate: new FormControl("", [Validators.required, this.dateLessThanTodayValidator()]),
-    phoneNumber: new FormControl("", [Validators.required, Validators.minLength(10), Validators.maxLength(20), Validators.pattern(/^\d+$/)]),
-    email: new FormControl("", [Validators.required, Validators.email]),
-    state: new FormControl(0, [Validators.required]),
-    plots: new FormControl<number[]>([]),
-  });
-
   redirect(url: string) {
     this.router.navigate([`${url}`]);
   }
@@ -238,7 +240,7 @@ export class UsersUpdateOwnerComponent implements OnInit {
       dni: form.get('dni')?.value,
       dateBirth: form.get('birthdate')?.value,
       ownerTypeId: form.get('ownerType')?.value,
-      taxStatusId: Number(this.stateSelected),
+      taxStatusId: Number(form.get('state').value),
       dniTypeId: form.get('dniType')?.value,
       businessName: form.get('bussinesName')?.value,
       phoneNumber: form.get('phoneNumber')?.value,

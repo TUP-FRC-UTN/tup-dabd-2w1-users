@@ -89,24 +89,7 @@
                     <div class="row">
                         <label class="col-2 col-form-label">Estado fiscal</label>
                         <div class="col-10">
-                            @if(stateOptions.length > 0) {
-                            <ng-select [items]="stateOptions" multiple="false" bindLabel="name" [closeOnSelect]="false"
-                                formControlName="state" bindValue="value">
-
-                                <ng-template ng-multi-label-tmp let-items="items">
-                                    @if(items.length == 1){
-                                    {{ items[0].name }}
-                                    }
-                                    @if(items.length>1){
-                                    {{ items.length }} seleccionados
-                                    }
-                                </ng-template>
-                                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-                                    <input class="form-check-input" id={{item.value}} type="checkbox" /> {{ item.name }}
-                                </ng-template>
-
-                            </ng-select>
-                            } <div class="invalid-feedback">{{showError('state')}}</div>
+                            <app-users-multiple-select [options]="stateOptions" [multiple]="false" [placeholder]="'Seleccione un estado...'" (selectedOptionsChange)="editOwner.get('state')?.setValue($event)" [selectedOptions]="editOwner.get('state')?.value" />
                         </div>
                     </div>
                 </div>
@@ -188,35 +171,10 @@
                         </div>
                     </div>
 
-                    <!-- <ng-select
-                        [items]="options"
-                        [multiple]="multiple"
-                        bindLabel="name"
-                        [closeOnSelect]="false"
-                        bindValue="value"
-                        [closeOnSelect]="!multiple"
-                        [(ngModel)]="selectedOptions"
-                        [compareWith]="compareWithFn"
-                        (ngModelChange)="send()">
-                        @if(multiple){
-                            <ng-template ng-multi-label-tmp let-items="items">
-                                @if(items.length == 1){
-                                    {{ items[0].name }}
-                                }
-                                @if(items.length>1){
-                                    {{ items.length }} seleccionados
-                                }
-                            </ng-template>
-                            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-                                <input class="form-check-input" id={{item.value}} type="checkbox" [ngModel]="item$.selected" /> {{ item.name }}
-                            </ng-template>
-                        }
-                    </ng-select> -->
-
                     <div class="row">
                         <label class="col-2 col-form-label">Lotes</label>
                         <div class="col-10">
-                            <ng-select [items]="plotsOptions" multiple="true" bindLabel="name" [closeOnSelect]="false"
+                            <!-- <ng-select [items]="plotsOptions" multiple="true" bindLabel="name" [closeOnSelect]="false"
                                 formControlName="plots" bindValue="value">
                                 <ng-template ng-multi-label-tmp let-items="items">
                                     @if(items.length == 1){
@@ -231,8 +189,8 @@
                                     <input class="form-check-input" id="{{item.value}}" type="checkbox" /> {{ item.name
                                     }}
                                 </ng-template>
-                            </ng-select>
-
+                            </ng-select> -->
+                            <app-users-multiple-select [options]="plotsOptions" [placeholder]="'Seleccione un lote...'" [selectedOptions]="editOwner.get('plots')?.value" (selectedOptionsChange)="editOwner.get('plots')?.setValue($event)" />
                             <div class="invalid-feedback">{{showError('state')}}</div>
                         </div>
                     </div>
@@ -247,6 +205,5 @@
                 </div>
             </div>
         </form>
-
     </div>
 </section>
