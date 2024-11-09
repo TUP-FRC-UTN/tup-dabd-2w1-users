@@ -43,7 +43,7 @@ export class UsersGraphicUserComponent {
     //console.log('Filtros aplicados');
   //}*/
     private readonly URL = 'http://localhost:9060/dashboard/users-by-role';
-    private readonly URL_PlotByStateCount = "http://localhost:8081/dashboard/Plot-By-State-Count";
+    private readonly URL_PlotByStateCount = "http://localhost:9062/dashboard/Plot-By-State-Count";
     private readonly http = inject(HttpClient);
 
     getUsersByRole(): Observable<UserRoleCount[]> {
