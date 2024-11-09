@@ -22,6 +22,7 @@
     "@ng-bootstrap/ng-bootstrap": "^17.0.1",
     "@ng-select/ng-select": "^13.9.1",
     "angular-datatables": "^18.0.0",
+    "angular-google-charts": "^16.0.1",
     "datatables.net": "^2.1.8",
     "datatables.net-bs5": "^2.1.8",
     "datatables.net-dt": "^2.1.8",

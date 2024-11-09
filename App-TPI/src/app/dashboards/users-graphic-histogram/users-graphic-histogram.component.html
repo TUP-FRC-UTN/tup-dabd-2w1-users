@@ -1,0 +1,75 @@
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <!-- Loading spinner -->
+                    @if (loading) {
+                        <div class="text-center p-5">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Cargando...</span>
+                            </div>
+                        </div>
+                    }
+                    
+                    <!-- Error message -->
+                    @if(error){
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                    }
+                    
+                    <!-- Chart -->
+                    
+                        <google-chart
+                            [type]="chartType"
+                            [data]="chartData"
+                            [options]="chartOptions"
+                            [width]="800"
+                            [height]="400"
+                            >
+                        </google-chart>
+
+                        <!-- Statistics Cards -->
+                        <div class="row mt-4">
+                            <div class="col-md-3">
+                                <div class="card bg-light">
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title">Total Usuarios</h5>
+                                        <p class="card-text h3">{{ ageDistribution.statistics.totalUsers }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-light">
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title">Edad Promedio</h5>
+                                        <p class="card-text h3">{{ ageDistribution.statistics.averageAge }} años</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-light">
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title">Edad Mínima</h5>
+                                        <p class="card-text h3">{{ ageDistribution.statistics.youngestAge }} años</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-light">
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title">Edad Máxima</h5>
+                                        <p class="card-text h3">{{ ageDistribution.statistics.oldestAge }} años</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

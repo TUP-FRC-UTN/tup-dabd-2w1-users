@@ -1,0 +1,43 @@
+<div class="container d-flex gap-3">
+    <div class="col-md-9">
+      <div class="card border-0 shadow-lg rounded-4 h-100 w-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="back-arrow" (click)="applyFilters()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="gray" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
+                <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0m3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z" />
+              </svg>
+            </div>
+            <div>
+              <h5 class="card-title text-secondary mb-1">Estado de Propietarios por Mes</h5>
+              <small class="text-secondary">Activos vs Inactivos</small>
+            </div>
+            <div class="badge bg-warning px-3 py-2">Total: {{totalOwners}}</div>
+          </div>
+          <google-chart
+            [type]="chartType"
+            [data]="chardata"
+            [options]="chartOptions"
+            class="w-100 expanded-chart-content">
+          </google-chart>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card border-0 shadow-lg mb-3 rounded-4 h-25 w-100">
+        <div class="card-body">
+          <h6 class="text-secondary mb-2">Propietarios Activos</h6>
+          <h3 class="mb-0">{{kpis.totalActive}}</h3>
+          <small class="text-muted">{{kpis.activePercentage}}% del total</small>
+        </div>
+      </div>
+      <div class="card border-0 shadow-lg mb-3 rounded-4 h-25 w-100">
+        <div class="card-body">
+          <h6 class="text-secondary mb-2">Mes con Mayor Actividad</h6>
+          <h3 class="mb-0">{{kpis.mostActiveMonth}}</h3>
+          <small class="text-muted">{{kpis.mostActiveCount}} propietarios activos</small>
+        </div>
+      </div>
+    </div>
+  </div>

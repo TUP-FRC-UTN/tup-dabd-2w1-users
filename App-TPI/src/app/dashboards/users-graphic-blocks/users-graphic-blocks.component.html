@@ -1,0 +1,67 @@
+<div class="container-fluid py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="h4 mb-1 text-primary">Análisis de Áreas por Bloque</h2>
+      <p class="text-muted mb-0">Comparativa de área construida vs área total</p>
+    </div>
+    <div class="badge bg-primary px-3 py-2">
+      Total de Mnza: {{blocks.length}}
+    </div>
+  </div>
+
+  <!-- KPI Cards Row -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <h6 class="text-muted mb-2">Área Total</h6>
+          <h3 class="mb-0">{{kPIs.totalArea}} m²</h3>
+          <small class="text-primary">
+            <i class="bi bi-arrow-up-right"></i>
+            Área máxima disponible
+          </small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <h6 class="text-muted mb-2">Área Construida</h6>
+          <h3 class="mb-0">{{kPIs.totalBuiltArea}} m²</h3>
+          <small class="text-success">
+            <i class="bi bi-building"></i>
+            Área total construida
+          </small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <h6 class="text-muted mb-2">Porcentaje Utilizado</h6>
+          <h3 class="mb-0">{{kPIs.utilizationPercentage| number:'1.0-1'}}%</h3>
+          <small [class]="kPIs.utilizationPercentage > 75 ? 'text-warning' : 'text-info'">
+            <i class="bi bi-percent"></i>
+            Promedio de utilización
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Chart Card -->
+  <div class="container">
+    <div class="card border-0 shadow-lg">
+      <div class="card-body">
+        <google-chart
+          [type]="chartType"
+          [data]="chartData"
+          [options]="chartOptions"
+          [width]="width"
+          [height]="height"
+          >
+        </google-chart>
+      </div>
+    </div>
+  </div>
+</div>
