@@ -14,11 +14,13 @@ import { GetPlotDto } from '../../../users-models/plot/GetPlotDto';
 import { ValidatorsService } from '../../../users-servicies/validators.service';
 import { ChangePasswordComponent } from "../../utils/users-change-password/users-change-password.component";
 import { UsersGraphicUserComponent } from "../../../dashboards/users-graphic-user/users-graphic-user.component";
+import { OwnerStatusCountComponent } from "../../../dashboards/owner-status-count/owner-status-count.component";
+import { UsersGraphicBlocksComponent } from "../../../dashboards/users-graphic-blocks/users-graphic-blocks.component";
 
 @Component({
   selector: 'app-users-profile',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, FormsModule, ImageUploadComponent, ChangePasswordComponent, UsersGraphicUserComponent],
+  imports: [ReactiveFormsModule, CommonModule, FormsModule, ImageUploadComponent, ChangePasswordComponent, UsersGraphicUserComponent, OwnerStatusCountComponent, UsersGraphicBlocksComponent],
   templateUrl: './users-profile.component.html',
   styleUrl: './users-profile.component.css'
 })

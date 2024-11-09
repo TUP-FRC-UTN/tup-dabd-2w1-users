@@ -2,9 +2,9 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { GoogleChartsModule, ChartType } from 'angular-google-charts';
-import { UserRoleCount } from '../../users-models/users/UserRoleCount';
-import { PlotByStateCount } from '../../users-models/users/PlotByStateCount';
+import { UserRoleCount } from '../../users-models/dashboard/UserRoleCount';
 import { Observable } from 'rxjs';
+import { PlotByStateCount } from '../../users-models/users/PlotByStateCount';
 
 @Component({
   selector: 'app-users-graphic-user',
@@ -14,6 +14,34 @@ import { Observable } from 'rxjs';
   styleUrl: './users-graphic-user.component.css'
 })
 export class UsersGraphicUserComponent {
+
+ /* columnChartType: ChartType = ChartType.ColumnChart;
+  columnChartData = [
+    ['Enero', 1000],
+    ['Febrero', 1170],
+    ['Marzo', 660],
+    ['Abril', 1030]
+  ];
+  columnChartOptions = {
+    title: 'Comparación de Ingresos',
+    hAxis: { title: 'Mes' },
+    vAxis: { title: 'Cantidad' },
+    legend: 'none',
+    width: '100%',
+    height: '100%'
+  };
+
+  // KPIs (datos adicionales para el KPI)
+  columnKPIs = {
+    totalPeriod: 3860,
+    monthlyAverage: 965
+  };
+
+  // Método para manejar el filtro
+  //7aplyFilters() {
+    // Aquí puedes aplicar la lógica de filtro y actualizar los datos
+    //console.log('Filtros aplicados');
+  //}*/
     private readonly URL = 'http://localhost:9060/dashboard/users-by-role';
     private readonly URL_PlotByStateCount = "http://localhost:8081/dashboard/Plot-By-State-Count";
     private readonly http = inject(HttpClient);

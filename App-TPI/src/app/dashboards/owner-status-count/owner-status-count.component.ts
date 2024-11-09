@@ -62,10 +62,13 @@ export class OwnerStatusCountComponent implements OnInit {
     this.getOwnersCountByStatusPerMonth().subscribe({
       next: (data: any[]) => {
         // Preparar los datos para el gráfico
-        this.chardata = [
-          ['Mes', 'Activos', 'Inactivos']
-        ];
+        //this.chardata = [
+          //['Mes', 'Activos', 'Inactivos']
+        //];
 
+        this.chardata = [
+          ['Mes', 1]
+        ];
         let totalActive = 0;
         let totalInactive = 0;
         let maxActiveCount = 0;
