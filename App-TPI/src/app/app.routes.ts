@@ -8,6 +8,11 @@ import { UnauthorizedComponent } from './errors-components/unauthorized/unauthor
 import { roleGuard } from './guards/role.guard';
 import { UsersFamiliarGroupComponent } from './users-components/users/users-familiar-group/users-familiar-group.component';
 import { UsersRecoveryPasswordComponent } from './users-components/utils/users-recovery-password/users-recovery-password.component';
+import { UsersGraphicUserComponent } from './dashboards/users-graphic-user/users-graphic-user.component';
+import { UsersGraphicHistogramComponent } from './dashboards/users-graphic-histogram/users-graphic-histogram.component';
+import { UsersGraphicBlocksComponent } from './dashboards/users-graphic-blocks/users-graphic-blocks.component';
+import { OwnerStatusCountComponent } from './dashboards/owner-status-count/owner-status-count.component';
+import { OwnersTaxstatusPercentageComponent } from './dashboards/owners-taxstatus-percentage/owners-taxstatus-percentage.component';
 
 // Rutas principales de la aplicación
 export const routes: Routes = [
@@ -55,6 +60,31 @@ export const routes: Routes = [
         path: 'owners',
         data: {roles: ['SuperAdmin', 'Gerente']},
         loadChildren: () => import('./users-components/owners/owners.module').then(m => m.OwnersModule)
+      },
+      {
+        path: 'charts/users',
+        data: {roles: ['SuperAdmin', 'Gerente']},
+        component: UsersGraphicUserComponent
+      },
+      {
+        path: 'charts/users/histogram',
+        data: {roles: ['SuperAdmin', 'Gerente']},
+        component: UsersGraphicHistogramComponent
+      },
+      {
+        path: 'charts/users/blocks',
+        data: {roles: ['SuperAdmin', 'Gerente']},
+        component: UsersGraphicBlocksComponent
+      },
+      {
+        path: 'charts/owners/stats',
+        data: {roles: ['SuperAdmin', 'Gerente']},
+        component: OwnerStatusCountComponent
+      },
+      {
+        path: 'charts/owners/taxes',
+        data: {roles: ['SuperAdmin', 'Gerente']},
+        component: OwnersTaxstatusPercentageComponent
       }
     ]
   },

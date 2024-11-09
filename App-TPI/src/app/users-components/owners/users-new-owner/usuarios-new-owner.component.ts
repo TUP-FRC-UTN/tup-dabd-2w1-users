@@ -110,8 +110,8 @@ export class UsuariosNewOwnerComponent {
       //phone: new FormControl('', [Validators.required]),
       company: new FormControl({ value: "", disabled: true }),
       telegram_id: new FormControl(''),
-      state: new FormControl( [Validators.required]),
-      plots: new FormControl([Validators.required])
+      state: new FormControl( ),
+      plots: new FormControl( )
     })
   }
 

@@ -95,6 +95,44 @@ export class NavbarComponent implements OnInit {
             roles: ["SuperAdmin", "Gerente"]
           }
         ]
+      },
+      {
+        icon: "bi bi-bar-chart",
+        title: "Gráficos",
+        roles: ["SuperAdmin", "Gerente"],
+        childButtons: [
+          {
+            icon: "bi bi-bar-chart",
+            title: "Gráficos",
+            route: "home/charts/users",
+            roles: ["SuperAdmin", "Gerente"]
+          },
+          {
+            icon: "bi bi-bar-chart",
+            title: "Gráficos",
+            route: "home/charts/users/histogram",
+            roles: ["SuperAdmin", "Gerente"]
+          },
+          {
+            icon: "bi bi-bar-chart",
+            title: "Gráficos",
+            route: "home/charts/users/blocks",
+            roles: ["SuperAdmin", "Gerente"]
+          },
+          {
+            icon: "bi bi-bar-chart",
+            title: "Gráficos",
+            route: "home/charts/owners/stats",
+            roles: ["SuperAdmin", "Gerente"]
+          },
+          {
+            icon: "bi bi-bar-chart",
+            title: "Gráficos",
+            route: "home/charts/owners/taxes",
+            roles: ["SuperAdmin", "Gerente"]
+          }
+          
+        ]
       }
 
     ];
