@@ -1,3 +1,3 @@
 export interface TaxStatusPercentage {
-    [key-: string]: number;
+    [key: string]: number;
 }

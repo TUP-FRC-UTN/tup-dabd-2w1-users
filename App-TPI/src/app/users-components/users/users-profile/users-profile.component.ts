@@ -16,11 +16,12 @@ import { ChangePasswordComponent } from "../../utils/users-change-password/users
 import { UsersGraphicUserComponent } from "../../../dashboards/users-graphic-user/users-graphic-user.component";
 import { OwnerStatusCountComponent } from "../../../dashboards/owner-status-count/owner-status-count.component";
 import { UsersGraphicBlocksComponent } from "../../../dashboards/users-graphic-blocks/users-graphic-blocks.component";
+import { OwnersTaxstatusPercentageComponent } from "../../../dashboards/owners-taxstatus-percentage/owners-taxstatus-percentage.component";
 
 @Component({
   selector: 'app-users-profile',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, FormsModule, ImageUploadComponent, ChangePasswordComponent, UsersGraphicUserComponent, OwnerStatusCountComponent, UsersGraphicBlocksComponent],
+  imports: [ReactiveFormsModule, CommonModule, FormsModule, ImageUploadComponent, ChangePasswordComponent, UsersGraphicUserComponent, OwnerStatusCountComponent, UsersGraphicBlocksComponent, OwnersTaxstatusPercentageComponent],
   templateUrl: './users-profile.component.html',
   styleUrl: './users-profile.component.css'
 })

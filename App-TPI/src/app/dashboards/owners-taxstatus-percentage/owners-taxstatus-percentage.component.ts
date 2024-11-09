@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { ChartType, GoogleChartComponent } from 'angular-google-charts';
+import { ChartType, GoogleChartsModule } from 'angular-google-charts';
 import { Observable } from 'rxjs';
 import { TaxStatusPercentage } from '../../users-models/owner/TaxStatusPercentage';
 import { HttpClient } from '@angular/common/http';
@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-owners-taxstatus-percentage',
   standalone: true,
-  imports: [GoogleChartComponent,CommonModule],
+  imports: [GoogleChartsModule,CommonModule],
   templateUrl: './owners-taxstatus-percentage.component.html',
   styleUrl: './owners-taxstatus-percentage.component.css'
 })
@@ -61,9 +61,7 @@ export class OwnersTaxstatusPercentageComponent {
   loadTaxStats() {
     this.getTaxStatusPercentage().subscribe({
       next: (data) => {
-        this.chartData = [
-          ['Estado Fiscal', 'Porcentaje']
-        ];
+        this.chartData = [];
 
         let maxPercentage = 0;
         let maxStatus = '';
