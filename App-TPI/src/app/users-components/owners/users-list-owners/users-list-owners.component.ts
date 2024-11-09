@@ -293,7 +293,7 @@ export class UsersListOwnersComponent {
 
     // Limpiar búsqueda y filtros
     table.search('').draw(); // Limpiar búsqueda general
-    table.column(4).search('').draw(); // Limpiar filtro de tipo
+    table.column(3).search('').draw(); // Limpiar filtro de tipo
 }
 
   updateFilterType() {

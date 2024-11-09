@@ -87,15 +87,28 @@ export class UsersUpdateUserComponent implements OnInit {
     return new Promise<void>((resolve, reject) => {
       this.userService.getUserById(parseInt(this.id)).subscribe({
         next: (data: UserGet) => {
+          console.log(data);
+          
           this.updateForm.get('name')?.setValue(data.name);
           this.updateForm.get('lastname')?.setValue(data.lastname);
           this.updateForm.get('dni')?.setValue(data.dni.toString());
           this.updateForm.get('email')?.setValue(data.email);
           this.updateForm.get('avatar_url')?.setValue(data.avatar_url);
           const formattedDate = DateService.parseDateString(data.datebirth);
-          this.updateForm.patchValue({
-            datebirth: formattedDate ? DateService.formatDate(formattedDate) : ''
-          });
+
+          if (formattedDate) {
+            // Formatea la fecha a 'yyyy-MM-dd' para un input de tipo date
+            const formattedDateString = formattedDate.toISOString().split('T')[0];
+
+            this.updateForm.patchValue({
+              datebirth: formattedDateString
+            });
+          } else {
+            this.updateForm.patchValue({
+              datebirth: ''
+            });
+          }
+
           this.updateForm.get('phoneNumber')?.setValue(data.phone_number.toString());
           this.updateForm.get('telegram_id')?.setValue(data.telegram_id) || 0;
   
@@ -162,13 +175,24 @@ export class UsersUpdateUserComponent implements OnInit {
     //Formatea la fecha correctamente (año-mes-día)
     const date: Date = new Date(this.updateForm.get('datebirth')?.value || '');
 
+    console.log(date);
+    
+
     //Formatear la fecha como YYYY-MM-DD
     const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+
+
+    console.log(formattedDate);
+    
 
     user.datebirth = formattedDate;
     user.roles = this.rolesSelected || []; // Asegúrate de que roles sea un arreglo   
     user.userUpdateId = this.authService.getUser().id;
     user.dni_type_id = 1;
+
+
+    console.log(user);
+    
     
     //Llama al servicio para actualizar el usuario
     this.userService.putUser(user, parseInt(this.id)).subscribe({
@@ -236,5 +260,7 @@ export class UsersUpdateUserComponent implements OnInit {
     }
     return ''; // Retorna cadena vacía si no hay errores.
   }  
+
+  
 }
 

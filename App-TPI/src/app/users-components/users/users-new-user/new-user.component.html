@@ -59,21 +59,23 @@
           </div>
         </div>
 
-
-        <div class="col-lg-6 mb-3">
-          <div class="row">
-            <label class="col-2 col-form-label">Lote</label>
-            <div class="col-10">
-              <select id="selectOption" class="form-select" formControlName="plot" [ngClass]="onValidate('plot')">
-                <option value="" disabled selected>Seleccione una opción</option>
-                @for (s of lotes; track $index) {
-                <option value="{{s.id}}">Numero de lote: {{s.plot_number}}, Manzana: {{s.block_number}}</option>
-                }
-              </select>
-              <div class="invalid-feedback">{{showError('plot')}}</div>
+        @if (actualRole === 'Gerente') {
+          <div class="col-lg-6 mb-3">
+            <div class="row">
+              <label class="col-2 col-form-label">Lote</label>
+              <div class="col-10">
+                <select id="selectOption" class="form-select" formControlName="plot" [ngClass]="onValidate('plot')">
+                  <option value="" disabled selected>Seleccione una opción</option>
+                  @for (s of lotes; track $index) {
+                  <option value="{{s.id}}">Numero de lote: {{s.plot_number}}, Manzana: {{s.block_number}}</option>
+                  }
+                </select>
+                <div class="invalid-feedback">{{showError('plot')}}</div>
+              </div>
             </div>
           </div>
-        </div>
+        }
+        
 
 
         <div class="col-lg-6 mb-3">
@@ -107,7 +109,7 @@
             <div class="col-10">
               <app-users-multiple-select [options]="options" (sendList)="fillOptionsSelected($event)" />
               <div class="text-danger form-error">
-                @if(!checkOption){ Ingrese al menos una opción }
+                @if(selectedOptions.length == 0){ Ingrese al menos una opción }
 
               </div>
             </div>

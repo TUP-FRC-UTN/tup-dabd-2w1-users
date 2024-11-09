@@ -8,11 +8,11 @@ export class DateService {
 
     //Parsea el formato de la fecha para que sea compatible con el input 
   static parseDateString(dateString: string): Date | null {
-    const [day, month, year] = dateString.split('/').map(Number);
-    if (!day || !month || !year) {
+    const [day, month, year] = dateString.split('-').map(Number);
+    if (!day || !month || !year) {      
       return null;
     }
-    // Crea un objeto Date con formato "yyyy-MM-dd"
+    // Crea un objeto Date con formato "yyyy-MM-dd"    
     return new Date(year, month - 1, day); // Restamos 1 al mes porque en JavaScript los meses son 0-indexed
   }
 

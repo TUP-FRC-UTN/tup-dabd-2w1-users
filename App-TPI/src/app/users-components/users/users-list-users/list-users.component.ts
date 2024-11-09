@@ -1,5 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { UserGet } from '../../../users-models/users/UserGet';
 import { PlotService } from '../../../users-servicies/plot.service';
 import { CommonModule } from '@angular/common';
@@ -26,17 +26,18 @@ import { UsersMultipleSelectComponent } from "../../utils/users-multiple-select/
 @Component({
   selector: 'app-list-users',
   standalone: true,
-  imports: [HttpClientModule, CommonModule, FormsModule, ModalInfoUserComponent, RouterModule, ReactiveFormsModule, UsersMultipleSelectComponent],
+  imports: [CommonModule, FormsModule, RouterModule, ReactiveFormsModule, UsersMultipleSelectComponent],
   templateUrl: './list-users.component.html',
   styleUrls: ['./list-users.component.css']
 })
-export class ListUsersComponent implements OnInit {
+export class ListUsersComponent implements OnInit, AfterViewInit {
 
   selectedOptions: any; 
   optionesFilter: any;
 
 
   constructor(private router: Router, private modal: NgbModal, private plotService: PlotService) { }
+
 
   typeModal: string = '';
   user: number = 0;
@@ -53,6 +54,7 @@ export class ListUsersComponent implements OnInit {
   selectedRole: string = '';
   initialDate: FormControl = new FormControl(this.minDate);
   endDate: FormControl = new FormControl(this.maxDate);
+  placeholder: string = "Seleccione un rol";
 
   getPlotByUser(plotId: number) {
     this.plotService.getPlotById(plotId).subscribe({
@@ -298,22 +300,17 @@ export class ListUsersComponent implements OnInit {
 fillOptionsSelected(options: any) {
   this.optionesFilter = options;  // Asignamos directamente los roles emitidos
   var optiones = options.map((option: any) => option).join(' ');
-  console.log(optiones);
   
   const table = $('#myTable').DataTable();
-  console.log(options);
-  
-  // Filtrar por roles, pero que contenga 1 o más roles de las optiones, no todos
-  $.fn.dataTable.ext.search.push((settings: any, data: any, dataIndex: any) => {
-    const roles = data[2].split(' ');
-    return options.some((option: any) => roles.includes(option));
-  });
+
+  table.column(2).search(optiones).draw();
 }
 
 
 
   updateFilterRol() {
     const table = $('#myTable').DataTable();
+    
     table.column(2).search(this.selectRol.value).draw();
   }
 
@@ -341,12 +338,16 @@ fillOptionsSelected(options: any) {
     table.draw();
   }
 
+  estadoRoles: { [id: string]: boolean } = {};
+
   showRole(roles: string[]): string {
     let rolesA: string = "";
   
-    roles.forEach((r, index) => {
+    let max: number = 2;
+  
+    for (let i = 0; i < max; i++) {
       let color: string = "";
-      switch (r) {
+      switch (roles[i]) {
         case "Gerente":
           color = "text-bg-danger";
           break;
@@ -367,12 +368,67 @@ fillOptionsSelected(options: any) {
           break;
       }
   
-      // Agrega un espacio después de cada badge excepto el último
-      rolesA += `<span class='${color} badge rounded-pill'>${r}</span>` + (index < roles.length - 1 ? " " : "");
-    });
-    
+      rolesA += `<span class="badge rounded-pill ${color}">${roles[i]}</span> `;
+    }
+  
+    if (roles.length > 2) {
+      var rolesExtra = roles.slice(2);
+      var rolesB = "";
+
+      rolesExtra.forEach((role: string) => {
+        let color: string = "";
+      switch (role) {
+        case "Gerente":
+          color = "text-bg-danger";
+          break;
+        case "Propietario":
+          color = "text-bg-primary";
+          break;
+        case "Familiar mayor":
+          color = "text-bg-secondary";
+          break;
+        case "Familiar menor":
+          color = "text-bg-secondary";
+          break;
+        case "SuperAdmin":
+          color = "text-bg-dark";
+          break;
+        default:
+          color = "badge bg-info text-dark";
+          break;
+      }
+  
+      rolesB += `<span class="badge rounded-pill m-1 ${color}">${role}</span> `;
+      });
+
+      rolesA += `<button class="btn btn-outline-dark text-dark badge" data-bs-toggle="collapse"
+           data-bs-target="#extraRoles" aria-expanded="false" aria-controls="extraRoles">
+              +
+            </button>
+
+            <div class="collapse position-absolute" id="extraRoles">
+              <div class="card card-body d-flex" style="z-index: 10;">
+                ${rolesB}
+              </div>
+            </div>`;
+    }
+  
     return rolesA;
   }
+  
+
+  aaaa(){
+    console.log("AAAA");
+  }
+
+  ngAfterViewInit() {
+    // Añadir el evento al botón dinámico
+    const button = document.getElementById('show-more-btn');
+    if (button) {
+      button.addEventListener('click', () => this.aaaa());
+    }
+  }
+
 
 
   // showRoleForPdf(role : string) : string {
@@ -487,7 +543,7 @@ fillOptionsSelected(options: any) {
   }
 
   getContentBetweenArrows(input: string): string[] {
-    const matches = [...input.matchAll(/>([^<,]*)</g)];
+    const matches = [...input.matchAll(/>([^+<,]*)</g)];
     return matches.map(match => match[1].trim()).filter(content => content !== "");
   }
 

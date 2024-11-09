@@ -15,6 +15,8 @@ export class UsersMultipleSelectComponent implements OnChanges {
    //Lista de opciones (Requiere un objeto {value: , name: })
    @Input() options: { value: number, name: string }[] = [];
 
+   @Input() placeholder : string = "";
+
    //Lista con los VALUES de los objetos que ya tienen que venir seleccionados (Ej: [1, 2] o ["Persona Física"])
    @Input() optionsChecked : any[] = []
  

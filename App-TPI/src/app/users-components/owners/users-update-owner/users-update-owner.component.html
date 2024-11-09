@@ -50,8 +50,7 @@
                     <div class="row">
                         <label class="col-2 col-form-label">Documento</label>
                         <div class="col-10">
-                            <input type="text" class="form-control" formControlName="dni"
-                                [ngClass]="onValidate('dni')">
+                            <input type="text" class="form-control" formControlName="dni" [ngClass]="onValidate('dni')">
                             <div class="invalid-feedback">{{showError('dni')}}</div>
                         </div>
                     </div>
@@ -91,10 +90,23 @@
                         <label class="col-2 col-form-label">Estado fiscal</label>
                         <div class="col-10">
                             @if(stateOptions.length > 0) {
-                                <app-users-multiple-select (sendList)="getStatus($event)" [multiple]="false" [options]="stateOptions" [optionsChecked]="[1]"/>
-                            }   @if(!stateSelected){
-                                <div class="text-danger">Debe seleccionar un estado</div>
-                            } 
+                            <ng-select [items]="stateOptions" multiple="false" bindLabel="name" [closeOnSelect]="false" formControlName="state"
+                                bindValue="value">
+
+                                <ng-template ng-multi-label-tmp let-items="items">
+                                    @if(items.length == 1){
+                                    {{ items[0].name }}
+                                    }
+                                    @if(items.length>1){
+                                    {{ items.length }} seleccionados
+                                    }
+                                </ng-template>
+                                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                                    <input class="form-check-input" id={{item.value}} type="checkbox" /> {{ item.name }}
+                                </ng-template>
+
+                            </ng-select>
+                            } <div class="invalid-feedback">{{showError('state')}}</div>
                         </div>
                     </div>
                 </div>
@@ -150,41 +162,43 @@
                 </div>
 
 
-                
-        <div class="col-lg-6 mb-3">
-            <div class="row">
-              <label class="col-2 col-form-label">Subir archivos</label>
-              <div class="col-10">
-                <input type="file" class="form-control" multiple formControlName="file" [ngClass]="onValidate('file')"
-                  (change)="onFileChange($event)">
-                <div class="invalid-feedback">{{showError('file')}}</div>
-                <!-- Listado de archivos -->
-                <div class="list-group mt-3">
-                  @for (file of files; track $index) {
-                  <div class="list-group-item d-flex justify-content-between align-items-center">
-                    <div class="d-flex align-items-center">
-                      <i class="bi-file-earmark-text me-3 text-primary fs-5"></i>
-                      <span>{{file.name.length > 40 ? file.name.slice(0, 40)+'...' : file.name}}</span>
+
+                <div class="col-lg-6 mb-3">
+                    <div class="row">
+                        <label class="col-2 col-form-label">Subir archivos</label>
+                        <div class="col-10">
+                            <input type="file" class="form-control" multiple formControlName="file"
+                                [ngClass]="onValidate('file')" (change)="onFileChange($event)">
+                            <div class="invalid-feedback">{{showError('file')}}</div>
+                            <!-- Listado de archivos -->
+                            <div class="list-group mt-3">
+                                @for (file of files; track $index) {
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi-file-earmark-text me-3 text-primary fs-5"></i>
+                                        <span>{{file.name.length > 40 ? file.name.slice(0, 40)+'...' :
+                                            file.name}}</span>
+                                    </div>
+                                    <button type="button" class="btn bi-x-lg" (click)="deleteFile($index)"></button>
+
+                                </div>
+
+                                }
+                            </div>
+                        </div>
                     </div>
-                    <button type="button" class="btn bi-x-lg" (click)="deleteFile($index)"></button>
-
-                  </div>
-
-                  }
                 </div>
-              </div>
+
+                <!-- Botones de Enviar / Cancelar -->
+                <div class="row">
+                    <div class="col d-flex justify-content-end gap-3">
+                        <button type="button" class="btn btn-secondary" (click)="confirmExit()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary"
+                            [disabled]="editOwner.invalid">Guardar</button>
+                    </div>
+                </div>
             </div>
-          </div>
-    
-    <!-- Botones de Enviar / Cancelar -->
-    <div class="row">
-        <div class="col d-flex justify-content-end gap-3">
-            <button type="button" class="btn btn-secondary" (click)="confirmExit()">Cancelar</button>
-            <button type="submit" class="btn btn-primary" [disabled]="!editOwner.invalid && stateSelected">Guardar</button>
-        </div>
-    </div>
-</div>
-    </form>
+        </form>
 
     </div>
 </section>

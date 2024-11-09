@@ -48,7 +48,7 @@ export class NewUserComponent implements OnInit {
   options: any[] = [];
   selectedOptions: string[] = [];
   passwordVisible: boolean = false; 
-  
+  actualRole = this.authService.getActualRole();
 
   ngOnInit() {
     this.loadRoles();
