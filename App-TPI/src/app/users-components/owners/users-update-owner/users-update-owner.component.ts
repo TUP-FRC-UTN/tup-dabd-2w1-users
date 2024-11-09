@@ -11,7 +11,7 @@ import { FileService } from '../../../users-servicies/file.service';
 import { FileDto } from '../../../users-models/owner/FileDto';
 import { FileUploadComponent } from '../../utils/file-upload/file-upload.component';
 import { UserService } from '../../../users-servicies/user.service';
-import { OwnerPlotUserDto } from '../../../users-models/owner/OwnerPlotUserDto';
+import { OwnerPlotUserDto, PlotDtoForOwner } from '../../../users-models/owner/OwnerPlotUserDto';
 import { UserGet } from '../../../users-models/users/UserGet';
 import { DateService } from '../../../users-servicies/date.service';
 import { OwnerTypeModel } from '../../../users-models/owner/OwnerType';
@@ -32,6 +32,7 @@ import { NgSelectComponent } from '@ng-select/ng-select';
 })
 export class UsersUpdateOwnerComponent implements OnInit {
   owner: Owner = new Owner();
+  plotsForOwner: PlotDtoForOwner[] = [];
   existingFiles: File[] = [];
   files: File[] = [];
   existingFilesDownload: FileDto[] = [];
@@ -43,7 +44,7 @@ export class UsersUpdateOwnerComponent implements OnInit {
   stateOptions: any[] = [];
   stateSelected: string = '';
   juridicId = 2;
-  optionnn: any[] = [];
+  plotsOptions: any[] = [];
   plots: String[] = [];
 
   private readonly ownerService = inject(OwnerService)
@@ -66,6 +67,8 @@ export class UsersUpdateOwnerComponent implements OnInit {
       // Esperar a que se cargue el propietario
       const data: OwnerPlotUserDto = await lastValueFrom(this.ownerService.getByIdWithUser(Number(this.id)));
       this.owner = data.owner;
+      this.plotsForOwner = data.plot;
+      
 
       // Rellenar los campos del formulario con los datos del propietario
       this.editOwner.patchValue({
@@ -114,6 +117,27 @@ export class UsersUpdateOwnerComponent implements OnInit {
       },
     })
 
+    this.plotService.getAllPlots().subscribe({
+      next: (data: GetPlotModel[]) => {
+        // Crear las opciones del select
+        this.plotsOptions = data.map(d => ({
+          value: d.id,
+          name: `Lote: ${d.plot_number}, Manzana: ${d.block_number}`
+        }));
+
+        // Aquí puedes setear valores iniciales si es necesario. Por ejemplo:
+        const selectedPlots = data // Aquí, 'data' es la lista completa de plots
+          .filter(plot => this.plotsForOwner?.some(p => p.id === plot.id)) // Filtrar los plots seleccionados
+          .map(plot => plot.id); // Extraer los IDs de los seleccionados
+
+        this.editOwner.get('plots')!.setValue(selectedPlots);
+      },
+      error: (err) => {
+        console.error('Error al cargar los terrenos:', err);
+      }
+    });
+    
+
     // Cargar las opciones para los selectores
     await this.ownerService.getAllTypes().subscribe({
       next: (data: OwnerTypeModel[]) => {
@@ -152,17 +176,12 @@ export class UsersUpdateOwnerComponent implements OnInit {
       next: (data: OwnerStateModel[]) => {
         this.states = data;
         this.states.forEach((state) => {
-          console.log(state);
-          console.log(this.owner.taxStatus);
-
-
           if (state.description === this.owner.taxStatus) {
             this.editOwner.get('state')!.setValue(state.id);
           }
         });
 
         this.editOwner.get('state')!.valueChanges.subscribe(value => {
-          console.log('Valor seleccionado:', value);
           this.stateSelected = value!.toString();
         });
 
@@ -195,7 +214,8 @@ export class UsersUpdateOwnerComponent implements OnInit {
     birthdate: new FormControl("", [Validators.required, this.dateLessThanTodayValidator()]),
     phoneNumber: new FormControl("", [Validators.required, Validators.minLength(10), Validators.maxLength(20), Validators.pattern(/^\d+$/)]),
     email: new FormControl("", [Validators.required, Validators.email]),
-    state: new FormControl(0, [Validators.required])
+    state: new FormControl(0, [Validators.required]),
+    plots: new FormControl<number[]>([]),
   });
 
   redirect(url: string) {
@@ -239,6 +259,8 @@ export class UsersUpdateOwnerComponent implements OnInit {
       //se crea el objeto
       let ownerPut = this.createObject(form);
       console.log(ownerPut);
+      console.log(this.editOwner.get('plots')?.value);
+      
 
 
       //llama al service
