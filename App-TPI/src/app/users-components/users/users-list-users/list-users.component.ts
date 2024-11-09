@@ -556,52 +556,44 @@ fillOptionsSelected(options: any) {
 
   exportExcel() {
     const table = $('#myTable').DataTable(); // Inicializa DataTable una vez
-
-    // Cambiar la forma de obtener las filas visibles usando 'search' en lugar de 'filter'
-    const visibleRows = table.rows({ search: 'applied' }).data().toArray(); // Usar 'search: applied'
-
-    // Filtrar a los propietarios por aquellos que aparezcan en la tabla visibleRows
-    let users = this.users.filter(user => visibleRows.some(row => row[1].includes(user.name) && row[1].includes(user.lastname)));
-
+  
+    // Obtener las filas visibles usando 'search: applied' (como en el export PDF)
+    const visibleRows = table.rows({ search: 'applied' }).data().toArray();
+  
     // Obtener las fechas 'Desde' y 'Hasta' solo para el nombre del archivo
     const formattedDesde = this.formatDate(new Date(this.initialDate.value));
     const formattedHasta = this.formatDate(new Date(this.endDate.value));
-
-    // Crear las filas de datos directamente desde las filas visibles de la tabla
-    const dataRows = visibleRows.map((row) => {
-      const user = users.find(user => `${user.name} ${user.lastname}` === row[1]); // Encontrar al usuario correspondiente
-
-      if (user) {
-        // Obtener los datos de la fila (en este caso, la columna 4 sería el lote)
-        const roles = user.roles // Si roles es un array, convertirlo a string
-        const lotes = row[3]; // Asumimos que la columna 4 (índice 3) tiene los lotes
-
-        // Retornar la fila con la información del propietario
-        return {
-          FechaCreacion: user.create_date.replace(/-/g, '/'),
-          Nombre: `${user.lastname}, ${user.name}`,
-          Rol: roles,  // Convertido a string
-          Lote: lotes  // Usando la columna 4 directamente
-        };
-      } else {
-        // Si no se encuentra el usuario, no retornar nada (filtramos fuera más adelante)
-        return null;
-      }
-    }).filter(row => row !== null); // Filtrar valores nulos o no definidos
-
-    // Crear la hoja de trabajo con los datos de los propietarios
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataRows, { header: ['FechaCreacion', 'Nombre', 'Rol', 'Lote'] });
-
+  
+    // Mapeamos las filas visibles a un formato adecuado para los datos de Excel
+    const dataRows = visibleRows.map((row: any) => {
+      // Extraemos los datos de la fila
+      const fechaCreacion = row[0]; // Fecha de creación
+      const nombre = row[1]; // Nombre
+      const rol = Array.isArray(row[2]) 
+                  ? row[2].map((r: string) => this.getContentBetweenArrows(r).join(', ')).join(', ') 
+                  : this.getContentBetweenArrows(row[2]).join(', '); // Aplicamos getContentBetweenArrows si es un array o un string
+      const lote = Array.isArray(row[3]) ? row[3].join(', ') : row[3]; // Si lote es un array, lo unimos por comas
+  
+      // Creamos el objeto para cada fila
+      return {
+        'Fecha de Creación': fechaCreacion,
+        'Nombre': nombre,
+        'Rol': rol,  // Aplicado getContentBetweenArrows a 'rol'
+        'Lote': lote // Convertido a string
+      };
+    });
+  
+    // Crear la hoja de trabajo con los datos de los usuarios
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataRows, { header: ['Fecha de Creación', 'Nombre', 'Rol', 'Lote'] });
+  
     // Crear el libro de trabajo
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Usuarios');
-
-    // Obtener la fecha actual para el nombre del archivo
-    const today = new Date();
-    const formattedDate = today.toISOString().split('T')[0].replace(/-/g, '_');
+  
+    // Guardar el archivo Excel con las fechas de los filtros
     const fileName = `${formattedDesde}_${formattedHasta}_listado_usuarios.xlsx`;
-
-    // Guardar el archivo Excel
     XLSX.writeFile(wb, fileName);
   }
+  
+  
 }

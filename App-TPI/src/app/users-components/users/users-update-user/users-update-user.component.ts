@@ -41,7 +41,7 @@ export class UsersUpdateUserComponent implements OnInit {
 
   async ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id') || ''; // Obtiene el parámetro 'id'
-
+    
   this.loadUserData().then(() => {
     // Llama a un método para cargar el select solo después de cargar los datos del usuario
     this.initSelectOptions();
@@ -50,25 +50,25 @@ export class UsersUpdateUserComponent implements OnInit {
   });
   
     
-    this.userService.getAllRoles().subscribe({
-      next: (data: RolModel[]) => {
-        this.existingRoles = data.map(rol => rol.description);
-        if(this.authService.getActualRole() == "Propietario"){
-          let optionsFilter = this.existingRoles.filter(rol => this.optionsForOwner.includes(rol));
-          this.existingRoles = [];
-          optionsFilter.forEach(o => this.existingRoles.push({value : o, name: o}))
+  this.userService.getAllRoles().subscribe({
+    next: (data: RolModel[]) => {
+      this.existingRoles = data.map(rol => rol.description);
+      if(this.authService.getActualRole() == "Propietario"){
+        let optionsFilter = this.existingRoles.filter(rol => this.optionsForOwner.includes(rol));
+        this.existingRoles = [];
+        optionsFilter.forEach(o => this.existingRoles.push({value : o, name: o}))
 
-                    
-        } else{
-          let optionsFilter = this.existingRoles.filter(rol => !this.optionsForOwner.includes(rol) && rol != "Propietario" && rol != "SuperAdmin");
-          this.existingRoles = [];
-          optionsFilter.forEach(o => this.existingRoles.push({value : o, name: o}))
-        }
-      },
-      error: (error) => {
-        console.error('Error al cargar los roles:', error);
+                  
+      } else{
+        let optionsFilter = this.existingRoles.filter(rol => !this.optionsForOwner.includes(rol) && rol != "Propietario" && rol != "SuperAdmin");
+        this.existingRoles = [];
+        optionsFilter.forEach(o => this.existingRoles.push({value : o, name: o}))
       }
-    });
+    },
+    error: (error) => {
+      console.error('Error al cargar los roles:', error);
+    }
+  });
 
     
 
@@ -81,7 +81,8 @@ export class UsersUpdateUserComponent implements OnInit {
     this.updateForm.get('datebirth')?.disable();
   }
 
-  //Método de chat GPT
+  
+
   private loadUserData(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this.userService.getUserById(parseInt(this.id)).subscribe({
@@ -100,7 +101,7 @@ export class UsersUpdateUserComponent implements OnInit {
   
           // Asigna `rolesSelected` después de obtener `data.roles`
           this.rolesUser = [...data.roles];  // Copia los roles para que aparezcan seleccionados en el select
-  
+          
           resolve(); // Indica que los datos del usuario se han cargado exitosamente
         },
         error: (error) => {
@@ -115,6 +116,8 @@ export class UsersUpdateUserComponent implements OnInit {
     // Aquí puedes ejecutar cualquier lógica que necesite `rolesUser` ya cargado,
     // por ejemplo, si el select depende de la lista de `rolesUser`
     this.rolesSelected = [...this.rolesUser];
+    console.log('Roles disponibles para el select:', this.existingRoles);
+    console.log('Roles seleccionados iniciales:', this.rolesSelected);
   }
   //-----------------------------------------------------------------------------
 
@@ -132,8 +135,10 @@ export class UsersUpdateUserComponent implements OnInit {
   });
 
   //Añade los roles seleccionados por users-select-multiple
-  fillRolesSelected(roles: any) {
-    this.rolesSelected = roles;  //Asignamos directamente los roles emitidos
+  fillRolesSelected(roles: string[]) {
+    // Filtra roles únicos para evitar duplicados
+    this.rolesSelected = roles.filter((role, index) => roles.indexOf(role) === index);
+    console.log('Roles seleccionados:', this.rolesSelected);
   }
 
   confirmExit() {

@@ -34,19 +34,17 @@ export class UsersMultipleSelectComponent implements OnChanges {
    }
 
    ngOnChanges(changes: SimpleChanges): void {
-      
-      this.selectedOptions = [...this.optionsChecked];
-      if (changes['options'].currentValue.length > 0) {
-        this.selectedOptions = [...this.optionsChecked];
-      }
-   }
+  if (changes['options'] && changes['options'].currentValue && changes['options'].currentValue.length > 0) {
+    this.selectedOptions = [...this.optionsChecked];
+  }
+}
  
    send(){
      this.sendList.emit(this.selectedOptions);
    }
 
      // Función para comparar valores
-  compareWithFn = (o1: any, o2: any): boolean => {
-    return o1 === o2;
-  };
-}
+     compareWithFn = (o1: any, o2: any): boolean => {
+      return o1.value === o2;
+    };
+  }

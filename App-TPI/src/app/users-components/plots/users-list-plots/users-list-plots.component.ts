@@ -337,43 +337,43 @@ export class UsersListPlotsComponent {
     doc.save(fileName);
   }
 
-  async exportExcel() {
+  exportExcel() {
+    // Obtenemos los datos visibles de la tabla (basados en los filtros aplicados)
     const table = $('#myTable').DataTable();
     const visibleRows = table.rows({ search: 'applied' }).data().toArray();
-    
-    // Filtrar los lotes visibles
-    const filteredPlots = this.plots.filter(plot =>
-      visibleRows.some(row => row[0] === plot.plot_number)
-    );
 
-    // Mapeo de plots con sus propietarios
-    const plotData = await Promise.all(filteredPlots.map(async plot => {
-      const ownerName = await this.showOwner(plot.id); // Obtiene el propietario
-      return {
-        Lote: plot.plot_number,
-        Manzana: plot.block_number,
-        'M2 Totales': plot.total_area_in_m2,
-        'M2 Construidos': plot.built_area_in_m2,
-        Tipo: plot.plot_type, // Directamente del objeto
-        Estado: plot.plot_state, // Directamente del objeto
-        Propietario: ownerName // Ahora aquí funciona el await
-      };
-    }));
-
-    // Convertir los datos a una hoja de Excel
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(plotData);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Lotes');
-
-    // Guardar el archivo Excel
     const today = new Date();
     const formattedDate = 
     today.getDate().toString().padStart(2, '0') + '/' + 
     (today.getMonth() + 1).toString().padStart(2, '0') + '/' + 
     today.getFullYear();
+  
+    // Preparamos los datos en formato adecuado para Excel
+    const rows = visibleRows.map((row: any) => [
+      `${this.getContentBetweenArrows(row[0])}`,
+      `${this.getContentBetweenArrows(row[1])}`,
+      `${this.getContentBetweenArrows(row[2])}`,
+      `${this.getContentBetweenArrows(row[3])}`,
+      `${this.getContentBetweenArrows(row[4])}`,
+      `${this.getContentBetweenArrows(row[5])}`,
+      `${row[6]}`  // Propietario
+    ]);
+  
+    // Definimos las columnas para el archivo Excel
+    const header = ['Lote', 'Manzana', 'M2 Totales', 'M2 Construidos', 'Tipo', 'Estado', 'Propietario'];
+  
+    // Creamos la hoja de Excel
+    const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet([header, ...rows]);
+  
+    // Creamos un libro de trabajo con la hoja
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Lista de Lotes');
+  
+    // Exportamos el archivo Excel
     const fileName = `${formattedDate}_listado_lotes.xlsx`;
     XLSX.writeFile(wb, fileName);
   }
+
 
 
   async abrirModal(plotId: number) {
