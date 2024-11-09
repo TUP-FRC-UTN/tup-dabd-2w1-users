@@ -12,6 +12,7 @@ export class PutOwnerDto {
     userUpdateId : number;
     active: boolean;
     files: File[] = [];
+    plotId: number[];
 
     constructor() {
         this.name = '';        
@@ -25,5 +26,6 @@ export class PutOwnerDto {
         this.email = '';
         this.userUpdateId = 0; 
         this.active = true;
+        this.plotId = [];
     }
 }

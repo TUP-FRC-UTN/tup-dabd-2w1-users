@@ -247,7 +247,8 @@ export class UsersUpdateOwnerComponent implements OnInit {
       email: form.get('email')?.value,
       files: this.files,
       userUpdateId: 1,
-      active: true
+      active: true,
+      plotId: form.get('plots')?.value
     } as PutOwnerDto
   }
 
@@ -260,8 +261,9 @@ export class UsersUpdateOwnerComponent implements OnInit {
 
       //se crea el objeto
       let ownerPut = this.createObject(form);
+      
       console.log(ownerPut);
-      console.log(this.editOwner.get('plots')?.value);
+
       
 
 

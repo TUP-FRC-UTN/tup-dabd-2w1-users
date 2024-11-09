@@ -104,6 +104,9 @@ export class OwnerService {
     formData.append('phoneNumber', owner.phoneNumber);
     formData.append('userCreateId', owner.userUpdateId.toString());
     formData.append('telegramId', "123123");
+    owner.plotId.forEach((plot) => {
+      formData.append('plotId', plot.toString());
+    });
     owner.files.forEach((file, index) => {
       formData.append('files', file);
     });
