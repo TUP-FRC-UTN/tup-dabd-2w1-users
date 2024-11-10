@@ -309,6 +309,7 @@ export class UsuariosNewOwnerComponent {
 
         //Resetea el fomulario
         this.resetForm() 
+        this.router.navigate(['/home/owners/list']);
       },
 
       //Se intercepta el error, si sucede

@@ -47,14 +47,25 @@ export class ModalInfoUserComponent implements OnInit {
 
   // Método para detectar cambios en el @Input
   ngOnInit() {
-      console.log("------------------------------------------------------");
-    
-      console.log('userModal:', this.userModal);
-      console.log('plotModal:', this.plotModal);
+
       // Actualiza los valores del formulario cuando cambian los datos del usuario
       if (this.userModal.datebirth) {
-        const formattedDate = formatDate(this.userModal.datebirth, 'dd/MM/yyyy', 'en-US');
-        const formattedCreatedDate = formatDate(this.userModal.create_date, 'dd/MM/yyyy', 'en-US');
+        const formattedCreatedDate = DateService.parseDateString(this.userModal.create_date);
+        const formattedDate = DateService.parseDateString(this.userModal.datebirth);
+
+        if (formattedDate) {
+          // Formatea la fecha a 'yyyy-MM-dd' para un input de tipo date
+          const formattedDateString = formattedDate.toISOString().split('T')[0];
+
+          this.editUser.patchValue({
+            datebirth: formattedDateString
+          });
+        } else {
+          this.editUser.patchValue({
+            datebirth: ''
+          });
+        }
+        
         this.editUser.patchValue({
           fullname: this.userModal.lastname + ', ' + this.userModal.name,
           email: this.userModal.email,

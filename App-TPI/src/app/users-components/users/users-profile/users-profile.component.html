@@ -6,7 +6,7 @@
                         @if(haveIcon(selectedIconUrl)){
                             <img [src]="selectedIconUrl" alt="Selected Icon" style="max-width: 120px;" class="border rounded-circle p-3 dropdown btn btn btn-outline-secondary dropdown-toggle"  data-bs-toggle="modal" data-bs-target="#exampleModal">
                         }@else {
-                            <img [src]="selectedIconUrl" alt="Selected Icon" style="max-width: 120px;" class="border rounded-circle p-3 dropdown btn btn btn-outline-secondary dropdown-toggle"  data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            <img [src]="noIcon" alt="Selected Icon" style="max-width: 120px;" class="border rounded-circle p-3 dropdown btn btn btn-outline-secondary dropdown-toggle"  data-bs-toggle="modal" data-bs-target="#exampleModal">
                         }
                         <div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">

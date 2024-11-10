@@ -14,7 +14,7 @@
             <option [value]="role.description">{{ role.description }}</option>
           }
         </select> -->
-        <app-users-multiple-select [options]="rolesFilter" (sendList)="fillOptionsSelected($event)"
+        <app-users-multiple-select [options]="rolesFilter" (selectedOptionsChange)="fillOptionsSelected($event)"
         [placeholder]='placeholder'></app-users-multiple-select>
       </div>
       <div>

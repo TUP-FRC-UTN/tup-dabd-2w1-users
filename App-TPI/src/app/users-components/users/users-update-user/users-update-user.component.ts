@@ -76,6 +76,7 @@ throw new Error('Method not implemented.');
     this.updateForm.get('email')?.disable();
     this.updateForm.get('avatar_url')?.disable();
     this.updateForm.get('datebirth')?.disable();
+  
 
   }
 

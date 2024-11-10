@@ -76,9 +76,18 @@ export class UsersProfileComponent implements OnInit {
   
             // Setea la fecha de nacimiento en el input
             const formattedDate :Date = DateService.parseDateString(user.datebirth)!;
-            this.formProfile.patchValue({
-              datebirth: formattedDate ? DateService.formatDate(formattedDate) : ''
-            });
+            if (formattedDate) {
+              // Formatea la fecha a 'yyyy-MM-dd' para un input de tipo date
+              const formattedDateString = formattedDate.toISOString().split('T')[0];
+  
+              this.formProfile.patchValue({
+                datebirth: formattedDateString
+              });
+            } else {
+              this.formProfile.patchValue({
+                datebirth: ''
+              });
+            }
         }
     })
 
@@ -156,7 +165,6 @@ export class UsersProfileComponent implements OnInit {
       this.formProfile.get('lastName')?.enable();
       this.formProfile.get('phoneNumber')?.enable();
       this.formProfile.get('avatar_url')?.enable();
-      this.formProfile.get('telegram_id')?.enable();
     }
     if(newType == 'info'){
       this.ngOnInit();
