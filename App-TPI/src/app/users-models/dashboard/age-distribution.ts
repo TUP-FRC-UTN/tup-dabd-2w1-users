@@ -1,22 +1,26 @@
-export class AgeRange {
+export class AgeDistribution {
     ageRange: string;
-    count: number;
-    percentage: number;
+    activeCount: number;
+    inactiveCount: number;
+    activePercentage: number;
+    inactivePercentage: number;
 
-    constructor() {
+    constructor(){
         this.ageRange = '';
-        this.count = 0;
-        this.percentage = 0;
+        this.activeCount = 0;
+        this.inactiveCount = 0;
+        this.activePercentage = 0;
+        this.inactivePercentage = 0;
     }
 }
 
-export class AgeStatistic {
+export class AgeStatics {
     totalUsers: number;
     averageAge: number;
     youngestAge: number;
     oldestAge: number;
 
-    constructor() {
+    constructor(){
         this.totalUsers = 0;
         this.averageAge = 0;
         this.youngestAge = 0;
@@ -24,17 +28,27 @@ export class AgeStatistic {
     }
 }
 
-export class AgeDistributionResponse {
-    distribution: AgeRange[];
-    statistics: AgeStatistic;
+export class UserStatusDistribution {
+    activeUsers: number;
+    inactiveUsers: number;
+    activePercentage: number;
+    inactivePercentage: number;
 
-    constructor() {
-        this.distribution = [];
-        this.statistics = {
-            totalUsers: 0,
-            averageAge: 0,
-            youngestAge: 0,
-            oldestAge: 0
-        };
+    constructor(){
+        this.activeUsers = 0;
+        this.inactiveUsers = 0;
+        this.activePercentage = 0;
+        this.inactivePercentage = 0;
+    }
+  }
+export class AgeDistributionResponse {
+    ageDistribution: AgeDistribution[];
+    statics: AgeStatics;
+    userStatusDistribution: UserStatusDistribution;
+
+    constructor(){
+        this.ageDistribution = [];
+        this.statics = new AgeStatics();
+        this.userStatusDistribution = new UserStatusDistribution();
     }
 }
