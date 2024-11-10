@@ -1,0 +1,21 @@
+<div class="chart-container">
+    <svg [attr.viewBox]="'0 0 ' + size + ' ' + size">
+      <g [attr.transform]="'translate(' + size/2 + ',' + size/2 + ')'">
+        @for (slice of slices; track slice.index) {
+          <path 
+            [attr.d]="slice.path" 
+            [attr.fill]="slice.color"
+            class="slice">
+          </path>
+        }
+      </g>
+    </svg>
+    <div class="legend">
+      @for (slice of slices; track slice.index) {
+        <div class="legend-item">
+          <span class="legend-color" [style.background-color]="slice.color"></span>
+          <span class="legend-label">{{slice.label}} ({{slice.value}})</span>
+        </div>
+      }
+    </div>
+  </div>
