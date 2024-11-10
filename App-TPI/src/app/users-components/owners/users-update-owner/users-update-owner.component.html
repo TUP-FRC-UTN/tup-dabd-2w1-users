@@ -32,7 +32,7 @@
                 <!-- Tipo Documento -->
                 <div class="col-lg-6 mb-3">
                     <div class="row">
-                        <label class="col-2 col-form-label">Tipo de documento</label>
+                        <label class="col-2 col-form-label">Tipo de Documento</label>
                         <div class="col-10">
                             <select id="selectOption" class="form-select" formControlName="dniType"
                                 [ngClass]="onValidate('dniType')">
@@ -59,7 +59,7 @@
                 <!-- Tipo de propietario -->
                 <div class="col-lg-6 mb-3">
                     <div class="row">
-                        <label class="col-2 col-form-label">Tipo propietario</label>
+                        <label class="col-2 col-form-label">Tipo Propietario</label>
                         <div class="col-10">
                             <select id="selectOption" class="form-select" formControlName="ownerType"
                                 [ngClass]="onValidate('ownerType')">
@@ -75,7 +75,7 @@
                 <!-- Nombre de empresa -->
                 <div class="col-lg-6 mb-3">
                     <div class="row">
-                        <label class="col-2 col-form-label">Razón social</label>
+                        <label class="col-2 col-form-label">Razón Social</label>
                         <div class="col-10">
                             <input type="text" class="form-control" formControlName="bussinesName"
                                 [ngClass]="onValidate('bussinesName')">
@@ -87,7 +87,7 @@
                 <!-- Estado fiscal-->
                 <div class="col-lg-6 mb-3">
                     <div class="row">
-                        <label class="col-2 col-form-label">Estado fiscal</label>
+                        <label class="col-2 col-form-label">Estado Fiscal</label>
                         <div class="col-10">
                             <app-users-multiple-select [options]="stateOptions" [multiple]="false" [placeholder]="'Seleccione un estado...'" (selectedOptionsChange)="editOwner.get('state')?.setValue($event)" [selectedOptions]="editOwner.get('state')?.value" />
                         </div>
@@ -111,7 +111,7 @@
                 <!-- Fecha -->
                 <div class="col-lg-6 mb-3">
                     <div class="row">
-                        <label class="col-2 col-form-label">Fecha de nacimiento</label>
+                        <label class="col-2 col-form-label">Fecha de Nacimiento</label>
                         <div class="col-10">
                             <input type="date" class="form-control" formControlName="birthdate"
                                 [ngClass]="onValidate('birthdate')">
@@ -148,7 +148,7 @@
 
                 <div class="col-lg-6 mb-3">
                     <div class="row">
-                        <label class="col-2 col-form-label">Subir archivos</label>
+                        <label class="col-2 col-form-label">Subir Archivos</label>
                         <div class="col-10">
                             <input type="file" class="form-control" multiple formControlName="file"
                                 [ngClass]="onValidate('file')" (change)="onFileChange($event)">

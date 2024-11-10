@@ -99,7 +99,7 @@ export class ListUsersComponent implements OnInit {
             order: [[0, 'asc']],
             pageLength: 5,
             columns: [
-              { title: 'Fecha de creación', width: '20%' },
+              { title: 'Fecha de Creación', width: '20%' },
               { title: 'Nombre', width: '20%' },
               { title: 'Rol', width: '30%' },
               {

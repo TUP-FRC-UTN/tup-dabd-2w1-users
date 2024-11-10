@@ -9,23 +9,23 @@
         <h5>Información Personal</h5>
         <div class="row mb-3">
             <div class="col-md-6">
-                <p><strong>Nombre completo:</strong> {{ fullName }}</p>
-                <p><strong>Tipo de documento:</strong> {{ infoOwner.get('dni_type')?.value || 'N/A' }}</p>
+                <p><strong>Nombre Completo:</strong> {{ fullName }}</p>
+                <p><strong>Tipo de Documento:</strong> {{ infoOwner.get('dni_type')?.value || 'N/A' }}</p>
             </div>
             <div class="col-md-6">
-                <p><strong>Fecha de nacimiento:</strong> {{ infoOwner.get('birthdate')?.value || 'N/A' }}</p>
-                <p><strong>Número de documento:</strong> {{ infoOwner.get('dni')?.value || 'N/A' }}</p>
+                <p><strong>Fecha de Nacimiento:</strong> {{ infoOwner.get('birthdate')?.value || 'N/A' }}</p>
+                <p><strong>Número de Documento:</strong> {{ infoOwner.get('dni')?.value || 'N/A' }}</p>
             </div>
         </div>
         <hr>
         <h5>Información Comercial</h5>
         <div class="row mb-3">
             <div class="col-md-6">
-                <p><strong>Tipo de propietario:</strong> {{ infoOwner.get('ownerType')?.value || 'N/A' }}</p>
-                <p><strong>Nombre de la empresa:</strong> {{ infoOwner.get('businessName')?.value || 'N/A' }}</p>
+                <p><strong>Tipo de Propietario:</strong> {{ infoOwner.get('ownerType')?.value || 'N/A' }}</p>
+                <p><strong>Nombre de la Empresa:</strong> {{ infoOwner.get('businessName')?.value || 'N/A' }}</p>
             </div>
             <div class="col-md-6">
-                <p><strong>Estado fiscal:</strong> {{ infoOwner.get('taxStatus')?.value || 'N/A' }}</p>
+                <p><strong>Estado Fiscal:</strong> {{ infoOwner.get('taxStatus')?.value || 'N/A' }}</p>
             </div>
         </div>
         <hr>
@@ -33,17 +33,17 @@
         <div class="row mb-3">
             @for (plot of plotsOwner; track $index) {
                 <div class="col-md-6">
-                    <p><strong>Nro. de lote:</strong> {{ plot.plot_number }}</p>
+                    <p><strong>Nro. de Lote:</strong> {{ plot.plot_number }}</p>
                 </div>
                 <div class="col-md-6">
-                    <p><strong>Nro. de manzana:</strong> {{ plot.block_number }}</p>
+                    <p><strong>Nro. de Manzana:</strong> {{ plot.block_number }}</p>
                 </div>
             }
 
         </div>
         <hr>
         <div class="mt-4">
-            <h5 class="mb-3">Archivos adjuntos</h5>
+            <h5 class="mb-3">Archivos Adjuntos</h5>
             <div class="list-group">
                 @if(!filesOwner.length){
                 <p>No hay archivos disponibles</p>

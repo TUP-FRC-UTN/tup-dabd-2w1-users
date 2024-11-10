@@ -119,7 +119,7 @@ export class UsersListPlotsComponent {
               { title: 'Manzana', width: '10%', className: 'text-start' },
               { title: 'Mts.2 Terreno', width: '15%', className: 'text-start' },
               { title: 'Mts.2 Construidos', width: '15%', className: 'text-start' },
-              { title: 'Tipo lote', width: '15%', className: 'text-start' },
+              { title: 'Tipo Lote', width: '15%', className: 'text-start' },
               { title: 'Estado', width: '15%', className: 'text-start' },
               { title: 'Propietario', width: '15%', className: 'text-start' }, // Nueva columna
               {

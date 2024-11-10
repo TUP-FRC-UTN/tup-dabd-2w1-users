@@ -24,24 +24,24 @@
         </p>
         <p>
 
-          <strong>Tipo de documento:</strong> {{ editUser.get("dni_type")?.value || "N/A" }}
+          <strong>Tipo de Documento:</strong> {{ editUser.get("dni_type")?.value || "N/A" }}
 
           
         </p>
       </div>
       <div class="col-md-6">
         <p>
-          <strong>Fecha de nacimiento:</strong>
+          <strong>Fecha de Nacimiento:</strong>
           {{ editUser.get("birthdate")?.value | date : "dd/MM/yyyy" }}
         </p>
         <p>
-          <strong>Fecha de alta:</strong>
+          <strong>Fecha de Alta:</strong>
           {{
             editUser.get("create_date")?.value | date : "dd/MM/yyyy"
           }}
         </p>
         <p>
-          <strong>Número de documento:</strong> {{ editUser.get("dni")?.value || "N/A" }}
+          <strong>Número de Documento:</strong> {{ editUser.get("dni")?.value || "N/A" }}
         </p>
       </div>
     </div>
@@ -55,7 +55,7 @@
           {{ editUser.get("phoneNumber")?.value || "N/A" }}
         </p>
         <p>
-          <strong>Telegram id:</strong>
+          <strong>Telegram Id:</strong>
           {{ editUser.get("telegram_id")?.value || "N/A" }}
         </p>
       </div>
@@ -70,15 +70,15 @@
     <div class="row mb-3 mt-3">
       @if(plotModal.length == 0){
       <div class="col-md-6">
-        <p><strong>Nro. de lote:</strong> N/A</p>
-        <p><strong>Nro. de manzana:</strong> N/A</p>
+        <p><strong>Nro. de Lote:</strong> N/A</p>
+        <p><strong>Nro. de Manzana:</strong> N/A</p>
       </div>
       }@else { @for (plot of plotModal; track $index) {
       <div class="col-md-6">
-        <p><strong>Nro. de lote:</strong> {{ plot.plot_number }}</p>
+        <p><strong>Nro. de Lote:</strong> {{ plot.plot_number }}</p>
       </div>
       <div class="col-md-6">
-        <p><strong>Nro. de manzana:</strong> {{ plot.block_number }}</p>
+        <p><strong>Nro. de Manzana:</strong> {{ plot.block_number }}</p>
       </div>
 
       } }

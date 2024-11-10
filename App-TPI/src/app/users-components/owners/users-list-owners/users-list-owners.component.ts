@@ -94,7 +94,7 @@ export class UsersListOwnersComponent {
             order: [[0, 'asc']],
             pageLength: 5,
             columns: [
-              { title: 'Fecha de creación', width: '15%', className: 'text-start' },
+              { title: 'Fecha de Creación', width: '15%', className: 'text-start' },
               { title: 'Nombre', width: '15%', className: 'text-start' },
               { title: 'Documento', width: '10%', className: 'text-start' },
               { title: 'Tipo', width: '15%', className: 'text-start' },
