@@ -13,14 +13,19 @@ import { UsersGraphicHistogramComponent } from './dashboards/users-graphic-histo
 import { UsersGraphicBlocksComponent } from './dashboards/users-graphic-blocks/users-graphic-blocks.component';
 import { OwnerStatusCountComponent } from './dashboards/owner-status-count/owner-status-count.component';
 import { OwnersTaxstatusPercentageComponent } from './dashboards/owners-taxstatus-percentage/owners-taxstatus-percentage.component';
+import { MainComponent } from './main/main.component';
 
 // Rutas principales de la aplicación
 export const routes: Routes = [
   {
     //si se deja vacío por defecto redirige al login
     path: '', 
-    redirectTo: '/login',
+    redirectTo: '/landing',
     pathMatch: 'full'
+  },
+  {
+    path: 'landing',
+    component: LandingPageComponent
   },
   {
     path: 'login',
@@ -29,7 +34,7 @@ export const routes: Routes = [
   {
     //ruta principal
     path: 'home',
-    component: LandingPageComponent,
+    component: MainComponent,
     canActivate: [authGuard, roleGuard],
     data: {roles : ['SuperAdmin', 'Gerente', 'Propietario']},
     children: [
