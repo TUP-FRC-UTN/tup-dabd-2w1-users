@@ -27,184 +27,42 @@ export class UsersGraphicBlocksComponent implements OnInit {
 
   //Datos para renderizar el gráfico
   chartType : ChartType = ChartType.ColumnChart;
-  chartDataArea : any[] = [];
-  chartDataPercent: any[] = [];
+  chartData: any[] = [];
   width = 800;
   height = 400;
 
-  chartOptionsArea = {
-    title: 'Áreas por Nro. de Manzana',
-    backgroundColor: 'transparent',
-    chartArea: {
-      width: '75%',
-      height: '70%'
-    },
-    hAxis: {
-      title: 'Manzana',
-      titleTextStyle: {
-        color: '#7f8c8d'
-      }
-    },
-    vAxis: {
-      title: 'Área (m²)',
-      titleTextStyle: {
-        color: '#7f8c8d'
-      },
-      gridlines: {
-        color: '#f1f1f1'
-      },
-      minValue: 0
-    },
-    seriesType: 'bars',
-    series: {
-      0: {
-        color: '#5dade2',
-        label: 'Área Total'
-      },
-      1: {
-        color: '#48c9b0',
-        label: 'Área Construida'
-      }
-    },
-    legend: {
-      position: 'top',
-      alignment: 'center',
-      textStyle: {
-        color: '#7f8c8d',
-        fontSize: 12
-      }
-    },
-    animation: {
-      startup: true,
-      duration: 1000,
-      easing: 'out'
-    }
-  };
-  
-  chartOptionsPercent = {
-    title: 'Porcentajes por Nro. de Manzana',
-    backgroundColor: 'transparent',
-    chartArea: {
-      width: '75%',
-      height: '70%'
-    },
-    hAxis: {
-      title: 'Manzana',
-      titleTextStyle: {
-        color: '#7f8c8d'
-      }
-    },
-    vAxis: {
-      title: 'Porcentaje (%)',
-      titleTextStyle: {
-        color: '#7f8c8d'
-      },
-      gridlines: {
-        color: '#f1f1f1'
-      },
-      minValue: 0,
-      maxValue: 100,
-      format: '#\'%\'' // Formato para el porcentaje
-    },
-    seriesType: 'bars',
-    series: {
-      0: {
-        color: '#f39c12',
-        label: 'Porcentaje Construido'
-      },
-      1: {
-        color: '#e74c3c',
-        label: 'Porcentaje No Construido'
-      }
-    },
-    legend: {
-      position: 'top',
-      alignment: 'center',
-      textStyle: {
-        color: '#7f8c8d',
-        fontSize: 12
-      }
-    },
-    animation: {
-      startup: true,
-      duration: 1000,
-      easing: 'out'
-    }
-  };
-  
-  
-
   chartOptions = {
-    title: 'Comparativa de Áreas por Nro. de Manzana',
+    title: 'Comparativa de Áreas y Porcentajes por Nro. de Manzana',
     backgroundColor: 'transparent',
-    chartArea: {
-      width: '75%',
-      height: '70%'
-    },
-    hAxis: {
-      title: 'Métricas',
-      titleTextStyle: {
-        color: '#7f8c8d'
-      }
-    },
+    chartArea: { width: '75%', height: '70%' },
+    hAxis: { title: 'Métricas', titleTextStyle: { color: '#7f8c8d' } },
     vAxes: {
-      0: {
+      0: { // Eje izquierdo para áreas
         title: 'Área (m²)',
-        titleTextStyle: {
-          color: '#7f8c8d'
-        },
-        gridlines: {
-          color: '#f1f1f1'
-        },
+        titleTextStyle: { color: '#7f8c8d' },
+        gridlines: { color: '#f1f1f1' },
         minValue: 0
       },
-      1: {
+      1: { // Eje derecho para porcentajes
         title: 'Porcentaje (%)',
-        titleTextStyle: {
-          color: '#7f8c8d'
-        },
-        gridlines: {
-          color: '#f1f1f1'
-        },
+        titleTextStyle: { color: '#7f8c8d' },
+        gridlines: { color: '#f1f1f1' },
         minValue: 0,
         maxValue: 100,
-        format: '#\'%\'' // Formato para el porcentaje
+        format: '#\'%\''
       }
     },
     seriesType: 'bars',
     series: {
-      0: { // Área Total - Eje izquierdo
-        color: '#5dade2',
-        targetAxisIndex: 0,
-        label: 'Área Total'
-      },
-      1: { // Área Construida - Eje izquierdo
-        color: '#48c9b0',
-        targetAxisIndex: 0,
-        label: 'Área Construida'
-      },
-      2: { // Porcentaje Construido - Eje derecho
-        type: 'line',
-        color: '#f39c12',
-        targetAxisIndex: 1,
-        lineWidth: 3,
-        pointSize: 6
-      },
-      3: { // Porcentaje No Construido - Eje derecho
-        type: 'line',
-        color: '#e74c3c',
-        targetAxisIndex: 1,
-        lineWidth: 3,
-        pointSize: 6
-      }
+      0: { color: '#5dade2', targetAxisIndex: 0, label: 'Área Total' },       // Área Total - Eje izquierdo
+      1: { color: '#48c9b0', targetAxisIndex: 0, label: 'Área Construida' },  // Área Construida - Eje izquierdo
+      2: { color: '#f39c12', targetAxisIndex: 1, lineWidth: 3, pointSize: 6 },  // % Construido - Eje derecho
+      3: { color: '#e74c3c', targetAxisIndex: 1, lineWidth: 3, pointSize: 6 }   // % No Construido - Eje derecho
     },
     legend: {
       position: 'top',
       alignment: 'center',
-      textStyle: {
-        color: '#7f8c8d',
-        fontSize: 12
-      }
+      textStyle: { color: '#7f8c8d', fontSize: 12 }
     },
     animation: {
       startup: true,
@@ -267,26 +125,13 @@ export class UsersGraphicBlocksComponent implements OnInit {
     const b1PercentNotBuilt = Number((100 - b1PercentBuilt).toFixed(1));
     const b2PercentNotBuilt = Number((100 - b2PercentBuilt).toFixed(1));
 
-    // Gráfico 1: Áreas (total y construida)
-this.chartDataArea = [
-  ['Mzna. 1', b1.totalArea, b1.builtArea],
-  ['Mzna. 2', b2.totalArea, b2.builtArea]
-];
+    this.chartData = [
+      ['Área Total', b1.totalArea, b2.totalArea, null, null],
+      ['Área Construida', b1.builtArea, b2.builtArea, null, null],
+      ['Porcentaje Construido', null, null, b1PercentBuilt, b2PercentBuilt],
+      ['Porcentaje No Construido', null, null, b1PercentNotBuilt, b2PercentNotBuilt]
+    ];
 
-// Gráfico 2: Porcentajes (construido y no construido)
-this.chartDataPercent = [
-  ['Mzna. 1', b1PercentBuilt, b1PercentNotBuilt],
-  ['Mzna. 2', b2PercentBuilt, b2PercentNotBuilt]
-];
-    //this.chartData = [
-
-      //['Mzna. 1', b1.totalArea, b1.builtArea, b1PercentBuilt, b1PercentNotBuilt],
-      //['Mzna. 2', b2.totalArea, b2.builtArea, b2PercentBuilt, b2PercentNotBuilt]
-      //['Bloque 1', b1.totalArea, b2.totalArea],
-    //['Bloque 2', b1.builtArea, b2.builtArea],
-    //['Bloque 1', b1PercentBuilt, b2PercentBuilt],
-    //['Bloque 2', b1PercentNotBuilt, b2PercentNotBuilt]
-    //];
   }
 
   selectedBlockskPIs = {
@@ -307,29 +152,4 @@ this.chartDataPercent = [
       utilizationPercentage: ((b1.builtArea + b2.builtArea) / (b1.totalArea + b2.totalArea)) * 100
     };
   }
-
- /* private calculateKPIs(): void {
-    this.kPIs.totalArea = this.blocks.reduce((sum, block) => sum + block.totalArea, 0);
-    this.kPIs.totalBuiltArea = this.blocks.reduce((sum, block) => sum + block.builtArea, 0);
-    this.kPIs.utilizationPercentage = (this.kPIs.totalBuiltArea / this.kPIs.totalArea) * 100;
-  }*/
 }
-
-/**
- * series: {
-      0: { 
-        color: '#5dade2', 
-        areaOpacity: 0.5, 
-        labelInLegend: 'Área Total',
-        label: 'Área Total',
-        pointShape: 'diamond'
-      }, // Área Total
-      1: { 
-        color: '#48c9b0', 
-        areaOpacity: 0.4, 
-        labelInLegend: 'Área Construida',
-        label: 'Área Construida',
-        pointShape: 'diamond'
-      }  // Área Construida
-    }
- */
