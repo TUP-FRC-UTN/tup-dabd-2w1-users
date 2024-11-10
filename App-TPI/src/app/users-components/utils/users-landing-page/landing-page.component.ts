@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterOutlet } from '@angular/router';
 import { PlotService } from '../../../users-servicies/plot.service';
@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './landing-page.component.html',
   styleUrls: ['./landing-page.component.css'], 
 })
-export class LandingPageComponent {
+export class LandingPageComponent implements OnInit {
 
   //Injects
   private router = inject(Router);
@@ -30,11 +30,15 @@ export class LandingPageComponent {
       message: new FormControl('', [Validators.required])
     })
   }
+  ngOnInit(): void {
+    this.getPlots();
+  }
 
   //Trae los primeros 3 lotes disponibles
   getPlots(){
     this.plotService.getAllPlotsAvailables().subscribe({
       next: (data: GetPlotModel[]) => {
+        
         const firstThreePlots = data.slice(0, 3);
         this.plotsCard = firstThreePlots.map(d => ({
           number: d.plot_number,
@@ -43,6 +47,7 @@ export class LandingPageComponent {
           type: d.plot_type,
           status: d.plot_state
           }));
+          
       },
       error: (err) => {
         console.error('Error al cargar los lotes', err);

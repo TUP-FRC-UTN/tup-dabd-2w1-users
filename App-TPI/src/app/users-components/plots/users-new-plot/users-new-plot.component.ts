@@ -141,6 +141,7 @@ export class UsersNewPlotComponent {
         });
         this.resetForm();
         this.ngOnInit();
+        this.router.navigate(['/home/plots/list']);
       },
       error: (error) => {
         console.error('Error al crear el lote:', error);

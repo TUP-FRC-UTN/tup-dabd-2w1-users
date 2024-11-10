@@ -37,10 +37,6 @@
           <p class="lead text-muted">Encuentra el terreno perfecto para construir tus sueños</p>
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci nobis ad officiis cupiditate maiores ducimus ea possimus. Distinctio, necessitatibus. 
               Consequuntur quis placeat molestias dignissimos corrupti consequatur, delectus perferendis quisquam ut.</p>
-          <div class="d-flex gap-2 justify-content-center">
-              <a href="#plots" class="btn btn-primary my-2">Ver Lotes Disponibles</a>
-              <a href="#contact" class="btn btn-secondary my-2">Más información</a>
-          </div>
       </div>
   </div>
 </section>
@@ -67,6 +63,13 @@
                   </div>
               </div>
           </div>
+          }
+          @if(plotsCard.length === 0) {
+              <div class="col">
+                  <div class="alert alert-warning" role="alert">
+                      No se han encontrado lotes disponibles
+                  </div>
+              </div>
           }
       </div>
   </div>
