@@ -245,6 +245,7 @@ verifyOptions() {
           this.router.navigate(['/home/family']);
         }
         //Reseteamos el formulario
+        this.router.navigate(['/home/users/list']);
         this.reactiveForm.reset();
         
       },

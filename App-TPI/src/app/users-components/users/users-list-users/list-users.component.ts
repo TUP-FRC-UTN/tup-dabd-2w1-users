@@ -30,7 +30,7 @@ import { UsersMultipleSelectComponent } from "../../utils/users-multiple-select/
   templateUrl: './list-users.component.html',
   styleUrls: ['./list-users.component.css']
 })
-export class ListUsersComponent implements OnInit, AfterViewInit {
+export class ListUsersComponent implements OnInit {
 
   selectedOptions: any; 
   optionesFilter: any;
@@ -295,23 +295,15 @@ export class ListUsersComponent implements OnInit, AfterViewInit {
     
 
     table.column(2).search('').draw();
+    table.search('').draw();
   }
 
-fillOptionsSelected(options: any) {
-  this.optionesFilter = options;  // Asignamos directamente los roles emitidos
-  var optiones = options.map((option: any) => option).join(' ');
-  
-  const table = $('#myTable').DataTable();
-
-  table.column(2).search(optiones).draw();
-}
-
-
-
-  updateFilterRol() {
-    const table = $('#myTable').DataTable();
+  fillOptionsSelected(options: any) {
+    var optiones = options.map((option: any) => option).join(' ');
     
-    table.column(2).search(this.selectRol.value).draw();
+    const table = $('#myTable').DataTable();
+
+    table.column(2).search(optiones).draw();
   }
 
   //Metodo para filtrar la tabla en base a las 2 fechas
@@ -346,32 +338,60 @@ fillOptionsSelected(options: any) {
   
     let max: number = 2;
   
-    for (let i = 0; i < max; i++) {
-      let color: string = "";
-      switch (roles[i]) {
-        case "Gerente":
-          color = "text-bg-danger";
-          break;
-        case "Propietario":
-          color = "text-bg-primary";
-          break;
-        case "Familiar mayor":
-          color = "text-bg-secondary";
-          break;
-        case "Familiar menor":
-          color = "text-bg-secondary";
-          break;
-        case "SuperAdmin":
-          color = "text-bg-dark";
-          break;
-        default:
-          color = "badge bg-info text-dark";
-          break;
+    if(roles.length > 1){
+      for (let i = 0; i < max; i++) {
+        let color: string = "";
+        switch (roles[i]) {
+          case "Gerente":
+            color = "text-bg-danger";
+            break;
+          case "Propietario":
+            color = "text-bg-primary";
+            break;
+          case "Familiar mayor":
+            color = "text-bg-secondary";
+            break;
+          case "Familiar menor":
+            color = "text-bg-secondary";
+            break;
+          case "SuperAdmin":
+            color = "text-bg-dark";
+            break;
+          default:
+            color = "badge bg-info text-dark";
+            break;
+        }
+    
+        rolesA += `
+                     <span class="badge rounded-pill50 ${color}">${roles[i]}</span> `;
       }
-  
-      rolesA += `
-                   <span class="badge rounded-pill50 ${color}">${roles[i]}</span> `;
+    }else{
+      let color: string = "";
+        switch (roles[0]) {
+          case "Gerente":
+            color = "text-bg-danger";
+            break;
+          case "Propietario":
+            color = "text-bg-primary";
+            break;
+          case "Familiar mayor":
+            color = "text-bg-secondary";
+            break;
+          case "Familiar menor":
+            color = "text-bg-secondary";
+            break;
+          case "SuperAdmin":
+            color = "text-bg-dark";
+            break;
+          default:
+            color = "badge bg-info text-dark";
+            break;
+        }
+    
+        rolesA += `
+                     <span class="badge rounded-pill50 ${color}">${roles[0]}</span> `;
     }
+  
   
     if (roles.length > 2) {
       var rolesExtra = roles.slice(2);
@@ -418,20 +438,6 @@ fillOptionsSelected(options: any) {
     return rolesA;
   }
   
-
-  aaaa(){
-    console.log("AAAA");
-  }
-
-  ngAfterViewInit() {
-    // Añadir el evento al botón dinámico
-    const button = document.getElementById('show-more-btn');
-    if (button) {
-      button.addEventListener('click', () => this.aaaa());
-    }
-  }
-
-
 
   // showRoleForPdf(role : string) : string {
   //   // Definimos el HTML del botón como una cadena

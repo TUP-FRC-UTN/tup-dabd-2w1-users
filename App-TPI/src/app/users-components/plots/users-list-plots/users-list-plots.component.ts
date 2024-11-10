@@ -106,8 +106,8 @@ export class UsersListPlotsComponent {
             order: [[0, 'asc']],
             pageLength: 5,
             data: this.plots.map((plot, index) => [
-              `<p class="text-end"> ${plot.plot_number}<p/>`,
-              `<p class="text-end"> ${plot.block_number}<p/>`,
+              `<p class="text-end">${plot.plot_number}<p/>`,
+              `<p class="text-end">${plot.block_number}<p/>`,
               ` <p class="text-end">${plot.total_area_in_m2} m²<p/>`,
               `<p class="text-end">${plot.built_area_in_m2} m²<p/>`,
               this.showPlotType(plot.plot_type),
@@ -250,9 +250,15 @@ export class UsersListPlotsComponent {
 
   getContentBetweenArrows(input: string): string[] {
     const matches = [...input.matchAll(/>(.*?)</g)];
-    return matches.map(match => match[1]).filter(content => content !== "");
+    const cleanedResults = matches
+      .map(match => match[1].trim()) // Elimina los espacios al inicio y al final de cada elemento
+      .filter(content => content !== ""); // Filtra los elementos que solo sean espacios o estén vacíos
+    
+    console.log(cleanedResults); // Verifica el resultado con los logs
+  
+    return cleanedResults;
   }
-
+  
 
   resetFilters() {
     // Reiniciar el valor del control de rol
@@ -450,7 +456,6 @@ export class UsersListPlotsComponent {
         color = "text-bg-danger";
         break;
     }
-
     return `<div class="d-flex justify-content-center"> <span class='badge rounded-pill ${color}'>${plotType}</span> </div>`;
   }
 

@@ -128,7 +128,7 @@
         </div>
 
 
-        <div class="col-lg-6 mb-3">
+        <!-- <div class="col-lg-6 mb-3">
           <div class="row">
             <label class="col-2 col-form-label">Telegram id</label>
             <div class="col-10">
@@ -137,7 +137,7 @@
               <div class="invalid-feedback">{{showError('telegram_id')}}</div>
             </div>
           </div>
-        </div>
+        </div> -->
 
 
 
@@ -162,7 +162,7 @@
             <button type="button" class="btn btn-secondary" (click)="redirect()">Cancelar</button>
           </div>
           <div class="col-auto">
-            <button type="submit" class="btn btn-success" [disabled]="!reactiveForm.valid || selectedOptions.length === 0">
+            <button type="submit" class="btn btn-success" [disabled]="!reactiveForm.valid">
               Registrar
             </button>
           </div>

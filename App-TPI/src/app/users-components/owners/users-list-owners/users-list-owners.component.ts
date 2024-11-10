@@ -281,6 +281,8 @@ export class UsersListOwnersComponent {
   resetFilters() {
     // Reiniciar el valor del control de rol
     this.selectType.setValue('');
+    this.initialDate.setValue(this.minDate);
+    this.endDate.setValue(this.maxDate);
 
     // Limpiar el campo de búsqueda general y el filtro de la columna de tipo
     const searchInput = document.querySelector('#myTable_filter input') as HTMLInputElement;
@@ -294,6 +296,7 @@ export class UsersListOwnersComponent {
     // Limpiar búsqueda y filtros
     table.search('').draw(); // Limpiar búsqueda general
     table.column(3).search('').draw(); // Limpiar filtro de tipo
+    table.column(0).search('').draw(); // Limpiar filtro de fecha
 }
 
   updateFilterType() {
