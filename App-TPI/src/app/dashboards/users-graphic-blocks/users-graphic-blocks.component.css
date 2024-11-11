@@ -6,3 +6,26 @@
     transform: translateY(-3px);
     box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
   }
+  
+  .tech-gradient {
+    background: linear-gradient(135deg, #4776E6 0%, #8E54E9 100%);
+  }
+  
+  .frost-gradient {
+    background: linear-gradient(135deg, rgba(52,152,219,0.3) 0%, rgba(52,152,219,0.1) 100%);
+    color: #666;
+    border: 1px solid rgba(52,152,219,0.2);
+  }
+  
+  .primary-gradient {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  }
+  
+  .success-gradient {
+    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  }
+
+  .info-gradient {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  }
+  
