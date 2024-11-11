@@ -24,6 +24,7 @@ import { GetPlotDto } from '../../../users-models/plot/GetPlotDto';
 import { PlotService } from '../../../users-servicies/plot.service';
 import { ModalEliminarOwnerComponent } from '../users-modal-delete-owner/users-modal-delete-owner.component';
 import { UsersMultipleSelectComponent } from "../../utils/users-multiple-select/users-multiple-select.component";
+import moment from 'moment';
 
 @Component({
   selector: 'app-users-list-owners',
@@ -94,7 +95,11 @@ export class UsersListOwnersComponent {
             order: [[0, 'asc']],
             pageLength: 5,
             columns: [
-              { title: 'Fecha de Creación', width: '15%', className: 'text-start' },
+              { title: 'Fecha de Creación', width: '15%', className: 'text-start',
+                render: (data) => {
+                  return moment(data, 'DD/MM/YYYY').format('DD/MM/YYYY');
+                },
+               },
               { title: 'Nombre', width: '15%', className: 'text-start' },
               { title: 'Documento', width: '10%', className: 'text-start' },
               { title: 'Tipo', width: '15%', className: 'text-start' },
@@ -142,6 +147,8 @@ export class UsersListOwnersComponent {
           // Alinear la caja de búsqueda a la derecha
           const searchInputWrapper = $('#myTable_filter');
           searchInputWrapper.addClass('d-flex justify-content-start');
+
+          table.order([0, 'desc']).draw(); // Ordenar por fecha de creación de forma descendente
   
           // Desvincular el comportamiento predeterminado de búsqueda
           $('#myTable_filter input').unbind();

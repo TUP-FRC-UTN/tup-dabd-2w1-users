@@ -21,7 +21,7 @@ import { GetPlotModel } from '../../../users-models/plot/GetPlot';
 import { ModalEliminarUserComponent } from '../users-modal-eliminar-user/modal-eliminar-user/modal-eliminar-user.component';
 import DataTable from 'datatables.net-bs5';
 import { UsersMultipleSelectComponent } from "../../utils/users-multiple-select/users-multiple-select.component";
-
+import moment from 'moment';
 
 @Component({
   selector: 'app-list-users',
@@ -85,8 +85,12 @@ export class ListUsersComponent implements OnInit {
 
           datebirth: user.datebirth.replace(/-/g, '/'),
           create_date: user.create_date.replace(/-/g, '/'),
+          
 
         }));
+
+        console.log(this.users);
+        
 
         //Inicializar DataTables después de cargar los datos
         setTimeout(() => {
@@ -99,7 +103,18 @@ export class ListUsersComponent implements OnInit {
             order: [[0, 'asc']],
             pageLength: 5,
             columns: [
-              { title: 'Fecha de Creación', width: '20%' },
+              {
+                title: 'Fecha de Creación', 
+                width: '20%',
+                render: (data, type, row, meta) => {
+                  // Convertir la fecha a un formato reconocido por moment (DD/MM/YYYY)
+                  const fechaFormateada = moment(data, 'DD/MM/YYYY').format('DD/MM/YYYY');
+              
+                  return fechaFormateada;
+                }
+              }
+              ,
+              
               { title: 'Nombre', width: '20%' },
               { title: 'Rol', width: '30%' },
               {
@@ -180,6 +195,8 @@ export class ListUsersComponent implements OnInit {
               emptyTable: "No hay datos disponibles en la tabla"
             },
           });
+
+          table.order([[0, 'desc']]).draw();
 
           //Alinear la caja de búsqueda a la derecha
           const searchInputWrapper = $('#myTable_filter');
@@ -302,6 +319,7 @@ export class ListUsersComponent implements OnInit {
     var optiones = options.map((option: any) => option).join(' ');
     
     const table = $('#myTable').DataTable();
+    table.order([[0, 'desc']]).draw();  // Asumiendo que la fecha está en la primera columna (índice 0) y deseas ordenarla de manera
 
     table.column(2).search(optiones).draw();
   }
@@ -661,3 +679,4 @@ export class ListUsersComponent implements OnInit {
   
   
 }
+

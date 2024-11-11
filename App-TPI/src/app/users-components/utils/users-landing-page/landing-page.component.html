@@ -8,8 +8,8 @@
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
           <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav me-auto">
+      <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarNav">
+          <!-- <ul class="navbar-nav me-auto">
               <li class="nav-item">
                   <a class="nav-link active" href="#start">Inicio</a>
               </li>
@@ -22,7 +22,7 @@
               <li class="nav-item">
                   <a class="nav-link" href="#contact">Contacto</a>
               </li>
-          </ul>
+          </ul> -->
           <button type="button" class="btn btn-primary" (click)="redirect('/login')">Iniciar Sesión
               <i class="bi bi-person-circle"></i> 
           </button>
@@ -34,11 +34,9 @@
 <section class="py-5 text-center bg-light" style="margin-top: 56px;" id="welcome">
   <div class="row py-lg-5">
       <div class="col-lg-6 col-md-8 mx-auto">
-          <h1 class="fw-light">Bienvenido a Consorcio Example</h1>
+          <h1 class="fw-light">Bienvenido a Villa del Cóndor</h1>
           <p class="lead text-muted">Encuentra el terreno perfecto para construir tus sueños</p>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci nobis ad officiis cupiditate maiores ducimus ea possimus. Distinctio, necessitatibus. 
-              Consequuntur quis placeat molestias dignissimos corrupti consequatur, delectus perferendis quisquam ut.</p>
-      </div>
+          <p>Villa del Cóndor es más que un consorcio: es un refugio donde la naturaleza se encuentra con la vida moderna. Ubicado en un entorno rodeado por colinas majestuosas y verdes praderas, cada rincón ofrece vistas espectaculares que invitan a la tranquilidad y a la contemplación. Aquí, el canto de las aves y el susurro del viento entre los árboles crean un ambiente sereno, ideal para aquellos que buscan un hogar en armonía con la naturaleza.</p></div>
   </div>
 </section>
 
@@ -77,7 +75,7 @@
 </section>
 
 
-<section class="py-5 bg-light m-0" id="plots">
+<!-- <section class="py-5 bg-light m-0" id="plots">
   <div class="container">
       <h2 class="text-center mb-4">Envianos un mensaje</h2>
       <p class="text-center">Si tienes alguna pregunta o deseas más información, no dudes en ponerte en contacto con nosotros.</p>
@@ -106,15 +104,15 @@
           </form>
       </div>
   </div>
-</section>
+</section> -->
 
 
 <!-- Footer -->
 <footer class="bg-dark text-white py-4">
   <div class="container">
-      <div class="row">
+      <div class="row d-flex justify-content-between">
           <div class="col-md-4">
-              <h5>Consorcio Example</h5>
+              <h5>Villa del Cóndor</h5>
               <p>Desarrollando el futuro inmobiliario</p>
               <div class="social-icons">
                   <a href="#" class="text-white me-3"><i class="bi bi-facebook"></i></a>
@@ -122,7 +120,7 @@
                   <a href="#" class="text-white me-3"><i class="bi bi-twitter-x"></i></a>
               </div>
           </div>
-          <div class="col-md-4">
+          <!-- <div class="col-md-4">
               <h5>Enlaces Rápidos</h5>
               <ul class="list-unstyled">
                   <li><a href="#start" class="text-white">Inicio</a></li>
@@ -130,19 +128,19 @@
                   <li><a href="#aboutUs" class="text-white">Nosotros</a></li>
                   <li><a href="#contact" class="text-white">Contacto</a></li>
               </ul>
-          </div>
+          </div> -->
           <div class="col-md-4">
               <h5>Contacto</h5>
               <ul class="list-unstyled">
                   <li><i class="bi bi-geo-alt"></i> Av. Principal 123</li>
                   <li><i class="bi bi-telephone"></i> +1 234 567 890</li>
-                  <li><i class="bi bi-envelope"></i> infoconsorcio.com</li>
+                  <li><i class="bi bi-envelope"></i> {{'villadelcondor@gmail.com'}}</li>
               </ul>
           </div>
       </div>
       <hr>
       <div class="text-center">
-          <small>&copy; 2024 Consorcio Example. Todos los derechos reservados.</small>
+          <small>&copy; 2024 Villa del Cóndor. Todos los derechos reservados.</small>
       </div>
   </div>
 </footer>
