@@ -101,5 +101,6 @@ export class UsersHomeComponent implements OnInit {
   capitalizeFirstLetter(day: string): string {
     return day.charAt(0).toUpperCase() + day.slice(1);
   }
+
 }
 

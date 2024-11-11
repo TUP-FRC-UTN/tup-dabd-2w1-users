@@ -29,7 +29,7 @@ export class WeatherService {
     'broken clouds': 'Nublado parcial',
     'shower rain': 'Lluvia fuerte',
     'rain': 'Lluvia',
-    'dust': 'Polvo',
+    'dust': 'Viento con polvo',
     'thunderstorm': 'Tormenta eléctrica',
     'snow': 'Nieve',
     'mist': 'Neblina',
