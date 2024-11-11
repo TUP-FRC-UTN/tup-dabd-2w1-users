@@ -139,10 +139,18 @@ export class UsersUpdateOwnerComponent implements OnInit {
     this.plotService.getAllPlots().subscribe({
       next: (data: GetPlotModel[]) => {
         // Crear las opciones del select
-        this.plotsOptions = data.map(d => ({
+        console.log(data);
+        
+        let plotsAvailables: GetPlotModel[] = data.filter(plot => plot.plot_state === 'Disponible' || this.plotsForOwner.some(p => p.id === plot.id));
+
+        console.log(plotsAvailables);
+        
+
+        this.plotsOptions = plotsAvailables.map(d => ({
           value: d.id,
           name: `Lote: ${d.plot_number}, Manzana: ${d.block_number}`
         }));
+        
 
         // Aquí puedes setear valores iniciales si es necesario. Por ejemplo:
         const selectedPlots = data // Aquí, 'data' es la lista completa de plots
@@ -155,6 +163,8 @@ export class UsersUpdateOwnerComponent implements OnInit {
         console.error('Error al cargar los terrenos:', err);
       }
     });
+
+
     
 
     // Cargar las opciones para los selectores

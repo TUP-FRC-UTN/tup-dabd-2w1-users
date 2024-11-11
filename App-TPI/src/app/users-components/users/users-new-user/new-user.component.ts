@@ -241,11 +241,14 @@ verifyOptions() {
           showConfirmButton: true,
           confirmButtonText: 'Aceptar',
         });
+        alert(this.authService.getActualRole());
         if(this.authService.getActualRole() == "Propietario"){
           this.router.navigate(['/home/family']);
         }
         //Reseteamos el formulario
-        this.router.navigate(['/home/users/list']);
+        if(this.authService.getActualRole() == "Gerente"){
+          this.router.navigate(['/home/users/list']);
+        }
         this.reactiveForm.reset();
         
       },
