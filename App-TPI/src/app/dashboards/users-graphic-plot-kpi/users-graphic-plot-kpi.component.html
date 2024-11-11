@@ -1,27 +1,48 @@
-<div class="dashboard-container">
-    <h1 class="dashboard-title">Estados de Lotes</h1>
-    
-    <div class="kpi-container">
-      <div class="kpi-card">
-        <h3>Cantidad de Lotes</h3>
-        <div class="kpi-value">{{totalLots}}</div>
-      </div>
-      
-      <div class="kpi-card">
-        <h3>Residenciales</h3>
-        <div class="kpi-value">{{residentialLots}}</div>
-      </div>
-      
-      <div class="kpi-card">
-        <h3>Comerciales</h3>
-        <div class="kpi-value">{{commercialLots}}</div>
-      </div>
-      
-      <div class="kpi-card">
-        <h3>Baldíos</h3>
-        <div class="kpi-value">{{emptyLots}}</div>
-      </div>
-    </div>
 
+<div class="container">
+  <div class="row">
+      <div class="col-md-7">
+          <div class="card border-0 shadow-lg rounded-4 h-100">
+              <div class="card-body">
+                  <div>
+                    <h1 class="dashboard-title">Estados de Lotes</h1>
+                    <app-users-graphic-plot></app-users-graphic-plot>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <div class="col-md-4">
+
+          <!-- kPIs -->
+          <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow primary-gradient">
+            <div class="kpi-card">
+              <h3>Cantidad de Lotes</h3>
+              <div class="kpi-value">{{totalLots}}</div>
+          </div>
+          </div>
+
+          <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow success-gradient">
+            <div class="kpi-card">
+              <h3>Residenciales</h3>
+              <div class="kpi-value">{{residentialLots}}</div>
+          </div>
+          </div>
+
+          <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow info-gradient">
+            
+            <div class="kpi-card">
+              <h3>Comerciales</h3>
+              <div class="kpi-value">{{commercialLots}}</div>
+          </div>
+          </div>
+          <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow warning-gradient">
+            <div class="kpi-card">
+              <h3>Baldíos</h3>
+              <div class="kpi-value">{{emptyLots}}</div>
+          </div>
+          </div>
+      </div>
   </div>
+</div>
   

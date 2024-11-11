@@ -3,11 +3,12 @@ import { Component, OnInit } from '@angular/core';
 import { PlotTypeCount } from '../../users-models/dashboard/PlotTypeCount';
 import { PlotStateCount } from '../../users-models/dashboard/PlotStateCount';
 import { Observable } from 'rxjs';
+import { UsersGraphicPlotComponent } from "../users-graphic-plot/users-graphic-plot.component";
 
 @Component({
   selector: 'app-users-graphic-plot-kpi',
   standalone: true,
-  imports: [],
+  imports: [UsersGraphicPlotComponent],
   templateUrl: './users-graphic-plot-kpi.component.html',
   styleUrl: './users-graphic-plot-kpi.component.css'
 })
