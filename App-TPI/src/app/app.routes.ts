@@ -14,6 +14,7 @@ import { UsersGraphicBlocksComponent } from './dashboards/users-graphic-blocks/u
 import { OwnerStatusCountComponent } from './dashboards/owner-status-count/owner-status-count.component';
 import { OwnersTaxstatusPercentageComponent } from './dashboards/owners-taxstatus-percentage/owners-taxstatus-percentage.component';
 import { MainComponent } from './main/main.component';
+import { UsersHomeComponent } from './users-components/utils/users-home/users-home.component';
 
 // Rutas principales de la aplicación
 export const routes: Routes = [
@@ -90,6 +91,11 @@ export const routes: Routes = [
         path: 'charts/owners/taxes',
         data: {roles: ['SuperAdmin', 'Gerente']},
         component: OwnersTaxstatusPercentageComponent
+      },
+      {
+        path: 'start',
+        data: {roles: ['SuperAdmin', 'Gerente', 'Propietario','Familiar mayor','Familiar menor','Inquilino']},
+        component: UsersHomeComponent
       }
     ]
   },
