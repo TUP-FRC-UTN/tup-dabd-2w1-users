@@ -72,7 +72,6 @@ export class UsersGraphicBlocksComponent implements OnInit {
       easing: 'out'
     },
     tooltip: {
-      isHtml: true,
       trigger: 'both',
       showColorCode: true
     }
@@ -166,7 +165,7 @@ export class UsersGraphicBlocksComponent implements OnInit {
        },
        {
          v: b2.totalArea,
-         f: `Manzana ${block2}:${b2.totalArea.toLocaleString()} m²`
+         f: `Manzana ${block2}: ${b2.totalArea.toLocaleString()} m²`
        }, 
        null, 
        null

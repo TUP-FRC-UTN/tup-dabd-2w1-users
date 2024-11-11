@@ -55,7 +55,6 @@ export class UsersGraphicHistogramComponent {
         },
         bar: { groupWidth: '70%' },
         tooltip: {
-            textStyle: { fontSize: 14, color: '#495057' },
             showColorCode: true,
             trigger: 'both'
         }
@@ -111,11 +110,21 @@ export class UsersGraphicHistogramComponent {
         this.barChartData = [
             //['Rango de Edad', 'Activos', 'Inactivos'],
             ...this.ageDistribution.ageDistribution.map((item: any) => [
-              item.ageRange,
-              item.activeCount,
-              item.inactiveCount
+              {
+                v: item.ageRange,
+                f: item.ageRange
+              },
+              {
+                v: item.activeCount,
+                f: `Activos: ${item.activeCount} usuarios`
+              },
+              {
+                v: item.inactiveCount,
+                f: `Inactivos: ${item.inactiveCount} usuarios.`
+              }
             ])
           ];
+
       
           // Prepare pie chart data
           const status = this.ageDistribution.userStatusDistribution;

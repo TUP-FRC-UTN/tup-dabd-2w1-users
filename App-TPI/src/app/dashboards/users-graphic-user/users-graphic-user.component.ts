@@ -7,13 +7,12 @@ import { Observable } from 'rxjs';
 import { PlotByStateCount } from '../../users-models/users/PlotByStateCount';
 import { PlotByTypeCount } from '../../users-models/plot/PlotByTypeCount';
 import { UsersGraphicPlotKPIComponent } from '../users-graphic-plot-kpi/users-graphic-plot-kpi.component';
-import { UsersGraphicPlotComponent } from '../users-graphic-plot/users-graphic-plot.component';
 
 
 @Component({
   selector: 'app-users-graphic-user',
   standalone: true,
-  imports: [GoogleChartsModule, CommonModule, UsersGraphicPlotKPIComponent, UsersGraphicPlotComponent],
+  imports: [GoogleChartsModule, CommonModule, UsersGraphicPlotKPIComponent],
   templateUrl: './users-graphic-user.component.html',
   styleUrl: './users-graphic-user.component.css'
 })
