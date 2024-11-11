@@ -1,47 +1,56 @@
 <div class="container">
     <div class="row">
         <div class="col-md-7">
-            <div class="card border-0 shadow-lg rounded-4 h-100">
+           
+           
+            <div class="mb-4">
+                <div>
+                  <h2 class="h4 mb-3 text-primary text-center">Distribución de Edades de Usuarios</h2>
+                  <p class="text-muted mb-3 text-center">Cantidad de Usuarios por Edad y Estado de Actividad</p>
+                </div>
+              </div>
+
+            <div class="card border-0 shadow-lg rounded-4">
                 <div class="card-body">
                     <div>
                         <!-- Gráfico de barras -->
                         <google-chart [type]="columnChart" [data]="barChartData" [options]="barChartOptions"
-                            [width]="600" [height]="500">
+                            [width]="600" [height]="520">
                         </google-chart>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-5">
 
             <!-- kPIs -->
             <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow primary-gradient">
                 <div class="card-body position-relative text-center">
                     <h6 class="text-white mb-2">Total de usuarios registrados: </h6>
-                    <h2 class="mb-0 fw-bold text-white" >{{ ageDistribution.statics.totalUsers }}</h2>
+                    <h4 class="mb-0 fw-bold text-white" >{{ ageDistribution.statics.totalUsers }}</h4>
                 </div>
             </div>
 
             <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow success-gradient">
                 <div class="card-body position-relative text-center">
-                    <h5 class="text-white mb-2">Edad promedio</h5>
-                    <h2 class="mb-0 fw-bold text-white">{{ ageDistribution.statics.averageAge }} años</h2>
+                    <h6 class="text-white mb-2">Edad promedio</h6>
+                    <h4 class="mb-0 fw-bold text-white">{{ ageDistribution.statics.averageAge }} años</h4>
                 </div>
             </div>
 
             <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow info-gradient">
                 <div class="card-body text-center">
-                    <h5 class="text-white mb-2">Rango de edad</h5>
-                    <h2 class="mb-0 fw-bold text-white">{{ ageDistribution.statics.youngestAge }} - {{
-                        ageDistribution.statics.oldestAge }} años</h2>
+                    <h6 class="text-white mb-2">Rango de edad</h6>
+                    <h4 class="mb-0 fw-bold text-white">{{ ageDistribution.statics.youngestAge }} - {{
+                        ageDistribution.statics.oldestAge }} años</h4>
                 </div>
             </div>
 
             <!-- Pie Chart -->
             <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow">
                 <div class="card-body position-relative">
-                    <google-chart [type]="pieChart" [data]="pieChartData" [options]="pieChartOptions" [width]="300"
+                    <google-chart [type]="pieChart" [data]="pieChartData" [options]="pieChartOptions" [width]="400"
                         [height]="300">
                     </google-chart>
                 </div>

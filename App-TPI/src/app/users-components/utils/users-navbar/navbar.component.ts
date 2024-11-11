@@ -118,20 +118,7 @@ export class NavbarComponent implements OnInit {
             title: "Gráficos",
             route: "home/charts/users/blocks",
             roles: ["SuperAdmin", "Gerente"]
-          },
-          {
-            icon: "bi bi-bar-chart",
-            title: "Gráficos",
-            route: "home/charts/owners/stats",
-            roles: ["SuperAdmin", "Gerente"]
-          },
-          {
-            icon: "bi bi-bar-chart",
-            title: "Gráficos",
-            route: "home/charts/owners/taxes",
-            roles: ["SuperAdmin", "Gerente"]
           }
-          
         ]
       }
 

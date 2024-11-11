@@ -24,11 +24,10 @@ export class UsersGraphicHistogramComponent {
   barChartData: any[] = [];
 
     barChartOptions = {
-        title: 'Distribución de Edades de Usuarios',
+        title: 'Distribución de Edades de Usuarios Por Estado',
         titleTextStyle: {
             color: '#495057',
-            fontSize: 21,
-            bold: true
+            fontSize: 16,
         },
         legend: { position: 'top', alignment: 'center' },
         series: {

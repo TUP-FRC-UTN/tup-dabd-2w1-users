@@ -22,17 +22,19 @@ export class UsersGraphicBlocksComponent implements OnInit {
   blockControl2 = new FormControl(0);
 
   blocksNumber: number[] = []; // números de las manzanas
+  availableBlocksForSelect1: number[] = [];
+  availableBlocksForSelect2: number[] = [];
   blocks: BlockData[] = [];
   private blocksSubject = new BehaviorSubject<BlockData[]>([]);
 
   //Datos para renderizar el gráfico
   chartType : ChartType = ChartType.ColumnChart;
   chartData: any[] = [];
-  width = 800;
-  height = 400;
+  width = 600;
+  height = 370;
 
   chartOptions = {
-    title: 'Comparativa de Áreas y Porcentajes por Nro. de Manzana',
+    title: 'Comparativa de Áreas y Porcentajes Entre Manzanas',
     backgroundColor: 'transparent',
     chartArea: { width: '75%', height: '70%' },
     hAxis: { title: 'Métricas', titleTextStyle: { color: '#7f8c8d' } },
@@ -54,10 +56,10 @@ export class UsersGraphicBlocksComponent implements OnInit {
     },
     seriesType: 'bars',
     series: {
-      0: { color: '#5dade2', targetAxisIndex: 0, label: 'Área Total' },       // Área Total - Eje izquierdo
-      1: { color: '#48c9b0', targetAxisIndex: 0, label: 'Área Construida' },  // Área Construida - Eje izquierdo
-      2: { color: '#f39c12', targetAxisIndex: 1, lineWidth: 3, pointSize: 6 },  // % Construido - Eje derecho
-      3: { color: '#e74c3c', targetAxisIndex: 1, lineWidth: 3, pointSize: 6 }   // % No Construido - Eje derecho
+      0: { color: '#5dade2', targetAxisIndex: 0, label: 'Área Total', labelInLegend: 'Mzna 1' },       // Área Total - Eje izquierdo
+      1: { color: '#48c9b0', targetAxisIndex: 0, label: 'Área Construida', labelInLegend: 'Mzna 2' },  // Área Construida - Eje izquierdo
+      2: { color: '#4f46e5', targetAxisIndex: 1, label: 'Área Construida', labelInLegend: 'Mzna 1'},  // % Construido - Eje derecho
+      3: { color: '#f97316', targetAxisIndex: 1, label: 'Área Construida', labelInLegend: 'Mzna 2' }   // % No Construido - Eje derecho
     },
     legend: {
       position: 'top',
@@ -79,6 +81,7 @@ export class UsersGraphicBlocksComponent implements OnInit {
   ngOnInit(): void {
     this.loadData();
     this.setupSubscriptions();
+    this.setupSelectFilters();
   }
 
   private loadData(): void {
@@ -87,6 +90,9 @@ export class UsersGraphicBlocksComponent implements OnInit {
         this.blocks = data;
         this.blocksNumber = data.map(block => block.blockNumber).sort((a, b) => a - b);
         this.blocksSubject.next(data);
+
+        this.availableBlocksForSelect1 = [...this.blocksNumber];
+        this.availableBlocksForSelect2 = [...this.blocksNumber];
         
         if (this.blocksNumber.length >= 2) {
           this.blockControl1.setValue(this.blocksNumber[0]);
@@ -114,9 +120,36 @@ export class UsersGraphicBlocksComponent implements OnInit {
     ).subscribe();
   }
 
+  private setupSelectFilters(): void {
+    // Suscripción para el primer select
+    this.blockControl1.valueChanges.subscribe(value => {
+      if (value) {
+        // Actualizar las opciones disponibles para el select 2
+        this.availableBlocksForSelect2 = this.blocksNumber.filter(block => block !== Number(value));
+      } else {
+        this.availableBlocksForSelect2 = [...this.blocksNumber];
+      }
+    });
+
+    // Suscripción para el segundo select
+    this.blockControl2.valueChanges.subscribe(value => {
+      if (value) {
+        // Actualizar las opciones disponibles para el select 1
+        this.availableBlocksForSelect1 = this.blocksNumber.filter(block => block !== Number(value));
+      } else {
+        this.availableBlocksForSelect1 = [...this.blocksNumber];
+      }
+    });
+  }
+
   private updateChartData(block1: number, block2: number, blocks: BlockData[]): void {
     const b1 = blocks.find(b => b.blockNumber === block1);
     const b2 = blocks.find(b => b.blockNumber === block2);
+
+    this.chartOptions.series[0].labelInLegend = `Mzna ${block1}`;
+    this.chartOptions.series[1].labelInLegend = `Mzna ${block2}`;
+    this.chartOptions.series[2].labelInLegend = `Mzna ${block1}`;
+    this.chartOptions.series[3].labelInLegend = `Mzna ${block2}`;
 
     if (!b1 || !b2) return;
 
@@ -126,18 +159,62 @@ export class UsersGraphicBlocksComponent implements OnInit {
     const b2PercentNotBuilt = Number((100 - b2PercentBuilt).toFixed(1));
 
     this.chartData = [
-      ['Área Total', b1.totalArea, b2.totalArea, null, null],
-      ['Área Construida', b1.builtArea, b2.builtArea, null, null],
-      ['Porcentaje Construido', null, null, b1PercentBuilt, b2PercentBuilt],
-      ['Porcentaje No Construido', null, null, b1PercentNotBuilt, b2PercentNotBuilt]
+      ['Área Total', 
+       {
+         v: b1.totalArea,
+         f: `Manzana ${block1}: ${b1.totalArea.toLocaleString()} m²`
+       },
+       {
+         v: b2.totalArea,
+         f: `Manzana ${block2}:${b2.totalArea.toLocaleString()} m²`
+       }, 
+       null, 
+       null
+      ],
+      ['Área Construida',
+       {
+         v: b1.builtArea,
+         f: `Manzana ${block1}: ${b1.builtArea.toLocaleString()} m²`
+       },
+       {
+         v: b2.builtArea,
+         f: `Manzana ${block2}: ${b2.builtArea.toLocaleString()} m²`
+       },
+       null,
+       null
+      ],
+      ['Porcentaje Construido',
+       null,
+       null,
+       {
+         v: b1PercentBuilt,
+         f: `Manzana ${block1}: ${b1PercentBuilt}%`
+       },
+       {
+         v: b2PercentBuilt,
+         f: `Manzana ${block2}: ${b2PercentBuilt}%`
+       }
+      ],
+      ['Porcentaje No Construido',
+       null,
+       null,
+       {
+         v: b1PercentNotBuilt,
+         f: `Manzana ${block1}: ${b1PercentNotBuilt}%`
+       },
+       {
+         v: b2PercentNotBuilt,
+         f: `Manzana ${block2}: ${b2PercentNotBuilt}%`
+       }
+      ]
     ];
-
   }
 
   selectedBlockskPIs = {
     totalArea: 0,
     totalBuiltArea: 0,
-    utilizationPercentage: 0
+    utilizationPercentage: 0,
+    notUtilizationPercentage: 0
   };
 
   private updateSelectedBlocksKPIs(block1: number, block2: number, blocks: BlockData[]): void {
@@ -149,7 +226,8 @@ export class UsersGraphicBlocksComponent implements OnInit {
     this.selectedBlockskPIs = {
       totalArea: b1.totalArea + b2.totalArea,
       totalBuiltArea: b1.builtArea + b2.builtArea,
-      utilizationPercentage: ((b1.builtArea + b2.builtArea) / (b1.totalArea + b2.totalArea)) * 100
+      utilizationPercentage: ((b1.builtArea + b2.builtArea) / (b1.totalArea + b2.totalArea)) * 100,
+      notUtilizationPercentage: 100 - (((b1.builtArea + b2.builtArea) / (b1.totalArea + b2.totalArea)) * 100)
     };
   }
 }

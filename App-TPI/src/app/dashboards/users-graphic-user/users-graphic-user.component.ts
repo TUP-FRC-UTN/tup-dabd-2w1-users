@@ -19,33 +19,6 @@ import { UsersGraphicPlotComponent } from '../users-graphic-plot/users-graphic-p
 })
 export class UsersGraphicUserComponent {
 
-  /* columnChartType: ChartType = ChartType.ColumnChart;
-   columnChartData = [
-     ['Enero', 1000],
-     ['Febrero', 1170],
-     ['Marzo', 660],
-     ['Abril', 1030]
-   ];
-   columnChartOptions = {
-     title: 'Comparación de Ingresos',
-     hAxis: { title: 'Mes' },
-     vAxis: { title: 'Cantidad' },
-     legend: 'none',
-     width: '100%',
-     height: '100%'
-   };
- 
-   // KPIs (datos adicionales para el KPI)
-   columnKPIs = {
-     totalPeriod: 3860,
-     monthlyAverage: 965
-   };
- 
-   // Método para manejar el filtro
-   //7aplyFilters() {
-     // Aquí puedes aplicar la lógica de filtro y actualizar los datos
-     //console.log('Filtros aplicados');
-   //}*/
   private readonly URL = 'http://localhost:9060/dashboard/users-by-role';
   private readonly URL_PlotByStateCount = "http://localhost:9062/dashboard/Plot-By-State-Count";
   private readonly URL_PlotByTypeCount = "http://localhost:9062/dashboard/Plot-By-Type-Count";
@@ -221,9 +194,4 @@ export class UsersGraphicUserComponent {
       mostCommonStateCount: maxCount
     };
   }
-
-  //lotes por tipo y estado
- 
-
-
 }
