@@ -31,17 +31,18 @@ export class UsersGraphicPlotComponent implements OnInit {
     let startAngle = 0;
     
     this.slices = data.map((item, index) => {
-      const percentage = item.count / total;
-      const angle = percentage * 2 * Math.PI;
-      
+      const percentage = (item.count / total) * 100;
+      const angle = (percentage / 100) * 2 * Math.PI;
+  
       const slice = {
         index,
         value: item.count,
         label: item.state,
         color: this.colors[index],
+        percentage: percentage.toFixed(2), // Calculando el porcentaje
         path: this.describeArc(startAngle, startAngle + angle)
       };
-      
+  
       startAngle += angle;
       return slice;
     });

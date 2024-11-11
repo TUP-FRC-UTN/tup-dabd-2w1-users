@@ -1,4 +1,3 @@
-
 <div class="container">
   <div class="row">
       <div class="col-md-7">
@@ -15,34 +14,42 @@
       <div class="col-md-4">
 
           <!-- kPIs -->
-          <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow primary-gradient">
+          <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow primary-gradient position-relative">
             <div class="kpi-card">
-              <h3>Cantidad de Lotes</h3>
+              <!-- Ícono en la parte superior derecha, sin mover el texto -->
+              <i class="bi bi-houses position-absolute top-0 end-0 me-3 mt-3" style="font-size: 24px;"></i>
+              <h3 class="ms-3">Cantidad de Lotes</h3>
               <div class="kpi-value">{{totalLots}}</div>
           </div>
           </div>
 
-          <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow success-gradient">
+          <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow success-gradient position-relative">
             <div class="kpi-card">
-              <h3>Residenciales</h3>
+              <!-- Ícono en la parte superior derecha, sin mover el texto -->
+              <i class="bi bi-house-heart position-absolute top-0 end-0 me-3 mt-3" style="font-size: 24px;"></i>
+              <h3 class="ms-3">Residenciales</h3>
               <div class="kpi-value">{{residentialLots}}</div>
           </div>
           </div>
 
-          <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow info-gradient">
-            
+          <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow info-gradient position-relative">
             <div class="kpi-card">
-              <h3>Comerciales</h3>
+              <!-- Ícono en la parte superior derecha, sin mover el texto -->
+              <i class="bi bi-shop position-absolute top-0 end-0 me-3 mt-3" style="font-size: 24px;"></i>
+              <h3 class="ms-3">Comerciales</h3>
               <div class="kpi-value">{{commercialLots}}</div>
           </div>
           </div>
-          <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow warning-gradient">
+
+          <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow warning-gradient position-relative">
             <div class="kpi-card">
-              <h3>Baldíos</h3>
+              <!-- Ícono en la parte superior derecha, sin mover el texto -->
+              <i class="bi bi-tree position-absolute top-0 end-0 me-3 mt-3" style="font-size: 24px;"></i>
+              <h3 class="ms-3">Baldíos</h3>
               <div class="kpi-value">{{emptyLots}}</div>
           </div>
           </div>
+
       </div>
   </div>
 </div>
-  

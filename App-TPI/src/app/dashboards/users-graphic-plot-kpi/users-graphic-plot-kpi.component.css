@@ -48,20 +48,19 @@
 }
 
 .primary-gradient {
-  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  background: linear-gradient(135deg, #f5e025ef 0%, #f7e224 100%);
 }
 
 .success-gradient {
-  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  background: linear-gradient(135deg, #ffb6c1 0%, #ffc0cb 100%);
 }
 
 .info-gradient {
-  background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
 }
 
-
 .warning-gradient {
-  background: linear-gradient(135deg, #f1c40f 0%, #f39c12 100%);
+  background: linear-gradient(135deg, #556B2F 0%, #5e7c21 100%); /* Cambiado a verde oscuro pastel */
 }
 
 /* Contenedor del gráfico de torta */
