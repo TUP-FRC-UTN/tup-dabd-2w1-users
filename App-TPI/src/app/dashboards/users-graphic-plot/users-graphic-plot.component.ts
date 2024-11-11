@@ -1,75 +1,76 @@
-import { Component, OnInit } from '@angular/core';
-import { PlotStateCount } from '../../users-models/dashboard/PlotStateCount';
+import { Component, OnInit, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { PlotStateCount } from '../../users-models/dashboard/PlotStateCount';
+import { CommonModule } from '@angular/common';
+import { ChartType, GoogleChartComponent, GoogleChartsModule } from 'angular-google-charts';
 
 @Component({
   selector: 'app-users-graphic-plot',
   standalone: true,
-  imports: [],
+  imports: [GoogleChartsModule, CommonModule],
   templateUrl: './users-graphic-plot.component.html',
-  styleUrl: './users-graphic-plot.component.css'
+  styleUrls: ['./users-graphic-plot.component.css']
 })
 export class UsersGraphicPlotComponent implements OnInit {
-  size = 400;
-  radius = 160;
-  innerRadius = 80;
-  slices: any[] = [];
-  
-  colors = ['#2196F3', '#4CAF50', '#F44336'];
-  
-  constructor(private http: HttpClient) {}
-  
+  private readonly http = inject(HttpClient);
+
+  loading = true;
+  error: string | null = null;
+
+  // Datos para el gráfico circular
+  plotStateData: any[] = [];
+  pieChart = ChartType.PieChart;
+  pieChartOptions = {
+    titleTextStyle: {
+      color: '#495057',
+      fontSize: 18,
+      bold: true
+    },
+    pieHole: 0.4,
+    backgroundColor: 'transparent',
+    colors: ['#2196F3', '#4CAF50', '#F44336'],
+    legend: {
+      position: 'bottom',
+      textStyle: { color: '#495057', fontSize: 12 },
+      alignment: 'center'
+    },
+    chartArea: { width: '90%', height: '80%' },
+    tooltip: {
+      textStyle: { fontSize: 14, color: '#495057' },
+      showColorCode: true,
+      trigger: 'both'
+    
+    }
+  };
+
   ngOnInit() {
+    this.loadPlotStateData();
+  }
+
+  private loadPlotStateData() {
+    this.loading = true;
+    this.error = null;
+
     this.http.get<PlotStateCount[]>('http://localhost:9062/dashboard/Plot-By-State-Count')
-      .subscribe(data => {
-        this.updateChart(data);
+      .subscribe({
+        next: (data) => {
+          this.loading = false;
+          this.processPlotStateData(data);
+        },
+        error: () => {
+          this.error = 'Error al cargar los datos de estado de los lotes';
+          this.loading = false;
+        }
       });
   }
-  
-  private updateChart(data: PlotStateCount[]) {
+
+  private processPlotStateData(data: PlotStateCount[]) {
+    // Preparar los datos para el gráfico
     const total = data.reduce((sum, item) => sum + item.count, 0);
-    let startAngle = 0;
-    
-    this.slices = data.map((item, index) => {
-      const percentage = (item.count / total) * 100;
-      const angle = (percentage / 100) * 2 * Math.PI;
   
-      const slice = {
-        index,
-        value: item.count,
-        label: item.state,
-        color: this.colors[index],
-        percentage: percentage.toFixed(2), // Calculando el porcentaje
-        path: this.describeArc(startAngle, startAngle + angle)
-      };
-  
-      startAngle += angle;
-      return slice;
-    });
-  }
-  
-  private describeArc(startAngle: number, endAngle: number): string {
-    const start = this.polarToCartesian(startAngle);
-    const end = this.polarToCartesian(endAngle);
-    const largeArcFlag = endAngle - startAngle <= Math.PI ? 0 : 1;
-    
-    const outerArc = [
-      'M', start.outerX, start.outerY,
-      'A', this.radius, this.radius, 0, largeArcFlag, 1, end.outerX, end.outerY,
-      'L', end.innerX, end.innerY,
-      'A', this.innerRadius, this.innerRadius, 0, largeArcFlag, 0, start.innerX, start.innerY,
-      'Z'
-    ].join(' ');
-    
-    return outerArc;
-  }
-  
-  private polarToCartesian(angle: number) {
-    return {
-      outerX: Math.cos(angle - Math.PI/2) * this.radius,
-      outerY: Math.sin(angle - Math.PI/2) * this.radius,
-      innerX: Math.cos(angle - Math.PI/2) * this.innerRadius,
-      innerY: Math.sin(angle - Math.PI/2) * this.innerRadius
-    };
+    // Concatenamos la cantidad junto con el nombre del estado
+    this.plotStateData = data.map(item => [
+      `${item.state} (${item.count})`, item.count
+    ]);
   }
 }

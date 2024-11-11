@@ -208,6 +208,13 @@ export class UsersNewPlotComponent {
   }
 
   deleteFile(index: number) {
+    // Elimina el archivo del array de archivos
     this.files.splice(index, 1);
+    
+    // Limpia el valor del input de archivo
+    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    }
   }
 }

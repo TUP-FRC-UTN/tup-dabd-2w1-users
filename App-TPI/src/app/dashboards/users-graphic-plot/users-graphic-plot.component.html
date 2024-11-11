@@ -1,21 +1,10 @@
-<div class="chart-container">
-    <svg [attr.viewBox]="'0 0 ' + size + ' ' + size">
-      <g [attr.transform]="'translate(' + size/2 + ',' + size/2 + ')'">
-        @for (slice of slices; track slice.index) {
-          <path 
-            [attr.d]="slice.path" 
-            [attr.fill]="slice.color"
-            class="slice">
-          </path>
-        }
-      </g>
-    </svg>
-    <div class="legend">
-      @for (slice of slices; track slice.index) {
-        <div class="legend-item">
-          <span class="legend-color" [style.background-color]="slice.color"></span>
-          <span class="legend-label">{{slice.label}} ({{slice.value}})</span>
-        </div>
-      }
-    </div>
-  </div>
+<div *ngIf="loading" class="loading">Cargando...</div>
+<div *ngIf="error" class="error">{{ error }}</div>
+
+<div *ngIf="!loading && !error">
+  <google-chart 
+    [type]="pieChart" 
+    [data]="plotStateData" 
+    [options]="pieChartOptions">
+  </google-chart>
+</div>

@@ -36,6 +36,12 @@
     height: 16px;
     border-radius: 4px;
   }
+
+  
+google-chart {
+  max-width: 100%; /* Asegura que el gráfico no se desborde */
+  height: 300px; /* Ajusta el tamaño según sea necesario */
+}
   
   .legend-label {
     font-size: 14px;

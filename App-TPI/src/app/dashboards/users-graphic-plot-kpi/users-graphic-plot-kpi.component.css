@@ -1,15 +1,3 @@
-.dashboard-container {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.dashboard-title {
-  font-size: 24px;
-  color: #333;
-  margin-bottom: 20px;
-  text-align: center;
-}
 
 .kpi-container {
   display: flex;
@@ -66,7 +54,7 @@
 /* Contenedor del gráfico de torta */
 .chart-container {
   width: 100%; /* Asegura que el gráfico ocupe todo el espacio disponible */
-  height: 300px; /* Ajusta el tamaño del gráfico */
+  height: 400px; /* Ajusta el tamaño del gráfico */
   display: flex;
   justify-content: center; /* Centra el gráfico */
   align-items: center; /* Centra el gráfico */
