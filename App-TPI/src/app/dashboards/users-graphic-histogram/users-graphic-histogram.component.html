@@ -1,21 +1,35 @@
 <div class="container">
     <div class="row">
+        <div class="p-3 border border-3 rounded m-3">
+            <div class="row">
+                <!-- Filtro de fechas -->
+                <div class="col d-flex gap-3">
+                  <div class="col">
+                    <input type="month" class="form-control border-1 bg-light">
+                  </div>
+                  <div class="col">
+                    <input type="month" class="form-control border-1 bg-light">
+                  </div>
+                </div>
+          
+                <!-- Botones de exportar -->
+                <div class="col-auto d-flex gap-1 ms-auto">
+                  <button class="btn btn-primary filterbutton" data-bs-toggle="modal" title="Filtros Avanzados"
+                    data-bs-target="#filtrosAvanzados">
+                    <i class="bi bi-funnel-fill"></i>
+                  </button>
+                  <button type="button" class="btn btn-secondary bi bi-trash filterbutton" (click)="clearFilters()"
+                    title="Limpiar Filtros"></button>
+                </div>
+              </div>
+        </div>
         <div class="col-md-7">
-           
-           
-            <div class="mb-4">
+              <div class="mb-4">
                 <div>
                   <h2 class="h4 mb-3 text-primary text-center">Distribución de Edades de Usuarios</h2>
                   <p class="text-muted mb-3 text-center">Cantidad de Usuarios por Edad y Estado de Actividad</p>
                 </div>
               </div>
-             
-              <!-- Filtros de Fecha -->
-            <div class="d-flex justify-content-center mb-4">
-                <input type="date" [(ngModel)]="startDate" class="form-control me-2" placeholder="Fecha de inicio">
-                <input type="date" [(ngModel)]="endDate" class="form-control me-2" placeholder="Fecha de fin">
-                <button (click)="filterByDate()" class="btn btn-primary">Filtrar</button>
-            </div>
              
 
             <div class="card border-0 shadow-lg rounded-4">

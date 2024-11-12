@@ -1,4 +1,26 @@
 <div class="container">
+  <div class="row">
+    <!--Container de filtros-->
+    <div class="p-3 border border-3 rounded m-3">
+      <div class="row">
+        <!-- Filtro de fechas -->
+        <div class="col d-flex gap-3">
+          <input type="month" class="form-control border-1 bg-light">
+          <input type="month" class="form-control border-1 bg-light">
+        </div>
+
+        <!-- Botones de exportar -->
+        <div class="col-auto d-flex gap-1 ms-auto">
+          <button class="btn btn-primary filterbutton" data-bs-toggle="modal" title="Filtros Avanzados"
+            data-bs-target="#filtrosAvanzados">
+            <i class="bi bi-funnel-fill"></i>
+          </button>
+          <button type="button" class="btn btn-secondary bi bi-trash filterbutton" (click)="clearFilters()"
+            title="Limpiar Filtros"></button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
@@ -6,17 +28,17 @@
       <p class="text-muted mb-0">Comparativa de Área Construida vs Área Total y Porcentaje Construido vs No Construido</p>
     </div>
   </div>
-
+  
   <!-- Block Selection Controls -->
   <div class="d-flex gap-3 align-items-center">
-
+  
     <div class="form-group">
       <label class="form-label fw-semibold mb-2">
         Seleccione las Manzanas a Comparar
       </label>
-
+  
       <div class="row">
-
+  
         <div class="col-6">
           <select [formControl]="blockControl1" class="form-select">
             <option value="" disabled selected>Seleccione una opción</option>
@@ -25,7 +47,7 @@
             </option>
           </select>
         </div>
-
+  
         <div class="col-6">
           <select [formControl]="blockControl2" class="form-select">
             <option value="" selected disabled>Seleccione una opción</option>
@@ -37,25 +59,23 @@
       </div>
     </div>
   </div>
-
-
+  
+  
   <div class="row mt-3">
     <div class="col-md-7">
       <div class="card border-0 shadow-lg rounded-4">
         <div class="card-body">
-          <google-chart [type]="chartType" [data]="chartData" [options]="chartOptions" [width]="width"
-            [height]="height">
+          <google-chart [type]="chartType" [data]="chartData" [options]="chartOptions" [width]="width" [height]="height">
           </google-chart>
         </div>
       </div>
     </div>
-
+  
     <div class="col-md-5">
-
-      <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow"
-      style="background-color: #d8ffedde;">
+  
+      <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow" style="background-color: #d8ffedde;">
         <div class="card-body position-relative text-center">
-
+  
           <h3 class="mb-0">{{selectedBlockskPIs.totalArea}} m²</h3>
           <small>
             <i class="bi bi-arrow-up-right"></i>
@@ -63,9 +83,8 @@
           </small>
         </div>
       </div>
-
-      <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow"
-      style="background-color: #e7f1ff;">
+  
+      <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow" style="background-color: #e7f1ff;">
         <div class="card-body text-center position-relative">
           <h3 class="mb-0">{{selectedBlockskPIs.totalBuiltArea}} m²</h3>
           <small>
@@ -74,9 +93,8 @@
           </small>
         </div>
       </div>
-
-      <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow"
-      style="background-color: #fff3e0;">
+  
+      <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow" style="background-color: #fff3e0;">
         <div class="card-body position-relative text-center">
           <h3 class="mb-0">{{selectedBlockskPIs.utilizationPercentage| number:'1.0-1'}}%</h3>
           <small>
@@ -85,9 +103,8 @@
           </small>
         </div>
       </div>
-
-      <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow"
-      style="background-color: #d8ffedde;">
+  
+      <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow" style="background-color: #d8ffedde;">
         <div class="card-body position-relative text-center">
           <h3 class="mb-0">{{selectedBlockskPIs.notUtilizationPercentage| number:'1.0-1'}}%</h3>
           <small>
@@ -98,3 +115,7 @@
       </div>
     </div>
   </div>
+
+</div>
+
+

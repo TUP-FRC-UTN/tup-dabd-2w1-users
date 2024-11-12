@@ -229,4 +229,16 @@ export class UsersGraphicBlocksComponent implements OnInit {
       notUtilizationPercentage: 100 - (((b1.builtArea + b2.builtArea) / (b1.totalArea + b2.totalArea)) * 100)
     };
   }
+
+
+  clearFilters() {
+    this.blockControl1.setValue(0);
+    this.blockControl2.setValue(0);
+  
+    this.availableBlocksForSelect1 = [...this.blocksNumber];
+    this.availableBlocksForSelect2 = [...this.blocksNumber];
+  
+    this.updateChartData(this.blocksNumber[0], this.blocksNumber[1], this.blocks);
+    this.updateSelectedBlocksKPIs(this.blocksNumber[0], this.blocksNumber[1], this.blocks);
+  }
 }

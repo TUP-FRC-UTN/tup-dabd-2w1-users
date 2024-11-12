@@ -154,4 +154,14 @@ export class UsersGraphicHistogramComponent {
         { v: item.inactiveCount, f: `Inactivos: ${item.inactiveCount} usuarios` }
       ]);
     }
+
+    clearFilters() {
+      this.startDate = null;
+      this.endDate = null;
+      this.barChartData = this.ageDistribution.ageDistribution.map((item) => [
+        { v: item.ageRange, f: item.ageRange },
+        { v: item.activeCount, f: `Activos: ${item.activeCount} usuarios` },
+        { v: item.inactiveCount, f: `Inactivos: ${item.inactiveCount} usuarios` }
+      ]);
+    }
 }

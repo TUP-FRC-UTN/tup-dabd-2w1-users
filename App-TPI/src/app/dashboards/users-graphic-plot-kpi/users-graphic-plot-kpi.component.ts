@@ -57,4 +57,19 @@ export class UsersGraphicPlotKPIComponent implements OnInit {
   private updateTotalLots(data: PlotStateCount[]) {
     this.totalLots = data.reduce((acc, curr) => acc + curr.count, 0);
   }
+
+  clearFilters() {
+    this.totalLots = 0;
+    this.residentialLots = 0;
+    this.commercialLots = 0;
+    this.emptyLots = 0;
+  
+    this.getPlotsByType().subscribe(data => {
+      this.updateTypeCounts(data);
+    });
+  
+    this.getPlotsByState().subscribe(data => {
+      this.updateTotalLots(data);
+    });
+  }
 }

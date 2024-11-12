@@ -1,60 +1,78 @@
 <div class="container">
   <div class="row">
-    <div class="col-md-7">
-      <div>
-        <div>
-          <h2 class="h4 mb-3 text-primary text-center p-2">Estado de los Lotes</h2>
-          <div class="row">
-          <p class="text-muted mb-3 text-center">Cantidad de lotes Disponibles y Habitados</p>
+    <div class="p-3 border border-3 rounded m-3">
+      <div class="row">
+        <!-- Filtro de fechas -->
+        <div class="col d-flex gap-3">
+          <input type="month" class="form-control border-1 bg-light">
+          <input type="month" class="form-control border-1 bg-light">
         </div>
-        </div>
-      </div>
-      <div class="card border-0 shadow-lg rounded-4 h-100">
-        <div class="card-body align-items-center">
-          <div class="chart-container">
-            <app-users-graphic-plot></app-users-graphic-plot>
-          </div>
+
+        <!-- Botones de exportar -->
+        <div class="col-auto d-flex gap-1 ms-auto">
+          <button class="btn btn-primary filterbutton" data-bs-toggle="modal" title="Filtros Avanzados"
+            data-bs-target="#filtrosAvanzados">
+            <i class="bi bi-funnel-fill"></i>
+          </button>
+          <button type="button" class="btn btn-secondary bi bi-trash filterbutton" (click)="clearFilters()"
+            title="Limpiar Filtros"></button>
         </div>
       </div>
     </div>
-
-    <div class="col-md-4">
-      <div>
-        <h2 class="h4 mb-3 text-primary text-center p-2">Distribución de Lotes</h2>
-        <div class="row">
-        <p class="text-muted mb-3 text-center">Cantidad de lotes por tipo (Residencial, Comercial, Baldío)</p>
-      </div>
-      </div>
-      <!-- kPIs -->
-      <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow primary-gradient position-relative">
-        <div class="kpi-card">
-          <i class="bi bi-houses position-absolute top-0 end-0 me-3 mt-3" style="font-size: 24px;"></i>
-          <h3 class="ms-3">Cantidad de Lotes</h3>
-          <div class="kpi-value">{{ totalLots }}</div>
+    <div class="row">
+      <div class="col-md-8">
+        <div>
+          <h2 class="h4 mb-3 text-primary text-center p-2">Estado de los Lotes</h2>
+          <div class="row">
+            <p class="text-muted mb-3 text-center">Cantidad de lotes Disponibles y Habitados</p>
+          </div>
+        </div>
+        <div class="card border-0 shadow-lg rounded-4 h-100">
+          <div class="card-body align-items-center">
+            <div class="chart-container">
+              <app-users-graphic-plot></app-users-graphic-plot>
+            </div>
+          </div>
         </div>
       </div>
-
-      <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow success-gradient position-relative">
-        <div class="kpi-card">
-          <i class="bi bi-house-heart position-absolute top-0 end-0 me-3 mt-3" style="font-size: 24px;"></i>
-          <h3 class="ms-3">Residenciales</h3>
-          <div class="kpi-value">{{ residentialLots }}</div>
+      <div class="col-md-4">
+        <div>
+          <h2 class="h4 mb-3 text-primary text-center p-2">Distribución de Lotes</h2>
+          <div class="row">
+            <p class="text-muted mb-3 text-center">Cantidad de lotes por tipo (Residencial, Comercial, Baldío)</p>
+          </div>
         </div>
-      </div>
-
-      <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow info-gradient position-relative">
-        <div class="kpi-card">
-          <i class="bi bi-shop position-absolute top-0 end-0 me-3 mt-3" style="font-size: 24px;"></i>
-          <h3 class="ms-3">Comerciales</h3>
-          <div class="kpi-value">{{ commercialLots }}</div>
+        <!-- kPIs -->
+        <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow primary-gradient position-relative">
+          <div class="kpi-card">
+            <i class="bi bi-houses position-absolute top-0 end-0 me-3 mt-3" style="font-size: 24px;"></i>
+            <h3 class="ms-3">Cantidad de Lotes</h3>
+            <div class="kpi-value">{{ totalLots }}</div>
+          </div>
         </div>
-      </div>
 
-      <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow warning-gradient position-relative">
-        <div class="kpi-card">
-          <i class="bi bi-tree position-absolute top-0 end-0 me-3 mt-3" style="font-size: 24px;"></i>
-          <h3 class="ms-3">Baldíos</h3>
-          <div class="kpi-value">{{ emptyLots }}</div>
+        <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow success-gradient position-relative">
+          <div class="kpi-card">
+            <i class="bi bi-house-heart position-absolute top-0 end-0 me-3 mt-3" style="font-size: 24px;"></i>
+            <h3 class="ms-3">Residenciales</h3>
+            <div class="kpi-value">{{ residentialLots }}</div>
+          </div>
+        </div>
+
+        <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow info-gradient position-relative">
+          <div class="kpi-card">
+            <i class="bi bi-shop position-absolute top-0 end-0 me-3 mt-3" style="font-size: 24px;"></i>
+            <h3 class="ms-3">Comerciales</h3>
+            <div class="kpi-value">{{ commercialLots }}</div>
+          </div>
+        </div>
+
+        <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow warning-gradient position-relative">
+          <div class="kpi-card">
+            <i class="bi bi-tree position-absolute top-0 end-0 me-3 mt-3" style="font-size: 24px;"></i>
+            <h3 class="ms-3">Baldíos</h3>
+            <div class="kpi-value">{{ emptyLots }}</div>
+          </div>
         </div>
       </div>
     </div>
