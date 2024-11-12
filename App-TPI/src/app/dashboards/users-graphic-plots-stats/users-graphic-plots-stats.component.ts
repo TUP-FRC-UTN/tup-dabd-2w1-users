@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-users-graphic-plots-stats',
   standalone: true,
   imports: [GoogleChartsModule, ReactiveFormsModule, FormsModule, CommonModule],
-  templateUrl: './users-graphic-plots-stats.component.html',
+templateUrl: './users-graphic-plots-stats.component.html',
   styleUrls: ['./users-graphic-plots-stats.component.css']
 })
 export class UsersGraphicPlotsStatsComponent implements OnInit{
@@ -125,27 +125,32 @@ export class UsersGraphicPlotsStatsComponent implements OnInit{
       this.filteredOwnerDistribution = [...this.ownerDistribution];
     
       const { block, type, status } = this.filterForm.value;
+
+  
     
-      //Tengo que aplicar el select multuiple, que se puede seleccionar varias manzanas
-      // este modificaria el grafico de barras solamente
+      // Esto es para filtrar las manzanas que se muestran
       if (block && block.length > 0) {
         this.filteredPlotsByBlock = this.plotsByBlock.filter(item => 
           block.includes(item.blockNumber)
         );
       }
     
-      if (type) {
-        //este modificaria el grafico de torta para poder ver la distribuciuon de los propieatrios en los lotes
-        //segun el tipo de lote
-      }
-    
-      if (status) {
-        //este modificaria el grafico de torta para poder ver la distribuciuon de los propieatrios en los lotes
-        //segun el tipo de estado
+      if(type || status){
+        this.apiService.getOwnersPlotsDistribution('', '', type, status).subscribe({
+          next: (data: OwnersPlotsDistribution[]) => {
+            this.filteredOwnerDistribution = data;
+            
+            this.processPieChartData();
+            this.loading = false;
+          },
+          error: () => {
+            this.error = 'Error al cargar las estadísticas de lotes';
+          }
+          
+        });
       }
     
       this.processData();
-      this.processPieChartData();
     }
 
     private processFilterOptions() {

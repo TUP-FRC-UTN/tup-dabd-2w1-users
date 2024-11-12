@@ -117,14 +117,12 @@
             <div class="col">
               <label for="typeFilter">Tipo:</label>
               <select class="form-control" id="typeFilter" formControlName="type">
-                <option value="">Todos los Tipos</option>
                 <option *ngFor="let type of plotsTypes" [value]="type">{{ type }}</option>
               </select>
             </div>
             <div class="col">
               <label for="statusFilter">Estado:</label>
               <select class="form-control" id="statusFilter" formControlName="status">
-                <option value="">Todos los Estados</option>
                 <option *ngFor="let status of plotsStatus" [value]="status">{{ status }}</option>
               </select>
             </div>
