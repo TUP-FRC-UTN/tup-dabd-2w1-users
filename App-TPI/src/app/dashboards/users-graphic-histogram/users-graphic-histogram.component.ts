@@ -4,11 +4,12 @@ import { AgeDistribution, AgeDistributionResponse } from '../../users-models/das
 import { CommonModule } from '@angular/common';
 import { ChartType, GoogleChartComponent, GoogleChartsModule } from 'angular-google-charts';
 import { UsersGraphicPlotsStatsComponent } from "../users-graphic-plots-stats/users-graphic-plots-stats.component";
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-users-graphic-histogram',
   standalone: true,
-  imports: [GoogleChartsModule, CommonModule],
+  imports: [GoogleChartsModule, CommonModule,FormsModule],
   templateUrl: './users-graphic-histogram.component.html',
   styleUrl: './users-graphic-histogram.component.css'
 })
@@ -17,6 +18,9 @@ export class UsersGraphicHistogramComponent {
   private readonly apiService = inject(DashboardService);
 
   ageDistribution: AgeDistributionResponse = new AgeDistributionResponse();
+
+  startDate: string | null = null;
+  endDate: string | null = null;
  
   loading = true;
   error: string | null = null;
@@ -134,5 +138,20 @@ export class UsersGraphicHistogramComponent {
             ['Activos', status.activeUsers],
             ['Inactivos', status.inactiveUsers]
           ];
+    }
+
+    filterByDate() {
+      if (!this.startDate || !this.endDate) return;
+  
+      const filteredData = this.ageDistribution.ageDistribution.filter((item) => {
+        const itemDate = new Date(item.date);
+        return itemDate >= new Date(this.startDate!) && itemDate <= new Date(this.endDate!);
+      });
+  
+      this.barChartData = filteredData.map((item) => [
+        { v: item.ageRange, f: item.ageRange },
+        { v: item.activeCount, f: `Activos: ${item.activeCount} usuarios` },
+        { v: item.inactiveCount, f: `Inactivos: ${item.inactiveCount} usuarios` }
+      ]);
     }
 }

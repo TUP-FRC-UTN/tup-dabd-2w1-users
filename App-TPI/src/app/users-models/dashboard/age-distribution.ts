@@ -4,6 +4,8 @@ export class AgeDistribution {
     inactiveCount: number;
     activePercentage: number;
     inactivePercentage: number;
+    date: string;
+
 
     constructor(){
         this.ageRange = '';
@@ -11,6 +13,7 @@ export class AgeDistribution {
         this.inactiveCount = 0;
         this.activePercentage = 0;
         this.inactivePercentage = 0;
+        this.date = '';
     }
 }
 
