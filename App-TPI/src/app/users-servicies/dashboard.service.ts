@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BlockData } from '../users-models/dashboard/BlockData';
 import { AgeDistributionResponse } from '../users-models/dashboard/age-distribution';
+import { ConstructionProgress, OwnersPlotsDistribution, PlotsByBlock, PlotsStats } from '../users-models/dashboard/plots-stats';
 
 @Injectable({
   providedIn: 'root'
@@ -21,5 +22,21 @@ export class DashboardService {
 
   getAgeDistribution(): Observable<AgeDistributionResponse> {
     return this.http.get<AgeDistributionResponse>(`${this.urlUsers}/age-data`);
+  }
+
+  getPlotsStats(): Observable<PlotsStats> {
+    return this.http.get<PlotsStats>(`${this.urlOwners}/plots-stats`);
+  }
+
+  getPlotsByBlock(): Observable<PlotsByBlock[]> {
+    return this.http.get<PlotsByBlock[]>(`${this.urlOwners}/plots-by-block`);
+  }
+
+  getOwnersPlotsDistribution(): Observable<OwnersPlotsDistribution[]> {
+    return this.http.get<OwnersPlotsDistribution[]>(`${this.urlOwners}/owners-distribution`);
+  }
+
+  getConstructionProgress(): Observable<ConstructionProgress> {
+    return this.http.get<ConstructionProgress>(`${this.urlOwners}/construction-progress`);
   }
 }

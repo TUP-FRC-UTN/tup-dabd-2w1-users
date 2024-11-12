@@ -1,0 +1,137 @@
+<div class="container">
+  <!-- Filtros -->
+  <div class="row sticky-section border-0 rounded-4 p-3 shadow mb-4">
+
+    <div class="row">
+      <!-- Filtro de fechas -->
+      <div class="col d-flex gap-3">
+        <div class="col">
+          <input type="month" class="form-control border-1 bg-light">
+        </div>
+        <div class="col">
+          <input type="month" class="form-control border-1 bg-light">
+        </div>
+      </div>
+
+      <!-- Botones de exportar -->
+      <div class="col-auto d-flex gap-1 ms-auto">
+        <button class="btn btn-primary filterbutton" data-bs-toggle="modal" title="Filtros Avanzados"
+          data-bs-target="#filtrosAvanzados">
+          <i class="bi bi-funnel-fill"></i>
+        </button>
+        <button type="button" class="btn btn-secondary bi bi-trash filterbutton" (click)="clearFilters()"
+          title="Limpiar Filtros"></button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row">
+
+    <div class="col-md-7">
+      <div class="card border-0 shadow-lg rounded-4">
+        <div class="card-body">
+          <div>
+            <!-- Gráfico de barras -->
+            <google-chart [type]="columnChart" [data]="barChartData" [options]="barChartOptions" [width]="600"
+              [height]="400">
+            </google-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-5">
+
+      <div class="row">
+        <div class="col">
+          <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow" style="background-color: #d8ffedde;">
+            <div class="card-body position-relative text-center">
+              <h6 class="mb-2">Ocupación Total</h6>
+              <h5 class="mb-0 fw-bold">70 de 120 lotes</h5>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow" style="background-color: #e7f1ff;">
+            <div class="card-body position-relative text-center">
+              <h6 class="mb-2">En Construcción</h6>
+              <h5 class="mb-0 fw-bold">25 lotes</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow" style="background-color: #fff3e0;">
+            <div class="card-body position-relative text-center">
+              <h6 class="mb-2">Disponibles</h6>
+              <h5 class="mb-0 fw-bold">Lotes sin asignar</h5>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow" style="background-color: #e7f1ff;">
+            <div class="card-body position-relative text-center">
+              <h6 class="mb-2">Área construida</h6>
+              <h5 class="mb-0 fw-bold">25 lotes</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-lg mb-3 rounded-4">
+        <div class="card-body position-relative">
+          <google-chart [type]="pieChart" [data]="pieChartData" [options]="pieChartOptions" [width]="400"
+            [height]="200">
+          </google-chart>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- Modal para filtros avanzados -->
+  <div class="modal fade" id="filtrosAvanzados" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Información del Dashboard</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+
+          <form [formGroup]="filterForm">
+
+            <div class="col">
+              <label for="blockFilter">Manzana:</label>
+              <select class="form-control" id="blockFilter" formControlName="block" multiple>
+                <option value="">Todas las Manzanas</option>
+                <option *ngFor="let block of blocksNumber" [value]="block">{{ block }}</option>
+              </select>
+            </div>
+            <div class="col">
+              <label for="typeFilter">Tipo:</label>
+              <select class="form-control" id="typeFilter" formControlName="type">
+                <option value="">Todos los Tipos</option>
+                <option *ngFor="let type of plotsTypes" [value]="type">{{ type }}</option>
+              </select>
+            </div>
+            <div class="col">
+              <label for="statusFilter">Estado:</label>
+              <select class="form-control" id="statusFilter" formControlName="status">
+                <option value="">Todos los Estados</option>
+                <option *ngFor="let status of plotsStatus" [value]="status">{{ status }}</option>
+              </select>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+
+          </form>
+        </div>
+      </div>

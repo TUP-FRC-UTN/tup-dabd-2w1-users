@@ -3,12 +3,13 @@ import { DashboardService } from '../../users-servicies/dashboard.service';
 import { AgeDistribution, AgeDistributionResponse } from '../../users-models/dashboard/age-distribution';
 import { CommonModule } from '@angular/common';
 import { ChartType, GoogleChartComponent, GoogleChartsModule } from 'angular-google-charts';
+import { UsersGraphicPlotsStatsComponent } from "../users-graphic-plots-stats/users-graphic-plots-stats.component";
 
 @Component({
   selector: 'app-users-graphic-histogram',
   standalone: true,
   imports: [GoogleChartsModule, CommonModule],
-templateUrl: './users-graphic-histogram.component.html',
+  templateUrl: './users-graphic-histogram.component.html',
   styleUrl: './users-graphic-histogram.component.css'
 })
 export class UsersGraphicHistogramComponent {
@@ -69,7 +70,7 @@ export class UsersGraphicHistogramComponent {
         fontSize: 21,
         bold: true
     },
-      pieHole: 0.4,
+      //pieHole: 0.4,
       colors: ['#4285F4', '#DB4437'],
       backgroundColor: 'transparent',
       legend: {
