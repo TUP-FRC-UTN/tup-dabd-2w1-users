@@ -30,9 +30,15 @@ export class DashboardService {
     return this.http.get<PlotsStats>(`${this.urlOwners}/plots-stats`, { params });
   }
 
-  getPlotsByBlock(startDate?: string, endDate?: string, plotType?: string, plotStatus?: string): Observable<PlotsByBlock[]> {
+  getPlotsByBlock(startDate?: string, endDate?: string): Observable<PlotsByBlock[]> {
 
-    const params = this.createParams(startDate, endDate, plotType, plotStatus);
+    let params = new HttpParams();
+    if (startDate) {
+      params = params.append('startDate', startDate);
+    }
+    if (endDate) {
+      params = params.append('endDate', endDate);
+    }
     return this.http.get<PlotsByBlock[]>(`${this.urlOwners}/plots-by-block`, { params});
   }
 
