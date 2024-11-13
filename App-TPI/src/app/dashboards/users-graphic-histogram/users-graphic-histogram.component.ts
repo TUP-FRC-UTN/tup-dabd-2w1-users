@@ -3,12 +3,13 @@ import { DashboardService } from '../../users-servicies/dashboard.service';
 import { AgeDistribution, AgeDistributionResponse } from '../../users-models/dashboard/age-distribution';
 import { CommonModule } from '@angular/common';
 import { ChartType, GoogleChartComponent, GoogleChartsModule } from 'angular-google-charts';
-import { UsersGraphicPlotsStatsComponent } from "../users-graphic-plots-stats/users-graphic-plots-stats.component";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-users-graphic-histogram',
   standalone: true,
-  imports: [GoogleChartsModule, CommonModule],
+  imports: [GoogleChartsModule, CommonModule, ReactiveFormsModule,FormsModule],
   templateUrl: './users-graphic-histogram.component.html',
   styleUrl: './users-graphic-histogram.component.css'
 })
@@ -20,6 +21,8 @@ export class UsersGraphicHistogramComponent {
  
   loading = true;
   error: string | null = null;
+  startDate = new FormControl('');
+  endDate = new FormControl('');
     
   columnChart = ChartType.ColumnChart; 
   barChartData: any[] = [];
@@ -84,6 +87,8 @@ export class UsersGraphicHistogramComponent {
           trigger: 'both'
       }
   };
+maxAge: any;
+minAge: any;
 
     ngOnInit() {
         this.loadData();
@@ -104,7 +109,55 @@ export class UsersGraphicHistogramComponent {
                 this.error = 'Error al cargar las estadísticas';
             }
           });
-    }  
+    } 
+    
+    filterByDate() {
+      const startDateValue = this.startDate.value;
+      const endDateValue = this.endDate.value;
+  
+      if (startDateValue && endDateValue) {
+        const start = new Date(startDateValue);
+        const end = new Date(endDateValue);
+  
+        if (start > end) {
+          console.error('Fecha inicial no puede ser mayor a la fecha final');
+          return;
+        }
+  
+        const formattedStartDate = this.formatDate(start);
+        const formattedEndDate = this.formatDate(end);
+  
+        this.updateDashboardData(formattedStartDate, formattedEndDate);
+        
+      }
+    }
+
+    private updateDashboardData(startDate: string, endDate: string) {
+      if (!startDate || !endDate) return;
+    
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+    
+      if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+        console.error("Fechas inválidas");
+        return;
+      }
+    
+      const filteredData = this.ageDistribution.ageDistribution.filter((item) => {
+        const itemDate = new Date(item.date);
+        return itemDate >= start && itemDate <= end;
+      });
+    
+      this.barChartData = filteredData.map((item) => [
+        { v: item.ageRange, f: item.ageRange },
+        { v: item.activeCount, f: `Activos: ${item.activeCount} usuarios` },
+        { v: item.inactiveCount, f: `Inactivos: ${item.inactiveCount} usuarios` }
+      ]);
+    }
+  
+    private formatDate(date: Date): string {
+      return date.toISOString().split('T')[0];
+    }
 
     private processData() {
         // Preparar datos para el gráfico
@@ -134,5 +187,11 @@ export class UsersGraphicHistogramComponent {
             ['Activos', status.activeUsers],
             ['Inactivos', status.inactiveUsers]
           ];
+    }
+
+    clearFilters() {
+      this.startDate.setValue(null);
+      this.endDate.setValue(null);
+      this.loadData();
     }
 }

@@ -1,7 +1,29 @@
 <div class="container">
-    <div class="row">
-        <div class="col-md-7">
-           
+    <div class="row sticky-section border-0 rounded-4 p-3 shadow mb-2">
+
+        <div class="row">
+          <!-- Filtro de fechas -->
+    
+          <div class="col d-flex gap-3">
+            <div class="col">
+              <input type="date" class="form-control border-1 bg-light" [formControl]="startDate" (change)="filterByDate()">
+            </div>
+            <div class="col">
+              <input type="date" class="form-control border-1 bg-light" [formControl]="endDate" (change)="filterByDate()">
+            </div>
+          </div>
+    
+    
+          <!-- Botones de exportar -->
+          <div class="col-auto d-flex gap-1 ms-auto">
+            <button class="btn btn-primary filterbutton" data-bs-toggle="modal" title="Filtros Avanzados"
+              data-bs-target="#filtrosAvanzados">
+              <i class="bi bi-funnel-fill"></i>
+            </button>
+            <button type="button" class="btn btn-secondary bi bi-trash filterbutton" (click)="clearFilters()"
+              title="Limpiar Filtros"></button>
+        </div>
+    </div>
            
             <div class="mb-4">
                 <div>
@@ -17,9 +39,7 @@
                         <google-chart [type]="columnChart" [data]="barChartData" [options]="barChartOptions"
                             [width]="600" [height]="520">
                         </google-chart>
-                    </div>
                 </div>
-            </div>
         </div>
 
         <div class="col-md-5">
@@ -58,4 +78,29 @@
 
         </div>
     </div>
+</div>
+
+<!-- Modal Filtros Avanzados -->
+<div class="modal fade" id="filtrosAvanzados" tabindex="-1" aria-labelledby="filtrosAvanzadosLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="filtrosAvanzadosLabel">Filtros Avanzados</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <label>Rango de Edad</label>
+          <div class="d-flex gap-3">
+            <input type="number" min="0" class="form-control" placeholder="Edad mínima" [(ngModel)]="minAge">
+            <input type="number" min="0" class="form-control" placeholder="Edad máxima" [(ngModel)]="maxAge">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <!-- <button type="button" class="btn btn-primary" (click)="applyAdvancedFilters()" data-bs-dismiss="modal"> -->
+          
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
