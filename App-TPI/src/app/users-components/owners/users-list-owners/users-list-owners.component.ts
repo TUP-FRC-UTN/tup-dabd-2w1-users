@@ -96,8 +96,14 @@ export class UsersListOwnersComponent {
             pageLength: 5,
             columns: [
               { title: 'Fecha de Creación', width: '15%', className: 'text-start',
-                render: (data) => {
-                  return moment(data, 'DD/MM/YYYY').format('DD/MM/YYYY');
+                render: (data, type) => {
+                  if (type === 'display') {
+                    // Mostrar la fecha formateada en la tabla
+                    return moment(data, 'DD/MM/YYYY').format('DD/MM/YYYY');
+                  } else {
+                    // Usar un formato que DataTables pueda ordenar correctamente
+                    return moment(data, 'DD/MM/YYYY').toDate();
+                  }
                 },
                },
               { title: 'Nombre', width: '15%', className: 'text-start' },

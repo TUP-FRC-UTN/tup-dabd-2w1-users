@@ -40,7 +40,6 @@ export class UsuariosNewOwnerComponent {
 
   juridicId = 2;
   date: string = new Date(2000, 0, 1).toISOString().split('T')[0];
-  initialDate: FormControl = new FormControl(this.date);
 
   types: OwnerTypeModel[] = [];
   states: any[] = [];
@@ -70,13 +69,14 @@ export class UsuariosNewOwnerComponent {
       dni: new FormControl("", [
         Validators.required,
         Validators.minLength(8),
-        Validators.pattern(/^\d+$/)
+        Validators.pattern(/^\d+$/),
+        this.validarCuit.bind(this)
       ],
         this.validatorService.validateUniqueDni()
       ), //Tipo de documento
       documentType: new FormControl("", [
         Validators.required]),
-      birthdate: new FormControl(null, [
+      birthdate: new FormControl(this.date, [
         Validators.required,
         this.dateLessThanTodayValidator()]),
       email: new FormControl("", [
@@ -178,6 +178,67 @@ export class UsuariosNewOwnerComponent {
     });
   }
 
+  validarCuit(control: AbstractControl): ValidationErrors | null {
+    const cuit = control.value;
+  
+    if (this.documentType !== '3') {
+      return null;
+    }
+  
+    if (!cuit || cuit.length !== 11 || !/^\d+$/.test(cuit)) {
+      return { invalidCuit: 'El formato de CUIT es incorrecto' };
+    }
+  
+    const base = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2];
+  
+    let aux = 0;
+    for (let i = 0; i < 10; i++) {
+      aux += parseInt(cuit[i], 10) * base[i];
+    }
+  
+    aux = 11 - (aux % 11);
+  
+    if (aux === 11) {
+      aux = 0;
+    }
+    if (aux === 10) {
+      aux = 9;
+    }
+  
+    return aux === parseInt(cuit[10], 10) ? null : { invalidCuit: 'El CUIT es inválido' };
+  }
+
+  documentType: string = '';
+  
+  documentTypeChange() {
+    this.documentType = this.formReactivo.get('documentType')?.value;
+  
+    const dniControl = this.formReactivo.get('dni');
+    
+    dniControl?.setErrors(null); 
+  
+    if (this.documentType === '3') {
+      const validationResult = this.validarCuit(dniControl!);
+      if (validationResult) {
+        dniControl?.setErrors(validationResult);
+      }
+    }
+  }
+
+  logFormErrors() {
+    // Recorremos todos los controles del formulario
+    Object.keys(this.formReactivo.controls).forEach(controlName => {
+      const control = this.formReactivo.get(controlName);
+  
+      // Verificamos si el control tiene errores
+      if (control && control.errors) {
+        // Si el control tiene errores, los mostramos en consola
+        console.log(`Errores en el control ${controlName}:`, control.errors);
+      }
+    });
+  }
+  
+  
   dateLessThanTodayValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const inputDate = new Date(control.value);
@@ -255,6 +316,7 @@ export class UsuariosNewOwnerComponent {
       usernameTaken: 'El nombre de usuario ya está en uso.',
       emailTaken: 'El correo electrónico ya está en uso.',
       dniTaken: 'El DNI ya está en uso.',
+      invalidCuit: 'El CUIT ingresado es inválido.'
     };
   
     return errorMessages[errorKey] || 'Error no identificado en el campo.';

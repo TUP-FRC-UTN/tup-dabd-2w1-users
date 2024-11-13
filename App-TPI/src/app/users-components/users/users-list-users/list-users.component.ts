@@ -104,13 +104,17 @@ export class ListUsersComponent implements OnInit {
             pageLength: 5,
             columns: [
               {
-                title: 'Fecha de Creación', 
+                title: 'Fecha de Creación',
+                className: 'text-start', 
                 width: '20%',
                 render: (data, type, row, meta) => {
-                  // Convertir la fecha a un formato reconocido por moment (DD/MM/YYYY)
-                  const fechaFormateada = moment(data, 'DD/MM/YYYY').format('DD/MM/YYYY');
-              
-                  return fechaFormateada;
+                  if (type === 'display') {
+                    // Mostrar la fecha formateada en la tabla
+                    return moment(data, 'DD/MM/YYYY').format('DD/MM/YYYY');
+                  } else {
+                    // Usar un formato que DataTables pueda ordenar correctamente
+                    return moment(data, 'DD/MM/YYYY').toDate();
+                  }
                 }
               }
               ,
