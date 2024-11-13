@@ -4,63 +4,66 @@
             <div class="row">
                 <!-- Filtro de fechas -->
                 <div class="col d-flex gap-3">
-                  <div class="col">
-                    <input type="month" class="form-control border-1 bg-light">
-                  </div>
-                  <div class="col">
-                    <input type="month" class="form-control border-1 bg-light">
-                  </div>
-                </div>
-          
-                <!-- Botones de exportar -->
-                <div class="col-auto d-flex gap-1 ms-auto">
-                  <button class="btn btn-primary filterbutton" data-bs-toggle="modal" title="Filtros Avanzados"
-                    data-bs-target="#filtrosAvanzados">
-                    <i class="bi bi-funnel-fill"></i>
-                  </button>
-                  <button type="button" class="btn btn-secondary bi bi-trash filterbutton" (click)="clearFilters()"
-                    title="Limpiar Filtros"></button>
-                </div>
-              </div>
-        </div>
-        <div class="col-md-7">
-              <div class="mb-4">
-                <div>
-                  <h2 class="h4 mb-3 text-primary text-center">Distribución de Edades de Usuarios</h2>
-                  <p class="text-muted mb-3 text-center">Cantidad de Usuarios por Edad y Estado de Actividad</p>
-                </div>
-              </div>
-             
-
-            <div class="card border-0 shadow-lg rounded-4">
-                <div class="card-body">
-                    <div>
-                        <!-- Gráfico de barras -->
-                        <google-chart [type]="columnChart" [data]="barChartData" [options]="barChartOptions"
-                            [width]="600" [height]="520">
-                        </google-chart>
+                    <!-- Fecha desde -->
+                    <div class="col">
+                        <label for="startDate">Desde</label>
+                        <input type="month" id="startDate" [(ngModel)]="startDate" class="form-control border-1 bg-light">
                     </div>
+                    <!-- Fecha hasta -->
+                    <div class="col">
+                        <label for="endDate">Hasta</label>
+                        <input type="month" id="endDate" [(ngModel)]="endDate" class="form-control border-1 bg-light">
+                    </div>
+                </div>
+
+                <!-- Botones de exportar y filtros -->
+                <div class="col-auto d-flex gap-1 ms-auto">
+                    <!-- Botón para filtros avanzados -->
+                    <button class="btn btn-primary filterbutton" data-bs-toggle="modal" title="Filtros Avanzados"
+                        data-bs-target="#filtrosAvanzados">
+                        <i class="bi bi-funnel-fill"></i>
+                    </button>
+                    <!-- Botón para limpiar filtros -->
+                    <button type="button" class="btn btn-secondary bi bi-trash filterbutton" (click)="clearFilters()"
+                        title="Limpiar Filtros"></button>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-5">
+        <!-- Gráfico de barras -->
+        <div class="col-md-7">
+            <div class="mb-4">
+                <div>
+                    <h2 class="h4 mb-3 text-primary text-center">Distribución de Edades de Usuarios</h2>
+                    <p class="text-muted mb-3 text-center">Cantidad de Usuarios por Edad y Estado de Actividad</p>
+                </div>
+            </div>
+            <div class="card border-0 shadow-lg rounded-4">
+                <div class="card-body">
+                    <google-chart [type]="columnChart" [data]="barChartData" [options]="barChartOptions"
+                        [width]="600" [height]="520">
+                    </google-chart>
+                </div>
+            </div>
+        </div>
 
-            <!-- kPIs -->
+        <!-- KPI y gráfico de torta -->
+        <div class="col-md-5">
+            <!-- KPI: Total de usuarios -->
             <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow primary-gradient">
                 <div class="card-body position-relative text-center">
                     <h6 class="text-white mb-2">Total de usuarios registrados: </h6>
-                    <h4 class="mb-0 fw-bold text-white" >{{ ageDistribution.statics.totalUsers }}</h4>
+                    <h4 class="mb-0 fw-bold text-white">{{ ageDistribution.statics.totalUsers }}</h4>
                 </div>
             </div>
-
+            <!-- KPI: Edad promedio -->
             <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow success-gradient">
                 <div class="card-body position-relative text-center">
                     <h6 class="text-white mb-2">Edad promedio</h6>
                     <h4 class="mb-0 fw-bold text-white">{{ ageDistribution.statics.averageAge }} años</h4>
                 </div>
             </div>
-
+            <!-- KPI: Edad mínima y máxima -->
             <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow info-gradient">
                 <div class="card-body text-center">
                     <h6 class="text-white mb-2">Edad Mínima - Edad Máxima</h6>
@@ -68,8 +71,7 @@
                         ageDistribution.statics.oldestAge }} años</h4>
                 </div>
             </div>
-
-            <!-- Pie Chart -->
+            <!-- Gráfico de torta -->
             <div class="card border-0 shadow-lg mb-3 rounded-4 hover-shadow">
                 <div class="card-body position-relative">
                     <google-chart [type]="pieChart" [data]="pieChartData" [options]="pieChartOptions" [width]="400"
@@ -77,7 +79,33 @@
                     </google-chart>
                 </div>
             </div>
-
         </div>
     </div>
+</div>
+
+<!-- Botón para abrir el modal de filtros avanzados -->
+<button class="btn btn-primary filterbutton" data-bs-toggle="modal" title="Filtros Avanzados" data-bs-target="#filtrosAvanzados">
+    <i class="bi bi-funnel-fill"></i>
+</button>
+
+<!-- Modal para filtros avanzados -->
+<div class="modal fade" id="filtrosAvanzados" tabindex="-1" aria-labelledby="filtrosAvanzadosLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="filtrosAvanzadosLabel">Filtros Avanzados</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <label for="minAge">Edad mínima</label>
+        <input type="number" id="minAge" [(ngModel)]="minAge" class="form-control" placeholder="Ej. 20">
+        <label for="maxAge">Edad máxima</label>
+        <input type="number" id="maxAge" [(ngModel)]="maxAge" class="form-control" placeholder="Ej. 40">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" (click)="applyFilters()" data-bs-dismiss="modal">Aplicar Filtros</button>
+      </div>
+    </div>
+  </div>
 </div>

@@ -19,6 +19,8 @@ export class UsersGraphicHistogramComponent {
 
   ageDistribution: AgeDistributionResponse = new AgeDistributionResponse();
 
+  minAge: number | null = null;
+  maxAge: number | null = null;
   startDate: string | null = null;
   endDate: string | null = null;
  
@@ -88,6 +90,9 @@ export class UsersGraphicHistogramComponent {
           trigger: 'both'
       }
   };
+  
+   // Mantener una copia de los datos originales
+   private originalData: AgeDistribution[] = [];
 
     ngOnInit() {
         this.loadData();
@@ -154,6 +159,30 @@ export class UsersGraphicHistogramComponent {
         { v: item.inactiveCount, f: `Inactivos: ${item.inactiveCount} usuarios` }
       ]);
     }
+
+    applyFilters() {
+      let filteredData = [...this.originalData];
+  
+      // Filtrar por rango de edad
+      if (this.minAge !== null || this.maxAge !== null) {
+        filteredData = filteredData.filter(item => {
+          const ageRange = item.ageRange.split('-');
+          const minRangeAge = parseInt(ageRange[0].replace('+', ''));
+          const maxRangeAge = ageRange[1] ? parseInt(ageRange[1]) : 100;
+  
+          const minCondition = this.minAge === null || minRangeAge >= this.minAge;
+          const maxCondition = this.maxAge === null || maxRangeAge <= this.maxAge;
+  
+          return minCondition && maxCondition;
+        });
+      }
+  // Actualizar datos del gráfico
+  this.barChartData = filteredData.map((item) => [
+    { v: item.ageRange, f: item.ageRange },
+    { v: item.activeCount, f: `Activos: ${item.activeCount} usuarios` },
+    { v: item.inactiveCount, f: `Inactivos: ${item.inactiveCount} usuarios` }
+  ]);
+}
 
     clearFilters() {
       this.startDate = null;
