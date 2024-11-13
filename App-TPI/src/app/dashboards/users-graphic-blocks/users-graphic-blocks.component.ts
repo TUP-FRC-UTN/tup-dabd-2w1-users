@@ -20,6 +20,9 @@ export class UsersGraphicBlocksComponent implements OnInit {
   //Controles para los filtros
   blockControl1 = new FormControl(0); 
   blockControl2 = new FormControl(0);
+  startDate = new FormControl('');
+  endDate = new FormControl('');
+
 
   blocksNumber: number[] = []; // números de las manzanas
   availableBlocksForSelect1: number[] = [];
@@ -31,10 +34,9 @@ export class UsersGraphicBlocksComponent implements OnInit {
   chartType : ChartType = ChartType.ColumnChart;
   chartData: any[] = [];
   width = 600;
-  height = 370;
+  height = 340;
 
   chartOptions = {
-    title: 'Comparativa de Áreas y Porcentajes Entre Manzanas',
     backgroundColor: 'transparent',
     chartArea: { width: '75%', height: '70%' },
     hAxis: { title: 'Métricas', titleTextStyle: { color: '#7f8c8d' } },
@@ -120,20 +122,16 @@ export class UsersGraphicBlocksComponent implements OnInit {
   }
 
   private setupSelectFilters(): void {
-    // Suscripción para el primer select
     this.blockControl1.valueChanges.subscribe(value => {
       if (value) {
-        // Actualizar las opciones disponibles para el select 2
         this.availableBlocksForSelect2 = this.blocksNumber.filter(block => block !== Number(value));
       } else {
         this.availableBlocksForSelect2 = [...this.blocksNumber];
       }
     });
 
-    // Suscripción para el segundo select
     this.blockControl2.valueChanges.subscribe(value => {
       if (value) {
-        // Actualizar las opciones disponibles para el select 1
         this.availableBlocksForSelect1 = this.blocksNumber.filter(block => block !== Number(value));
       } else {
         this.availableBlocksForSelect1 = [...this.blocksNumber];
@@ -228,5 +226,64 @@ export class UsersGraphicBlocksComponent implements OnInit {
       utilizationPercentage: ((b1.builtArea + b2.builtArea) / (b1.totalArea + b2.totalArea)) * 100,
       notUtilizationPercentage: 100 - (((b1.builtArea + b2.builtArea) / (b1.totalArea + b2.totalArea)) * 100)
     };
+  }
+
+  filterByDate() {
+    const startDateValue = this.startDate.value;
+    const endDateValue = this.endDate.value;
+
+    if (startDateValue && endDateValue) {
+      const start = new Date(startDateValue);
+      const end = new Date(endDateValue);
+
+      if (start > end) {
+        console.error('Fecha inicial no puede ser mayor a la fecha final');
+        return;
+      }
+
+      const formattedStartDate = this.formatDate(start);
+      const formattedEndDate = this.formatDate(end);
+
+      this.updateDashboardData(formattedStartDate, formattedEndDate);
+      
+    }
+  }
+
+  private formatDate(date: Date): string {
+    return date.toISOString().split('T')[0];
+  }
+
+  private updateDashboardData(startDate: string, endDate: string) {
+
+    this.dashboardService
+      .getBlockStats(
+        startDate,
+        endDate
+      )
+      .subscribe({
+        next: (stats) => {
+          this.blocks = stats;
+          this.blocksNumber = stats.map(block => block.blockNumber).sort((a, b) => a - b);
+          this.blocksSubject.next(stats);
+
+          this.availableBlocksForSelect1 = [...this.blocksNumber];
+          this.availableBlocksForSelect2 = [...this.blocksNumber];
+          
+          if (this.blocksNumber.length >= 2) {
+            this.blockControl1.setValue(this.blocksNumber[0]);
+            this.blockControl2.setValue(this.blocksNumber[1]);
+          }
+        },
+        error: (error) => {
+          console.error('Error al obtener estadísticas:', error);
+        },
+      });
+
+  }
+
+  clearFilters() {
+    this.startDate.reset();
+    this.endDate.reset();
+    this.loadData();
   }
 }

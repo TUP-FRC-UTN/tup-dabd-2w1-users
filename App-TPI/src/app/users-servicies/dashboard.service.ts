@@ -16,8 +16,15 @@ export class DashboardService {
 
 
   // Método para obtener los datos de los bloques
-  getBlockStats(): Observable<BlockData[]>{
-    return this.http.get<BlockData[]>(`${this.urlOwners}/blockStats`);
+  getBlockStats(startDate?: string, endDate?: string): Observable<BlockData[]>{
+    let params = new HttpParams();
+    if (startDate) {
+      params = params.append('startDate', startDate);
+    }
+    if (endDate) {
+      params = params.append('endDate', endDate);
+    }
+    return this.http.get<BlockData[]>(`${this.urlOwners}/blockStats`, { params });
   }
 
   getAgeDistribution(): Observable<AgeDistributionResponse> {

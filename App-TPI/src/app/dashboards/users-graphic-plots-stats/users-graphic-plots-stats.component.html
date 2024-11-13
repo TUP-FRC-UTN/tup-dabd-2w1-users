@@ -100,43 +100,45 @@
 
     </div>
   </div>
+</div>
 
-
-  <!-- Modal para filtros avanzados -->
-  <div class="modal fade" id="filtrosAvanzados" role="dialog">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Información del Dashboard</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-
-          <form [formGroup]="filterForm">
-
-            <div class="col mb-3">
-              <label for="blockFilter" class="form-label">Manzana:</label>
-              <app-users-multiple-select [options]="blocksNumber"
-                (selectedOptionsChange)="filterForm.get('block')?.setValue($event)" />
-            </div>
-
-            <div class="col mb-3">
-              <label for="typeFilter" class="form-label">Tipo:</label>
-              <select class="form-select" id="typeFilter" formControlName="type">
-                <option value="" selected>Seleccione una opción</option>
-                <option *ngFor="let type of plotsTypes" [value]="type.name">{{ type.name }}</option>
-              </select>
-            </div>
-            <div class="col mb-3">
-              <label for="statusFilter" class="form-label">Estado:</label>
-              <select class="form-select" id="statusFilter" formControlName="status">
-                <option value="" selected>Seleccione una opción</option>
-                <option *ngFor="let status of plotsStatus" [value]="status.name">{{ status.name }}</option>
-              </select>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            </div>
-          </form>
-        </div>
+<!-- Modal para filtros avanzados -->
+<div class="modal fade" id="filtrosAvanzados" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Información del Dashboard</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
+      <div class="modal-body">
+
+        <form [formGroup]="filterForm">
+
+          <div class="col mb-3">
+            <label for="blockFilter" class="form-label">Manzana:</label>
+            <app-users-multiple-select [options]="blocksNumber"
+              (selectedOptionsChange)="filterForm.get('block')?.setValue($event)" />
+          </div>
+
+          <div class="col mb-3">
+            <label for="typeFilter" class="form-label">Tipo:</label>
+            <select class="form-select" id="typeFilter" formControlName="type">
+              <option value="" selected>Seleccione una opción</option>
+              <option *ngFor="let type of plotsTypes" [value]="type.name">{{ type.name }}</option>
+            </select>
+          </div>
+          <div class="col mb-3">
+            <label for="statusFilter" class="form-label">Estado:</label>
+            <select class="form-select" id="statusFilter" formControlName="status">
+              <option value="" selected>Seleccione una opción</option>
+              <option *ngFor="let status of plotsStatus" [value]="status.name">{{ status.name }}</option>
+            </select>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
