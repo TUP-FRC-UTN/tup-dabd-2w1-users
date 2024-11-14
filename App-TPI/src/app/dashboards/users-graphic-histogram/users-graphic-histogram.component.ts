@@ -127,12 +127,12 @@ minAge: any;
         const formattedStartDate = this.formatDate(start);
         const formattedEndDate = this.formatDate(end);
   
-        this.updateDashboardData(formattedStartDate, formattedEndDate);
+        //this.updateDashboardData(formattedStartDate, formattedEndDate);
         
       }
     }
 
-    private updateDashboardData(startDate: string, endDate: string) {
+    /*private updateDashboardData(startDate: string, endDate: string) {
       if (!startDate || !endDate) return;
     
       const start = new Date(startDate);
@@ -153,7 +153,7 @@ minAge: any;
         { v: item.activeCount, f: `Activos: ${item.activeCount} usuarios` },
         { v: item.inactiveCount, f: `Inactivos: ${item.inactiveCount} usuarios` }
       ]);
-    }
+    }*/
   
     private formatDate(date: Date): string {
       return date.toISOString().split('T')[0];
