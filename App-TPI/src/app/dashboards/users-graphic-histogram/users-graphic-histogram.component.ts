@@ -28,11 +28,6 @@ export class UsersGraphicHistogramComponent {
   barChartData: any[] = [];
 
     barChartOptions = {
-        title: 'Distribución de Edades de Usuarios Por Estado',
-        titleTextStyle: {
-            color: '#495057',
-            fontSize: 16,
-        },
         legend: { position: 'top', alignment: 'center' },
         series: {
             0: { labelInLegend: 'Activos' },
@@ -67,17 +62,11 @@ export class UsersGraphicHistogramComponent {
     pieChart = ChartType.PieChart;
     pieChartData: any[] = [];
     pieChartOptions = {
-      title: 'Estado de Usuarios',
-      titleTextStyle: {
-        color: '#495057',
-        fontSize: 21,
-        bold: true
-    },
       //pieHole: 0.4,
       colors: ['#4285F4', '#DB4437'],
       backgroundColor: 'transparent',
       legend: {
-          position: 'bottom',
+          position: 'right',
           textStyle: { color: '#495057', fontSize: 12 }
       },
       chartArea: { width: '90%', height: '80%' },
