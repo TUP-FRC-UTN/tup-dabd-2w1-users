@@ -43,6 +43,7 @@ export class UsersListPlotsComponent {
   selectType = new FormControl("Seleccione un tipo");
   selectState = new FormControl("Seleccione un estado");
 
+
   plotTypes: string[] = [];
   plotStatus: string[] = [];
   typesForFilter: any[] = [];
@@ -62,7 +63,7 @@ export class UsersListPlotsComponent {
           name: r.name
         }));
 
-        
+
       },
       error: (error) => {
         console.error('Error al cargar los estados:', error);
