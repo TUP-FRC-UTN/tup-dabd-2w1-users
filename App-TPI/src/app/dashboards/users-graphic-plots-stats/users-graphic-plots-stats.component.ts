@@ -56,8 +56,11 @@ export class UsersGraphicPlotsStatsComponent implements OnInit {
   plotsTypes: PlotTypeModel[] = [];
   plotsStatus: PlotStateModel[] = [];
 
-  loading = true;
-  error: string | null = null;
+  errorPieChart: string | null = null;
+  errorBarChart: string | null = null;
+  errorRangeDate: string | null = null;
+  
+  
 
   columnChart = ChartType.ColumnChart;
   barChartData: any[] = [];
@@ -107,7 +110,7 @@ export class UsersGraphicPlotsStatsComponent implements OnInit {
     colors: ['#FF9900', '#4285F4', '#34A853', '#EA4335', '#9334E6', '#FBBC05'],
     backgroundColor: 'transparent',
     legend: {
-      position: 'bottom',
+      position: 'right',
       textStyle: { color: '#495057', fontSize: 12 },
     },
     chartArea: { width: '90%', height: '80%' },
@@ -120,6 +123,7 @@ export class UsersGraphicPlotsStatsComponent implements OnInit {
   };
 
   ngOnInit() {
+
     this.loadData();
     this.setFilterListeners();
 
@@ -149,6 +153,9 @@ export class UsersGraphicPlotsStatsComponent implements OnInit {
   }
 
   private applyFilters() {
+    this.errorBarChart = null;
+    this.errorPieChart = null;
+
     this.filteredPlotsStats = { ...this.plotsStats };
     this.filteredPlotsByBlock = [...this.plotsByBlock];
     this.filteredOwnerDistribution = [...this.ownerDistribution];
@@ -169,15 +176,13 @@ export class UsersGraphicPlotsStatsComponent implements OnInit {
             if (!data.length) {
               this.filteredOwnerDistribution = [];
               this.processPieChartData();
-              this.loading = false;
               return;
             }
             this.filteredOwnerDistribution = data;
             this.processPieChartData();
-            this.loading = false;
           },
           error: () => {
-            this.error = 'Error al cargar la distribución de propietarios';
+            this.errorPieChart = 'Error al cargar la distribución de propietarios';
           },
         });
 
@@ -187,7 +192,7 @@ export class UsersGraphicPlotsStatsComponent implements OnInit {
           this.updateKPIs(data);
         },
         error: (error) => {
-          console.error('Error loading plots stats:', error);
+          console.error('Error al cargar la estadísticas:', error);
         },
       });
     } else {
@@ -214,32 +219,41 @@ export class UsersGraphicPlotsStatsComponent implements OnInit {
   }
 
   private loadData() {
-    this.loading = true;
-    this.error = null;
+    this.errorBarChart = null;
+    this.errorPieChart = null;
+    this.loadStats();
+    this.loadBarChart();
+    this.loadPieChart();
+    this.processFilterOptions();
+  }
 
+   loadStats() {
     this.apiService.getPlotsStats().subscribe({
       next: (data: PlotsStats) => {
         this.plotsStats = data;
         this.filteredPlotsStats = { ...this.plotsStats };
-        this.loading = false;
       },
       error: () => {
-        this.error = 'Error al cargar las estadísticas de lotes';
+        console.error('Error al cargar las estadísticas');
       },
     });
+  }
 
+ loadBarChart() {
     this.apiService.getPlotsByBlock().subscribe({
       next: (data: PlotsByBlock[]) => {
         this.plotsByBlock = data;
         this.filteredPlotsByBlock = [...this.plotsByBlock];
-        this.loading = false;
         this.processData();
         this.processFilterOptions();
       },
       error: () => {
-        this.error = 'Error al cargar las estadísticas';
+        this.errorBarChart = 'Error al cargar los datos por manzana';
       },
     });
+  }
+  
+  loadPieChart() {
 
     this.apiService.getOwnersPlotsDistribution().subscribe({
       next: (data: OwnersPlotsDistribution[]) => {
@@ -248,14 +262,17 @@ export class UsersGraphicPlotsStatsComponent implements OnInit {
         this.processPieChartData();
       },
       error: () => {
-        this.error = 'Error al cargar la distribución de propietarios';
+        this.errorPieChart = 'Error al cargar la distribución de propietarios';
       },
     });
 
-    this.processFilterOptions();
   }
 
   private processData() {
+    if(this.filteredPlotsByBlock.length === 0) {
+      this.errorBarChart = 'No hay datos disponibles con esos filtros';
+    }
+
     this.barChartData = [
       ...this.filteredPlotsByBlock.map((item: PlotsByBlock) => [
         {
@@ -280,10 +297,8 @@ export class UsersGraphicPlotsStatsComponent implements OnInit {
 
   private processPieChartData() {
     if (!this.filteredOwnerDistribution?.length) {
-      this.pieChartData = [
-          ['No hay datos disponibles', 1]
-      ];
-  }
+      this.errorPieChart = 'No hay datos disponibles con esos filtros';
+    }
 
     const sortedOwners = [...this.filteredOwnerDistribution].sort(
       (a, b) => b.plotCount - a.plotCount
@@ -324,6 +339,7 @@ export class UsersGraphicPlotsStatsComponent implements OnInit {
           f: `Lotes: ${othersCount}\nPorcentaje: ${othersPercentage.toFixed(1)}%\nPropietarios: ${sortedOwners.length - 8}`
         }
       ]);
+
     }
 
     this.pieChartOptions = {
@@ -336,6 +352,7 @@ export class UsersGraphicPlotsStatsComponent implements OnInit {
     this.startDate.reset();
     this.endDate.reset();
     this.filterForm.reset();
+    this.errorRangeDate = null;
     this.filteredPlotsByBlock = [...this.plotsByBlock];
     this.filteredOwnerDistribution = [...this.ownerDistribution];
     this.filteredPlotsStats = { ...this.plotsStats };
@@ -344,6 +361,8 @@ export class UsersGraphicPlotsStatsComponent implements OnInit {
   }
 
   filterByDate() {
+    this.errorRangeDate = null;
+
     const startDateValue = this.startDate.value;
     const endDateValue = this.endDate.value;
 
@@ -352,7 +371,7 @@ export class UsersGraphicPlotsStatsComponent implements OnInit {
       const end = new Date(endDateValue);
 
       if (start > end) {
-        console.error('Fecha inicial no puede ser mayor a la fecha final');
+        this.errorRangeDate = 'La fecha de inicio no puede ser mayor a la fecha de fin';
         return;
       }
 
@@ -365,6 +384,8 @@ export class UsersGraphicPlotsStatsComponent implements OnInit {
 
   private updateDashboardData(startDate: string, endDate: string) {
     const currentFilters = this.filterForm.value;
+    this.errorBarChart = null;
+    this.errorPieChart = null;
 
     this.apiService
       .getPlotsStats(
@@ -413,5 +434,26 @@ export class UsersGraphicPlotsStatsComponent implements OnInit {
 
   private formatDate(date: Date): string {
     return date.toISOString().split('T')[0];
+  }
+
+  resetPieChart() {
+    this.filterForm.reset();
+    this.startDate.reset();
+    this.endDate.reset();
+    this.loadPieChart();
+    this.loadStats();
+  }
+
+  resetBarChart() {
+    this.startDate.reset();
+    this.endDate.reset();
+    this.loadBarChart();
+  }
+
+  resetAll() {
+    this.filterForm.reset();
+    this.startDate.reset();
+    this.endDate.reset();
+    this.loadData();
   }
 }

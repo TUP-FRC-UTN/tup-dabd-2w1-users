@@ -9,6 +9,9 @@
                 <div class="col">
                     <input type="date" class="form-control border-1 bg-light" [formControl]="startDate"
                         (change)="filterByDate()">
+                    <!-- @if(errorRange) {
+                    <div class="text-danger">La fecha de inicio no puede ser mayor a la fecha de fin</div>
+                    } -->
                 </div>
                 <div class="col">
                     <input type="date" class="form-control border-1 bg-light" [formControl]="endDate"
@@ -31,7 +34,6 @@
 
     <div class="row">
 
-
         <div class="col-md-5">
 
             <!-- kPIs -->
@@ -40,7 +42,8 @@
                     <div class="card border-0 shadow mb-1 p-2 hover-shadow" style="background-color: #e7f1ff;">
                         <div
                             class="card-body d-flex flex-column align-items-center justify-content-center p-2 text-center">
-                            <h6 class="card-title">Total de usuarios registrados<i class="bi bi-people-fill me-2"></i></h6>
+                            <h6 class="card-title">Total de usuarios registrados<i class="bi bi-people-fill me-2"></i>
+                            </h6>
                             <span>{{ ageDistribution.statics.totalUsers }}</span>
                         </div>
                     </div>
@@ -49,7 +52,8 @@
                     <div class="card border-0 shadow mb-1 p-2 hover-shadow" style="background-color: #fff3e0;">
                         <div
                             class="card-body d-flex flex-column align-items-center justify-content-center p-2 text-center">
-                            <h6 class="card-title">Edad Mínima - Edad Máxima<i class="bi bi-hourglass-split me-2"></i></h6>
+                            <h6 class="card-title">Edad Mínima - Edad Máxima<i class="bi bi-hourglass-split me-2"></i>
+                            </h6>
                             <span>{{ ageDistribution.statics.youngestAge }} - {{
                                 ageDistribution.statics.oldestAge }} años</span>
                         </div>
@@ -66,12 +70,23 @@
 
             <!-- Pie Chart -->
             <div class="card border-0 shadow mb-2 p-2 hover-shadow">
-                <div class="card-body position-relative">
+                <div class="card-body">
+
+                    <div *ngIf="error" class="error-container">
+                        <i class="bi bi-exclamation-triangle-fill error-icon"></i>
+                        <p>{{ error }}</p>
+                        <button class="btn btn-secondary mt-2" (click)="clearFilters()">
+                          <i class="bi bi-arrow-clockwise me-2"></i>Reintentar
+                        </button>
+                      </div>
+                    
+                    @if(!error){
                     <h5 class="card-title align-items-center">Estado de Usuarios</h5>
                     <hr>
                     <google-chart [type]="pieChart" [data]="pieChartData" [options]="pieChartOptions" [width]="400"
                         [height]="160">
                     </google-chart>
+                    }
                 </div>
             </div>
         </div>
@@ -80,12 +95,24 @@
             <div class="card border-0 shadow-lg rounded-4">
                 <div class="card-body">
                     <div>
+                        @if(error){
+                        <div class="error-container">
+                            <i class="bi bi-exclamation-triangle-fill error-icon"></i>
+                            <p>{{ error }}</p>
+                            <button class="btn btn-secondary mt-2" (click)="clearFilters()">
+                                <i class="bi bi-arrow-clockwise me-2"></i>Reintentar
+                            </button>
+                        </div>
+                        }
+
+                        @if(!error){
                         <h4 class="card-title align-items-center">Distribución de Edades de Usuarios</h4>
                         <h6 class="card-subtitle">Cantidad de Usuarios por Edad y Estado de Actividad</h6>
                         <hr>
                         <google-chart [type]="columnChart" [data]="barChartData" [options]="barChartOptions"
                             [width]="600" [height]="340">
                         </google-chart>
+                        }
                     </div>
                 </div>
             </div>

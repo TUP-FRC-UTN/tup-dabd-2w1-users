@@ -23,7 +23,11 @@ export class UsersGraphicBlocksComponent implements OnInit {
   startDate = new FormControl('');
   endDate = new FormControl('');
 
-
+  loading = true;
+  error: string | null = null;
+  errorRange: string | null = null;
+  
+  
   blocksNumber: number[] = []; // números de las manzanas
   availableBlocksForSelect1: number[] = [];
   availableBlocksForSelect2: number[] = [];
@@ -85,7 +89,10 @@ export class UsersGraphicBlocksComponent implements OnInit {
     this.setupSelectFilters();
   }
 
-  private loadData(): void {
+  loadData(): void {
+    this.loading = true;
+    this.error = null;
+
     this.dashboardService.getBlockStats().subscribe({
       next: (data) => {
         this.blocks = data;
@@ -99,9 +106,12 @@ export class UsersGraphicBlocksComponent implements OnInit {
           this.blockControl1.setValue(this.blocksNumber[0]);
           this.blockControl2.setValue(this.blocksNumber[1]);
         }
+        this.loading = false;
       },
       error: (error) => {
         console.error('Error al cargar datos:', error);
+        this.error = 'Ha ocurrido un error al cargar los datos. Por favor, intente nuevamente.';
+        this.loading = false;
       }
     });
   }
@@ -141,6 +151,7 @@ export class UsersGraphicBlocksComponent implements OnInit {
   }
 
   private updateChartData(block1: number, block2: number, blocks: BlockData[]): void {
+
     const b1 = blocks.find(b => b.blockNumber === block1);
     const b2 = blocks.find(b => b.blockNumber === block2);
 
@@ -239,13 +250,15 @@ export class UsersGraphicBlocksComponent implements OnInit {
   filterByDate() {
     const startDateValue = this.startDate.value;
     const endDateValue = this.endDate.value;
+    this.startDate.setErrors(null);
 
     if (startDateValue && endDateValue) {
       const start = new Date(startDateValue);
       const end = new Date(endDateValue);
+      this.errorRange = null;
 
       if (start > end) {
-        console.error('Fecha inicial no puede ser mayor a la fecha final');
+        this.errorRange = 'La fecha de inicio no puede ser mayor a la fecha de fin';
         return;
       }
 
@@ -262,6 +275,9 @@ export class UsersGraphicBlocksComponent implements OnInit {
   }
 
   private updateDashboardData(startDate: string, endDate: string) {
+    
+    this.loading = true;
+    this.error = null;
 
     this.dashboardService
       .getBlockStats(
@@ -272,6 +288,10 @@ export class UsersGraphicBlocksComponent implements OnInit {
         next: (stats) => {
           this.blocks = stats;
           this.blocksNumber = stats.map(block => block.blockNumber).sort((a, b) => a - b);
+          
+          if (this.blocksNumber.length === 0) {
+            this.error = 'No se encontraron datos para las fechas seleccionadas';
+          }
           this.blocksSubject.next(stats);
 
           this.availableBlocksForSelect1 = [...this.blocksNumber];
@@ -281,9 +301,12 @@ export class UsersGraphicBlocksComponent implements OnInit {
             this.blockControl1.setValue(this.blocksNumber[0]);
             this.blockControl2.setValue(this.blocksNumber[1]);
           }
+          this.loading = false;
         },
         error: (error) => {
           console.error('Error al obtener estadísticas:', error);
+          this.error = 'Ha ocurrido un error al obtener las estadísticas. Por favor, intente nuevamente.';
+          this.loading = false;
         },
       });
 
@@ -293,5 +316,12 @@ export class UsersGraphicBlocksComponent implements OnInit {
     this.startDate.reset();
     this.endDate.reset();
     this.loadData();
+    this.errorRange = null;
+  }
+
+  loadPage(){
+    this.loadData();
+    this.startDate.reset();
+    this.endDate.reset();
   }
 }
