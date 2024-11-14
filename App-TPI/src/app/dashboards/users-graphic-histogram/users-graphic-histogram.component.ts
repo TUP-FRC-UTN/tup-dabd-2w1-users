@@ -4,17 +4,20 @@ import { AgeDistribution, AgeDistributionResponse } from '../../users-models/das
 import { CommonModule } from '@angular/common';
 import { ChartType, GoogleChartComponent, GoogleChartsModule } from 'angular-google-charts';
 import { UsersGraphicPlotsStatsComponent } from "../users-graphic-plots-stats/users-graphic-plots-stats.component";
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-users-graphic-histogram',
   standalone: true,
-  imports: [GoogleChartsModule, CommonModule],
+  imports: [GoogleChartsModule, CommonModule, ReactiveFormsModule],
   templateUrl: './users-graphic-histogram.component.html',
   styleUrl: './users-graphic-histogram.component.css'
 })
 export class UsersGraphicHistogramComponent {
     
   private readonly apiService = inject(DashboardService);
+  startDate:FormControl = new FormControl('');
+  endDate:FormControl = new FormControl('');
 
   ageDistribution: AgeDistributionResponse = new AgeDistributionResponse();
  
@@ -134,5 +137,53 @@ export class UsersGraphicHistogramComponent {
             ['Activos', status.activeUsers],
             ['Inactivos', status.inactiveUsers]
           ];
+    }
+
+    filterByDate() {
+      const startDateValue = this.startDate.value;
+      const endDateValue = this.endDate.value;
+  
+      if (startDateValue && endDateValue) {
+        const start = new Date(startDateValue);
+        const end = new Date(endDateValue);
+  
+        if (start > end) {
+          console.error('Fecha inicial no puede ser mayor a la fecha final');
+          return;
+        }
+  
+        const formattedStartDate = this.formatDate(start);
+        const formattedEndDate = this.formatDate(end);
+  
+        this.updateDashboardData(formattedStartDate, formattedEndDate);
+        
+      }
+    }
+  
+    private formatDate(date: Date): string {
+      return date.toISOString().split('T')[0];
+    }
+
+    private updateDashboardData(startDate: string, endDate: string) {
+
+      this.apiService
+        .getAgeDistribution(startDate, endDate)
+        .subscribe({
+          next: (stats) => {
+            this.ageDistribution = stats;
+            this.loading = false;
+            this.processData();
+          },
+          error: (error) => {
+            console.error('Error al obtener estadísticas:', error);
+          },
+        });
+  
+    }
+
+    clearFilters() {
+      this.startDate.reset();
+      this.endDate.reset();
+      this.loadData();
     }
 }

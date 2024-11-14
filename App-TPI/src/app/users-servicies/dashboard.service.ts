@@ -27,8 +27,15 @@ export class DashboardService {
     return this.http.get<BlockData[]>(`${this.urlOwners}/blockStats`, { params });
   }
 
-  getAgeDistribution(): Observable<AgeDistributionResponse> {
-    return this.http.get<AgeDistributionResponse>(`${this.urlUsers}/age-data`);
+  getAgeDistribution(startDate?: string, endDate?: string): Observable<AgeDistributionResponse> {
+    let params = new HttpParams();
+    if (startDate) {
+      params = params.append('startDate', startDate);
+    }
+    if (endDate) {
+      params = params.append('endDate', endDate);
+    }
+    return this.http.get<AgeDistributionResponse>(`${this.urlUsers}/age-data`, { params });
   }
 
   getPlotsStats(startDate?: string, endDate?: string, plotType?: string, plotStatus?: string): Observable<PlotsStats> {
