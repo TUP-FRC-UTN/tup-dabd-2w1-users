@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { PlotTypeCount } from '../../users-models/dashboard/PlotTypeCount';
 import { PlotStateCount } from '../../users-models/dashboard/PlotStateCount';
@@ -103,11 +103,25 @@ export class UsersGraphicPlotKPIComponent implements OnInit {
   }
 
   private getPlotsByStateWithDate(startDate: string, endDate: string): Observable<PlotStateCount[]> {
-    return this.http.get<PlotStateCount[]>(`http://localhost:9062/dashboard/Plot-By-State-Count?startDate=${startDate}&endDate=${endDate}`);
+    let params = new HttpParams();
+    if (startDate) {
+      params = params.append('startDate', startDate);
+    }
+    if (endDate) {
+      params = params.append('endDate', endDate);
+    }
+    return this.http.get<PlotStateCount[]>(`http://localhost:9062/dashboard/Plot-By-State-Count`, {params});
   }
 
   private getPlotsByTypeWithDate(startDate: string, endDate: string): Observable<PlotTypeCount[]> {
-    return this.http.get<PlotTypeCount[]>(`http://localhost:9062/dashboard/Plot-By-Type-Count?startDate=${startDate}&endDate=${endDate}`);
+    let params = new HttpParams();
+    if (startDate) {
+      params = params.append('startDate', startDate);
+    }
+    if (endDate) {
+      params = params.append('endDate', endDate);
+    }
+    return this.http.get<PlotTypeCount[]>(`http://localhost:9062/dashboard/Plot-By-Type-Count`, {params});
   }
 
   applyAdvancedFilters() {
