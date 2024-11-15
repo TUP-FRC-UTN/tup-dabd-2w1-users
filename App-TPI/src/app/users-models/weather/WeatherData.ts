@@ -1,4 +1,5 @@
 export interface WeatherData {
+    currentDate: Date;
     dayOfWeek: string; // Día de la semana
     main: {
       temp: number;        // Temperatura actual

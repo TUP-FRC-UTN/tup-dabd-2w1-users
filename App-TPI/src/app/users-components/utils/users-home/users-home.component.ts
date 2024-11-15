@@ -27,7 +27,6 @@ export class UsersHomeComponent implements OnInit {
   notifications: Notification[] = [];
 
   ngOnInit() {
-    this.updateGreeting();
     this.weatherService.getForecast();
     this.weatherService.getWeather();
     this.loadNotifications();
@@ -40,36 +39,10 @@ export class UsersHomeComponent implements OnInit {
         this.forecast = forecast;
       });
     // Actualizar cada minuto
-    setInterval(() => {
-      this.updateGreeting();
-    }, 60000);
 
     // Obtener el nombre del usuario
     this.userLoged= this.authService.getUser();
     this.userName = this.userLoged?.name || '';
-  }
-
-  private updateGreeting() {
-    const now = new Date();
-    const hours = now.getHours();
-    
-    // Actualizar la hora actual
-    this.currentTime = now.toLocaleTimeString('es-ES', {
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-
-    // Establecer el saludo según la hora
-    if (hours >= 5 && hours < 12) {
-      this.greeting = '¡Buenos días';
-      this.icon = 'bi bi-brightness-high-fill';
-    } else if (hours >= 12 && hours < 20) {
-      this.greeting = '¡Buenas tardes';
-      this.icon = 'bi bi-brightness-alt-high-fill'
-    } else {
-      this.greeting = '¡Buenas noches';
-      this.icon = 'bi bi-moon-fill';
-    }
   }
 
   formatDate(dateStr: string): string {
