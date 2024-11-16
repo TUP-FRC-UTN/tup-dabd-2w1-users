@@ -58,14 +58,7 @@ export class NavbarComponent implements OnInit {
         icon: "bi-people",
         title: "Usuarios",
         roles: ["SuperAdmin", "Gerente"],
-        childButtons: [{
-
-          //botón agregar usuario
-          icon: "bi-person-plus-fill",
-          title: "Añadir",
-          route: "home/users/add",
-          roles: ["SuperAdmin", "Gerente"]
-        },
+        childButtons: [
         {
 
           //botón listado
@@ -80,12 +73,7 @@ export class NavbarComponent implements OnInit {
         icon: "bi-houses",
         title: "Lotes",
         roles: ["SuperAdmin", "Gerente"],
-        childButtons: [{
-          icon: "bi-house-add",
-          title: "Añadir",
-          route: "home/plots/add",
-          roles: ["SuperAdmin", "Gerente"]
-        },
+        childButtons: [
         {
           icon: "bi-house-gear-fill",
           title: "Listado",
@@ -99,16 +87,42 @@ export class NavbarComponent implements OnInit {
         title: "Propietario",
         roles: ["SuperAdmin", "Gerente"],
         childButtons: [
-          {
-            icon: "bi-key-fill",
-            title: "Añadir",
-            route: "home/owners/add",
-            roles: ["SuperAdmin", "Gerente"]
-          },
+          
           {
             icon: "bi-key-fill",
             title: "Lista",
             route: "home/owners/list",
+            roles: ["SuperAdmin", "Gerente"]
+          }
+        ]
+      },
+      {
+        icon: "bi bi-bar-chart",
+        title: "Gráficos",
+        roles: ["SuperAdmin", "Gerente"],
+        childButtons: [
+          {
+            icon: "bi bi-bar-chart",
+            title: "Gráficos",
+            route: "home/charts/users",
+            roles: ["SuperAdmin", "Gerente"]
+          },
+          {
+            icon: "bi bi-bar-chart",
+            title: "Gráficos",
+            route: "home/charts/users/histogram",
+            roles: ["SuperAdmin", "Gerente"]
+          },
+          {
+            icon: "bi bi-bar-chart",
+            title: "Gráficos",
+            route: "home/charts/users/blocks",
+            roles: ["SuperAdmin", "Gerente"]
+          },
+          {
+            icon: "bi bi-bar-chart",
+            title: "Gráficos",
+            route: "home/charts/users/plots/stats",
             roles: ["SuperAdmin", "Gerente"]
           }
         ]

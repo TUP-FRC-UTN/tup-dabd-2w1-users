@@ -81,6 +81,7 @@ export class UsersUpdatePlotComponent implements OnInit {
              // Crear un nuevo objeto File a partir del Blob
              const newFile = new File([blob], filename, { type: blob.type });
              this.existingFiles.push(newFile);
+             
            }, error => {
              console.error(`Error al descargar el archivo ${fileDto.uuid}, error`);
            });
@@ -131,25 +132,8 @@ export class UsersUpdatePlotComponent implements OnInit {
   }
 
   confirmExit() {
-    Swal.fire({
-        title: '¿Seguro que desea cancelar la operación?',
-        showCancelButton: true,
-        confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#dc3545',
-        cancelButtonText: 'Cancelar',
-    }).then((result) => {
-        if (result.isConfirmed) {
-            this.redirect('/home/plots/list');
-            Swal.fire({
-                title: 'Operación cancelada',
-                icon: 'info',
-                position: 'top-right', 
-                showConfirmButton: false, 
-                timer: 1000 
-            });
-        }
-    });
-}
+    this.redirect('/home/plots/list');
+  }
 
   
 
@@ -172,8 +156,12 @@ export class UsersUpdatePlotComponent implements OnInit {
         Swal.fire({
           icon: "success",
           title: "Se han guardado los cambios",
-          showConfirmButton: false,
-          timer: 1500
+          showConfirmButton: true,
+          confirmButtonText: "Aceptar",
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          timer: undefined,
+
         });
         
         this.redirect('home/plots/list');
@@ -182,11 +170,13 @@ export class UsersUpdatePlotComponent implements OnInit {
         console.log("Error al actualizar el lote" + error);
 
           Swal.fire({
-            position: "top-end",
             icon: "error",
             title: "Ha ocurrido un error",
-            showConfirmButton: false,
-            timer: 1000
+            showConfirmButton: true,
+            confirmButtonText: "Aceptar",
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            timer: undefined,
           });
       }
     });
