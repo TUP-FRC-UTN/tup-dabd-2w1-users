@@ -40,10 +40,6 @@ export class UsersGraphicPlotComponent implements OnInit {
 
   pieChart = ChartType.PieChart;
   pieChartOptions = {
-    title: 'Estado de los lotes',
-    titleTextStyle: {
-      fontSize: 14,
-    },
     pieHole: 0.4,
     backgroundColor: 'transparent',
     colors: ['#2196F3', '#4CAF50', '#F44336'],
@@ -52,7 +48,7 @@ export class UsersGraphicPlotComponent implements OnInit {
       textStyle: { color: '#495057', fontSize: 12 },
       alignment: 'center'
     },
-    chartArea: { width: '100%', height: '90%' },
+    chartArea: { width: '100%', height: '80%' },
     tooltip: {
       textStyle: { fontSize: 14, color: '#495057' },
       showColorCode: true,

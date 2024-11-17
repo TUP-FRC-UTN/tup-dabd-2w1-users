@@ -35,24 +35,20 @@
         <!-- Distribución de Lotes y KPIs -->
         <div class="col-md-3">
 
-          <app-users-kpi class="mb-2" title="Cantidad de Lotes" icon="bi bi-houses" [amount]="totalLots"
+          <app-users-kpi class="mb-3" title="Cantidad de Lotes" icon="bi bi-houses" [amount]="totalLots"
             [customStyles]="{ 'background-color': '#d8ffedde' }" formatPipe="text" tooltip="Cantidad total de lotes">
           </app-users-kpi>
-          <app-users-kpi class="mb-2" title="Lotes Residenciales" icon="bi bi-house-heart" [amount]="residentialLots"
-            [customStyles]="{ 'background-color': '#e7f1ff' }" tooltip="Cantidad de lotes destinados a uso residencial"
-            formatPipe="text">
-          </app-users-kpi>
-          <app-users-kpi class="mb-2" title="Residenciales" icon="bi bi-house-heart" [amount]="residentialLots"
+          <app-users-kpi class="mb-3" title="Lotes Residenciales" icon="bi bi-house-heart" [amount]="residentialLots"
             [customStyles]="{ 'background-color': '#e7f1ff' }" tooltip="Cantidad de lotes destinados a uso residencial"
             formatPipe="text">
           </app-users-kpi>
 
-          <app-users-kpi class="mb-2" title="Comerciales" icon="bi bi-shop" [amount]="commercialLots"
+          <app-users-kpi class="mb-3" title="Comerciales" icon="bi bi-shop" [amount]="commercialLots"
             [customStyles]="{ 'background-color': '#fff3e0' }" tooltip="Cantidad de lotes destinados a uso comercial"
             formatPipe="text">
           </app-users-kpi>
 
-          <app-users-kpi class="mb-2" title="Baldíos" icon="bi bi-tree" [amount]="emptyLots"
+          <app-users-kpi class="mb-3" title="Baldíos" icon="bi bi-tree" [amount]="emptyLots"
             [customStyles]="{ 'background-color': '#d8ffedde' }" tooltip="Cantidad de lotes sin construcción"
             formatPipe="text">
           </app-users-kpi>  
@@ -69,7 +65,7 @@
             </div>
             @if(!loadingPieChart && !errorPieChart){
   
-            <google-chart [type]="pieChart" [data]="plotStateData" [options]="pieChartOptions">
+            <google-chart [type]="pieChart" [data]="plotStateData" [options]="pieChartOptions" [height]="300">
             </google-chart>
             }
         </div>
