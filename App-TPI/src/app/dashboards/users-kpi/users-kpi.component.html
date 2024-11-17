@@ -6,7 +6,16 @@
             <span>{{ amount | percent: '1.0-2' }}</span>
         }
         @if(formatPipe=='metros'){
-            <span>{{ amount + 'm²'}}</span>
+            <span>{{ amount + ' m²'}}</span>
+        }
+        @if(formatPipe=='text'){
+            <span>{{ amount + ' lotes'}}</span>
+        }
+        @if(formatPipe=='age'){
+            <span>{{ amount + ' años'}}</span>
+        }
+        @if(formatPipe=='users'){
+            <span>{{ amount + ' usuarios'}}</span>
         }
         @if(formatPipe==''){
             <span>{{ amount }}</span>

@@ -17,6 +17,7 @@ import { MainComponent } from './main/main.component';
 import { UsersHomeComponent } from './users-components/utils/users-home/users-home.component';
 import { UsersGraphicPlotsStatsComponent } from './dashboards/users-graphic-plots-stats/users-graphic-plots-stats.component';
 import { UsersReportComponent } from './dashboards/users-report/users-report.component';
+import { UsersGraphicPlotComponent } from './dashboards/users-graphic-plot/users-graphic-plot.component';
 
 // Rutas principales de la aplicación
 export const routes: Routes = [
@@ -72,7 +73,7 @@ export const routes: Routes = [
       {
         path: 'charts/users',
         data: {roles: ['SuperAdmin', 'Gerente']},
-        component: UsersGraphicUserComponent
+        component: UsersGraphicPlotComponent
       },
       {
         path: 'charts/users/histogram',

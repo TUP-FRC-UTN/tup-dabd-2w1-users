@@ -11,6 +11,7 @@ import {  RouterModule } from '@angular/router';
 })
 export class UsersKpiComponent {
   @Input() amount: number = 0;
+  @Input() text: string = "";
   @Input() title: string = '';
   @Input() subTitle: string = '';
   @Input() tooltip: string = '';

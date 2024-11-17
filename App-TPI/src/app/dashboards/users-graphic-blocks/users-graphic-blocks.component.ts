@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
 import { UsersKpiComponent } from "../users-kpi/users-kpi.component";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-users-graphic-blocks',
@@ -17,6 +18,7 @@ import { UsersKpiComponent } from "../users-kpi/users-kpi.component";
 export class UsersGraphicBlocksComponent implements OnInit {
 
   private readonly dashboardService = inject(DashboardService);
+  private readonly router = inject(Router);
   
   //Controles para los filtros
   blockControl1 = new FormControl(0); 
@@ -324,5 +326,9 @@ export class UsersGraphicBlocksComponent implements OnInit {
     this.loadData();
     this.startDate.reset();
     this.endDate.reset();
+  }
+
+  changeView(view: string){
+    this.router.navigate(['home/charts/users' + view]);
   }
 }

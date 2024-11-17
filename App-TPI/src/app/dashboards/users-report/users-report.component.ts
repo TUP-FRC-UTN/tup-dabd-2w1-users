@@ -194,7 +194,7 @@ export class UsersReportComponent implements OnInit{
 
   chartOptions = {
     backgroundColor: 'transparent',
-    chartArea: { width: '70%', height: '55%' },
+    chartArea: { width: '70%', height: '50%' },
     hAxis: { title: 'Métricas', titleTextStyle: { color: '#7f8c8d' } },
     vAxes: {
       0: { // Eje izquierdo para áreas
@@ -476,7 +476,8 @@ export class UsersReportComponent implements OnInit{
   barChartData: any[] = [];
 
   barChartOptions = {
-    legend: { position: 'top', alignment: 'center' },
+    legend: { position: 'right', alignment: 'center' },
+    chartArea: { width: '70%', height: '50%' },
     series: {
       0: { labelInLegend: 'Activos' },
       1: { labelInLegend: 'Inactivos' },
@@ -588,7 +589,10 @@ export class UsersReportComponent implements OnInit{
       const formattedStartDate = this.formatDate(start);
       const formattedEndDate = this.formatDate(end);
 
+      this.updateDashboardBlocks(formattedStartDate, formattedEndDate);
       this.updateDashboardDataAge(formattedStartDate, formattedEndDate);
+      this.loadPlotStateData(formattedStartDate, formattedEndDate);
+      this.loadPlotTypeData(formattedStartDate, formattedEndDate);
     }
   }
 
