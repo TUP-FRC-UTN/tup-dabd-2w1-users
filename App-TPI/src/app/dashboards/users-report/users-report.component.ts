@@ -31,14 +31,14 @@ export class UsersReportComponent implements OnInit{
   //Filtros comunes a todos los graficos
   startDate = new FormControl('');
   endDate = new FormControl('');
-
+  plotTypes = new FormControl('');
 
   //-------------Grafico de torta para mostrar la cantidad de lotes por estado-------------
   loadingPieChart = true;
   errorPieChart: string | null = null;
 
   // Filtros para el gráfico de torta
-  selectedPlotType: string | undefined = '';
+  selectedPlotType: number | undefined = undefined;
 
   // Datos para el gráfico circular
   plotStateData: any[] = [];
@@ -77,6 +77,7 @@ export class UsersReportComponent implements OnInit{
     //Grafico de torta de estado de los lotes
     this.loadPlotStateData();
     this.loadPlotTypeData();
+    this.setupFilters();
 
     //Grafico de barras para comparar dos manzanas
     this.loadDataBlocks();
@@ -87,6 +88,35 @@ export class UsersReportComponent implements OnInit{
     this.loadDataAgeRange();
   }
 
+  private setupFilters() {
+    // Suscribirse a cambios en los filtros y actualizar los datos en consecuencia
+    this.subscriptions.add(
+      this.startDate.valueChanges.subscribe(() => this.applyFilters())
+    );
+    this.subscriptions.add(
+      this.endDate.valueChanges.subscribe(() => this.applyFilters())
+    );
+    this.subscriptions.add(
+      this.plotTypes.valueChanges.subscribe(value => {
+        this.selectedPlotType = value ? Number(value) : undefined;
+        this.applyFilters();
+      })
+    );
+  }
+
+  private applyFilters() {
+    const startDate = this.startDate.value ? this.formatDate(new Date(this.startDate.value)) : undefined;
+    const endDate = this.endDate.value ? this.formatDate(new Date(this.endDate.value)) : undefined;
+
+    if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
+      this.errorPieChart = 'La fecha inicial no puede ser mayor a la fecha final';
+      return;
+    }
+
+    this.errorPieChart = null;
+    this.loadPlotStateData(startDate, endDate, this.selectedPlotType);
+    this.loadPlotTypeData(startDate, endDate);
+  }
   private loadPlotStateData(startDate?: string, endDate?: string, plotType?: number) {
     this.loadingPieChart = true;
     this.errorPieChart = null;
@@ -591,9 +621,15 @@ export class UsersReportComponent implements OnInit{
 
       this.updateDashboardBlocks(formattedStartDate, formattedEndDate);
       this.updateDashboardDataAge(formattedStartDate, formattedEndDate);
+      this.updateDashboardData(formattedStartDate, formattedEndDate);
       this.loadPlotStateData(formattedStartDate, formattedEndDate);
       this.loadPlotTypeData(formattedStartDate, formattedEndDate);
     }
+  }
+  private updateDashboardData(startDate: string, endDate: string) {
+    // Llamamos a los métodos de backend con los parámetros de fecha
+    this.loadPlotStateData(startDate, endDate);
+    this.loadPlotTypeData(startDate, endDate);
   }
 
   private updateDashboardDataAge(startDate: string, endDate: string) {
@@ -614,7 +650,8 @@ export class UsersReportComponent implements OnInit{
   clearFilters() {
     this.startDate.reset();
     this.endDate.reset();
-    this.selectedPlotType = '';
+    this.plotTypes.reset();
+    this.selectedPlotType = undefined;
     this.loadPlotStateData();
     this.loadPlotTypeData();
     this.loadDataAgeRange();

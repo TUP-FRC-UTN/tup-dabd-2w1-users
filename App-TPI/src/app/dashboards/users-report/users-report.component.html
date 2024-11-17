@@ -140,11 +140,11 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="plotTypeSelect" class="form-label fw-semibold mb-2">Seleccione el Tipo de Lote</label>
-                    <select id="plotTypeSelect" class="form-select" [(ngModel)]="selectedPlotType">
+                    <select id="plotTypeSelect" class="form-select" [formControl]="plotTypes">
                         <option value="" disabled selected>Seleccione una opción</option>
-                        <option value="Residencial">Residencial</option>
-                        <option value="Comercial">Comercial</option>
-                        <option value="Baldío">Baldío</option>
+                        <option value="2">Residencial</option>
+                        <option value="1">Comercial</option>
+                        <option value="3">Baldío</option>
                     </select>
                 </div>
 
