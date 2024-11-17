@@ -8,11 +8,12 @@ import { Subscription } from 'rxjs';
 import { DashboardService } from '../../users-servicies/dashboard.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { PlotTypeCount } from '../../users-models/dashboard/PlotTypeCount';
+import { UsersKpiComponent } from "../users-kpi/users-kpi.component";
 
 @Component({
   selector: 'app-users-graphic-plot',
   standalone: true,
-  imports: [GoogleChartsModule, CommonModule, ReactiveFormsModule],
+  imports: [GoogleChartsModule, CommonModule, ReactiveFormsModule, UsersKpiComponent],
   templateUrl: './users-graphic-plot.component.html',
   styleUrls: ['./users-graphic-plot.component.css']
 })
@@ -33,16 +34,15 @@ export class UsersGraphicPlotComponent implements OnInit {
   endDate = new FormControl('');
   plotTypes = new FormControl('');
 
-  selectedPlotType: string | undefined = '';
+  selectedPlotType: number | undefined = undefined;
   
   plotStateData: any[] = [];
 
   pieChart = ChartType.PieChart;
   pieChartOptions = {
+    title: 'Estado de los lotes',
     titleTextStyle: {
-      color: '#495057',
-      fontSize: 18,
-      bold: true
+      fontSize: 14,
     },
     pieHole: 0.4,
     backgroundColor: 'transparent',
@@ -65,17 +65,38 @@ export class UsersGraphicPlotComponent implements OnInit {
   ngOnInit() {
     this.loadPlotStateData();
     this.loadPlotTypeData();
-    //this.setupSelectFilters();
+    this.setupFilters();
   }
 
- /* private setupSelectFilters() {
+  private setupFilters() {
+    // Suscribirse a cambios en los filtros y actualizar los datos en consecuencia
     this.subscriptions.add(
-      this.plotTypes.valueChanges.subscribe((value: string) => {
-        this.selectedPlotType = value;
-        this.loadPlotStateData(this.startDate, this.endDate.value, this.getPlotTypeValue(value));
+      this.startDate.valueChanges.subscribe(() => this.applyFilters())
+    );
+    this.subscriptions.add(
+      this.endDate.valueChanges.subscribe(() => this.applyFilters())
+    );
+    this.subscriptions.add(
+      this.plotTypes.valueChanges.subscribe(value => {
+        this.selectedPlotType = value ? Number(value) : undefined;
+        this.applyFilters();
       })
     );
-  }*/
+  }
+
+  private applyFilters() {
+    const startDate = this.startDate.value ? this.formatDate(new Date(this.startDate.value)) : undefined;
+    const endDate = this.endDate.value ? this.formatDate(new Date(this.endDate.value)) : undefined;
+
+    if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
+      this.errorPieChart = 'La fecha inicial no puede ser mayor a la fecha final';
+      return;
+    }
+
+    this.errorPieChart = null;
+    this.loadPlotStateData(startDate, endDate, this.selectedPlotType);
+    this.loadPlotTypeData(startDate, endDate);
+  }
   
   private loadPlotStateData(startDate?: string, endDate?: string, plotType?: number) {
     this.loadingPieChart = true;
@@ -117,7 +138,6 @@ export class UsersGraphicPlotComponent implements OnInit {
 
   }
 
-
   private updateTypeCounts(data: PlotTypeCount[]) {
     this.residentialLots = 0;
     this.commercialLots = 0;
@@ -157,7 +177,6 @@ export class UsersGraphicPlotComponent implements OnInit {
         console.error('Fecha inicial no puede ser mayor a la fecha final');
         return;
       }
-
       const formattedStartDate = this.formatDate(start);
       const formattedEndDate = this.formatDate(end);
 
@@ -171,14 +190,18 @@ export class UsersGraphicPlotComponent implements OnInit {
     this.loadPlotTypeData(startDate, endDate);
   }
 
-  
   clearFilters() {
     this.startDate.reset();
     this.endDate.reset();
-    this.selectedPlotType = '';
+    this.plotTypes.reset();
+    this.selectedPlotType = undefined;
     
     // Vuelvo a cargar los datos sin filtros
     this.loadPlotStateData();
     this.loadPlotTypeData();
+  }
+
+  changeView(view: string){
+    this.router.navigate(['home/charts/users' + view]);
   }
 }
