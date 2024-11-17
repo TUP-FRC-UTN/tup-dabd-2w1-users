@@ -124,6 +124,12 @@ export class NavbarComponent implements OnInit {
             title: "Gráficos",
             route: "home/charts/users/plots/stats",
             roles: ["SuperAdmin", "Gerente"]
+          },
+          {
+            icon: "bi bi-bar-chart",
+            title: "Gráficos",
+            route: "home/charts/users/reports",
+            roles: ["SuperAdmin", "Gerente"]
           }
         ]
       }

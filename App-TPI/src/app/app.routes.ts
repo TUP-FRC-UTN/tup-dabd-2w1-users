@@ -16,6 +16,7 @@ import { OwnersTaxstatusPercentageComponent } from './dashboards/owners-taxstatu
 import { MainComponent } from './main/main.component';
 import { UsersHomeComponent } from './users-components/utils/users-home/users-home.component';
 import { UsersGraphicPlotsStatsComponent } from './dashboards/users-graphic-plots-stats/users-graphic-plots-stats.component';
+import { UsersReportComponent } from './dashboards/users-report/users-report.component';
 
 // Rutas principales de la aplicación
 export const routes: Routes = [
@@ -97,6 +98,11 @@ export const routes: Routes = [
         path: 'charts/owners/taxes',
         data: {roles: ['SuperAdmin', 'Gerente']},
         component: OwnersTaxstatusPercentageComponent
+      },
+      {
+        path: 'charts/users/reports',
+        data: {roles: ['SuperAdmin', 'Gerente']},
+        component: UsersReportComponent
       },
       {
         path: 'start',

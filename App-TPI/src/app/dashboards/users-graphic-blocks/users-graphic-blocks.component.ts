@@ -5,11 +5,12 @@ import { BlockData } from '../../users-models/dashboard/BlockData';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
+import { UsersKpiComponent } from "../users-kpi/users-kpi.component";
 
 @Component({
   selector: 'app-users-graphic-blocks',
   standalone: true,
-  imports: [GoogleChartsModule, CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [GoogleChartsModule, CommonModule, FormsModule, ReactiveFormsModule, UsersKpiComponent],
   templateUrl: './users-graphic-blocks.component.html',
   styleUrl: './users-graphic-blocks.component.css'
 })
@@ -37,7 +38,7 @@ export class UsersGraphicBlocksComponent implements OnInit {
   //Datos para renderizar el gráfico
   chartType : ChartType = ChartType.ColumnChart;
   chartData: any[] = [];
-  width = 600;
+  width = 700;
   height = 340;
 
   chartOptions = {
@@ -242,9 +243,9 @@ export class UsersGraphicBlocksComponent implements OnInit {
     this.selectedBlockskPIs = {
       totalArea: blocks.reduce((acc, b) => acc + b.totalArea, 0),
       totalBuiltArea: blocks.reduce((acc, b) => acc + b.builtArea, 0),
-      utilizationPercentage: (blocks.reduce((acc, b) => acc + b.builtArea, 0) / blocks.reduce((acc, b) => acc + b.totalArea, 0)) * 100,
-      notUtilizationPercentage: 100 - ((blocks.reduce((acc, b) => acc + b.builtArea, 0) / blocks.reduce((acc, b) => acc + b.totalArea, 0)) * 100)
-    }
+      utilizationPercentage: blocks.reduce((acc, b) => acc + b.builtArea, 0) / blocks.reduce((acc, b) => acc + b.totalArea, 0),
+      notUtilizationPercentage: 1 - (blocks.reduce((acc, b) => acc + b.builtArea, 0) / blocks.reduce((acc, b) => acc + b.totalArea, 0))
+    };    
   }
 
   filterByDate() {

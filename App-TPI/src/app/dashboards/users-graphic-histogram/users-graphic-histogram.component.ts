@@ -12,11 +12,12 @@ import {
 } from 'angular-google-charts';
 import { UsersGraphicPlotsStatsComponent } from '../users-graphic-plots-stats/users-graphic-plots-stats.component';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { UsersKpiComponent } from "../users-kpi/users-kpi.component";
 
 @Component({
   selector: 'app-users-graphic-histogram',
   standalone: true,
-  imports: [GoogleChartsModule, CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [GoogleChartsModule, CommonModule, ReactiveFormsModule, FormsModule, UsersKpiComponent],
   templateUrl: './users-graphic-histogram.component.html',
   styleUrl: './users-graphic-histogram.component.css',
 })
@@ -35,7 +36,8 @@ export class UsersGraphicHistogramComponent {
   barChartData: any[] = [];
 
   barChartOptions = {
-    legend: { position: 'top', alignment: 'center' },
+    title: 'Distribución de Edades de Usuarios',
+    legend: { position: 'right', alignment: 'center' },
     series: {
       0: { labelInLegend: 'Activos' },
       1: { labelInLegend: 'Inactivos' },
@@ -69,6 +71,7 @@ export class UsersGraphicHistogramComponent {
   pieChart = ChartType.PieChart;
   pieChartData: any[] = [];
   pieChartOptions = {
+    title: 'Distribución de Usuarios por Estado',
     //pieHole: 0.4,
     colors: ['#4285F4', '#DB4437'],
     backgroundColor: 'transparent',

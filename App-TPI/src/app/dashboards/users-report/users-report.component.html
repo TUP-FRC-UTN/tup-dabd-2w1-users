@@ -1,0 +1,157 @@
+<div class="container p-2 border border-2 rounded shadow-lg mt-0">
+
+    <!-- Sección de Filtros -->
+    <div class="row">
+        <div class="col d-flex gap-3">
+            <div class="col">
+                <input type="date" class="form-control border-1 bg-light" [formControl]="startDate"
+                    (change)="filterByDate()">
+            </div>
+            <div class="col">
+                <input type="date" class="form-control border-1 bg-light" [formControl]="endDate"
+                    (change)="filterByDate()">
+            </div>
+        </div>
+
+        <div class="col-auto d-flex gap-1 ms-auto">
+            <button class="btn btn-primary filterbutton" data-bs-toggle="modal" title="Filtros Avanzados"
+                data-bs-target="#filtrosAvanzados">
+                <i class="bi bi-funnel-fill"></i>
+            </button>
+            <button type="button" class="btn btn-secondary bi bi-trash filterbutton" (click)="clearFilters()"
+                title="Limpiar Filtros"></button>
+        </div>
+    </div>
+</div>
+
+<!-- Sección Principal -->
+<div class="container">
+
+    @if(cardView == 0){}
+
+    <div class="row">
+        <div class="col-md-5 gap-2 d-flex flex-column justify-content-center">
+
+            <!-- KPI Cards -->
+            <div class="row">
+                <div class="col">
+                    <app-users-kpi title="Área Total" icon="bi bi-arrow-up-right"
+                        [amount]="selectedBlockskPIs.totalArea" [customStyles]="{ 'background-color': '#d8ffedde' }"
+                        tooltip="Área total disponible" [selectable]="true" route="/home/charts/users/blocks">
+                    </app-users-kpi>
+                    <app-users-kpi title="Área Construida" icon="bi bi-building"
+                        [amount]="selectedBlockskPIs.totalBuiltArea"
+                        [customStyles]="{ 'background-color': '#d8ffedde' }"
+                        tooltip="Superficie total que ya ha sido construida" formatPipe="metros"></app-users-kpi>
+                </div>
+                <div class="col">
+                    <app-users-kpi title="Cantidad de Lotes" icon="bi bi bi-houses" [amount]="totalLots"
+                        [customStyles]="{ 'background-color': '#d8ffedde' }"
+                        tooltip="Número total de lotes"></app-users-kpi>
+                    <app-users-kpi title="Usuarios Registrados" icon="bi bi bi-houses" [amount]="totalLots"
+                        [customStyles]="{ 'background-color': '#d8ffedde' }"
+                        tooltip="Cantidad total de usuarios registrados"></app-users-kpi>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-7">
+            <div class="row mb-2">
+                <div class="card border-0 shadow-lg rounded-4">
+                    <div class="card-body">
+                        <div *ngIf="loadingPieChart" class="loading">Cargando...</div>
+                        <div *ngIf="errorPieChart" class="error">{{ errorPieChart }}</div>
+
+                        <div *ngIf="!loadingPieChart && !errorPieChart">
+                            <h5 class="card-title align-items-center">Estado de los Lotes<button type="button"
+                                    class="btn btn-sm btn-link text-muted bi bi-arrows-angle-expand fs-5 float-end"
+                                    title="Expandir" (click)="changeView('')"></button></h5>
+                            <hr>
+                            <div class="col-12 hover-scale flex-grow-1 d-flex align-items-center ">
+                                <google-chart [type]="pieChart" [data]="plotStateData" [options]="pieChartOptions"
+                                    style="width: 100%; height: 120px;">
+                                </google-chart>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <!-- Grafico 3 -->
+        <div class="col-md-6">
+            <div class="card border-0 shadow-lg rounded-4 h-100">
+                <div class="card-body">
+                    <div *ngIf="loadingBlocksChart" class="loading">Cargando...</div>
+                    <div *ngIf="errorBlocksChart" class="error">{{ errorBlocksChart }}</div>
+
+                    <div *ngIf="!loadingBlocksChart && !errorBlocksChart">
+                        <h5 class="card-title align-items-center">Estado de los Lotes<button type="button"
+                                class="btn btn-sm btn-link text-muted bi bi-arrows-angle-expand fs-5 float-end"
+                                title="Expandir" (click)="changeView('')"></button></h5>
+                        <hr>
+                        <div class="col-12 hover-scale flex-grow-1 d-flex align-items-center ">
+                            <google-chart [type]="chartType" [data]="chartData" [options]="chartOptions"
+                                style="width: 100%; height: 150px;">
+                            </google-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card border-0 shadow-lg rounded-4 h-100">
+                <div class="card-body">
+                    <div *ngIf="loadingAgeRange" class="loading">Cargando...</div>
+                    <div *ngIf="errorAgeRange" class="error">{{ errorAgeRange }}</div>
+
+                    <div *ngIf="!loadingAgeRange && !errorAgeRange">
+                        <h5 class="card-title align-items-center">Distribución de Edades de Usuarios<button type="button"
+                                class="btn btn-sm btn-link text-muted bi bi-arrows-angle-expand fs-5 float-end"
+                                title="Expandir" (click)="changeView('histogram')"></button></h5>
+                        <hr>
+                        <div class="col-12 hover-scale flex-grow-1 d-flex align-items-center ">
+                            <google-chart [type]="columnChart" [data]="barChartData" [options]="barChartOptions"
+                                style="width: 100%; height: 180px;">
+                            </google-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal para filtros avanzados de tipo de lote -->
+<div class="modal fade" id="filtrosAvanzados" tabindex="-1" role="dialog" aria-labelledby="modalTitle"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Información del Dashboard</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="plotTypeSelect" class="form-label fw-semibold mb-2">Seleccione el Tipo de Lote</label>
+                    <select id="plotTypeSelect" class="form-select" [(ngModel)]="selectedPlotType">
+                        <option value="" disabled selected>Seleccione una opción</option>
+                        <option value="Residencial">Residencial</option>
+                        <option value="Comercial">Comercial</option>
+                        <option value="Baldío">Baldío</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <!-- <button type="button" class="btn btn-primary" (click)="applyAdvancedFilters()">Aplicar Filtro</button> -->
+            </div>
+        </div>
+    </div>
+</div>
